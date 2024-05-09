@@ -1,0 +1,12 @@
+.p-dialog .p-dialog-header {
+    background: var(--primary-color);
+    color:var( --primary-color-text);
+}
+.p-dialog .p-dialog-header .p-dialog-header-icon {
+    color:var( --primary-color-text);
+}
+.p-dialog .p-dialog-content {
+    background: var(--surface-card);
+    color: var(--text-color);
+    padding: 1.5rem;
+}

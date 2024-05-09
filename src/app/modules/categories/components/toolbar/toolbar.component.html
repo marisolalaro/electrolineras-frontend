@@ -1,0 +1,13 @@
+<p-toolbar>
+    <ng-template pTemplate="left">
+        <div class="my-2">
+            <button pButton pRipple type="button" icon="pi pi-plus" [pTooltip]="buttons.create" tooltipPosition="top" class="p-button-rounded mr-2 p-button-success" styleClass="p-button-sm" (click)="create()" ></button>
+            <button pButton pRipple type="button" icon="pi pi-pencil" [pTooltip]="buttons.edit" tooltipPosition="top" class=" p-button-rounded mr-2" styleClass="p-button-sm" (click)="edit()"></button>
+            <button pButton pRipple type="button" icon="pi pi-trash" [pTooltip]="buttons.delete" tooltipPosition="top" class=" p-button-rounded mr-2 p-button-danger" styleClass="p-button-sm" (click)="deleteSelected()"></button>
+            <button pButton pRipple type="button" icon="pi pi-info" [pTooltip]="buttons.info" tooltipPosition="top" class="p-button-rounded mr-2 p-button-warning" styleClass="p-button-sm" (click)="info()"></button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="right">
+        <p-splitButton [label]="buttons.export" styleClass="p-button-help p-button-rounded" icon="pi pi-file-export" class="buttonExport"></p-splitButton>
+    </ng-template>
+</p-toolbar>

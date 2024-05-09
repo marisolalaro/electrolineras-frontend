@@ -1,0 +1,22 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { CustomersRoutingModule } from './customers-routing.module';
+import { PrimeModule } from 'src/app/prime.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PipesModule } from 'src/app/core/pipes/pipes.module';
+import { FilterInformationComponent } from 'src/app/shared/components/filter-information/filter-information.component';
+
+@NgModule({
+  declarations: [
+  ],
+  imports: [
+    CommonModule,
+    CustomersRoutingModule,
+    PrimeModule,
+    FormsModule,
+    ReactiveFormsModule,
+    PipesModule,
+    FilterInformationComponent
+  ]
+})
+export class CustomersModule { }

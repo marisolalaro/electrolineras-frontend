@@ -1,0 +1,16 @@
+    <p-menubar [model]="items" styleClass="white-menubar">
+        <ng-template pTemplate="start">
+            <a [routerLink]="['/']">
+                <img src="https://boliviaemprende.com/wp-content/uploads/2016/03/ende.png" height="40" class="mr-2" />
+            </a>
+        </ng-template>
+        <ng-template pTemplate="end">
+            <div class="flex">
+                <span class="block mt-2 md:mt-0 p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" placeholder="Search..."  class="w-full sm:w-auto mr-2"/>
+                </span>
+                <button pButton pRipple icon="pi pi-user" class="p-button-rounded ml-2"></button>
+            </div>
+        </ng-template>
+    </p-menubar>

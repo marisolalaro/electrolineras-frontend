@@ -1,0 +1,8 @@
+version: "3"
+services:
+  angular-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod  # Utilizar el Dockerfile de producción
+    ports:
+      - "8087:80"  # Puerto 80 para producción

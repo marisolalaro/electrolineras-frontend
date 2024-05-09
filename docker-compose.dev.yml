@@ -1,0 +1,12 @@
+version: "3"
+services:
+  angular-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./src:/app/src
+    environment:
+      - NG_CLI_ANALYTICS=ci

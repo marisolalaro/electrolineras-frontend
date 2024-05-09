@@ -1,0 +1,22 @@
+.card {
+    padding: 2rem 4rem;
+}
+
+.cardtitle {
+    padding: 0.5rem 2rem;
+    background-color: var(--surface-card);
+    border-radius: 2rem;
+}
+
+.p-toolbar {
+    background: var(--surface-card);
+}
+
+.secondaryTitle {
+    color: var(--gray-300);
+}
+
+.h3 {
+    margin: 0;
+    font-size: var(--font-size-title);
+}

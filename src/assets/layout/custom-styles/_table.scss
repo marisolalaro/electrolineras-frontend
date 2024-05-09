@@ -1,0 +1,114 @@
+.p-datatable .p-datatable-thead>tr>th {
+    text-align: left;
+    padding: 1rem 1rem;
+    border: 1px solid var(--surface-d);
+    border-width: 0 0 1px 0;
+    font-weight: 700;
+    color: var(--primary-color-text);
+    background: var(--primary-color);
+    transition: box-shadow 0.2s;
+}
+
+.p-datatable .p-sortable-column .p-sortable-column-icon {
+    color: var(--primary-color-text);
+    margin-left: 0.5rem;
+}
+
+.p-datatable .p-sortable-column.p-highlight:hover {
+    background: var(--primary-color);
+    color: var(--primary-color-text);
+}
+
+.p-datatable .p-sortable-column.p-highlight {
+    background: var(--primary-color);
+    color: var(--primary-color-text);
+}
+
+.p-datatable .p-sortable-column.p-highlight .p-sortable-column-icon {
+    color: var(--primary-color-text);
+}
+
+p-datatable .p-sortable-column.p-highlight {
+    background: var(--primary-color-text);
+    color: var(--primary-color);
+}
+
+.p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody>tr>td {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 1px;
+}
+
+.p-datatable .p-datatable-tbody>tr.p-highlight {
+    background: #d2e4fa;
+    color: var(--primary-color);
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page {
+    border-radius: 50%;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    border-radius: 50%;
+}
+
+.p-datatable.p-datatable-sm .p-datatable-thead>tr>th {
+    padding: 0.5rem;
+    font-size: var(--font-size);
+    font-weight: 640;
+}
+
+.p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody>tr>td {
+    padding: 0.2rem 0.5rem;
+    font-size: var(--font-size);
+}
+
+.p-paginator {
+    font-size: var(--font-size);
+}
+
+.p-paginator .p-paginator-current {
+    font-size: var(--font-size);
+}
+
+.p-dropdown .p-dropdown-trigger {
+    background: transparent;
+    color: #6c757d;
+    width: 2rem;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page {
+    font-size: var(--font-size);
+    min-width: 2rem;
+    height: 2rem;
+}
+
+.p-dropdown .p-dropdown-trigger .p-icon {
+    width: 0.8rem;
+    height: 0.8rem;
+}
+
+.p-dropdown .p-dropdown-label {
+    font-size: var(--font-size);
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+    font-size: var(--font-size);
+}
+
+.p-dropdown-item .ng-star-inserted {
+    font-size: var(--font-size);
+}
+
+.p-input-icon-left>.p-inputtext {
+    font-size: var(--font-size);
+}
+
+.p-button.p-button-secondary.p-button-outlined,
+.p-buttonset.p-button-secondary>.p-button.p-button-outlined,
+.p-splitbutton.p-button-secondary>.p-button.p-button-outlined {
+    border: 1px solid #ced4da;
+}

@@ -1,0 +1,14 @@
+:root {
+    --font-size: 0.95rem;
+    --font-size-title:1.3rem
+    --font-size-header: 1.1rem; 
+    --font-size-header-accordion: 1rem; 
+}
+@import "./_footer";
+@import "./_dialog";
+@import "./_panel-filter";
+@import "./_table";
+@import "./_calendar";
+@import "./_badges";
+@import "./_titles";
+@import "./_toolbar"
