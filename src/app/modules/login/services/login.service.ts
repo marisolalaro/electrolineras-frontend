@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpBackend  } from '@angular/common/http';
 import { environment } from 'src/app/core/environments/environment.development';
 
 @Injectable({
@@ -7,6 +7,7 @@ import { environment } from 'src/app/core/environments/environment.development';
 })
 export class LoginService {
 
+  private customHttpClient: HttpClient;
   private restUrlAutenticacion: string = '';
   private OAUTH_USER = environment.VITE_OAUTH_USER;
   private OAUTH_PASSWORD = environment.VITE_OAUTH_PASSWORD;
@@ -15,7 +16,8 @@ export class LoginService {
     GRANT_TYPE: "password",
   };
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, backend: HttpBackend) {
+    this.customHttpClient = new HttpClient(backend);
     this.restUrlAutenticacion = environment.apiUrl + '/oauth/token';
   }
 
@@ -29,6 +31,7 @@ export class LoginService {
   iniciaSesion(usuario: string, password: string) {
     const httpHeaders = this.getHttpHeader();
     let bodyString = 'username=' + usuario + '&password=' + password + '&grant_type=password';
-    return this.http.post(this.restUrlAutenticacion, bodyString, { headers: httpHeaders });
+    // return this.http.post(this.restUrlAutenticacion, bodyString, { headers: httpHeaders });
+    return this.customHttpClient.post(this.restUrlAutenticacion, bodyString, { headers: httpHeaders });
   }
 }

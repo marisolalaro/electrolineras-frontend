@@ -9,10 +9,12 @@ export class Global {
 
     public token: any;
     public user: any;
-    public role: any;
-    public dataLogin: any;
     public userId: number;
+    public role: any;
+    public roleId: number;
+    public dataLogin: any;
     public expireTime: any;
+    public decodeToken: any = jwtDecode(localStorage.getItem('token'));
 
     constructor() { }
 
@@ -26,11 +28,13 @@ export class Global {
     }
 
     getToken() {
-        return this.token;
+        return localStorage.getItem('token');
     }
 
-    setUser(user) {
-        this.user = user;
+    setUser() {
+        this.user = this.decodeToken.user;
+        this.userId = this.decodeToken.user.id;
+        this.setRol(this.decodeToken.user.roles[0])
     }
 
     getUser() {
@@ -39,14 +43,15 @@ export class Global {
 
     setRol(role) {
         this.role = role;
+        this.roleId = this.role.id
     }
 
     getRol() {
         return this.role;
     }
 
-    setExpireTime(expireTime) {
-        this.expireTime = expireTime;
+    setExpireTime() {
+        this.expireTime = this.decodeToken.exp;
     }
 
     getExpireTime() {

@@ -5,6 +5,7 @@ import { PrimeModule } from 'src/app/prime.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { FilterInformationComponent } from 'src/app/shared/components/filter-information/filter-information.component';
+import { CustomerService } from './services/customer.service';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,9 @@ import { FilterInformationComponent } from 'src/app/shared/components/filter-inf
     ReactiveFormsModule,
     PipesModule,
     FilterInformationComponent
+  ],
+  providers: [
+    CustomerService,
   ]
 })
 export class CustomersModule { }

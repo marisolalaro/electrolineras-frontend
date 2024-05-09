@@ -1,10 +1,12 @@
 import { environment } from 'src/app/core/environments/environment';
 
-// const API_BASE;
-const endPoints = {
-    API_BASE: environment.apiUrl,
+export class EndPoins {
 
-    ADMINISTRATION_UPDATE: `/clientUser/update`,
+    // api general
+    static apiUrl = environment.apiUrl;
+    static api = '/api/v1';
+
+    // clientes
+    static customer = "/clientUser";
+    static charges = "/clientListCharges";
 };
-
-export default endPoints;

@@ -105,8 +105,7 @@ export default class LoginComponent {
   addVariablesGlobales() {
     return new Promise((resolve) => {
       this.global.setDataLogin(this.dataLogin);
-      this.global.setUser(this.dataLogin.user);
-      this.global.setExpireTime(this.dataLogin.exp);
+      this.global.setExpireTime();
       this.global.setToken(this.dataLogin.access_token);
       resolve(true);
     });

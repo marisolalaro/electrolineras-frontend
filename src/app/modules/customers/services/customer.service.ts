@@ -1,20 +1,21 @@
-import { EventEmitter, Injectable, Output } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Global } from 'src/app/core/variables/globales';
+import { EndPoins } from 'src/app/core/constants/endPoints';
+import { BodyFilterModel } from 'src/app/core/model/body-filter';
 
-import { Customer } from 'src/app/core/model/customer';
-
-import { environment } from 'src/app/core/environments/environment';
-
-@Injectable({
-  providedIn: 'root'
-})
+Global
+@Injectable()
 
 export class CustomerService {
 
+  private apiService: string;
+
   constructor(private http: HttpClient) {
-    
+    this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.customer;
   }
 
-  
+  getAllFilter(bodyFilter: BodyFilterModel) {
+    return this.http.post(this.apiService + EndPoins.charges, bodyFilter);
+  }
 }
