@@ -4,11 +4,14 @@ import { mainTitles } from 'src/app/core/constants/labels';
 import { CustomerService } from './services/customer.service';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 import { Global } from 'src/app/core/variables/globales';
+import { NgFor } from '@angular/common';
+import { Customer } from 'src/app/core/model/customer';
+import { decodeLocal } from 'src/app/core/utils/decodeToken';
 
 @Component({
   selector: 'app-customers',
   standalone: true,
-  imports: [CustomersModule],
+  imports: [CustomersModule, NgFor],
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.scss']
 })
@@ -16,7 +19,8 @@ import { Global } from 'src/app/core/variables/globales';
 export default class CustomersComponent {
 
   public titleProduct: any = mainTitles['clientes'];
-  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.global.roleId, this.global.userId);
+  public customers: Customer[] = [];
+  public bodyFilter: BodyFilterModel = new BodyFilterModel(decodeLocal().user.roles[0].id, decodeLocal().user.id);
 
   constructor(
     public customerService: CustomerService,
@@ -30,8 +34,7 @@ export default class CustomersComponent {
   getCustomers(): void {
     this.customerService.getAllFilter(this.bodyFilter).subscribe(
       (resp : any) => {
-        console.log(JSON.stringify(resp));
-        
+        this.customers = resp.data;        
       }
     )
   }

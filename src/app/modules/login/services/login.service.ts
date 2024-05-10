@@ -31,7 +31,6 @@ export class LoginService {
   iniciaSesion(usuario: string, password: string) {
     const httpHeaders = this.getHttpHeader();
     let bodyString = 'username=' + usuario + '&password=' + password + '&grant_type=password';
-    // return this.http.post(this.restUrlAutenticacion, bodyString, { headers: httpHeaders });
     return this.customHttpClient.post(this.restUrlAutenticacion, bodyString, { headers: httpHeaders });
   }
 }

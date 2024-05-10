@@ -14,7 +14,7 @@ export class Global {
     public roleId: number;
     public dataLogin: any;
     public expireTime: any;
-    public decodeToken: any = jwtDecode(localStorage.getItem('token'));
+    public decodeToken: any = localStorage.getItem('token') ? jwtDecode(localStorage.getItem('token')) : '';
 
     constructor() { }
 
