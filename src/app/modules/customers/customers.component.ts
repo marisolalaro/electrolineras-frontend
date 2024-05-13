@@ -1,30 +1,36 @@
-import { Component } from '@angular/core';
-import { CustomersModule } from './customers.module';
-import { mainTitles } from 'src/app/core/constants/labels';
-import { CustomerService } from './services/customer.service';
-import { BodyFilterModel } from 'src/app/core/model/body-filter';
-import { Global } from 'src/app/core/variables/globales';
 import { NgFor } from '@angular/common';
-import { Customer } from 'src/app/core/model/customer';
+import { Component } from '@angular/core';
+// cores
+import { Global } from 'src/app/core/variables/globales';
+import { mainTitles } from 'src/app/core/constants/labels';
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
+// modules
+import { CustomersModule } from './customers.module';
+import { PipesModule } from 'src/app/core/pipes/pipes.module';
+// models
+import { Customer } from 'src/app/core/model/customer';
+import { BodyFilterModel } from 'src/app/core/model/body-filter';
+// services
+import { CustomerService } from './services/customer.service';
 
 @Component({
   selector: 'app-customers',
   standalone: true,
-  imports: [CustomersModule, NgFor],
+  imports: [CustomersModule, NgFor, PipesModule],
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.scss']
 })
 
 export default class CustomersComponent {
 
-  public titleProduct: any = mainTitles['clientes'];
   public customers: Customer[] = [];
+  public customer: Customer = new Customer();
+  public titleProduct: any = mainTitles['clientes'];
   public bodyFilter: BodyFilterModel = new BodyFilterModel(decodeLocal().user.roles[0].id, decodeLocal().user.id);
 
   constructor(
     public customerService: CustomerService,
-    public global: Global
+    public global: Global,
   ) {}
 
   ngOnInit() {
@@ -37,5 +43,10 @@ export default class CustomersComponent {
         this.customers = resp.data;        
       }
     )
+  }
+
+  onSelecetedItem(item): void {
+    this.customer = JSON.parse(JSON.stringify(item));
+    console.log(JSON.stringify(this.customer));
   }
 }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { CommonModule, DatePipe } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
@@ -18,7 +18,9 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -38,6 +40,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     })
   ],
   providers: [
+    DatePipe,
     {
       provide: HTTP_INTERCEPTORS, 
       useClass: AuthInterceptor,
