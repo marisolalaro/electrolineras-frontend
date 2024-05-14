@@ -73,7 +73,7 @@ export default class LoginComponent {
         
         resolve(true);
       } else {
-        console.log('llene los campos user and pass');
+        // console.log('llene los campos user and pass');
         resolve(false);
       }
     })
@@ -89,7 +89,7 @@ export default class LoginComponent {
           resolve(true);
         })
         .catch((err) => {
-          console.log("Error del servidor");
+          // console.log("Error del servidor");
           resolve(false);
         });
     });

@@ -12,17 +12,19 @@ import { Customer } from 'src/app/core/model/customer';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 // services
 import { CustomerService } from './services/customer.service';
-
+import {NgxPaginationModule} from 'ngx-pagination'; // <-- import the module
 @Component({
   selector: 'app-customers',
   standalone: true,
-  imports: [CustomersModule, NgFor, PipesModule],
+  imports: [CustomersModule, NgFor, PipesModule, NgxPaginationModule],
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.scss']
 })
 
 export default class CustomersComponent {
 
+  public page: number = 1;
+  public itemsPerPage: number = 10;
   public customers: Customer[] = [];
   public customer: Customer = new Customer();
   public titleProduct: any = mainTitles['clientes'];
@@ -47,6 +49,9 @@ export default class CustomersComponent {
 
   onSelecetedItem(item): void {
     this.customer = JSON.parse(JSON.stringify(item));
-    console.log(JSON.stringify(this.customer));
+  }
+
+  seleccionaSizeList(event) {
+    this.itemsPerPage = event.target.value;
   }
 }
