@@ -113,7 +113,7 @@ export default class LoginComponent {
 
   redireccionaRuta() {
     return new Promise((resolve) => {
-      this.router.navigate(['/epagos-egsa']);
+      this.router.navigate(['/administration']);
       resolve(true);
     });
   }

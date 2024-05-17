@@ -23,6 +23,7 @@ import {NgxPaginationModule} from 'ngx-pagination'; // <-- import the module
 
 export default class CustomersComponent {
 
+  // variables
   public page: number = 1;
   public itemsPerPage: number = 10;
   public customers: Customer[] = [];

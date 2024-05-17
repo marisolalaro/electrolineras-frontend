@@ -9,4 +9,7 @@ export class EndPoins {
     // clientes
     static customer = "/clientUser";
     static charges = "/clientListCharges";
+
+    // estaciones de carga
+    static electricStations = "/chargingStation";
 };

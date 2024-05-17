@@ -22,17 +22,17 @@ export class HeaderComponent {
           {
             label: mainTitles['clientes'].mainTitle,
             icon: 'pi pi-fw pi-file',
-            routerLink: ['/epagos-egsa/customers'],
+            routerLink: ['/administration/customers'],
           },
           {
             label: mainTitles['usuarios'].mainTitle,
             icon: 'pi pi-fw pi-file',
-            routerLink: ['/epagos-egsa/users'],
+            routerLink: ['/administration/administrators'],
           },
           {
             label: mainTitles['electrolineras'].mainTitle,
             icon: 'pi pi-fw pi-file',
-            routerLink: ['/epagos-egsa/electric-stations'],
+            routerLink: ['/administration/electric-stations'],
           },
           // {
           //   label: 'Productos',

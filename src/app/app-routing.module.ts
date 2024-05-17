@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     // TODO 
-    path: 'epagos-egsa',
+    path: 'administration',
     loadComponent: () => import('./modules/content/content.component'),
     children: [
       {
@@ -16,12 +16,12 @@ const routes: Routes = [
         loadComponent: () => import('./modules/customers/customers.component'),
       },
       {
-        path: 'users',
-        loadComponent: () => import('./modules/categories/categories.component'),
+        path: 'administrators',
+        loadComponent: () => import('./modules/administrators/administrators.component'),
       },
       {
         path: 'electric-stations',
-        loadComponent: () => import('./modules/products/products.component'),
+        loadComponent: () => import('./modules/electric-stations/electric-stations.component'),
       },
     ]
   },

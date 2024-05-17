@@ -13,6 +13,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -39,7 +40,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient],
       },
     }),
-    NgxPaginationModule
+    NgxPaginationModule,
+    LeafletModule
   ],
   providers: [
     DatePipe,
