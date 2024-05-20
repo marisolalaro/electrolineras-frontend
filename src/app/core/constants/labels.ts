@@ -1,9 +1,16 @@
 import { IMainTitles } from "../interfaces/labels.interface"
 
 export const labels: any = {
+  // electric station
+  nameStation: 'Nombre de Estación',
+  description: 'Descripción',
+  address: 'Dirección',
+  latitude: 'Latitud',
+  longitude: 'Longitud',
+
+
   name: 'Nombre',
   code: 'Código',
-  description: 'Descripción',
   price: 'Precio',
   stock: 'Stock',
   category: 'Categoría',

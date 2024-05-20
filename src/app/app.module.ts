@@ -41,7 +41,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
     }),
     NgxPaginationModule,
-    LeafletModule
+    LeafletModule,
+    CommonModule,
   ],
   providers: [
     DatePipe,

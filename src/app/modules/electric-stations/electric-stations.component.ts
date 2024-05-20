@@ -1,47 +1,67 @@
-import { NgFor } from '@angular/common';
-import { Component } from '@angular/core';
+import { NgClass, NgFor, NgIf } from '@angular/common';
+import { Component, ElementRef, ViewChild  } from '@angular/core';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ElectricStationsModule } from './electric-stations.module';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ElectricStationsService } from './services/electric-stations.service';
 import { ElectricStationModel } from 'src/app/core/model/electric-station';
-import { mainTitles } from 'src/app/core/constants/labels';
+import { labels, mainTitles } from 'src/app/core/constants/labels';
+import { messages } from 'src/app/core/constants/messages';
+import { catchError, of, tap } from 'rxjs';
+
 
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
 import { icon, Marker } from 'leaflet';
 import { Inject, Input, OnInit } from '@angular/core';
-
+import { NgModel } from '@angular/forms';
+import { HelpersService } from 'src/app/core/services/helpers.service';
+import { MessageService } from 'primeng/api';
 // export const TITULO = 'Proyecto';
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
 const shadowUrl = 'assets/marker-shadow.png';
 
 @Component({
-  selector: 'app-electric-stations',
   standalone: true,
+  selector: 'app-electric-stations',
   templateUrl: './electric-stations.component.html',
-  imports: [ElectricStationsModule, NgFor, PipesModule, NgxPaginationModule],
-  styleUrls: ['./electric-stations.component.scss']
+  imports: [ElectricStationsModule, NgFor, NgIf, PipesModule, NgxPaginationModule, ReactiveFormsModule, NgClass],
+  styleUrls: ['./electric-stations.component.scss'],
+  providers: [HelpersService, MessageService],
 })
 export default class ElectricStationsComponent implements OnInit {
 
+  // variables de control
+  public submitted: boolean = false;
+
+  // variables Globales del Core
+  public labelsGlobales = labels;
+  public messagesGlobales = messages;
+
+  // variables del paginador
   public page: number = 1;
   public itemsPerPage: number = 10;
-  public electricStation: ElectricStationModel = new ElectricStationModel();
-  public electricStations: ElectricStationModel[] = [];
   public titleProduct: any = mainTitles['electrolineras'];
 
+  // variables del Mapa
+  private map: any;
   public latitude: number;
   public longitude: number;
 
-  private map: any;
-  // @Input() lat: number = -16.499273;
-  // @Input() lon: number = -68.133352;
-  // @Input() titulo: string = TITULO;
+  // variables modal
+  public crearModal = document.getElementById('crearModal')
+  @ViewChild('childModal') public childModal:ElementRef;
+
+  // variables propias del componente
+  public electricStations: ElectricStationModel[] = [];
+  public formRegistro: FormGroup = this.createFormGroup();
+  public electricStation: ElectricStationModel = new ElectricStationModel();
 
   constructor(
     public electricStationsService: ElectricStationsService,
+    private helpersService: HelpersService
   ) { }
 
   ngOnInit() {
@@ -69,10 +89,61 @@ export default class ElectricStationsComponent implements OnInit {
     this.electricStation = JSON.parse(JSON.stringify(item));
     if (this.map) { this.map = this.map.off(); this.map = this.map.remove(); }
     this.initMap(+this.electricStation.latitude, +this.electricStation.longitude)
-    // this.map.remove();
   }
-  
-  public initMap( latitude, longitude): void {
+
+  onValidaFormulario() {
+    this.submitted = true;
+    if (this.formRegistro.valid) {
+      if (this.electricStation.id) {
+        this.onUpdateRegistro(this.electricStation.id);
+      } else {
+        this.onCreateRegistro();
+      }
+    }
+  }
+
+  private createFormGroup() {
+    return new FormGroup({
+      id: new FormControl(null),
+      nameStation: new FormControl('', [Validators.required]),
+      descripcion: new FormControl('', [Validators.required]),
+      direccion: new FormControl('', [Validators.required]),
+      latitude: new FormControl('', [Validators.required]),
+      longitude: new FormControl('', [Validators.required]),
+    });
+  }
+
+  onCreateRegistro() {
+    var registro: ElectricStationModel = {
+      ...this.formRegistro.value,
+    };
+    this.electricStationsService.create(registro)
+      .pipe(
+        tap(() => {
+          // this.crearModal.addEventListener('hidden.bs.modal', event => {
+          //   console.log("se cierra el modal");
+          // })
+          // this.childModal.nativeElement.click()
+          this.helpersService.messageNotification('success', messages.successCreate);
+          this.getAllElectricStations();
+        }),
+        catchError((err) =>
+          of(
+            'error',
+            err.map((message: any) => {
+              this.helpersService.messageNotification('error', message);
+            })
+          )
+        )
+      )
+      .subscribe()
+  }
+
+  onUpdateRegistro(id: number) {
+
+  }
+
+  public initMap(latitude, longitude): void {
     //configuración del mapa
     this.map = L.map('map', {
       center: [latitude, longitude],

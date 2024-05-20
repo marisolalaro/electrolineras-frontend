@@ -8,15 +8,14 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 @NgModule({
   declarations: [
-    
   ],
   imports: [
-    CommonModule,
     ElectricStationsRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     PipesModule,
-    LeafletModule
+    LeafletModule,
+    CommonModule,
   ],
   providers: [
     ElectricStationsService,
