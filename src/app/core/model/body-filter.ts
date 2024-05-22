@@ -7,11 +7,12 @@ export class BodyFilterModel {
   idUsuario: number;
   sort: SortFilterModel;
 
-  constructor(idRol, idUsuario) {
-    this.page = 1;
-    this.size = 10;
+  constructor(page, size, idRol, idUsuario) {
+    this.page = page;
+    this.size = size;
     this.idRol = idRol;
     this.idUsuario = idUsuario;
     this.sort = new SortFilterModel();
   }
-}
+  
+} 

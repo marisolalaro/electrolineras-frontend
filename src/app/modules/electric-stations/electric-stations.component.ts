@@ -1,5 +1,5 @@
 import { NgClass, NgFor, NgIf } from '@angular/common';
-import { Component, ElementRef, ViewChild  } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ElectricStationsModule } from './electric-stations.module';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
@@ -52,7 +52,7 @@ export default class ElectricStationsComponent implements OnInit {
 
   // variables modal
   public crearModal = document.getElementById('crearModal')
-  @ViewChild('childModal') public childModal:ElementRef;
+  @ViewChild('childModal') public childModal: ElementRef;
 
   // variables propias del componente
   public electricStations: ElectricStationModel[] = [];
@@ -77,8 +77,16 @@ export default class ElectricStationsComponent implements OnInit {
     )
   }
 
-  onSelecetedItem(item): void {
-    this.electricStations = JSON.parse(JSON.stringify(item));
+  onSelecetedEdit(item) {
+    // delete[item.activo];
+    this.formRegistro.patchValue(item);
+    // this.formRegistro = JSON.parse(JSON.stringify(item));
+    // console.log(JSON.stringify(this.formRegistro));
+
+
+    // var registro: ElectricStationModel = item;
+
+    // this.electricStations = JSON.parse(JSON.stringify(item));
   }
 
   seleccionaSizeList(event) {
@@ -99,6 +107,13 @@ export default class ElectricStationsComponent implements OnInit {
       } else {
         this.onCreateRegistro();
       }
+    }
+  }
+
+  onValidaFormularioEdit() {
+    this.submitted = true;
+    if (this.formRegistro.valid) {
+        this.onUpdateRegistro(this.electricStation.id);
     }
   }
 

@@ -11,13 +11,16 @@ import { CustomerService } from './services/customer.service';
   declarations: [
   ],
   imports: [
-    CommonModule,
     CustomersRoutingModule,
     PrimeModule,
     FormsModule,
     ReactiveFormsModule,
     PipesModule,
-    FilterInformationComponent
+    FilterInformationComponent,
+    CommonModule,
+  ],
+  exports:[
+    PrimeModule
   ],
   providers: [
     CustomerService,

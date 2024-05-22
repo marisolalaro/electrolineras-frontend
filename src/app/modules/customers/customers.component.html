@@ -1,196 +1,157 @@
 <div class="container">
   <section class="listado">
     <h3>{{titleProduct.mainTitle}}</h3>
-    
-    <div class="table-responsive">
-      <table class="table table-success table-striped-columns">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Apellido Paterno</th>
-            <th scope="col">Apellido Materno</th>
-            <th scope="col">email</th>
-            <th scope="col">Ultima Recarga</th>
-            <th scope="col">Credito Restabte</th>
-            <th scope="col">Ultima estacion de carga</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="table"
-            *ngFor="let item of customers | paginate: {itemsPerPage: itemsPerPage, currentPage: page}; let i = index">
-            <th scope="row">{{i + 1}}</th>
-            <td>{{item.names}}</td>
-            <td>{{item.lastName}}</td>
-            <td>{{item.motherLastName}}</td>
-            <td>{{item.electronicMail}}</td>
-            <td>{{item.lastRechargeAmount}}</td>
-            <td>{{item.remainingCredit}}</td>
-            <td>{{item.lastChargingStation}}</td>
-            <td>
-              <i class="bi bi-info-circle-fill" style="font-size: 1.5rem; color: #3498db;" data-bs-toggle="modal"
-                data-bs-target="#exampleModal" (click)="onSelecetedItem(item)"></i> &nbsp;
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+    <p-table #dt1 [columns]="cols" [value]="customers" dataKey="id"
+      styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
+      [showCurrentPageReport]="false" currentPageReportTemplate="Showing {first} to {last} of {{totalRecords}} entries"
+      [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" pSortableColumn="{{col.field}}">
+            {{col.header}}
+            <p-sortIcon field="{{col.field}}"></p-sortIcon>
+          </th>
+        </tr>
+        <tr>
+          <th *ngFor="let col of columns" [ngSwitch]="col.field">
+            <p-columnFilter *ngSwitchCase="'names'" type="text" field="names" matchMode="contains"
+              (input)="applyFilter($event, 'names', 'contains')">
+            </p-columnFilter>
+            <p-columnFilter *ngSwitchCase="'lastName'" type="text" field="lastName" matchMode="contains"
+              (input)="applyFilter($event, 'lastName', 'contains')">
+            </p-columnFilter>
+            <p-columnFilter *ngSwitchCase="'motherLastName'" type="text" field="motherLastName" matchMode="contains"
+              (input)="applyFilter($event, 'motherLastName', 'contains')">
+            </p-columnFilter>
+            <p-columnFilter *ngSwitchCase="'electronicMail'" type="text" field="electronicMail" matchMode="contains"
+              (input)="applyFilter($event, 'electronicMail', 'contains')">
+            </p-columnFilter>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td *ngFor="let col of columns">
+            <div *ngIf="col.field != '';then normal_content else icon_content"></div>
+            <ng-template #normal_content>
+              {{rowData[col.field]}}
+            </ng-template>
+            <ng-template #icon_content>
+              <button pButton pRipple type="button" icon="pi pi-info" pTooltip="Información" tooltipPosition="top"
+                class="p-button-rounded mr-2 p-button-warning" styleClass="p-button-sm"
+                (click)="onOpenDetail(rowData)"></button>
+            </ng-template>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <div class="card flex justify-content-center">
+      <p-paginator (onPageChange)="onPageChange($event)" [first]="page" [rows]="itemsPerPage" [totalRecords]="totalRecords"
+        [rowsPerPageOptions]="[5, 10, 20]">
+      </p-paginator>
     </div>
-    <div class="flex">
-      <span class="block mt-2 md:mt-0 p-input-icon-left">
-        <select class="form-select" id="codBaja" name="codBaja" 
-        (change)="seleccionaSizeList($event)">
-          <option selected [value]=10>10</option>
-          <option [value]=15>15</option>
-          <option [value]=20>20</option>
-        </select>
-      </span>
-      <pagination-controls (pageChange)="page = $event"></pagination-controls>
-    </div>
+
+    <!-- Paginador aparte -->
+
+    <!-- Dialog Detalle -->
+    <p-dialog header="Header" [(visible)]="dialogDetalle" [modal]="true"
+      [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw' }" [draggable]="false"
+      [resizable]="false">
+
+      <p-tabView>
+        <p-tabPanel header="Cliente">
+
+          <div class="form-group field col-12 md:col-6">
+            <span class="p-float-label">
+              <input pInputText id="username" [(ngModel)]="customer.names" />
+              <label htmlFor="username">Nombres</label>
+            </span>
+          </div>
+
+          <div class="form-group field col-12 md:col-6">
+            <span class="p-float-label">
+              <input pInputText id="lastName" [(ngModel)]="customer.lastName" />
+              <label htmlFor="lastName">Apellido Paterno</label>
+            </span>
+          </div>
+
+          <div class="form-group field col-12 md:col-6">
+            <span class="p-float-label">
+              <input pInputText id="motherLastName" [(ngModel)]="customer.motherLastName" />
+              <label htmlFor="motherLastName">Apellido Materno</label>
+            </span>
+          </div>
+
+          <div class="form-group field col-12 md:col-6">
+            <span class="p-float-label">
+              <input pInputText id="phoneNumber" [(ngModel)]="customer.phoneNumber" />
+              <label htmlFor="phoneNumber">Número de Celular</label>
+            </span>
+          </div>
+        </p-tabPanel>
+
+        <p-tabPanel header="Transacciones">
+          <p-table [value]="customer.paymentTransactionsElectrolineraList" [paginator]="true" [rows]="5"
+            [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]">
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width:20%">Razon Social</th>
+                <th style="width:20%">N° Documento</th>
+                <th style="width:20%">Complemento</th>
+                <th style="width:20%">Fecha</th>
+                <th style="width:20%">Glosario</th>
+                <th style="width:20%">Transaccion</th>
+                <th style="width:20%">Procesar Pago</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-customer>
+              <tr>
+                <td>{{customer.nombreRazonSocial}}</td>
+                <td>{{customer.numeroDocumento}}</td>
+                <td>{{customer.complemento}}</td>
+                <td>{{customer.paymentDate | formatFieldDate}}</td>
+                <td>{{customer.gloss}}</td>
+                <td>{{customer.amount}}</td>
+                <td>{{customer.processPayment}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-tabPanel>
+
+        <p-tabPanel header="Cargas">
+          <p-table [value]="customer.chargeClientList" [paginator]="true" [rows]="5"
+            [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]">
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width:20%">Monto de carga</th>
+                <th style="width:20%">Comision por uso</th>
+                <th style="width:20%">Carga inicio</th>
+                <th style="width:20%">Carga final</th>
+                <th style="width:20%">duracion</th>
+                <th style="width:20%">Energia Consumida (Kwh)</th>
+                <th style="width:20%">estado</th>
+                <th style="width:20%">Estacion de carga</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-customer>
+              <tr>
+                <td>{{customer.amount}}</td>
+                <td>{{customer.changeFee}}</td>
+                <td>{{customer.staredChargingAt | formatFieldTime }}</td>
+                <td>{{customer.finisheAt | formatFieldTime}}</td>
+                <td>{{customer.duration}}</td>
+                <td>{{customer.energyComsumed}}</td>
+                <td>{{customer.status}}</td>
+                <td>{{customer.chargingStation}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-tabPanel>
+      </p-tabView>
+
+    </p-dialog>
 
   </section>
 </div>
-
-<!-- Modal Info -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
-              role="tab" aria-controls="home" aria-selected="true">Cliente</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
-              role="tab" aria-controls="profile" aria-selected="false">Transacciones</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button"
-              role="tab" aria-controls="contact" aria-selected="false">Cargas</button>
-          </li>
-        </ul>
-        <div class="tab-content" id="myTabContent">
-
-          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <form class="row g-3">
-              <div class="col-4">
-                <label for="inputAddress" class="form-label">Nombres</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="{{customer.names}}" disabled>
-              </div>
-              <div class="col-4">
-                <label for="inputAddress" class="form-label">Apellido Paterno</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="{{customer.lastName}}" disabled>
-              </div>
-              <div class="col-4">
-                <label for="inputAddress" class="form-label">Apellido Materno.</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="{{customer.motherLastName}}"
-                  disabled>
-              </div>
-
-              <div class="col-4">
-                <label for="inputAddress" class="form-label">CI</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="CI" disabled>
-              </div>
-              <div class="col-4">
-                <label for="inputAddress" class="form-label">Complemento</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="Complemento" disabled>
-              </div>
-              <div class="col-4">
-                <label for="inputAddress" class="form-label">Extension</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="Extension" disabled>
-              </div>
-
-              <div class="col-4">
-                <label for="inputAddress" class="form-label">Fecha de Nacimiento</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="10/10/1991" disabled>
-              </div>
-              <div class="col-4">
-                <label for="inputAddress" class="form-label">Nro. Celular</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="{{customer.phoneNumber}}"
-                  disabled>
-              </div>
-              <div class="col-4">
-                <label for="inputAddress" class="form-label">Cantidad</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="10/10/1991" disabled>
-              </div>
-            </form>
-          </div>
-
-          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Razon Social</th>
-                    <th scope="col">N° Documento</th>
-                    <th scope="col">Complemento</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Glosario</th>
-                    <th scope="col">Transaccion</th>
-                    <th scope="col">Procesar Pago</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of customer.paymentTransactionsElectrolineraList; let i = index">
-                    <th scope="row">{{i + 1}}</th>
-                    <td>{{item.nombreRazonSocial}}</td>
-                    <td>{{item.numeroDocumento}}</td>
-                    <td>{{item.complemento}}</td>
-                    <td>{{item.paymentDate | formatFieldDate}}</td>
-                    <td>{{item.gloss}}</td>
-                    <td>{{item.amount}}</td>
-                    <td>{{item.processPayment}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Monto de carga</th>
-                    <th scope="col">Comision por uso</th>
-                    <th scope="col">Carga inicio</th>
-                    <th scope="col">Carga final</th>
-                    <th scope="col">duracion</th>
-                    <th scope="col">Energia Consumida (Kwh)</th>
-                    <th scope="col">estado</th>
-                    <th scope="col">Estacion de carga</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of customer.chargeClientList; let i = index">
-                    <th scope="row">{{i + 1}}</th>
-                    <td>{{item.amount}}</td>
-                    <td>{{item.changeFee}}</td>
-                    <td>{{item.staredChargingAt | formatFieldTime }}</td>
-                    <td>{{item.finisheAt | formatFieldTime}}</td>
-                    <td>{{item.duration}}</td>
-                    <td>{{item.energyComsumed}}</td>
-                    <td>{{item.status}}</td>
-                    <td>{{item.chargingStation}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal Info -->

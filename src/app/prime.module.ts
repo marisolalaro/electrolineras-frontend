@@ -24,6 +24,9 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { TabViewModule } from 'primeng/tabview';
+import { PaginatorModule } from "primeng/paginator"; 
+
 @NgModule({
   exports: [
     CardModule,
@@ -50,6 +53,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
     InputTextareaModule,
     InputSwitchModule,
     InputNumberModule,
+    TabViewModule,
+    PaginatorModule
   ],
 })
 export class PrimeModule {}
