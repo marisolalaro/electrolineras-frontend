@@ -17,6 +17,7 @@ import { NgxPaginationModule } from 'ngx-pagination'; // <-- import the module
 
 import { ViewChild } from '@angular/core';
 import { Table } from 'primeng/table';
+import { DBAttributeName } from 'src/app/core/constants/dbAttributeName';
 
 
 interface PageEvent {
@@ -92,16 +93,29 @@ export default class CustomersComponent {
   }
 
   onOpenDetail(customer) {
-    console.log(JSON.stringify(customer));
-
     this.customer = customer;
     this.dialogDetalle = true;
   }
 
   applyFilter($event: any, field: string, matchMode: string) {
-    console.log($event.target as HTMLInputElement);
+    this.bodyFilter.page = 1;
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
+
+    if(field == 'names') {
+      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribName;
+    }
+    if(field == 'lastName') {
+      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribLastName;
+    }
+    if(field == 'motherLastName') {
+      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribMotherLastName;
+    }
+    if(field == 'electronicMail') {
+      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribElectronicMail;
+    }
+    this.bodyFilter.search.value = value;
+    this.getCustomers();
   }
 
   onPageChange(event: any) {

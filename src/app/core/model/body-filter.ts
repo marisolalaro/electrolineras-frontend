@@ -1,3 +1,4 @@
+import { SearchFilterModel } from "./search-filter";
 import { SortFilterModel } from "./sort-filter";
 
 export class BodyFilterModel {
@@ -6,6 +7,7 @@ export class BodyFilterModel {
   idRol: number;
   idUsuario: number;
   sort: SortFilterModel;
+  search: SearchFilterModel;
 
   constructor(page, size, idRol, idUsuario) {
     this.page = page;
@@ -13,6 +15,7 @@ export class BodyFilterModel {
     this.idRol = idRol;
     this.idUsuario = idUsuario;
     this.sort = new SortFilterModel();
+    this.search = new SearchFilterModel();
   }
   
 } 
