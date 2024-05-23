@@ -122,7 +122,6 @@ export default class CustomersComponent {
     this.bodyFilter.page = event.page + 1;
     this.bodyFilter.size = event.rows;
     this.getCustomers();
-
   }
 
 }

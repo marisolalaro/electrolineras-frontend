@@ -18,16 +18,18 @@
         <tr>
           <th *ngFor="let col of columns" [ngSwitch]="col.field">
             <input *ngSwitchCase="'names'" pInputText type="text" (input)="applyFilter($event, 'names', 'contains')"
-               placeholder="Busca por nombres" class="w-full">
+              placeholder="Busca por nombres" class="w-full">
 
-            <input *ngSwitchCase="'lastName'" pInputText type="text" (input)="applyFilter($event, 'lastName', 'contains')"
-               placeholder="Busca por apellido paterno" class="w-full">
+            <input *ngSwitchCase="'lastName'" pInputText type="text"
+              (input)="applyFilter($event, 'lastName', 'contains')" placeholder="Busca por apellido paterno"
+              class="w-full">
 
-            <input *ngSwitchCase="'motherLastName'" pInputText type="text" (input)="applyFilter($event, 'motherLastName', 'contains')"
-               placeholder="Busca por apellido materno" class="w-full">
+            <input *ngSwitchCase="'motherLastName'" pInputText type="text"
+              (input)="applyFilter($event, 'motherLastName', 'contains')" placeholder="Busca por apellido materno"
+              class="w-full">
 
-            <input *ngSwitchCase="'electronicMail'" pInputText type="text" (input)="applyFilter($event, 'electronicMail', 'contains')"
-               placeholder="Busca por email" class="w-full">
+            <input *ngSwitchCase="'electronicMail'" pInputText type="text"
+              (input)="applyFilter($event, 'electronicMail', 'contains')" placeholder="Busca por email" class="w-full">
           </th>
         </tr>
       </ng-template>
@@ -95,16 +97,26 @@
 
         <p-tabPanel header="Transacciones">
           <p-table [value]="customer.paymentTransactionsElectrolineraList" [paginator]="true" [rows]="5"
-            [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]">
+            [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 5, 20]" #tableref 
+            [globalFilterFields]="['nombreRazonSocial', 'numeroDocumento', 'complemento', 'gloss', 'amount']">
+            <ng-template pTemplate="caption">
+              <div class="flex">
+                <span class="p-input-icon-left ml-auto">
+                  <i class="pi pi-search"></i>
+                  <input type="text" pInputText (input)="tableref.filterGlobal(
+                   $any($event.target).value, 'contains')" />
+                </span>
+              </div>
+            </ng-template>
             <ng-template pTemplate="header">
               <tr>
-                <th style="width:20%">Razon Social</th>
-                <th style="width:20%">N° Documento</th>
-                <th style="width:20%">Complemento</th>
-                <th style="width:20%">Fecha</th>
-                <th style="width:20%">Glosario</th>
-                <th style="width:20%">Transaccion</th>
-                <th style="width:20%">Procesar Pago</th>
+                <th style="width:20%" pSortableColumn="nombreRazonSocial">Razon Social <p-sortIcon field="nombreRazonSocial"></p-sortIcon> </th>
+                <th style="width:20%" pSortableColumn="numeroDocumento">N° Documento <p-sortIcon field="numeroDocumento"></p-sortIcon> </th>
+                <th style="width:20%" pSortableColumn="complemento">Complemento <p-sortIcon field="complemento"></p-sortIcon> </th>
+                <th style="width:20%" pSortableColumn="paymentDate">Fecha <p-sortIcon field="paymentDate"></p-sortIcon> </th>
+                <th style="width:20%" pSortableColumn="gloss">Glosario <p-sortIcon field="gloss"></p-sortIcon> </th>
+                <th style="width:20%" pSortableColumn="amount">Transaccion <p-sortIcon field="amount"></p-sortIcon> </th>
+                <th style="width:20%" pSortableColumn="processPayment">Procesar Pago <p-sortIcon field="processPayment"></p-sortIcon></th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-customer>
@@ -123,17 +135,27 @@
 
         <p-tabPanel header="Cargas">
           <p-table [value]="customer.chargeClientList" [paginator]="true" [rows]="5"
-            [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]">
+            [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]" #tableCargas
+            [globalFilterFields]="['nombreRazonSocial', 'numeroDocumento', 'complemento', 'gloss', 'amount']" >
+            <ng-template pTemplate="caption">
+              <div class="flex">
+                <span class="p-input-icon-left ml-auto">
+                  <i class="pi pi-search"></i>
+                  <input type="text" pInputText (input)="tableCargas.filterGlobal(
+                   $any($event.target).value, 'contains')" />
+                </span>
+              </div>
+            </ng-template>
             <ng-template pTemplate="header">
               <tr>
-                <th style="width:20%">Monto de carga</th>
-                <th style="width:20%">Comision por uso</th>
-                <th style="width:20%">Carga inicio</th>
-                <th style="width:20%">Carga final</th>
-                <th style="width:20%">duracion</th>
-                <th style="width:20%">Energia Consumida (Kwh)</th>
-                <th style="width:20%">estado</th>
-                <th style="width:20%">Estacion de carga</th>
+                <th style="width:20%" pSortableColumn="amount">Monto de carga <p-sortIcon field="amount"></p-sortIcon></th>
+                <th style="width:20%" pSortableColumn="changeFee">Comision por uso <p-sortIcon field="changeFee"></p-sortIcon></th>
+                <th style="width:20%" pSortableColumn="staredChargingAt">Carga inicio <p-sortIcon field="staredChargingAt"></p-sortIcon></th>
+                <th style="width:20%" pSortableColumn="finisheAt">Carga final <p-sortIcon field="finisheAt"></p-sortIcon></th>
+                <th style="width:20%" pSortableColumn="duration">duracion <p-sortIcon field="duration"></p-sortIcon></th>
+                <th style="width:20%" pSortableColumn="energyComsumed">Energia Consumida (Kwh) <p-sortIcon field="energyComsumed"></p-sortIcon></th>
+                <th style="width:20%" pSortableColumn="status">estado <p-sortIcon field="status"></p-sortIcon></th>
+                <th style="width:20%" pSortableColumn="chargingStation">Estacion de carga <p-sortIcon field="chargingStation"></p-sortIcon></th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-customer>
