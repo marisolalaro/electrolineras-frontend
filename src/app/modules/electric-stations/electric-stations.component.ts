@@ -1,5 +1,5 @@
-import { NgClass, NgFor, NgIf } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
+import { Component, ViewChild,OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ElectricStationsModule } from './electric-stations.module';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
@@ -11,23 +11,18 @@ import { messages } from 'src/app/core/constants/messages';
 import { catchError, of, tap } from 'rxjs';
 
 
-import * as L from 'leaflet';
-import 'leaflet-routing-machine';
-import { icon, Marker } from 'leaflet';
-import { Inject, Input, OnInit } from '@angular/core';
-import { NgModel } from '@angular/forms';
 import { HelpersService } from 'src/app/core/services/helpers.service';
 import { MessageService } from 'primeng/api';
-// export const TITULO = 'Proyecto';
-const iconRetinaUrl = 'assets/marker-icon-2x.png';
-const iconUrl = 'assets/marker-icon.png';
-const shadowUrl = 'assets/marker-shadow.png';
+import { BodyFilterModel } from 'src/app/core/model/body-filter';
+import { decodeLocal } from 'src/app/core/utils/decodeToken';
+import { Table } from 'primeng/table';
+import { DBAttributeName } from 'src/app/core/constants/dbAttributeName';
 
 @Component({
   standalone: true,
   selector: 'app-electric-stations',
   templateUrl: './electric-stations.component.html',
-  imports: [ElectricStationsModule, NgFor, NgIf, PipesModule, NgxPaginationModule, ReactiveFormsModule, NgClass],
+  imports: [ElectricStationsModule, NgFor, NgIf, PipesModule, NgxPaginationModule, ReactiveFormsModule, NgClass, NgSwitch, NgSwitchCase],
   styleUrls: ['./electric-stations.component.scss'],
   providers: [HelpersService, MessageService],
 })
@@ -42,61 +37,61 @@ export default class ElectricStationsComponent implements OnInit {
 
   // variables del paginador
   public page: number = 1;
-  public itemsPerPage: number = 10;
-  public titleProduct: any = mainTitles['electrolineras'];
+  public itemsPerPage: number = 5;
+  public totalRecords: number = 0;
 
   // variables del Mapa
-  private map: any;
   public latitude: number;
   public longitude: number;
 
-  // variables modal
-  public crearModal = document.getElementById('crearModal')
-  @ViewChild('childModal') public childModal: ElementRef;
+  // variables dialog
+  public visible: boolean = false;
 
   // variables propias del componente
+  public cols: any[] = [];
   public electricStations: ElectricStationModel[] = [];
+  public titleProduct: any = mainTitles['electrolineras'];
   public formRegistro: FormGroup = this.createFormGroup();
   public electricStation: ElectricStationModel = new ElectricStationModel();
+  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
+
+  @ViewChild('dt1') dt!: Table;
 
   constructor(
     public electricStationsService: ElectricStationsService,
     private helpersService: HelpersService
   ) { }
 
-  ngOnInit() {
-    // this.initMap();
+  ngOnInit():void {
+    this.inicializaDatos()
     this.getAllElectricStations();
+  }
+
+  inicializaDatos() {
+    this.cols = [
+      { field: 'nameStation', header: 'Nombre' },
+      { field: 'direccion', header: 'Dirección' },
+      { field: 'descripcion', header: 'Descripcón' },
+      { field: '', header: 'Opciones' },
+    ];
   }
 
   getAllElectricStations(): void {
     this.electricStationsService.getAll().subscribe(
       (resp: any) => {
         this.electricStations = resp.data;
+        this.totalRecords = resp.data.totalRecords;
       }
     )
   }
 
   onSelecetedEdit(item) {
-    // delete[item.activo];
     this.formRegistro.patchValue(item);
-    // this.formRegistro = JSON.parse(JSON.stringify(item));
-    // console.log(JSON.stringify(this.formRegistro));
-
-
-    // var registro: ElectricStationModel = item;
-
-    // this.electricStations = JSON.parse(JSON.stringify(item));
   }
 
+  //
   seleccionaSizeList(event) {
     this.itemsPerPage = event.target.value;
-  }
-
-  onVerMapa(item): void {
-    this.electricStation = JSON.parse(JSON.stringify(item));
-    if (this.map) { this.map = this.map.off(); this.map = this.map.remove(); }
-    this.initMap(+this.electricStation.latitude, +this.electricStation.longitude)
   }
 
   onValidaFormulario() {
@@ -113,7 +108,7 @@ export default class ElectricStationsComponent implements OnInit {
   onValidaFormularioEdit() {
     this.submitted = true;
     if (this.formRegistro.valid) {
-        this.onUpdateRegistro(this.electricStation.id);
+      this.onUpdateRegistro(this.electricStation.id);
     }
   }
 
@@ -135,10 +130,6 @@ export default class ElectricStationsComponent implements OnInit {
     this.electricStationsService.create(registro)
       .pipe(
         tap(() => {
-          // this.crearModal.addEventListener('hidden.bs.modal', event => {
-          //   console.log("se cierra el modal");
-          // })
-          // this.childModal.nativeElement.click()
           this.helpersService.messageNotification('success', messages.successCreate);
           this.getAllElectricStations();
         }),
@@ -158,38 +149,35 @@ export default class ElectricStationsComponent implements OnInit {
 
   }
 
-  public initMap(latitude, longitude): void {
-    //configuración del mapa
-    this.map = L.map('map', {
-      center: [latitude, longitude],
-      attributionControl: false,
-      zoom: 17
-    });
-
-    //iconos personalizados
-    var iconDefault = L.icon({
-      iconRetinaUrl,
-      iconUrl,
-      shadowUrl,
-      iconSize: [25, 41], // Tamaño de tu icono
-      iconAnchor: [12, 41], // Punto de anclaje del icono
-      popupAnchor: [1, -34], // Punto de anclaje del popup
-      shadowSize: [41, 41], // Tamaño de la sombra
-      tooltipAnchor: [16, -28],
-    });
-
-    L.Marker.prototype.options.icon = iconDefault;
-
-    //titulo
-    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://1938.com.es">Web Inteligencia Artificial</a>'
-    });
-    tiles.addTo(this.map);
-
-    //marca con pop up
-    const mark = L.marker([latitude, longitude]).bindPopup('');
-    mark.addTo(this.map);
+  onOpenDetail(electricStation) {
+    this.electricStation = electricStation;
   }
 
+  applyFilter($event: any, field: string, matchMode: string) {
+    this.bodyFilter.page = 1;
+    let value = ($event.target as HTMLInputElement)?.value;
+    this.dt.filter(value, field, matchMode);
+    // TODO cambiar a los nombres de la base de datos
+    if (field == 'nameStation') {
+      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribName;
+    }
+    if (field == 'direccion') {
+      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribLastName;
+    }
+    if (field == 'descripcion') {
+      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribMotherLastName;
+    }
+    this.bodyFilter.search.value = value;
+    this.getAllElectricStations();
+  }
+
+  onPageChange(event: any) {
+    this.bodyFilter.page = event.page + 1;
+    this.bodyFilter.size = event.rows;
+    this.getAllElectricStations();
+  }
+
+  onVerMapa(rowData) {
+    this.visible = true;
+  }
 }

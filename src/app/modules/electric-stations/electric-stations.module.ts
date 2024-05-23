@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { ElectricStationsService } from './services/electric-stations.service';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { PrimeModule } from 'src/app/prime.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,10 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     PipesModule,
     LeafletModule,
     CommonModule,
+    PrimeModule
+  ],
+  exports:[
+    PrimeModule
   ],
   providers: [
     ElectricStationsService,

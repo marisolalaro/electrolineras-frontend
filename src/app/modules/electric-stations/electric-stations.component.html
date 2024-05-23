@@ -2,64 +2,75 @@
   <section class="listado">
     <h3>{{titleProduct.mainTitle}}</h3>
 
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crearModal">Registrar
-      Nuevo</button>
+    <p-table #dt1 [columns]="cols" [value]="electricStations" dataKey="id"
+      styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
+      [showCurrentPageReport]="false" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES">
 
-    <div class="table-responsive">
-      <table class="table table-success table-striped-columns">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Direccion</th>
-            <th scope="col">Descripcion</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="table"
-            *ngFor="let item of electricStations | paginate: {itemsPerPage: itemsPerPage, currentPage: page}; let i = index">
-            <th scope="row">{{i + 1}}</th>
-            <td>{{item.nameStation}}</td>
-            <td>{{item.descripcion}}</td>
-            <td>{{item.direccion}}</td>
-            <td>
-              <i class="bi bi-pencil-fill" style="font-size: 1.5rem; color: #3498db;" 
-              data-bs-toggle="modal" data-bs-target="#editModal" (click)="onSelecetedEdit(item)"></i> &nbsp;
-              <i class="bi bi-geo-alt-fill" style="font-size: 1.5rem; color: #F51D1E;" data-bs-toggle="modal"
-                data-bs-target="#exampleModal" (click)="onVerMapa(item)"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" pSortableColumn="{{col.field}}">
+            {{col.header}}
+            <p-sortIcon field="{{col.field}}"></p-sortIcon>
+          </th>
+        </tr>
+
+        <tr>
+          <th *ngFor="let col of columns" [ngSwitch]="col.field">
+            <input *ngSwitchCase="'nameStation'" pInputText type="text" (input)="applyFilter($event, 'nameStation', 'contains')"
+              placeholder="Busca por Nombre" class="w-full">
+
+            <input *ngSwitchCase="'direccion'" pInputText type="text"
+              (input)="applyFilter($event, 'direccion', 'contains')" placeholder="Busca por Dirección" class="w-full">
+
+            <input *ngSwitchCase="'descripcion'" pInputText type="text"
+              (input)="applyFilter($event, 'descripcion', 'contains')" placeholder="Busca por Descripcón"
+              class="w-full">
+
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td *ngFor="let col of columns">
+            <div *ngIf="col.field != '';then normal_content else icon_content"></div>
+            <ng-template #normal_content>
+              {{rowData[col.field]}}
+            </ng-template>
+            <ng-template #icon_content>
+              <i class="pi pi-pencil" style="font-size: 1.5rem; color: #3498db;" data-bs-toggle="modal"
+                data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
+              <i class="pi pi-map-marker" style="font-size: 1.5rem; color: #F51D1E;" data-bs-toggle="modal"
+                data-bs-target="#exampleModal" (click)="onVerMapa(rowData)"></i>
+            </ng-template>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <!-- Paginador -->
+    <div class="card flex justify-content-center">
+      <p-paginator (onPageChange)="onPageChange($event)" [first]="page" [rows]="itemsPerPage"
+        [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20]" >
+      </p-paginator>
     </div>
-    <div class="flex">
-      <span class="block mt-2 md:mt-0 p-input-icon-left">
-        <select class="form-select" name="codBaja" (change)="seleccionaSizeList($event)">
-          <option selected [value]=10>10</option>
-          <option [value]=15>15</option>
-          <option [value]=20>20</option>
-        </select>
-      </span>
-      <pagination-controls (pageChange)="page = $event"></pagination-controls>
-    </div>
+    <!-- Paginador -->
   </section>
 </div>
 
 <!-- modal ver mapa -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="map-container">
+<!-- <div class="card flex justify-content-center">
+</div> -->
+  <p-dialog header="Header" [(visible)]="visible" [style]="{width: '50vw'}">
+    <!-- <div class="map-container">
       <div class="map-frame">
         <div id="map"></div>
       </div>
-    </div>
-  </div>
-</div>
+    </div> -->
+  </p-dialog>
 <!-- modal ver mapa -->
 
 <!-- modal Crear nuevo -->
-<div class="modal" #crearModal tabindex="-1" id="crearModal" >
+<!-- <div class="modal" #crearModal tabindex="-1" id="crearModal" >
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -132,11 +143,11 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <!-- modal Crear nuevo -->
 
 <!-- modal Editar Registro -->
-<div class="modal" #editModal tabindex="-1" id="editModal" >
+<!-- <div class="modal" #editModal tabindex="-1" id="editModal" >
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -210,5 +221,5 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <!-- modal Editar Registro -->
