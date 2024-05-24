@@ -16,6 +16,7 @@ import { PrimeModule } from 'src/app/prime.module';
     ReactiveFormsModule,
     PipesModule,
     LeafletModule,
+    LeafletModule,
     CommonModule,
     PrimeModule
   ],

@@ -18,6 +18,15 @@ import { decodeLocal } from 'src/app/core/utils/decodeToken';
 import { Table } from 'primeng/table';
 import { DBAttributeName } from 'src/app/core/constants/dbAttributeName';
 
+import { titles,buttons } from 'src/app/core/constants/labels';
+import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
+import { TasaCargaModel } from 'src/app/core/model/tasa-carga';
+import * as Leaflet from 'leaflet';
+interface AutoCompleteCompleteEvent {
+  originalEvent: Event;
+  query: string;
+}
+
 @Component({
   standalone: true,
   selector: 'app-electric-stations',
@@ -34,6 +43,7 @@ export default class ElectricStationsComponent implements OnInit {
   // variables Globales del Core
   public labelsGlobales = labels;
   public messagesGlobales = messages;
+  public botonesGlobales = buttons;
 
   // variables del paginador
   public page: number = 1;
@@ -46,6 +56,8 @@ export default class ElectricStationsComponent implements OnInit {
 
   // variables dialog
   public visible: boolean = false;
+  public dialogRegistro: boolean = false;
+  public dialogEdit: boolean = false;
 
   // variables propias del componente
   public cols: any[] = [];
@@ -55,16 +67,47 @@ export default class ElectricStationsComponent implements OnInit {
   public electricStation: ElectricStationModel = new ElectricStationModel();
   public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
 
+  public tasasCarga: TasaCargaModel [] = [];
   @ViewChild('dt1') dt!: Table;
 
+  title = 'AngularOSM';
+  options: Leaflet.MapOptions = {
+    layers: getLayers(),
+    zoom: 12,
+    center: new Leaflet.LatLng(43.530147, 16.488932)
+  };
+
+  leafletOptions: any;
   constructor(
     public electricStationsService: ElectricStationsService,
-    private helpersService: HelpersService
+    private helpersService: HelpersService,
+    public tasaCargaService: ParTasaCargaService,
   ) { }
 
+  countries: any[] | undefined;
+
+    selectedCountry: any;
+
+    filteredCountries: any[] | undefined;
+
+
+    filterCountry(event: AutoCompleteCompleteEvent) {
+        let filtered: any[] = [];
+        let query = event.query;
+        for (let i = 0; i < (this.countries as any[]).length; i++) {
+            let country = (this.countries as any[])[i];
+            if (country.amount.indexOf(query.toLowerCase()) == 0) {
+                filtered.push(country);
+            }
+        }
+        this.filteredCountries = filtered;
+    }
+
+
   ngOnInit():void {
-    this.inicializaDatos()
+    this.inicializaDatos();
     this.getAllElectricStations();
+    this.getTasaDeCarga();
   }
 
   inicializaDatos() {
@@ -85,11 +128,21 @@ export default class ElectricStationsComponent implements OnInit {
     )
   }
 
-  onSelecetedEdit(item) {
-    this.formRegistro.patchValue(item);
+  getTasaDeCarga(): void {
+    this.tasaCargaService.getAll().subscribe(
+      (resp: any) => {
+        this.countries  = resp.data;
+        // this.tasasCarga = resp.data;
+      }
+    )
   }
 
-  //
+  onSelecetedEdit(item) {
+    this.formRegistro.patchValue(item);
+    this.selectedCountry = item.chargeRate
+    this.dialogEdit = true;
+  }
+
   seleccionaSizeList(event) {
     this.itemsPerPage = event.target.value;
   }
@@ -98,17 +151,10 @@ export default class ElectricStationsComponent implements OnInit {
     this.submitted = true;
     if (this.formRegistro.valid) {
       if (this.electricStation.id) {
-        this.onUpdateRegistro(this.electricStation.id);
+        this.onUpdateRegistro();
       } else {
         this.onCreateRegistro();
       }
-    }
-  }
-
-  onValidaFormularioEdit() {
-    this.submitted = true;
-    if (this.formRegistro.valid) {
-      this.onUpdateRegistro(this.electricStation.id);
     }
   }
 
@@ -120,6 +166,8 @@ export default class ElectricStationsComponent implements OnInit {
       direccion: new FormControl('', [Validators.required]),
       latitude: new FormControl('', [Validators.required]),
       longitude: new FormControl('', [Validators.required]),
+      chargeRate: new FormControl('', [Validators.required]),
+      codeStationQr: new FormControl('', [Validators.required]),
     });
   }
 
@@ -127,9 +175,14 @@ export default class ElectricStationsComponent implements OnInit {
     var registro: ElectricStationModel = {
       ...this.formRegistro.value,
     };
+    registro.chargeRate = {
+      id:this.selectedCountry.id
+    };
+    registro.activo = true;
     this.electricStationsService.create(registro)
       .pipe(
         tap(() => {
+          this.openDialog(false,false, 'crear');
           this.helpersService.messageNotification('success', messages.successCreate);
           this.getAllElectricStations();
         }),
@@ -145,8 +198,31 @@ export default class ElectricStationsComponent implements OnInit {
       .subscribe()
   }
 
-  onUpdateRegistro(id: number) {
-
+  onUpdateRegistro() {
+    var registro: ElectricStationModel = {
+      ...this.formRegistro.value,
+    };
+    registro.chargeRate = {
+      id:this.selectedCountry.id
+    };
+    registro.activo = true;
+    this.electricStationsService.update(registro)
+      .pipe(
+        tap(() => {
+          this.helpersService.messageNotification('success', messages.successCreate);
+          this.getAllElectricStations();
+          this.dialogEdit = false;
+        }),
+        catchError((err) =>
+          of(
+            'error',
+            err.map((message: any) => {
+              this.helpersService.messageNotification('error', message);
+            })
+          )
+        )
+      )
+      .subscribe()
   }
 
   onOpenDetail(electricStation) {
@@ -180,4 +256,18 @@ export default class ElectricStationsComponent implements OnInit {
   onVerMapa(rowData) {
     this.visible = true;
   }
+
+  public openDialog(state: any, stateSubmitted?:any, tipo?: any) {
+    tipo == 'crear'?this.dialogRegistro = state : this.dialogEdit = state;
+    this.submitted = stateSubmitted;
+  }
+
 }
+
+export const getLayers = (): Leaflet.Layer[] => {
+  return [
+    new Leaflet.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    } as Leaflet.TileLayerOptions),
+  ] as Leaflet.Layer[];
+};

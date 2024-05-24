@@ -7,7 +7,10 @@ export const labels: any = {
   address: 'Dirección',
   latitude: 'Latitud',
   longitude: 'Longitud',
+  codeStationQr: 'Codigo QR',
 
+  // Tasa de carga
+  tasaCarga: 'Tasa de Carga',
 
   name: 'Nombre',
   code: 'Código',

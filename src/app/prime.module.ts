@@ -26,6 +26,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TabViewModule } from 'primeng/tabview';
 import { PaginatorModule } from "primeng/paginator"; 
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @NgModule({
   exports: [
@@ -54,7 +55,8 @@ import { PaginatorModule } from "primeng/paginator";
     InputSwitchModule,
     InputNumberModule,
     TabViewModule,
-    PaginatorModule
+    PaginatorModule,
+    AutoCompleteModule
   ],
 })
 export class PrimeModule {}

@@ -12,4 +12,7 @@ export class EndPoins {
 
     // estaciones de carga
     static electricStations = "/chargingStation";
+
+    // tasa de carga
+    static chargeRate = "/chargeRate";
 };
