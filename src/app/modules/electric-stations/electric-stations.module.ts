@@ -6,9 +6,12 @@ import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { ElectricStationsService } from './services/electric-stations.service';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { PrimeModule } from 'src/app/prime.module';
+import { MapaComponent } from './components/mapa/mapa.component';
 
 @NgModule({
   declarations: [
+  
+    MapaComponent
   ],
   imports: [
     ElectricStationsRoutingModule,
@@ -21,7 +24,8 @@ import { PrimeModule } from 'src/app/prime.module';
     PrimeModule
   ],
   exports:[
-    PrimeModule
+    PrimeModule,
+    MapaComponent
   ],
   providers: [
     ElectricStationsService,

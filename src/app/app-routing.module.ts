@@ -7,7 +7,6 @@ const routes: Routes = [
     loadChildren: () => import('./modules/login/login-routing.module').then(m => m.LoginRoutingModule),
   },
   {
-    // TODO 
     path: 'administration',
     loadComponent: () => import('./modules/content/content.component'),
     children: [

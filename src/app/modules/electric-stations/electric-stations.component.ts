@@ -1,5 +1,5 @@
 import { NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
-import { Component, ViewChild,OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ElectricStationsModule } from './electric-stations.module';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
@@ -16,26 +16,29 @@ import { MessageService } from 'primeng/api';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
 import { Table } from 'primeng/table';
-import { DBAttributeName } from 'src/app/core/constants/dbAttributeName';
 
-import { titles,buttons } from 'src/app/core/constants/labels';
+import { buttons } from 'src/app/core/constants/labels';
 import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
 import { TasaCargaModel } from 'src/app/core/model/tasa-carga';
 import * as Leaflet from 'leaflet';
+import * as L from 'leaflet';
+import 'leaflet-routing-machine';
+import { Input } from '@angular/core';
+
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
   query: string;
 }
 
 @Component({
-  standalone: true,
   selector: 'app-electric-stations',
+  standalone: true,
   templateUrl: './electric-stations.component.html',
-  imports: [ElectricStationsModule, NgFor, NgIf, PipesModule, NgxPaginationModule, ReactiveFormsModule, NgClass, NgSwitch, NgSwitchCase],
   styleUrls: ['./electric-stations.component.scss'],
+  imports: [ ElectricStationsModule, NgFor, NgIf, PipesModule, ReactiveFormsModule, NgClass, NgSwitch, NgSwitchCase],
   providers: [HelpersService, MessageService],
 })
-export default class ElectricStationsComponent implements OnInit {
+export default class ElectricStationsComponent implements OnInit  {
 
   // variables de control
   public submitted: boolean = false;
@@ -53,6 +56,7 @@ export default class ElectricStationsComponent implements OnInit {
   // variables del Mapa
   public latitude: number;
   public longitude: number;
+  public title: string;
 
   // variables dialog
   public visible: boolean = false;
@@ -67,17 +71,9 @@ export default class ElectricStationsComponent implements OnInit {
   public electricStation: ElectricStationModel = new ElectricStationModel();
   public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
 
-  public tasasCarga: TasaCargaModel [] = [];
+  public tasasCarga: TasaCargaModel[] = [];
   @ViewChild('dt1') dt!: Table;
 
-  title = 'AngularOSM';
-  options: Leaflet.MapOptions = {
-    layers: getLayers(),
-    zoom: 12,
-    center: new Leaflet.LatLng(43.530147, 16.488932)
-  };
-
-  leafletOptions: any;
   constructor(
     public electricStationsService: ElectricStationsService,
     private helpersService: HelpersService,
@@ -86,25 +82,24 @@ export default class ElectricStationsComponent implements OnInit {
 
   countries: any[] | undefined;
 
-    selectedCountry: any;
+  selectedCountry: any;
 
-    filteredCountries: any[] | undefined;
+  filteredCountries: any[] | undefined;
 
 
-    filterCountry(event: AutoCompleteCompleteEvent) {
-        let filtered: any[] = [];
-        let query = event.query;
-        for (let i = 0; i < (this.countries as any[]).length; i++) {
-            let country = (this.countries as any[])[i];
-            if (country.amount.indexOf(query.toLowerCase()) == 0) {
-                filtered.push(country);
-            }
-        }
-        this.filteredCountries = filtered;
+  filterCountry(event: AutoCompleteCompleteEvent) {
+    let filtered: any[] = [];
+    let query = event.query;
+    for (let i = 0; i < (this.countries as any[]).length; i++) {
+      let country = (this.countries as any[])[i];
+      if (country.amount.indexOf(query.toLowerCase()) == 0) {
+        filtered.push(country);
+      }
     }
+    this.filteredCountries = filtered;
+  }
 
-
-  ngOnInit():void {
+  ngOnInit(): void {
     this.inicializaDatos();
     this.getAllElectricStations();
     this.getTasaDeCarga();
@@ -131,7 +126,7 @@ export default class ElectricStationsComponent implements OnInit {
   getTasaDeCarga(): void {
     this.tasaCargaService.getAll().subscribe(
       (resp: any) => {
-        this.countries  = resp.data;
+        this.countries = resp.data;
         // this.tasasCarga = resp.data;
       }
     )
@@ -176,13 +171,13 @@ export default class ElectricStationsComponent implements OnInit {
       ...this.formRegistro.value,
     };
     registro.chargeRate = {
-      id:this.selectedCountry.id
+      id: this.selectedCountry.id
     };
     registro.activo = true;
     this.electricStationsService.create(registro)
       .pipe(
         tap(() => {
-          this.openDialog(false,false, 'crear');
+          this.openDialog(false, false, 'crear');
           this.helpersService.messageNotification('success', messages.successCreate);
           this.getAllElectricStations();
         }),
@@ -203,7 +198,7 @@ export default class ElectricStationsComponent implements OnInit {
       ...this.formRegistro.value,
     };
     registro.chargeRate = {
-      id:this.selectedCountry.id
+      id: this.selectedCountry.id
     };
     registro.activo = true;
     this.electricStationsService.update(registro)
@@ -233,17 +228,6 @@ export default class ElectricStationsComponent implements OnInit {
     this.bodyFilter.page = 1;
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
-    // TODO cambiar a los nombres de la base de datos
-    if (field == 'nameStation') {
-      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribName;
-    }
-    if (field == 'direccion') {
-      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribLastName;
-    }
-    if (field == 'descripcion') {
-      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribMotherLastName;
-    }
-    this.bodyFilter.search.value = value;
     this.getAllElectricStations();
   }
 
@@ -255,19 +239,17 @@ export default class ElectricStationsComponent implements OnInit {
 
   onVerMapa(rowData) {
     this.visible = true;
+    this.latitude=-16.504334;
+    this.longitude=-68.130453;
+    this.title = "vivi";
   }
 
-  public openDialog(state: any, stateSubmitted?:any, tipo?: any) {
-    tipo == 'crear'?this.dialogRegistro = state : this.dialogEdit = state;
+  public openDialog(state: any, stateSubmitted?: any, tipo?: any) {
+    tipo == 'crear' ? this.dialogRegistro = state : this.dialogEdit = state;
     this.submitted = stateSubmitted;
   }
 
+  cerrarMapa(evet) {
+    this.visible = false
+  }
 }
-
-export const getLayers = (): Leaflet.Layer[] => {
-  return [
-    new Leaflet.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    } as Leaflet.TileLayerOptions),
-  ] as Leaflet.Layer[];
-};

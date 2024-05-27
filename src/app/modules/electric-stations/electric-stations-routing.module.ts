@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./electric-stations.component'),
+    loadComponent : () => import('./electric-stations.component'),
   },
 ];
 
