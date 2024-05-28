@@ -73,4 +73,8 @@ export const mainTitles: IMainTitles = {
     mainTitle: 'Electrolineras',
     secondaryTitle: 'Listado de Electrolineras'
   },
+  administradores: {
+    mainTitle: 'Administradores',
+    secondaryTitle: 'Listado de Administradores'
+  },
 }
