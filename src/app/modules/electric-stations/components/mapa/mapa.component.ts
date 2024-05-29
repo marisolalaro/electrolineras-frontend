@@ -1,4 +1,4 @@
-import { Component, Output, Input, EventEmitter } from '@angular/core';
+import { Component, Output, Input, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
 import { icon, Marker } from 'leaflet';
@@ -17,11 +17,12 @@ const shadowUrl = 'assets/marker-shadow.png';
   templateUrl: './mapa.component.html',
   styleUrls: ['./mapa.component.scss']
 })
-export class MapaComponent implements OnInit {
+export class MapaComponent implements OnInit, OnChanges {
 
   @Output() newItemEvent = new EventEmitter<any>();
 
   private map: any;
+  private marker: L.Marker;
   // @Input() lat: number = DEFAULT_LAT;
   // @Input() lon: number = DEFAULT_LON;
   // @Input() titulo: string = TITULO;
@@ -36,15 +37,25 @@ export class MapaComponent implements OnInit {
     this.initMap();
   }
 
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['lat'] || changes['lon']) {
+      if (!this.map) {
+        this.initMap();
+      } else {
+        this.updateMap();
+      }
+    }
+  }
+
+
   private initMap(): void {
-    //configuración del mapa
     this.map = L.map('map', {
       center: [this.lat, this.lon],
       attributionControl: false,
       zoom: 14
     });
 
-    //iconos personalizados
     var iconDefault = L.icon({
       iconRetinaUrl,
       iconUrl,
@@ -57,38 +68,30 @@ export class MapaComponent implements OnInit {
     });
     L.Marker.prototype.options.icon = iconDefault;
 
-    //titulo
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://1938.com.es">Web Inteligencia Artificial</a>'
     });
 
-    //marca con pop up
-    const lon = this.lon + 0.009;
-    const lat = this.lat + 0.009;
-    const marker = L.marker([lat + 0.005, lon + 0.005]).bindPopup(this.titulo);
-    marker.addTo(this.map);
-
-    //marca forma de circulo
-    const mark = L.circleMarker([this.lat, this.lon]).addTo(this.map);
-    mark.addTo(this.map);
-
-
-    //ruta
-    L.Routing.control({
-      router: L.Routing.osrmv1({
-        serviceUrl: `https://router.project-osrm.org/route/v1/`
-      }),
-      showAlternatives: true,
-      fitSelectedRoutes: false,
-      show: false,
-      routeWhileDragging: true,
-      waypoints: [
-        L.latLng(this.lat, this.lon),
-        L.latLng(lat, lon)
-      ]
-    }).addTo(this.map);
     tiles.addTo(this.map);
+
+    this.addMarkers();
+  }
+
+  private addMarkers(): void {
+    if (this.marker) {
+      this.map.removeLayer(this.marker); // Remover el marcador anterior
+    }
+
+    this.marker = L.marker([this.lat, this.lon]).bindPopup(this.titulo);
+    this.marker.addTo(this.map);
+  }
+
+  private updateMap(): void {
+    if (this.map) {
+      this.map.setView(new L.LatLng(this.lat, this.lon), 14);
+      this.addMarkers(); // Actualizar el marcador
+    }
   }
 
   cerrar() {
