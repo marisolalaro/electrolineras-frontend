@@ -1,0 +1,113 @@
+.container {
+  padding: 16px;
+  background-color: #f5f5f5;
+}
+
+.listado {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title-electric-stations {
+  margin-bottom: 16px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+p-button {
+  margin-bottom: 16px;
+}
+
+.p-datatable {
+  border: none;
+
+  .p-datatable-header {
+    background-color: #3498db;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .p-datatable-thead > tr > th {
+    background-color: #3498db;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+    padding: 12px;
+  }
+
+  .p-datatable-tbody > tr > td {
+    font-size: 14px;
+    color: #555;
+    padding: 12px;
+    border-bottom: 1px solid #eeeeee;
+
+    &:last-child {
+      text-align: center;
+    }
+  }
+
+  .p-datatable-gridlines .p-datatable-tbody > tr > td {
+    border-right: 1px solid #eeeeee;
+  }
+
+  .p-datatable-striped .p-datatable-tbody > tr:nth-of-type(odd) {
+    background-color: #fafafa;
+  }
+
+  .p-datatable-tbody > tr:hover > td {
+    background-color: #f1f1f1;
+  }
+}
+
+input.p-inputtext {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  margin-bottom: 8px;
+
+  &:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
+  }
+}
+
+button.mat-raised-button {
+  background-color: #3498db;
+  color: #fff;
+  cursor: pointer;
+  border-color: #3498db;
+  border-radius: 6px;
+  padding: 10px;
+
+  &:hover {
+    background-color: #dee2e6;
+    color: #333;
+    border-color:  #dee2e6;
+  }
+}
+
+.mat-elevation-z8 {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.paginator {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #ffffff;
+  border-top: 1px solid #eeeeee;
+
+  .mat-paginator-page-size {
+    margin-right: 16px;
+  }
+}
