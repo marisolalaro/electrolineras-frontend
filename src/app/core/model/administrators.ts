@@ -1,19 +1,24 @@
 import { Base } from './base';
 
 export class AdministratorModel extends Base {
-  id: number;
-  userName: string;
-  electronicMail: string;
-  phoneNumber: null;
+  id?: number;
   names: string;
+  username: string;
+  password: string;
+  electronicMail: string;
+  phoneNumber: number;
   lastName: string;
   motherLastName: string;
   identificationNumber: string;
   birthdate: string;
+  activationCode: string;
+  idTypePhone: number;
   cellPhoneNumber: number;
+  accountStatus: number;
+  restoreCode: string;
+  activationMethod: string;
   extension: string;
-  complement: null;
-  amount: number;
-  paymentTransactionsElectrolineraList: any[];
-  chargeClientList: any[];
+  complement: string;
+  idTypeIdentification: number;
+  roles: number[];
 }

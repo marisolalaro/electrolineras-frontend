@@ -16,4 +16,5 @@ export const messages: any =
     export: 'Exportación exitosa',
     selectionColumns: 'Seleccione las columnas.',
     searchCurrentView: 'Buscar en la vista actual',
+    maxLength: 'A superado el limite requerido',
 }

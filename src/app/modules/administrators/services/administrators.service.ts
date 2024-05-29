@@ -12,16 +12,16 @@ export class AdministratorsService {
   private apiService: string;
 
   constructor(private http: HttpClient) { 
-    this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.customer + EndPoins.administration;
+    this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.customer ;
   }
 
   getAll(bodyFilter): Observable<AdministratorModel[]> {
     delete bodyFilter.search;
-    return this.http.post<AdministratorModel[]>(this.apiService, bodyFilter);
+    return this.http.post<AdministratorModel[]>(this.apiService+ EndPoins.administration, bodyFilter);
   }
 
   create(adminitration: AdministratorModel) {
-    return this.http.post(this.apiService,adminitration);
+    return this.http.post(this.apiService + '/register',adminitration);
   }
 
   update(adminitration: AdministratorModel) {

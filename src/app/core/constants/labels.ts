@@ -12,7 +12,19 @@ export const labels: any = {
   // Tasa de carga
   tasaCarga: 'Tasa de Carga',
 
-  name: 'Nombre',
+  // Administradores
+  email: 'Email',
+  userName: 'Nombre de Usuario',
+  name: 'Nombres',
+  apellidoPaterno: 'Apellido Paterno',
+  apellidoMaterno: 'Apellido Materno',
+  ci: 'Cedula de Identidad',
+  celular: 'Celular',
+  telefono: 'Telefono',
+  fechaNacimiento: 'Fecha de Nacimiento',
+  usuario: 'Usuario',
+  contrasenia: 'Contraseña',
+
   code: 'Código',
   price: 'Precio',
   stock: 'Stock',
