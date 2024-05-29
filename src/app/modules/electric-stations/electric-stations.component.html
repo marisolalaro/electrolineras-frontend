@@ -1,16 +1,12 @@
 <div class="container">
   <section class="listado">
-    <h3>{{titleProduct.mainTitle}}</h3>
+    <h3 class="title-electric-stations">{{titleProduct.mainTitle}}</h3>
 
-    <p-button label="Nuevo Registro" (click)="dialogRegistro = true"></p-button>
+    <button class="mat-raised-button" (click)="dialogRegistro = true">Nuevo Registro</button>
 
     <p-table #dt1 [columns]="cols" [value]="electricStations" dataKey="id"
       styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
       [showCurrentPageReport]="false" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES">
-
-      <!-- <p-table #dt1 [value]="customers" selectionMode="single" [(selection)]="selectedCustomers" dataKey="id" [tableStyle]="{'min-width': '50rem'}"
-    [rows]="10" [paginator]="true" stateStorage="session" stateKey="statedemo-session"> -->
-
 
       <ng-template pTemplate="header" let-columns>
         <tr>
@@ -19,21 +15,21 @@
             <p-sortIcon field="{{col.field}}"></p-sortIcon>
           </th>
         </tr>
-
         <tr>
           <th *ngFor="let col of columns" [ngSwitch]="col.field">
             <input *ngSwitchCase="'nameStation'" pInputText type="text"
               (input)="applyFilter($event, 'nameStation', 'contains')" placeholder="Busca por Nombre" class="w-full">
-
             <input *ngSwitchCase="'direccion'" pInputText type="text"
               (input)="applyFilter($event, 'direccion', 'contains')" placeholder="Busca por Dirección" class="w-full">
-
             <input *ngSwitchCase="'descripcion'" pInputText type="text"
               (input)="applyFilter($event, 'descripcion', 'contains')" placeholder="Busca por Descripcón"
               class="w-full">
+            <input *ngSwitchCase="'latitude'" pInputText type="text"
+              (input)="applyFilter($event, 'latitude', 'contains')" placeholder="Busca por Latitud" class="w-full">
+            <input *ngSwitchCase="'longitude'" pInputText type="text"
+              (input)="applyFilter($event, 'longitude', 'contains')" placeholder="Busca por Longitud" class="w-full">
           </th>
         </tr>
-
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr>
@@ -53,67 +49,13 @@
       </ng-template>
     </p-table>
 
-    <app-mapa *ngIf="visible" (newItemEvent)="cerrarMapa($event)" [lat]="latitude" [lon]="longitude" [titulo]="title"></app-mapa>
-
-    <!-- <div class="map-container">
-      <div class="map-frame">
-        <div id="map"></div>
-      </div>
-      <ng-template pTemplate="Header"></ng-template>
-    </div> -->
-
-    <!--<p-dialog header="Header" [(visible)]="visible" [modal]="true" [style]="{width: '80vw', height: '80vh'}">
-        <div class="map-container">
-           <div class="map-frame">
-            <div id="map"></div>
-          </div>
-        </div>
-    </p-dialog> -->
-
-
-    <!-- <p-dialog header="Mapa de Estación" [(visible)]="visible" [style]="{width: '50vw'}">
-      <div class="map-container" leaflet style="height: 100px;">
-      </div>
-      </p-dialog> -->
-
-    <!-- <p-dialog header="Mapa" [(visible)]="visible" [modal]="true" [style]="{width: '80vw', height: '80vh'}">
-      <div class="map-container">
-        <div class="map-frame">
-          <div #mapContainer id="map"></div>
-        </div>
-      </div>
-    </p-dialog> -->
-
-
-    <!-- Paginador -->
-    <!-- <div class="card flex justify-content-center">
-      <p-paginator (onPageChange)="onPageChange($event)" [first]="page" [rows]="itemsPerPage"
-        [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20]">
-      </p-paginator>
-    </div> -->
-    <!-- Paginador -->
-  </section>
-
-  <!-- TODO -->
-  <!-- <section>
-    <div class="map" leaflet [leafletOptions]="options">
+    <div *ngIf="visible" class="map-modal">
+      <h2>{{ title }}</h2>
+      <app-mapa [lat]="latitude" [lon]="longitude" [titulo]="title" (newItemEvent)="cerrarMapa($event)"></app-mapa>
     </div>
-  </section> -->
+  </section>
 </div>
 
-<!-- modal ver mapa -->
-
-  <!-- <p-dialog header="Mapa de Estación" [(visible)]="visible" [style]="{width: '80vw', height: '80vh'}">
-<div class="map-container">
-    <div class="map-frame">
-      <div id="map"></div>
-    </div>
-  </div> -->
-  <!--<app-mapa></app-mapa>
-   <div class="app-wheels"></div> 
-</p-dialog>-->
-
-<!-- modal ver mapa -->
 
 <!-- modal Crear nuevo -->
 <p-dialog header="Header" [(visible)]="dialogRegistro" [style]="{width: '50vw'}" class="p-fluid"

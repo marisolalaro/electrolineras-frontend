@@ -110,7 +110,9 @@ export default class ElectricStationsComponent implements OnInit  {
       { field: 'nameStation', header: 'Nombre' },
       { field: 'direccion', header: 'Dirección' },
       { field: 'descripcion', header: 'Descripcón' },
-      { field: '', header: 'Opciones' },
+      { field: 'latitude', header: 'Latitud' },
+      { field: 'longitude', header: 'Longitud' },
+      { field: '', header: 'Opciones' }
     ];
   }
 
@@ -238,11 +240,12 @@ export default class ElectricStationsComponent implements OnInit  {
   }
 
   onVerMapa(rowData) {
+    console.log('Latitude:', rowData.latitude, 'Longitude:', rowData.longitude); // Añadir esto para depuración
     this.visible = true;
-    this.latitude=-16.504334;
-    this.longitude=-68.130453;
-    this.title = "vivi";
-  }
+    this.latitude = parseFloat(rowData.latitude);
+    this.longitude = parseFloat(rowData.longitude);
+    this.title = rowData.nameStation; // O cualquier otro título relevante
+}
 
   public openDialog(state: any, stateSubmitted?: any, tipo?: any) {
     tipo == 'crear' ? this.dialogRegistro = state : this.dialogEdit = state;
