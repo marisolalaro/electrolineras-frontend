@@ -9,7 +9,7 @@ export class BodyFilterModel {
   sort: SortFilterModel;
   search: SearchFilterModel;
 
-  constructor(page, size, idRol, idUsuario) {
+  constructor(page, size, idRol?, idUsuario?) {
     this.page = page;
     this.size = size;
     this.idRol = idRol;

@@ -27,7 +27,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { TabViewModule } from 'primeng/tabview';
 import { PaginatorModule } from "primeng/paginator"; 
 import { AutoCompleteModule } from 'primeng/autocomplete';
-
+import { DividerModule } from 'primeng/divider';
 @NgModule({
   exports: [
     CardModule,
@@ -56,7 +56,8 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     InputNumberModule,
     TabViewModule,
     PaginatorModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    DividerModule
   ],
 })
 export class PrimeModule {}

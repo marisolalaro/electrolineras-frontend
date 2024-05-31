@@ -20,14 +20,14 @@ export class HeaderComponent {
     ngOnInit() {
         this.items = [
           {
+            label: mainTitles['administradores'].mainTitle,
+            icon: 'pi pi-fw pi-file',
+            routerLink: ['/administration/administrators'],
+          },
+          {
             label: mainTitles['clientes'].mainTitle,
             icon: 'pi pi-fw pi-file',
             routerLink: ['/administration/customers'],
-          },
-          {
-            label: mainTitles['usuarios'].mainTitle,
-            icon: 'pi pi-fw pi-file',
-            routerLink: ['/administration/administrators'],
           },
           {
             label: mainTitles['electrolineras'].mainTitle,

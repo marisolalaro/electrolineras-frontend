@@ -15,4 +15,7 @@ export class EndPoins {
 
     // tasa de carga
     static chargeRate = "/chargeRate";
+    
+    // administradores
+    static administration = "/adminList";
 };
