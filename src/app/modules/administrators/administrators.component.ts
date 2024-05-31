@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { AdministratorsModule } from './administrators.module';
-import { NgxPaginationModule } from 'ngx-pagination';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
-import { buttons, labels, mainTitles } from 'src/app/core/constants/labels';
+import { buttons, labels, titles, mainTitles } from 'src/app/core/constants/labels';
 import { AdministratorModel } from 'src/app/core/model/administrators';
 import { AdministratorsService } from './services/administrators.service';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
@@ -13,6 +12,7 @@ import { messages } from 'src/app/core/constants/messages';
 import { HelpersService } from 'src/app/core/services/helpers.service';
 import { catchError, of, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-administrators',
@@ -35,6 +35,7 @@ export default class AdministratorsComponent {
   public labelsGlobales = labels;
   public messagesGlobales = messages;
   public botonesGlobales = buttons;
+  public titlesGlobales = titles;
 
   // Variables Paaginador
   public page: number = 1;
@@ -66,22 +67,17 @@ export default class AdministratorsComponent {
     )
   }
 
-  onSelecetedEdit(item: AdministratorModel) {
-
-  }
-
   createFormGroup() {
     return new FormGroup({
-      // id: new FormControl(null),
+      id: new FormControl(null),
       names: new FormControl('', [Validators.required]),
       lastName: new FormControl('', [Validators.required]),
       motherLastName: new FormControl('', [Validators.required]),
       identificationNumber: new FormControl('', [Validators.required]),
-      // TODO VER LA VALIDACIONE DE LOS NUMEROS
-      cellPhoneNumber: new FormControl('', [Validators.required, Validators.maxLength(8)]),
-      phoneNumber: new FormControl('', [Validators.required, Validators.maxLength(8)]),
+      cellPhoneNumber: new FormControl('', [Validators.required, Validators.maxLength(8), Validators.minLength(7), Validators.pattern(/^[0-9]\d*$/)]),
+      phoneNumber: new FormControl('', [Validators.required, Validators.maxLength(8), Validators.minLength(7), Validators.pattern(/^[0-9]\d*$/)]),
       birthdate: new FormControl('', [Validators.required]),
-      electronicMail: new FormControl('', [Validators.required]),
+      electronicMail: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
       username: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required]),
     });
@@ -90,7 +86,7 @@ export default class AdministratorsComponent {
   onValidaFormulario() {
     this.submitted = true;
     if (this.formRegistro.valid) {
-      if (this.administrador.id) {
+      if (this.formRegistro.get('id').value) {
         this.onUpdateRegistro();
       } else {
         this.onCreateRegistro();
@@ -98,7 +94,18 @@ export default class AdministratorsComponent {
     }
   }
 
+  openDialog(state: any, stateSubmitted?: any, tipo?: any) {
+    tipo == 'crear' ? this.dialogRegistro = state : this.dialogEdit = state;
+    this.submitted = stateSubmitted;
+  }
 
+  onSelecetedEdit(item: AdministratorModel) {
+    this.administrador = new AdministratorModel();
+    this.administrador = item;
+    this.formRegistro.patchValue(JSON.parse(JSON.stringify(item)));
+    this.formRegistro.controls['username'].setValue(item.username);
+    this.dialogEdit = true;
+  }
 
   onCreateRegistro() {
     var registro: AdministratorModel = {
@@ -112,7 +119,8 @@ export default class AdministratorsComponent {
     registro.extension = '';
     registro.complement = '';
     registro.idTypeIdentification = 4;
-    registro.roles = [2]
+    registro.roles = [2];
+    registro.birthdate = moment(registro.birthdate).utc().format('YYYY-MM-DD');
 
     this.administratorsService.create(registro)
       .pipe(
@@ -133,16 +141,32 @@ export default class AdministratorsComponent {
       .subscribe()
   }
 
-  openDialog(state: any, stateSubmitted?: any, tipo?: any) {
-    tipo == 'crear' ? this.dialogRegistro = state : this.dialogEdit = state;
-    this.submitted = stateSubmitted;
-  }
-
   onUpdateRegistro() {
     var registro: AdministratorModel = {
       ...this.formRegistro.value,
     };
-    this.administratorsService.update(registro)
+
+    this.administrador.names = this.formRegistro.get('names').value;
+    this.administrador.lastName = this.formRegistro.get('lastName').value;
+    this.administrador.motherLastName = this.formRegistro.get('motherLastName').value;
+    this.administrador.identificationNumber = this.formRegistro.get('identificationNumber').value;
+    this.administrador.cellPhoneNumber = this.formRegistro.get('cellPhoneNumber').value;
+    this.administrador.phoneNumber = this.formRegistro.get('phoneNumber').value;
+    this.administrador.electronicMail = this.formRegistro.get('electronicMail').value;
+    this.administrador.username = this.formRegistro.get('username').value;
+    this.administrador.password = this.formRegistro.get('password').value;
+    this.administrador.birthdate = moment(this.formRegistro.get('birthdate').value).utc().format('YYYY-MM-DD');
+    this.administrador.activationCode = '';
+    this.administrador.idTypePhone = 1;
+    this.administrador.accountStatus = 1;
+    this.administrador.restoreCode = '';
+    this.administrador.activationMethod = 'email';
+    this.administrador.extension = '';
+    this.administrador.complement = '';
+    this.administrador.idTypeIdentification = 4;
+    this.administrador.roles = [2];
+
+    this.administratorsService.update(this.administrador)
       .pipe(
         tap(() => {
           this.helpersService.messageNotification('success', messages.successCreate);

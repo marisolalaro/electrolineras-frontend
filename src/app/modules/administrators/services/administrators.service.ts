@@ -12,7 +12,7 @@ export class AdministratorsService {
   private apiService: string;
 
   constructor(private http: HttpClient) { 
-    this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.customer ;
+    this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.customer;
   }
 
   getAll(bodyFilter): Observable<AdministratorModel[]> {
@@ -25,6 +25,6 @@ export class AdministratorsService {
   }
 
   update(adminitration: AdministratorModel) {
-    return this.http.put(this.apiService,adminitration)
+    return this.http.post(this.apiService + '/update', adminitration);
   }
 }
