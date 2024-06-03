@@ -1,355 +1,336 @@
 <div class="container">
-  <div class="card">
-    <div class="row">
-      <h3><b>{{componentTitle.mainTitle}}</b></h3>
-      <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
-        <button class="mat-raised-button" (click)="openDialog(true,false, 'crear')">Nuevo Registro</button>
-      </div>
+  <!-- <section class="titulo">
+  </section> -->
+    <h3><b>{{componentTitle.mainTitle}}</b></h3>
+    <div style = "display: flex; justify-content:flex-end; margin-bottom: 1rem;" >
+      <button class="mat-raised-button" (click)="openDialog(true,false, 'crear')">Nuevo Registro</button>
     </div>
+    
+    <!-- <section class="listado"> -->
+    <p-table [value]="administradors" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [rowsPerPageOptions]="[5, 10, 20]">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width:25%">Usuario</th>
+          <th style="width:25%">Nombres</th>
+          <th style="width:25%">Apellido Paterno</th>
+          <th style="width:25%">Apellido Materno</th>
+          <th style="width:25%">Email</th>
+          <th style="width:25%">Celular</th>
+          <th style="width:25%">Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-administrator>
+        <tr>
+          <td>{{ administrator.userName }}</td>
+          <td>{{ administrator.names }}</td>
+          <td>{{ administrator.lastName }}</td>
+          <td>{{ administrator.motherLastName }}</td>
+          <td>{{ administrator.electronicMail }}</td>
+          <td>{{ administrator.cellPhoneNumber }}</td>
+          <td>
+            <i class="pi pi-pencil" style="font-size: 1.5rem; color: #3498db;" data-bs-toggle="modal"
+              data-bs-target="#editModal" (click)="onSelecetedEdit(administrator)"></i> &nbsp;
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  <!-- </section> -->
 
-    <div class="row">
+  <!-- modal Crear nuevo -->
+  <section class="dialogCrear">
+    <p-dialog header={{titlesGlobales.create}} [(visible)]="dialogRegistro" [style]="{width: '50vw'}" class="p-fluid"
+      [dismissableMask]="true">
+      <ng-template pTemplate="content">
+        <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
 
-      <p-table #dt1 [columns]="cols" [value]="administradors" dataKey="id"
-        styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
-        [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES">
-
-        <ng-template pTemplate="header" let-columns>
-          <tr>
-            <th *ngFor="let col of columns" pSortableColumn="{{col.field}}">
-              {{col.header}}
-              <p-sortIcon field="{{col.field}}"></p-sortIcon>
-            </th>
-          </tr>
-          <tr>
-            <th *ngFor="let col of columns" [ngSwitch]="col.field">
-              <input *ngSwitchCase="'username'" pInputText type="text"
-                (input)="applyFilter($event, 'username', 'contains')" placeholder="Busca por Usuario" class="w-full">
-              <input *ngSwitchCase="'names'" pInputText type="text" (input)="applyFilter($event, 'names', 'contains')"
-                placeholder="Busca por Nombres" class="w-full">
-              <input *ngSwitchCase="'lastName'" pInputText type="text"
-                (input)="applyFilter($event, 'lastName', 'contains')" placeholder="Busca por Apellido Paterno" class="w-full">
-              <input *ngSwitchCase="'motherLastName'" pInputText type="text"
-                (input)="applyFilter($event, 'motherLastName', 'contains')" placeholder="Busca por Apellido Materno"
-                class="w-full">
-              <input *ngSwitchCase="'electronicMail'" pInputText type="text"
-                (input)="applyFilter($event, 'electronicMail', 'contains')" placeholder="Busca por Email"
-                class="w-full">
-              <input *ngSwitchCase="'cellPhoneNumber'" pInputText type="text"
-                (input)="applyFilter($event, 'cellPhoneNumber', 'contains')" placeholder="Busca por Nro Celular"
-                class="w-full">
-            </th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns">
-          <tr>
-            <td *ngFor="let col of columns">
-              <div *ngIf="col.field != '';then normal_content else icon_content"></div>
-              <ng-template #normal_content>
-                {{rowData[col.field]}}
-              </ng-template>
-              <ng-template #icon_content>
-                <i class="pi pi-user-edit" style="font-size: 1.5rem; color: #3498db;" data-bs-toggle="modal"
-                  data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
-              </ng-template>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
-
-    <!-- modal Crear nuevo -->
-    <section class="dialogCrear">
-      <p-dialog header={{titlesGlobales.create}} [(visible)]="dialogRegistro" [style]="{width: '50vw'}" class="p-fluid"
-        [dismissableMask]="true">
-        <ng-template pTemplate="content">
-          <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
-
-            <p-divider align="left">
-              <div class="inline-flex align-items-center">
-                <i class="pi pi-user mr-2"></i>
-                <b>Datos Personales</b>
-              </div>
-            </p-divider>
-
-            <div class="form-group field">
-              <label for="names">{{labelsGlobales.name}}</label>
-              <input type="text" pInputText required formControlName="names"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['names'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['names'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('names')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <p-divider align="left">
+            <div class="inline-flex align-items-center">
+              <i class="pi pi-user mr-2"></i>
+              <b>Datos Personales</b>
             </div>
+          </p-divider>
 
-            <div class="form-group field">
-              <label for="lastName">{{labelsGlobales.apellidoPaterno}}</label>
-              <input type="text" pInputText required formControlName="lastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['lastName'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['lastName'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('lastName')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="names">{{labelsGlobales.name}}</label>
+            <input type="text" pInputText required formControlName="names"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['names'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['names'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('names')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-            <div class="form-group field">
-              <label for="motherLastName">{{labelsGlobales.apellidoMaterno}}</label>
-              <input type="text" pInputText required formControlName="motherLastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['motherLastName'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['motherLastName'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('motherLastName')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="lastName">{{labelsGlobales.apellidoPaterno}}</label>
+            <input type="text" pInputText required formControlName="lastName"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['lastName'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['lastName'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('lastName')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-            <div class="form-group field">
-              <label for="identificationNumber">{{labelsGlobales.ci}}</label>
-              <input type="text" pInputText required formControlName="identificationNumber"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['identificationNumber'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['identificationNumber'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('identificationNumber')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="motherLastName">{{labelsGlobales.apellidoMaterno}}</label>
+            <input type="text" pInputText required formControlName="motherLastName"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['motherLastName'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['motherLastName'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('motherLastName')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-            <div class="form-group field">
-              <label for="cellPhoneNumber">{{labelsGlobales.celular}}</label>
-              <input type="text" pInputText required formControlName="cellPhoneNumber"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['cellPhoneNumber'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['cellPhoneNumber'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('cellPhoneNumber')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="identificationNumber">{{labelsGlobales.ci}}</label>
+            <input type="text" pInputText required formControlName="identificationNumber"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['identificationNumber'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['identificationNumber'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('identificationNumber')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-            <div class="form-group field">
-              <label for="phoneNumber">{{labelsGlobales.telefono}}</label>
-              <input type="text" pInputText formControlName="phoneNumber"
-                />
-              <!-- <div *ngIf="submitted && formRegistro.controls['phoneNumber'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('phoneNumber')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-                <small class="p-error" *ngIf="formRegistro.get('phoneNumber')?.hasError('maxLength')">
-                  {{messagesGlobales.maxLength}}
-                </small>
-              </div> -->
+          <div class="form-group field">
+            <label for="cellPhoneNumber">{{labelsGlobales.celular}}</label>
+            <input type="text" pInputText required formControlName="cellPhoneNumber"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['cellPhoneNumber'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['cellPhoneNumber'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('cellPhoneNumber')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-            <div class="form-group field">
-              <label for="birthdate">{{labelsGlobales.fechaNacimiento}}</label>
-              <p-calendar formControlName="birthdate" dateFormat="dd/mm/yy"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['birthdate'].invalid}">
-              </p-calendar>
-              <div *ngIf="submitted && formRegistro.controls['birthdate'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('birthdate')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="phoneNumber">{{labelsGlobales.telefono}}</label>
+            <input type="text" pInputText required formControlName="phoneNumber"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['phoneNumber'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['phoneNumber'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('phoneNumber')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
+              <small class="p-error" *ngIf="formRegistro.get('phoneNumber')?.hasError('maxLength')">
+                {{messagesGlobales.maxLength}}
+              </small>
             </div>
+          </div>
 
-            <div class="form-group field">
-              <label for="electronicMail">{{labelsGlobales.email}}</label>
-              <input type="text" pInputText required formControlName="electronicMail"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['electronicMail'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['electronicMail'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('electronicMail')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="birthdate">{{labelsGlobales.fechaNacimiento}}</label>
+            <p-calendar formControlName="birthdate" dateFormat="dd/mm/yy"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['birthdate'].invalid}">
+            </p-calendar>
+            <div *ngIf="submitted && formRegistro.controls['birthdate'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('birthdate')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-            <p-divider align="left">
-              <div class="inline-flex align-items-center">
-                <i class="pi pi-unlock mr-2"></i>
-                <b>Datos de Usuario</b>
-              </div>
-            </p-divider>
-
-            <div class="form-group field">
-              <label for="username">{{labelsGlobales.username}}</label>
-              <input type="text" pInputText required formControlName="username" value="" autocomplete="off"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['username'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['username'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('username')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="electronicMail">{{labelsGlobales.email}}</label>
+            <input type="text" pInputText required formControlName="electronicMail"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['electronicMail'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['electronicMail'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('electronicMail')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-            <div class="form-group field">
-              <label for="password">{{labelsGlobales.contrasenia}}</label>
-              <input type="password" pInputText required formControlName="password" value="" autocomplete="new-password"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['password'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['password'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('password')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <p-divider align="left">
+            <div class="inline-flex align-items-center">
+              <i class="pi pi-unlock mr-2"></i>
+              <b>Datos de Usuario</b>
             </div>
+          </p-divider>
 
-          </form>
-        </ng-template>
-
-        <ng-template pTemplate="footer">
-          <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
-            class="p-button-secondary p-button-rounded mr-2" (click)="openDialog(false,false, 'crear')"></button>
-          <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check" class="p-button-rounded mr-2"
-            (click)="onValidaFormulario()"></button>
-        </ng-template>
-      </p-dialog>
-    </section>
-    <!-- modal Crear nuevo -->
-
-    <!-- modal Editar -->
-    <section class="dialogEdit">
-      <p-dialog header={{titlesGlobales.edit}} [(visible)]="dialogEdit" [style]="{width: '50vw'}" class="p-fluid"
-        [dismissableMask]="true">
-        <ng-template pTemplate="content">
-          <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
-
-            <p-divider align="left">
-              <div class="inline-flex align-items-center">
-                <i class="pi pi-user mr-2"></i>
-                <b>Datos Personales</b>
-              </div>
-            </p-divider>
-
-            <div class="form-group field">
-              <label for="names">{{labelsGlobales.name}}</label>
-              <input type="text" pInputText required formControlName="names"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['names'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['names'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('names')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="username">{{labelsGlobales.userName}}</label>
+            <input type="text" pInputText required formControlName="username" value="" autocomplete="off"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['username'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['username'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('username')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-            <div class="form-group field">
-              <label for="lastName">{{labelsGlobales.apellidoPaterno}}</label>
-              <input type="text" pInputText required formControlName="lastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['lastName'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['lastName'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('lastName')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="password">{{labelsGlobales.contrasenia}}</label>
+            <input type="password" pInputText required formControlName="password" value="" autocomplete="new-password"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['password'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['password'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('password')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-            <div class="form-group field">
-              <label for="motherLastName">{{labelsGlobales.apellidoMaterno}}</label>
-              <input type="text" pInputText required formControlName="motherLastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['motherLastName'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['motherLastName'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('motherLastName')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
+          class="p-button-secondary p-button-rounded mr-2" (click)="openDialog(false,false, 'crear')"></button>
+        <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check" class="p-button-rounded mr-2"
+          (click)="onValidaFormulario()"></button>
+      </ng-template>
+    </p-dialog>
+  </section>
+  <!-- modal Crear nuevo -->
+
+  <!-- modal Editar -->
+  <section class="dialogEdit">
+    <p-dialog header={{titlesGlobales.edit}} [(visible)]="dialogEdit" [style]="{width: '50vw'}" class="p-fluid"
+      [dismissableMask]="true">
+      <ng-template pTemplate="content">
+        <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
+
+          <p-divider align="left">
+            <div class="inline-flex align-items-center">
+              <i class="pi pi-user mr-2"></i>
+              <b>Datos Personales</b>
             </div>
+          </p-divider>
 
-            <div class="form-group field">
-              <label for="identificationNumber">{{labelsGlobales.ci}}</label>
-              <input type="text" pInputText required formControlName="identificationNumber"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['identificationNumber'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['identificationNumber'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('identificationNumber')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="names">{{labelsGlobales.name}}</label>
+            <input type="text" pInputText required formControlName="names"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['names'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['names'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('names')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-            <div class="form-group field">
-              <label for="cellPhoneNumber">{{labelsGlobales.celular}}</label>
-              <input type="text" pInputText required formControlName="cellPhoneNumber"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['cellPhoneNumber'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['cellPhoneNumber'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('cellPhoneNumber')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="lastName">{{labelsGlobales.apellidoPaterno}}</label>
+            <input type="text" pInputText required formControlName="lastName"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['lastName'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['lastName'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('lastName')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-            <div class="form-group field">
-              <label for="phoneNumber">{{labelsGlobales.telefono}}</label>
-              <input type="text" pInputText formControlName="phoneNumber"/>
-              <!-- <div *ngIf="submitted && formRegistro.controls['phoneNumber'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('phoneNumber')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-                <small class="p-error" *ngIf="formRegistro.get('phoneNumber')?.hasError('maxLength')">
-                  {{messagesGlobales.maxLength}}
-                </small>
-              </div> -->
+          <div class="form-group field">
+            <label for="motherLastName">{{labelsGlobales.apellidoMaterno}}</label>
+            <input type="text" pInputText required formControlName="motherLastName"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['motherLastName'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['motherLastName'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('motherLastName')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-            <div class="form-group field">
-              <label for="birthdate">{{labelsGlobales.fechaNacimiento}}</label>
-              <p-calendar formControlName="birthdate" dateFormat="dd/mm/yy"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['birthdate'].invalid}">
-              </p-calendar>
-              <div *ngIf="submitted && formRegistro.controls['birthdate'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('birthdate')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="identificationNumber">{{labelsGlobales.ci}}</label>
+            <input type="text" pInputText required formControlName="identificationNumber"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['identificationNumber'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['identificationNumber'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('identificationNumber')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-            <div class="form-group field">
-              <label for="electronicMail">{{labelsGlobales.email}}</label>
-              <input type="text" pInputText required formControlName="electronicMail"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['electronicMail'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['electronicMail'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('electronicMail')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="cellPhoneNumber">{{labelsGlobales.celular}}</label>
+            <input type="text" pInputText required formControlName="cellPhoneNumber"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['cellPhoneNumber'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['cellPhoneNumber'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('cellPhoneNumber')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-            <p-divider align="left">
-              <div class="inline-flex align-items-center">
-                <i class="pi pi-unlock mr-2"></i>
-                <b>Datos de Usuario</b>
-              </div>
-            </p-divider>
-
-            <div class="form-group field">
-              <label for="username">{{labelsGlobales.username}}</label>
-              <input type="text" pInputText required formControlName="username" value="" autocomplete="off"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['username'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['username'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('username')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="phoneNumber">{{labelsGlobales.telefono}}</label>
+            <input type="text" pInputText required formControlName="phoneNumber"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['phoneNumber'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['phoneNumber'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('phoneNumber')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
+              <small class="p-error" *ngIf="formRegistro.get('phoneNumber')?.hasError('maxLength')">
+                {{messagesGlobales.maxLength}}
+              </small>
             </div>
+          </div>
 
-            <div class="form-group field">
-              <label for="password">{{labelsGlobales.contrasenia}}</label>
-              <input type="password" pInputText required formControlName="password" value="" autocomplete="new-password"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['password'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['password'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('password')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
+          <div class="form-group field">
+            <label for="birthdate">{{labelsGlobales.fechaNacimiento}}</label>
+            <p-calendar formControlName="birthdate" dateFormat="dd/mm/yy"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['birthdate'].invalid}">
+            </p-calendar>
+            <div *ngIf="submitted && formRegistro.controls['birthdate'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('birthdate')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
             </div>
+          </div>
 
-          </form>
-        </ng-template>
+          <div class="form-group field">
+            <label for="electronicMail">{{labelsGlobales.email}}</label>
+            <input type="text" pInputText required formControlName="electronicMail"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['electronicMail'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['electronicMail'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('electronicMail')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
+            </div>
+          </div>
 
-        <ng-template pTemplate="footer">
-          <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
-            class="p-button-secondary p-button-rounded mr-2" (click)="openDialog(false,false, 'edit')"></button>
-          <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check" class="p-button-rounded mr-2"
-            (click)="onValidaFormulario()"></button>
-        </ng-template>
-      </p-dialog>
-    </section>
-    <!-- modal Editar -->
-  </div>
+          <p-divider align="left">
+            <div class="inline-flex align-items-center">
+              <i class="pi pi-unlock mr-2"></i>
+              <b>Datos de Usuario</b>
+            </div>
+          </p-divider>
+
+          <div class="form-group field">
+            <label for="username">{{labelsGlobales.userName}}</label>
+            <input type="text" pInputText required formControlName="username" value="" autocomplete="off"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['username'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['username'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('username')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group field">
+            <label for="password">{{labelsGlobales.contrasenia}}</label>
+            <input type="password" pInputText required formControlName="password" value="" autocomplete="new-password"
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['password'].invalid}" />
+            <div *ngIf="submitted && formRegistro.controls['password'].invalid">
+              <small class="p-error" *ngIf="formRegistro.get('password')?.hasError('required')">
+                {{messagesGlobales.requiredField}}
+              </small>
+            </div>
+          </div>
+
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
+          class="p-button-secondary p-button-rounded mr-2" (click)="openDialog(false,false, 'edit')"></button>
+        <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check" class="p-button-rounded mr-2"
+          (click)="onValidaFormulario()"></button>
+      </ng-template>
+    </p-dialog>
+  </section>
+  <!-- modal Editar -->
 </div>

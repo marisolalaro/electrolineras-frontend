@@ -1,59 +1,60 @@
 <div class="container">
-  <section class="listado">
-    <h3 class="title-electric-stations">{{titleProduct.mainTitle}}</h3>
+  <!-- <section class="listado"> -->
+  <h3><b>{{titleProduct.mainTitle}}</b></h3>
 
+  <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
     <button class="mat-raised-button" (click)="dialogRegistro = true">Nuevo Registro</button>
+  </div>
 
-    <p-table #dt1 [columns]="cols" [value]="electricStations" dataKey="id"
-      styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
-      [showCurrentPageReport]="false" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES">
+  <p-table #dt1 [columns]="cols" [value]="electricStations" dataKey="id"
+    styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5" [showCurrentPageReport]="false"
+    [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES">
 
-      <ng-template pTemplate="header" let-columns>
-        <tr>
-          <th *ngFor="let col of columns" pSortableColumn="{{col.field}}">
-            {{col.header}}
-            <p-sortIcon field="{{col.field}}"></p-sortIcon>
-          </th>
-        </tr>
-        <tr>
-          <th *ngFor="let col of columns" [ngSwitch]="col.field">
-            <input *ngSwitchCase="'nameStation'" pInputText type="text"
-              (input)="applyFilter($event, 'nameStation', 'contains')" placeholder="Busca por Nombre" class="w-full">
-            <input *ngSwitchCase="'direccion'" pInputText type="text"
-              (input)="applyFilter($event, 'direccion', 'contains')" placeholder="Busca por Dirección" class="w-full">
-            <input *ngSwitchCase="'descripcion'" pInputText type="text"
-              (input)="applyFilter($event, 'descripcion', 'contains')" placeholder="Busca por Descripcón"
-              class="w-full">
-            <input *ngSwitchCase="'latitude'" pInputText type="text"
-              (input)="applyFilter($event, 'latitude', 'contains')" placeholder="Busca por Latitud" class="w-full">
-            <input *ngSwitchCase="'longitude'" pInputText type="text"
-              (input)="applyFilter($event, 'longitude', 'contains')" placeholder="Busca por Longitud" class="w-full">
-          </th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr>
-          <td *ngFor="let col of columns">
-            <div *ngIf="col.field != '';then normal_content else icon_content"></div>
-            <ng-template #normal_content>
-              {{rowData[col.field]}}
-            </ng-template>
-            <ng-template #icon_content>
-              <i class="pi pi-pencil" style="font-size: 1.5rem; color: #3498db;" data-bs-toggle="modal"
-                data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
-              <i class="pi pi-map-marker" style="font-size: 1.5rem; color: #F51D1E;" data-bs-toggle="modal"
-                data-bs-target="#exampleModal" (click)="onVerMapa(rowData);"></i>
-            </ng-template>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns" pSortableColumn="{{col.field}}">
+          {{col.header}}
+          <p-sortIcon field="{{col.field}}"></p-sortIcon>
+        </th>
+      </tr>
+      <tr>
+        <th *ngFor="let col of columns" [ngSwitch]="col.field">
+          <input *ngSwitchCase="'nameStation'" pInputText type="text"
+            (input)="applyFilter($event, 'nameStation', 'contains')" placeholder="Busca por Nombre" class="w-full">
+          <input *ngSwitchCase="'direccion'" pInputText type="text"
+            (input)="applyFilter($event, 'direccion', 'contains')" placeholder="Busca por Dirección" class="w-full">
+          <input *ngSwitchCase="'descripcion'" pInputText type="text"
+            (input)="applyFilter($event, 'descripcion', 'contains')" placeholder="Busca por Descripcón" class="w-full">
+          <input *ngSwitchCase="'latitude'" pInputText type="text" (input)="applyFilter($event, 'latitude', 'contains')"
+            placeholder="Busca por Latitud" class="w-full">
+          <input *ngSwitchCase="'longitude'" pInputText type="text"
+            (input)="applyFilter($event, 'longitude', 'contains')" placeholder="Busca por Longitud" class="w-full">
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns">
+          <div *ngIf="col.field != '';then normal_content else icon_content"></div>
+          <ng-template #normal_content>
+            {{rowData[col.field]}}
+          </ng-template>
+          <ng-template #icon_content>
+            <i class="pi pi-pencil" style="font-size: 1.5rem; color: #3498db;" data-bs-toggle="modal"
+              data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
+            <i class="pi pi-map-marker" style="font-size: 1.5rem; color: #F51D1E;" data-bs-toggle="modal"
+              data-bs-target="#exampleModal" (click)="onVerMapa(rowData);"></i>
+          </ng-template>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 
-    <div *ngIf="visible" class="map-modal">
-      <h2>{{ title }}</h2>
-      <app-mapa [lat]="latitude" [lon]="longitude" [titulo]="title" (newItemEvent)="cerrarMapa($event)"></app-mapa>
-    </div>
-  </section>
+  <div *ngIf="visible" class="map-modal">
+    <h2>{{ title }}</h2>
+    <app-mapa [lat]="latitude" [lon]="longitude" [titulo]="title" (newItemEvent)="cerrarMapa($event)"></app-mapa>
+  </div>
+  <!-- </section> -->
 </div>
 
 
