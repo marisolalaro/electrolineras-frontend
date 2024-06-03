@@ -28,6 +28,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/assets/layout/styles/theme/saga-blue/theme.css",
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images/",
@@ -119,6 +120,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/assets/layout/styles/theme/saga-blue/theme.css",
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images/",

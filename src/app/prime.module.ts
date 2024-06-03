@@ -28,6 +28,14 @@ import { TabViewModule } from 'primeng/tabview';
 import { PaginatorModule } from "primeng/paginator"; 
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DividerModule } from 'primeng/divider';
+import { MegaMenuModule } from 'primeng/megamenu';
+import { MenuModule } from 'primeng/menu';
+import { ContextMenuModule } from 'primeng/contextmenu';
+import { PanelMenuModule } from 'primeng/panelmenu';
+import { SlideMenuModule } from 'primeng/slidemenu';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { TieredMenuModule } from 'primeng/tieredmenu';
+
 @NgModule({
   exports: [
     CardModule,
@@ -57,7 +65,14 @@ import { DividerModule } from 'primeng/divider';
     TabViewModule,
     PaginatorModule,
     AutoCompleteModule,
-    DividerModule
+    DividerModule,
+    MegaMenuModule, 
+    MenuModule,
+    ContextMenuModule,
+    PanelMenuModule,
+    SlideMenuModule,
+    TabMenuModule,
+    TieredMenuModule,
   ],
 })
 export class PrimeModule {}
