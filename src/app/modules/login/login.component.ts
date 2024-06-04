@@ -113,7 +113,7 @@ export default class LoginComponent {
 
   redireccionaRuta() {
     return new Promise((resolve) => {
-      this.router.navigate(['/administration']);
+      this.router.navigate(['/administration/customers']);
       resolve(true);
     });
   }
