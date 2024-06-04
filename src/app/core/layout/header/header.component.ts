@@ -21,17 +21,17 @@ export class HeaderComponent {
         this.items = [
           {
             label: mainTitles['administradores'].mainTitle,
-            icon: 'pi pi-fw pi-file',
+            icon: 'pi pi-fw pi-user',
             routerLink: ['/administration/administrators'],
           },
           {
             label: mainTitles['clientes'].mainTitle,
-            icon: 'pi pi-fw pi-file',
+            icon: 'pi pi-fw pi-users',
             routerLink: ['/administration/customers'],
           },
           {
             label: mainTitles['electrolineras'].mainTitle,
-            icon: 'pi pi-fw pi-file',
+            icon: 'pi pi-fw pi-bolt',
             routerLink: ['/administration/electric-stations'],
           },
           // {
