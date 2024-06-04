@@ -11,11 +11,11 @@ import { PrimeModule } from 'src/app/prime.module';
     
   ],
   imports: [
-    CommonModule,
     AdministratorsRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     PipesModule,
+    CommonModule,
     PrimeModule
   ],
   exports: [
