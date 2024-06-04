@@ -1,26 +1,32 @@
-import { Component } from '@angular/core';
-import { AdministratorsModule } from './administrators.module';
-import { PipesModule } from 'src/app/core/pipes/pipes.module';
-import { buttons, labels, titles, mainTitles } from 'src/app/core/constants/labels';
-import { AdministratorModel } from 'src/app/core/model/administrators';
-import { AdministratorsService } from './services/administrators.service';
-import { BodyFilterModel } from 'src/app/core/model/body-filter';
-import { decodeLocal } from 'src/app/core/utils/decodeToken';
+import { Component, ViewChild } from '@angular/core';
+import { NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
-import { messages } from 'src/app/core/constants/messages';
-import { HelpersService } from 'src/app/core/services/helpers.service';
+// librerias
+import * as moment from 'moment';
+import { Table } from 'primeng/table';
 import { catchError, of, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
-import * as moment from 'moment';
+// cores
+import { messages } from 'src/app/core/constants/messages';
+import { decodeLocal } from 'src/app/core/utils/decodeToken';
+import { buttons, labels, titles, mainTitles } from 'src/app/core/constants/labels';
+// modules
+import { PipesModule } from 'src/app/core/pipes/pipes.module';
+import { AdministratorsModule } from './administrators.module';
+// models
+import { BodyFilterModel } from 'src/app/core/model/body-filter';
+import { AdministratorModel } from 'src/app/core/model/administrators';
+// services
+import { HelpersService } from 'src/app/core/services/helpers.service';
+import { AdministratorsService } from './services/administrators.service';
 
 @Component({
+  standalone: true,
   selector: 'app-administrators',
   templateUrl: './administrators.component.html',
-  standalone: true,
-  imports: [AdministratorsModule, PipesModule, ReactiveFormsModule, NgClass, NgIf],
   styleUrls: ['./administrators.component.scss'],
   providers: [HelpersService, MessageService],
+  imports: [AdministratorsModule, PipesModule, ReactiveFormsModule,NgFor, NgClass, NgIf, NgSwitch, NgSwitchCase],
 })
 export default class AdministratorsComponent {
 
@@ -28,24 +34,26 @@ export default class AdministratorsComponent {
   public submitted: boolean = false;
 
   // variables de dialog
-  public dialogRegistro: boolean = false;
   public dialogEdit: boolean = false;
+  public dialogRegistro: boolean = false;
 
   // variables Globales del Core
   public labelsGlobales = labels;
-  public messagesGlobales = messages;
-  public botonesGlobales = buttons;
   public titlesGlobales = titles;
+  public botonesGlobales = buttons;
+  public messagesGlobales = messages;
 
   // Variables Paaginador
   public page: number = 1;
   public itemsPerPage: number = 9999;
 
   // variables propias del componete
+  @ViewChild('dt1') dt!: Table;
+  public cols: any[] = [];
   public administradors: AdministratorModel[] = [];
-  public administrador: AdministratorModel = new AdministratorModel();
-  public componentTitle: any = mainTitles['administradores'];
   public formRegistro: FormGroup = this.createFormGroup();
+  public componentTitle: any = mainTitles['administradores'];
+  public administrador: AdministratorModel = new AdministratorModel();
   public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
 
   constructor(
@@ -55,8 +63,21 @@ export default class AdministratorsComponent {
 
   ngOnInit(): void {
     this.getAllAdministrations();
+    this.inicializaDatos();
   }
 
+  inicializaDatos() {
+    this.cols = [
+      { field: 'username', header: 'Usuario' },
+      { field: 'names', header: 'Nombres' },
+      { field: 'lastName', header: 'Apellido Paterno' },
+      { field: 'motherLastName', header: 'Apellido Materno' },
+      { field: 'electronicMail', header: 'Email' },
+      { field: 'cellPhoneNumber', header: 'Celular' },
+      { field: '', header: 'Opciones' },
+    ];
+  }
+  
   getAllAdministrations() {
     this.administratorsService.getAll(this.bodyFilter).subscribe(
       (resp: any) => {
@@ -75,7 +96,7 @@ export default class AdministratorsComponent {
       motherLastName: new FormControl('', [Validators.required]),
       identificationNumber: new FormControl('', [Validators.required]),
       cellPhoneNumber: new FormControl('', [Validators.required, Validators.maxLength(8), Validators.minLength(7), Validators.pattern(/^[0-9]\d*$/)]),
-      phoneNumber: new FormControl('', [Validators.required, Validators.maxLength(8), Validators.minLength(7), Validators.pattern(/^[0-9]\d*$/)]),
+      phoneNumber: new FormControl('', [Validators.maxLength(8), Validators.minLength(7), Validators.pattern(/^[0-9]\d*$/)]),
       birthdate: new FormControl('', [Validators.required]),
       electronicMail: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
       username: new FormControl('', [Validators.required]),
@@ -97,6 +118,8 @@ export default class AdministratorsComponent {
   openDialog(state: any, stateSubmitted?: any, tipo?: any) {
     tipo == 'crear' ? this.dialogRegistro = state : this.dialogEdit = state;
     this.submitted = stateSubmitted;
+    this.formRegistro.reset();
+    this.formRegistro = this.createFormGroup();
   }
 
   onSelecetedEdit(item: AdministratorModel) {
@@ -104,7 +127,9 @@ export default class AdministratorsComponent {
     this.administrador = item;
     this.formRegistro.patchValue(JSON.parse(JSON.stringify(item)));
     this.formRegistro.controls['username'].setValue(item.username);
+    this.formRegistro.controls['birthdate'].setValue(new Date (moment(item.birthdate).toString()));
     this.dialogEdit = true;
+    // this.formRegistro.removeControl('password');
   }
 
   onCreateRegistro() {
@@ -121,6 +146,7 @@ export default class AdministratorsComponent {
     registro.idTypeIdentification = 4;
     registro.roles = [2];
     registro.birthdate = moment(registro.birthdate).utc().format('YYYY-MM-DD');
+    registro.username = this.formRegistro.get('username').value
 
     this.administratorsService.create(registro)
       .pipe(
@@ -145,7 +171,6 @@ export default class AdministratorsComponent {
     var registro: AdministratorModel = {
       ...this.formRegistro.value,
     };
-
     this.administrador.names = this.formRegistro.get('names').value;
     this.administrador.lastName = this.formRegistro.get('lastName').value;
     this.administrador.motherLastName = this.formRegistro.get('motherLastName').value;
@@ -154,7 +179,6 @@ export default class AdministratorsComponent {
     this.administrador.phoneNumber = this.formRegistro.get('phoneNumber').value;
     this.administrador.electronicMail = this.formRegistro.get('electronicMail').value;
     this.administrador.username = this.formRegistro.get('username').value;
-    this.administrador.password = this.formRegistro.get('password').value;
     this.administrador.birthdate = moment(this.formRegistro.get('birthdate').value).utc().format('YYYY-MM-DD');
     this.administrador.activationCode = '';
     this.administrador.idTypePhone = 1;
@@ -164,6 +188,7 @@ export default class AdministratorsComponent {
     this.administrador.extension = '';
     this.administrador.complement = '';
     this.administrador.idTypeIdentification = 4;
+    this.administrador.password = this.formRegistro.get('password').value;
     this.administrador.roles = [2];
 
     this.administratorsService.update(this.administrador)
@@ -183,6 +208,13 @@ export default class AdministratorsComponent {
         )
       )
       .subscribe()
+  }
+
+  applyFilter($event: any, field: string, matchMode: string) {
+    this.bodyFilter.page = 1;
+    let value = ($event.target as HTMLInputElement)?.value;
+    this.dt.filter(value, field, matchMode);
+    // this.getAllElectricStations();
   }
 
 }

@@ -14,7 +14,7 @@ export const labels: any = {
 
   // Administradores
   email: 'Email',
-  userName: 'Nombre de Usuario',
+  username: 'Nombre de Usuario',
   name: 'Nombres',
   apellidoPaterno: 'Apellido Paterno',
   apellidoMaterno: 'Apellido Materno',
