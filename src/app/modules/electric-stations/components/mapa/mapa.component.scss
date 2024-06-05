@@ -5,14 +5,17 @@
     right: 0;
     bottom: 0;
     margin: 30px;
-    // display: flex;
+    display: flex;
     // align-items: center;
-    // justify-content: center;
+    justify-content: center;
 }
 
 .map-frame {
+  // display: flex;
+    justify-content: center;
     border: 2px solid black;
     height: 100%;
+    width: 50%;
 }
 
 #map {
@@ -39,7 +42,7 @@
   }
 
   #map {
-    width: 100%;
+    width: 50%;
     height: 400px;
   }
 }

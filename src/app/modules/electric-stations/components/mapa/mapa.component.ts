@@ -4,9 +4,6 @@ import 'leaflet-routing-machine';
 import { icon, Marker } from 'leaflet';
 import { Inject, OnInit } from '@angular/core';
 
-// export const DEFAULT_LAT = 48.20807;
-// export const DEFAULT_LON = 16.37320;
-// export const TITULO = 'Proyecto';
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
 const shadowUrl = 'assets/marker-shadow.png';
@@ -23,9 +20,6 @@ export class MapaComponent implements OnInit, OnChanges {
 
   private map: any;
   private marker: L.Marker;
-  // @Input() lat: number = DEFAULT_LAT;
-  // @Input() lon: number = DEFAULT_LON;
-  // @Input() titulo: string = TITULO;
   @Input() lat: number ;
   @Input() lon: number  ;
   @Input() titulo: string ;
@@ -53,7 +47,7 @@ export class MapaComponent implements OnInit, OnChanges {
     this.map = L.map('map', {
       center: [this.lat, this.lon],
       attributionControl: false,
-      zoom: 14
+      zoom: 17
     });
 
     var iconDefault = L.icon({
@@ -82,7 +76,6 @@ export class MapaComponent implements OnInit, OnChanges {
     if (this.marker) {
       this.map.removeLayer(this.marker); // Remover el marcador anterior
     }
-
     this.marker = L.marker([this.lat, this.lon]).bindPopup(this.titulo);
     this.marker.addTo(this.map);
   }

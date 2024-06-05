@@ -1,29 +1,30 @@
 import { NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ElectricStationsModule } from './electric-stations.module';
-import { PipesModule } from 'src/app/core/pipes/pipes.module';
-import { NgxPaginationModule } from 'ngx-pagination';
-import { ElectricStationsService } from './services/electric-stations.service';
-import { ElectricStationModel } from 'src/app/core/model/electric-station';
-import { labels, mainTitles } from 'src/app/core/constants/labels';
-import { messages } from 'src/app/core/constants/messages';
-import { catchError, of, tap } from 'rxjs';
-
-
-import { HelpersService } from 'src/app/core/services/helpers.service';
-import { MessageService } from 'primeng/api';
-import { BodyFilterModel } from 'src/app/core/model/body-filter';
-import { decodeLocal } from 'src/app/core/utils/decodeToken';
-import { Table } from 'primeng/table';
-
-import { buttons } from 'src/app/core/constants/labels';
-import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
-import { TasaCargaModel } from 'src/app/core/model/tasa-carga';
-import * as Leaflet from 'leaflet';
-import * as L from 'leaflet';
+// librerias
 import 'leaflet-routing-machine';
-import { Input } from '@angular/core';
+import { Table } from 'primeng/table';
+import { catchError, of, tap } from 'rxjs';
+import { MessageService } from 'primeng/api';
+// cores
+import { messages } from 'src/app/core/constants/messages';
+import { decodeLocal } from 'src/app/core/utils/decodeToken';
+import { PipesModule } from 'src/app/core/pipes/pipes.module';
+import { labels, mainTitles, buttons } from 'src/app/core/constants/labels';
+// modules
+import { ElectricStationsModule } from './electric-stations.module';
+// models
+import { TasaCargaModel } from 'src/app/core/model/tasa-carga';
+import { BodyFilterModel } from 'src/app/core/model/body-filter';
+import { ElectricStationModel } from 'src/app/core/model/electric-station';
+// services
+import { HelpersService } from 'src/app/core/services/helpers.service';
+import { ElectricStationsService } from './services/electric-stations.service';
+import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
+
+// import * as Leaflet from 'leaflet';
+// import * as L from 'leaflet';
+// import { Input } from '@angular/core';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -31,22 +32,22 @@ interface AutoCompleteCompleteEvent {
 }
 
 @Component({
-  selector: 'app-electric-stations',
   standalone: true,
+  selector: 'app-electric-stations',
   templateUrl: './electric-stations.component.html',
   styleUrls: ['./electric-stations.component.scss'],
-  imports: [ ElectricStationsModule, NgFor, NgIf, PipesModule, ReactiveFormsModule, NgClass, NgSwitch, NgSwitchCase],
   providers: [HelpersService, MessageService],
+  imports: [ElectricStationsModule, NgFor, NgIf, PipesModule, ReactiveFormsModule, NgClass, NgSwitch, NgSwitchCase],
 })
-export default class ElectricStationsComponent implements OnInit  {
+export default class ElectricStationsComponent implements OnInit {
 
   // variables de control
   public submitted: boolean = false;
 
   // variables Globales del Core
   public labelsGlobales = labels;
-  public messagesGlobales = messages;
   public botonesGlobales = buttons;
+  public messagesGlobales = messages;
 
   // variables del paginador
   public page: number = 1;
@@ -54,38 +55,41 @@ export default class ElectricStationsComponent implements OnInit  {
   public totalRecords: number = 0;
 
   // variables del Mapa
+  public title: string;
   public latitude: number;
   public longitude: number;
-  public title: string;
 
   // variables dialog
   public visible: boolean = false;
-  public dialogRegistro: boolean = false;
   public dialogEdit: boolean = false;
+  public dialogRegistro: boolean = false;
+
+  // variables para el select
+  public selectedCountry: any;
+  public countries: any[] | undefined;
+  public filteredCountries: any[] | undefined;
 
   // variables propias del componente
   public cols: any[] = [];
+  @ViewChild('dt1') dt!: Table;
+  public tasasCarga: TasaCargaModel[] = [];
   public electricStations: ElectricStationModel[] = [];
   public titleProduct: any = mainTitles['electrolineras'];
   public formRegistro: FormGroup = this.createFormGroup();
   public electricStation: ElectricStationModel = new ElectricStationModel();
   public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
 
-  public tasasCarga: TasaCargaModel[] = [];
-  @ViewChild('dt1') dt!: Table;
-
   constructor(
-    public electricStationsService: ElectricStationsService,
     private helpersService: HelpersService,
     public tasaCargaService: ParTasaCargaService,
+    public electricStationsService: ElectricStationsService,
   ) { }
 
-  countries: any[] | undefined;
-
-  selectedCountry: any;
-
-  filteredCountries: any[] | undefined;
-
+  ngOnInit(): void {
+    this.inicializaDatos();
+    this.getAllElectricStations();
+    this.getTasaDeCarga();
+  }
 
   filterCountry(event: AutoCompleteCompleteEvent) {
     let filtered: any[] = [];
@@ -97,12 +101,6 @@ export default class ElectricStationsComponent implements OnInit  {
       }
     }
     this.filteredCountries = filtered;
-  }
-
-  ngOnInit(): void {
-    this.inicializaDatos();
-    this.getAllElectricStations();
-    this.getTasaDeCarga();
   }
 
   inicializaDatos() {
@@ -138,10 +136,6 @@ export default class ElectricStationsComponent implements OnInit  {
     this.formRegistro.patchValue(item);
     this.selectedCountry = item.chargeRate
     this.dialogEdit = true;
-  }
-
-  seleccionaSizeList(event) {
-    this.itemsPerPage = event.target.value;
   }
 
   onValidaFormulario() {
@@ -245,7 +239,7 @@ export default class ElectricStationsComponent implements OnInit  {
     this.latitude = parseFloat(rowData.latitude);
     this.longitude = parseFloat(rowData.longitude);
     this.title = rowData.nameStation; // O cualquier otro título relevante
-}
+  }
 
   public openDialog(state: any, stateSubmitted?: any, tipo?: any) {
     tipo == 'crear' ? this.dialogRegistro = state : this.dialogEdit = state;
