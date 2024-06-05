@@ -8,10 +8,9 @@
     </div>
 
     <div class="row">
-
       <p-table #dt1 [columns]="cols" [value]="administradors" dataKey="id"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
-        [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES">
+        [showCurrentPageReport]="false" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES">
 
         <ng-template pTemplate="header" let-columns>
           <tr>

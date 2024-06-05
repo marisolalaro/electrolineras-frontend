@@ -38,6 +38,7 @@ export const titles: any = {
   edit: 'Editar registro',
   create: 'Nuevo registro',
   filter: 'Filtrar por:',
+  detail: 'Detalle registro',
 }
 
 export const buttons: any = {

@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 // cores
 import { Global } from 'src/app/core/variables/globales';
-import { mainTitles } from 'src/app/core/constants/labels';
+import { mainTitles, titles } from 'src/app/core/constants/labels';
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
 // modules
 import { CustomersModule } from './customers.module';
@@ -46,6 +46,7 @@ export default class CustomersComponent {
   public titleProduct: any = mainTitles['clientes'];
   public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
 
+  public titlesGlobales = titles;
   // Variables Dialog
   public dialogDetalle: boolean = false;
   selectedCustomers!: Customer;
@@ -70,8 +71,9 @@ export default class CustomersComponent {
       { field: 'lastName', header: 'Apellido Paterno' },
       { field: 'motherLastName', header: 'Apellido Materno' },
       { field: 'electronicMail', header: 'Email' },
+      { field: 'paymentTransactionsElectrolineraList', header: 'Última Transacción'},
+      { field: 'chargeClientList', header: 'Última Carga' },
       { field: '', header: 'Opciones' },
-
     ];
   }
 
@@ -113,6 +115,12 @@ export default class CustomersComponent {
     }
     if(field == 'electronicMail') {
       this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribElectronicMail;
+    }
+    if(field == 'paymentTransactionsElectrolineraList') {
+      this.bodyFilter.search.column = 'paymentTransactionsElectrolineraList.amount';
+    }
+    if(field == 'chargeClientList') {
+      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribChargeClientList;
     }
     this.bodyFilter.search.value = value;
     this.getCustomers();
