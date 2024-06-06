@@ -5,14 +5,13 @@
     </div>
     <div class="row">
       <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
-        <button class="mat-raised-button" (click)="dialogRegistro = true">Nuevo Registro</button>
+        <button class="mat-raised-button" (click)="openDialog(true, false, 'crear')">Nuevo Registro</button>
       </div>
     </div>
     <div class="row">
       <p-table #dt1 [columns]="cols" [value]="electricStations" dataKey="id"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
         [showCurrentPageReport]="false" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES">
-
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th *ngFor="let col of columns" pSortableColumn="{{col.field}}">
@@ -55,14 +54,13 @@
       </p-table>
     </div>
     <div class="row">
-      <div *ngIf="visible" class="map-modal">
-        <h2>{{ title }}</h2>
+      <div *ngIf="mapaVisible" class="map-modal">
         <app-mapa [lat]="latitude" [lon]="longitude" [titulo]="title" (newItemEvent)="cerrarMapa($event)"></app-mapa>
       </div>
     </div>
     <!-- modal Crear nuevo -->
     <div class="row">
-      <p-dialog header="Header" [(visible)]="dialogRegistro" [style]="{width: '50vw'}" class="p-fluid"
+      <p-dialog header={{titlesGlobales.create}} [(visible)]="dialogRegistro" [style]="{width: '50vw'}" class="p-fluid"
         [dismissableMask]="true">
         <ng-template pTemplate="content">
           <form class="row g-2" [formGroup]="formRegistro">
@@ -158,7 +156,7 @@
     <!-- modal Crear nuevo -->
     <!-- modal Editar Registro -->
     <div class="row">
-      <p-dialog header="Header" [(visible)]="dialogEdit" [style]="{width: '50vw'}" class="p-fluid"
+      <p-dialog header={{titlesGlobales.edit}} [(visible)]="dialogEdit" [style]="{width: '50vw'}" class="p-fluid"
         [closeOnEscape]="true" [closable]="true">
         <ng-template pTemplate="content">
           <form class="row g-2" [formGroup]="formRegistro">

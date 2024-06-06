@@ -10,7 +10,7 @@ import { MessageService } from 'primeng/api';
 import { messages } from 'src/app/core/constants/messages';
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
-import { labels, mainTitles, buttons } from 'src/app/core/constants/labels';
+import { labels, mainTitles, buttons, titles } from 'src/app/core/constants/labels';
 // modules
 import { ElectricStationsModule } from './electric-stations.module';
 // models
@@ -43,11 +43,13 @@ export default class ElectricStationsComponent implements OnInit {
 
   // variables de control
   public submitted: boolean = false;
+  public mapaVisible: boolean = false;
 
   // variables Globales del Core
   public labelsGlobales = labels;
   public botonesGlobales = buttons;
   public messagesGlobales = messages;
+  public titlesGlobales = titles;
 
   // variables del paginador
   public page: number = 1;
@@ -60,7 +62,6 @@ export default class ElectricStationsComponent implements OnInit {
   public longitude: number;
 
   // variables dialog
-  public visible: boolean = false;
   public dialogEdit: boolean = false;
   public dialogRegistro: boolean = false;
 
@@ -133,8 +134,9 @@ export default class ElectricStationsComponent implements OnInit {
   }
 
   onSelecetedEdit(item) {
+    this.electricStation = item;
     this.formRegistro.patchValue(item);
-    this.selectedCountry = item.chargeRate
+    this.selectedCountry = item.chargeRate;
     this.dialogEdit = true;
   }
 
@@ -143,7 +145,7 @@ export default class ElectricStationsComponent implements OnInit {
     if (this.formRegistro.valid) {
       if (this.electricStation.id) {
         this.onUpdateRegistro();
-      } else {
+        } else {
         this.onCreateRegistro();
       }
     }
@@ -151,7 +153,7 @@ export default class ElectricStationsComponent implements OnInit {
 
   private createFormGroup() {
     return new FormGroup({
-      id: new FormControl(null),
+      id: new FormControl(''),
       nameStation: new FormControl('', [Validators.required]),
       descripcion: new FormControl('', [Validators.required]),
       direccion: new FormControl('', [Validators.required]),
@@ -200,9 +202,9 @@ export default class ElectricStationsComponent implements OnInit {
     this.electricStationsService.update(registro)
       .pipe(
         tap(() => {
-          this.helpersService.messageNotification('success', messages.successCreate);
+          this.openDialog(false, false, 'edit');
+          this.helpersService.messageNotification('success', messages.successUpdate);
           this.getAllElectricStations();
-          this.dialogEdit = false;
         }),
         catchError((err) =>
           of(
@@ -234,19 +236,23 @@ export default class ElectricStationsComponent implements OnInit {
   }
 
   onVerMapa(rowData) {
-    console.log('Latitude:', rowData.latitude, 'Longitude:', rowData.longitude); // Añadir esto para depuración
-    this.visible = true;
+    this.mapaVisible = true;
     this.latitude = parseFloat(rowData.latitude);
     this.longitude = parseFloat(rowData.longitude);
-    this.title = rowData.nameStation; // O cualquier otro título relevante
+    // this.title = rowData.nameStation; // O cualquier otro título relevante
   }
 
-  public openDialog(state: any, stateSubmitted?: any, tipo?: any) {
-    tipo == 'crear' ? this.dialogRegistro = state : this.dialogEdit = state;
+  openDialog(state: any, stateSubmitted?: any, tipo?: any) {
+    if (tipo == 'crear') {
+      this.dialogRegistro = state;
+      this.formRegistro.reset();
+    } else {
+      this.dialogEdit = state;
+    }
     this.submitted = stateSubmitted;
   }
 
   cerrarMapa(evet) {
-    this.visible = false
+    this.mapaVisible = false
   }
 }

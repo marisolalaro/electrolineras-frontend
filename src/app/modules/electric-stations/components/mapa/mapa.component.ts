@@ -8,7 +8,6 @@ const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
 const shadowUrl = 'assets/marker-shadow.png';
 
-
 @Component({
   selector: 'app-mapa',
   templateUrl: './mapa.component.html',
@@ -16,21 +15,23 @@ const shadowUrl = 'assets/marker-shadow.png';
 })
 export class MapaComponent implements OnInit, OnChanges {
 
-  @Output() newItemEvent = new EventEmitter<any>();
-
   private map: any;
   private marker: L.Marker;
   @Input() lat: number ;
   @Input() lon: number  ;
   @Input() titulo: string ;
+  @Output() newItemEvent = new EventEmitter<any>();
 
   constructor() {
   }
 
   ngOnInit(): void {
+    if (this.map) { 
+      this.map = this.map.off(); 
+      this.map = this.map.remove(); 
+    }
     this.initMap();
   }
-
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['lat'] || changes['lon']) {
@@ -42,33 +43,28 @@ export class MapaComponent implements OnInit, OnChanges {
     }
   }
 
-
   private initMap(): void {
     this.map = L.map('map', {
       center: [this.lat, this.lon],
       attributionControl: false,
       zoom: 17
     });
-
     var iconDefault = L.icon({
-      iconRetinaUrl,
+      // iconRetinaUrl,
       iconUrl,
       shadowUrl,
       iconSize: [25, 41],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
-      tooltipAnchor: [16, -28],
+      // tooltipAnchor: [16, -28],
       shadowSize: [41, 41]
     });
     L.Marker.prototype.options.icon = iconDefault;
-
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://1938.com.es">Web Inteligencia Artificial</a>'
     });
-
     tiles.addTo(this.map);
-
     this.addMarkers();
   }
 
