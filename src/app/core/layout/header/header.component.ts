@@ -14,32 +14,40 @@ import { mainTitles } from '../../constants/labels';
   standalone: true,
 })
 export class HeaderComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
   items: any;
 
-    ngOnInit() {
-        this.items = [
-          {
-            label: mainTitles['administradores'].mainTitle,
-            icon: 'pi pi-fw pi-user',
-            routerLink: ['/administration/administrators'],
-          },
-          {
-            label: mainTitles['clientes'].mainTitle,
-            icon: 'pi pi-fw pi-users',
-            routerLink: ['/administration/customers'],
-          },
-          {
-            label: mainTitles['electrolineras'].mainTitle,
-            icon: 'pi pi-fw pi-bolt',
-            routerLink: ['/administration/electric-stations'],
-          },
-          // {
-          //   label: 'Productos',
-          //   icon: 'pi pi-fw pi-file',
-          //   routerLink: ['/products'],
-          // },
-        ];
+  ngOnInit() {
+    this.items = [
+      {
+        label: mainTitles['administradores'].mainTitle,
+        icon: 'pi pi-fw pi-user',
+        routerLink: ['/administration/administrators'],
+      },
+      {
+        label: mainTitles['clientes'].mainTitle,
+        icon: 'pi pi-fw pi-users',
+        routerLink: ['/administration/customers'],
+      },
+      {
+        label: mainTitles['electrolineras'].mainTitle,
+        icon: 'pi pi-fw pi-bolt',
+        routerLink: ['/administration/electric-stations'],
+      },
+      // {
+      //   label: 'Productos',
+      //   icon: 'pi pi-fw pi-file',
+      //   routerLink: ['/products'],
+      // },
+    ];
+  }
+
+  salir() {
+    var c = confirm("¿Salir del sitio web?");
+    if (c == true) {
+     localStorage.removeItem('token');
+      this.router.navigate(['']);
     }
+  }
 }
 

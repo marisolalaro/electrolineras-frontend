@@ -129,7 +129,8 @@
               <tr>
                 <td>{{customer.nombreRazonSocial}}</td>
                 <td>{{customer.numeroDocumento}}</td>
-                <td>{{customer.complemento}}</td>
+                <td *ngIf="customer.complemento != 'null'">{{customer.complemento}}</td>
+                <td *ngIf="customer.complemento == 'null'"></td>
                 <td>{{customer.paymentDate | formatFieldDate}}</td>
                 <td>{{customer.gloss}}</td>
                 <td>{{customer.amount}}</td>

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Global } from 'src/app/core/variables/globales';
+import { MessageService } from 'primeng/api';
 // modulos
 import { LoginModule } from './login.module';
 // servicios
@@ -12,7 +13,8 @@ import { LoginService } from './services/login.service';
   templateUrl: './login.component.html',
   standalone: true,
   imports: [LoginModule],
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  providers: [MessageService]
 })
 export default class LoginComponent {
 
@@ -33,7 +35,8 @@ export default class LoginComponent {
     private fb: FormBuilder,
     private router: Router,
     public loginService: LoginService,
-    private global: Global) { }
+    private global: Global,
+    private messageService: MessageService) { }
 
   ngOnInit() {
   }
@@ -73,7 +76,7 @@ export default class LoginComponent {
         
         resolve(true);
       } else {
-        // console.log('llene los campos user and pass');
+        this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Nombre de usuario y contraseña, son campos requeridos' });
         resolve(false);
       }
     })
@@ -89,7 +92,7 @@ export default class LoginComponent {
           resolve(true);
         })
         .catch((err) => {
-          // console.log("Error del servidor");
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Usuario o Contraseña Incorrectos'});
           resolve(false);
         });
     });

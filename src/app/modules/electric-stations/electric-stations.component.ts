@@ -1,7 +1,7 @@
 import { NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-// librerias
+// librerías
 import 'leaflet-routing-machine';
 import { Table } from 'primeng/table';
 import { catchError, of, tap } from 'rxjs';
@@ -21,11 +21,7 @@ import { ElectricStationModel } from 'src/app/core/model/electric-station';
 import { HelpersService } from 'src/app/core/services/helpers.service';
 import { ElectricStationsService } from './services/electric-stations.service';
 import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
-
-// import * as Leaflet from 'leaflet';
-// import * as L from 'leaflet';
-// import { Input } from '@angular/core';
-
+ 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
   query: string;
@@ -108,7 +104,7 @@ export default class ElectricStationsComponent implements OnInit {
     this.cols = [
       { field: 'nameStation', header: 'Nombre' },
       { field: 'direccion', header: 'Dirección' },
-      { field: 'descripcion', header: 'Descripcón' },
+      { field: 'descripcion', header: 'Descripción' },
       { field: 'latitude', header: 'Latitud' },
       { field: 'longitude', header: 'Longitud' },
       { field: '', header: 'Opciones' }
