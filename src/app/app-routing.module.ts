@@ -26,6 +26,10 @@ const routes: Routes = [
         path: 'transactions',
         loadComponent: () => import('./modules/transactions/transactions.component'),
       },
+      {
+        path: 'invoices',
+        loadComponent: () => import('./modules/invoice-electric-stations/invoice-electric-stations.component'),
+      },
     ]
   },
 ];
