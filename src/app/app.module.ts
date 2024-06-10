@@ -14,6 +14,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { TabViewModule } from 'primeng/tabview';
+import { SharedModule } from 'primeng/api';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -39,10 +41,12 @@ export function HttpLoaderFactory(http: HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
       },
-    }),
-    NgxPaginationModule,
+      }),
+      NgxPaginationModule,
     LeafletModule,
     CommonModule,
+    TabViewModule, 
+    SharedModule
   ],
   providers: [
     DatePipe,

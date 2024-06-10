@@ -35,6 +35,8 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { SlideMenuModule } from 'primeng/slidemenu';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { TieredMenuModule } from 'primeng/tieredmenu';
+import { SidebarModule } from 'primeng/sidebar';
+import { SharedModule } from 'primeng/api';
 
 @NgModule({
   exports: [
@@ -73,6 +75,8 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
     SlideMenuModule,
     TabMenuModule,
     TieredMenuModule,
+    SidebarModule,
+    SharedModule
   ],
 })
 export class PrimeModule {}

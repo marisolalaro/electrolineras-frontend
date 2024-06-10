@@ -7,9 +7,9 @@ import { HeaderComponent } from 'src/app/core/layout/header/header.component';
 @Component({
   selector: 'app-content',
   standalone: true,
-  imports: [ContentModule, RouterModule, FooterComponent, HeaderComponent],
   templateUrl: './content.component.html',
-  styleUrls: ['./content.component.scss']
+  styleUrls: ['./content.component.scss'],
+  imports: [ContentModule, RouterModule, FooterComponent, HeaderComponent],
 })
 export default class ContentComponent {
 

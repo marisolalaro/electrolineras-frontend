@@ -1,8 +1,7 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PrimeModule } from 'src/app/prime.module';
-import { MegaMenuItem } from 'primeng/api';
 import { MenuItem } from 'primeng/api';
 import { mainTitles } from '../../constants/labels';
 
@@ -13,9 +12,17 @@ import { mainTitles } from '../../constants/labels';
   imports: [CommonModule, RouterModule, PrimeModule],
   standalone: true,
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
+
+  // variables del menu Lateral
+  public sidebarVisible: boolean = false;
+  public itemsLateral: MenuItem[] | undefined;
+  
+  // variables del menu horizontal
+  public items: MenuItem[] | undefined;
+  public activeItem: MenuItem | undefined;
+ 
   constructor(private router: Router) { }
-  items: any;
 
   ngOnInit() {
     this.items = [
@@ -29,23 +36,35 @@ export class HeaderComponent {
         icon: 'pi pi-fw pi-users',
         routerLink: ['/administration/customers'],
       },
+    ];
+    this.itemsLateral = [
       {
         label: mainTitles['electrolineras'].mainTitle,
         icon: 'pi pi-fw pi-bolt',
         routerLink: ['/administration/electric-stations'],
       },
-      // {
-      //   label: 'Productos',
-      //   icon: 'pi pi-fw pi-file',
-      //   routerLink: ['/products'],
-      // },
-    ];
+      {
+        label: mainTitles['transacciones'].mainTitle,
+        icon: 'pi pi-fw pi-money-bill',
+        routerLink: ['/administration/electric-stations'],
+      },
+      {
+        label: mainTitles['facturas'].mainTitle,
+        icon: 'pi pi-fw pi-file',
+        routerLink: ['/administration/electric-stations'],
+      },
+    ]
+    this.activeItem = this.items[0];
+  }
+
+  onActiveItemChange(event: MenuItem) {
+    this.activeItem = event;
   }
 
   salir() {
     var c = confirm("¿Salir del sitio web?");
     if (c == true) {
-     localStorage.removeItem('token');
+      localStorage.removeItem('token');
       this.router.navigate(['']);
     }
   }

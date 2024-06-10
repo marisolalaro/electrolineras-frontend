@@ -66,28 +66,26 @@ export const tooltip: any = {
 }
 
 export const mainTitles: IMainTitles = {
-  categories: {
-    mainTitle: 'Categorías',
-    secondaryTitle: 'Listado de Categorías'
-  },
-  products: {
-    mainTitle: 'Productos',
-    secondaryTitle: 'Listado de Productos'
-  },
-  usuarios: {
-    mainTitle: 'Usuarios',
-    secondaryTitle: 'Listado de Usuarios'
-  },
+  // menu Horizontal
   clientes: {
     mainTitle: 'Clientes',
     secondaryTitle: 'Listado de Clientes'
   },
+  administradores: {
+    mainTitle: 'Administradores',
+    secondaryTitle: 'Listado de Administradores'
+  },
+  // menu Lateral
   electrolineras: {
     mainTitle: 'Electrolineras',
     secondaryTitle: 'Listado de Electrolineras'
   },
-  administradores: {
-    mainTitle: 'Administradores',
-    secondaryTitle: 'Listado de Administradores'
+  transacciones: {
+    mainTitle: 'Transacciones',
+    secondaryTitle: 'Listado de Transacciones'
+  },
+  facturas: {
+    mainTitle: 'Facturas-compra-venta',
+    secondaryTitle: 'Listado de Facturas'
   },
 }
