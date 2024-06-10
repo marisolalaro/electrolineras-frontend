@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="card">
+
+    <div class="row">
+      <h3><b>{{titleComponent.mainTitle}}</b></h3>
+    </div>
+
+    <div class="row">
+      <p-table #dt1 [columns]="cols" [value]="transactions" dataKey="id"
+        styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
+        [showCurrentPageReport]="false"
+        currentPageReportTemplate="Showing {first} to {last} of {{totalRecords}} entries"
+        [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
+
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns" pSortableColumn="{{col.field}}">
+              {{col.header}}
+              <p-sortIcon field="{{col.field}}"></p-sortIcon>
+            </th>
+          </tr>
+
+          <tr>
+            <th *ngFor="let col of columns" [ngSwitch]="col.field">
+              <input *ngSwitchCase="nombreConsumidor" pInputText type="text" (input)="applyFilter($event, nombreConsumidor, 'contains')"
+                placeholder="Busca por nombres consumidor" class="w-full">
+              <input *ngSwitchCase="nombreRazonSocial" pInputText type="text" (input)="applyFilter($event, nombreRazonSocial, 'contains')"
+                placeholder="Busca por razón social" class="w-full">
+              <input *ngSwitchCase="numeroDocumento" pInputText type="text" (input)="applyFilter($event, numeroDocumento, 'contains')"
+                placeholder="Busca por número de documento" class="w-full">
+              <input *ngSwitchCase="email" pInputText type="text" (input)="applyFilter($event, email, 'contains')"
+                placeholder="Busca por email" class="w-full">
+              <input *ngSwitchCase="montoTransaccion" pInputText type="text" (input)="applyFilter($event, montoTransaccion, 'contains')"
+                placeholder="Busca por monto transacción" class="w-full">
+              <input *ngSwitchCase="creditoRestante" pInputText type="text" (input)="applyFilter($event, creditoRestante, 'contains')"
+                placeholder="Busca por crédito restante" class="w-full">
+              <input *ngSwitchCase="fechaRegistro" pInputText type="text" (input)="applyFilter($event, fechaRegistro, 'contains')"
+                placeholder="Busca por fecha registro" class="w-full">
+              <input *ngSwitchCase="fechaExpiracion" pInputText type="text" (input)="applyFilter($event, fechaExpiracion, 'contains')"
+                placeholder="Busca por fecha de expiración" class="w-full">
+              <input *ngSwitchCase="fechaPago" pInputText type="text" (input)="applyFilter($event, fechaPago, 'contains')"
+                placeholder="Busca por fecha de pago" class="w-full">
+              <input *ngSwitchCase="giftCard" pInputText type="text" (input)="applyFilter($event, giftCard, 'contains')"
+                placeholder="Busca por número gift card" class="w-full">
+              <input *ngSwitchCase="qrImage" pInputText type="text" (input)="applyFilter($event, qrImage, 'contains')"
+                placeholder="Busca por QR" class="w-full">
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr>
+            <td>{{rowData['names']}}</td>
+            <td>{{rowData['lastName']}}</td>
+            <td>{{rowData['motherLastName']}}</td>
+            <td>{{rowData['electronicMail']}}</td>
+            <td *ngIf="rowData['paymentTransactionsElectrolineraList'][0]">
+              {{rowData['paymentTransactionsElectrolineraList'][0].amount}}</td>
+            <td *ngIf="!rowData['paymentTransactionsElectrolineraList'][0]"></td>
+            <td *ngIf="rowData['chargeClientList'][0]">{{rowData['chargeClientList'][0].amount}}</td>
+            <td *ngIf="!rowData['chargeClientList'][0]"></td>
+            <!-- TODO mostrar datos del servicio -->
+             <!-- y hacer una ventana dialog que muestre el qr -->
+           <td></td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-paginator (onPageChange)="onPageChange($event)" [first]="page" [rows]="itemsPerPage"
+        [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20]">
+      </p-paginator>
+    </div>
+  </div>
+</div>

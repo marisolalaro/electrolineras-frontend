@@ -1,0 +1,43 @@
+import { Base } from './base';
+
+export class TransactionsModel extends Base {
+    id: number = null;
+    fecha_modificacion: string = '';
+    fecha_registro: string = '';
+    usuario_modificacion: string = '';
+    usuario_registro: string = '';
+    amount: number = null;
+    authorization_number: number = null;
+    codigo_pais: number = null;
+    codigo_tipo_documento_identidad: string = '';
+    complemento: string = '';
+    consumer_name: string = '';
+    correlation_id: string = '';
+    email_cliente: string = '';
+    expiration_dt: string;
+    gift_card_number: number = null;
+    gloss: string = '';
+    id_response: number = null;
+    nombre_cliente: string = '';
+    nombre_razon_social: string = '';
+    numero_documento: string = '';
+    payment_date: string;
+    placa_vehiculo: string = '';
+    process_icon: number = null;
+    process_payment: number = null;
+    qr_image: string = '';
+    receiver_account: string = '';
+    receiver_bank: string = '';
+    receiver_document: string = '';
+    receiver_name: string = '';
+    registration_at: string;
+    remaining_amount: number = null;
+    request_data: string = '';
+    response_data: string = '';
+    response_description: string = '';
+    response_message: string = '';
+    response_status: string = '';
+    id_cliente: number = null;
+    id_collection_company: number = null;
+    id_payment_type: number = null;
+}

@@ -46,7 +46,7 @@ export class HeaderComponent implements OnInit {
       {
         label: mainTitles['transacciones'].mainTitle,
         icon: 'pi pi-fw pi-money-bill',
-        routerLink: ['/administration/electric-stations'],
+        routerLink: ['/administration/transactions'],
       },
       {
         label: mainTitles['facturas'].mainTitle,

@@ -22,6 +22,10 @@ const routes: Routes = [
         path: 'electric-stations',
         loadComponent: () => import('./modules/electric-stations/electric-stations.component'),
       },
+      {
+        path: 'transactions',
+        loadComponent: () => import('./modules/transactions/transactions.component'),
+      },
     ]
   },
 ];

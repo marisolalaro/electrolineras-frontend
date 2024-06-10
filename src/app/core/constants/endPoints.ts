@@ -18,4 +18,9 @@ export class EndPoins {
     
     // administradores
     static administration = "/adminList";
+
+    // Transacciones
+    static transaction = "/paymentElectrolinera";
+    static transactionCharges = "/paymentListCharges";
+
 };
