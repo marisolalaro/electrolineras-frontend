@@ -14,6 +14,8 @@ import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 import { InvoiceElectricStationModel } from 'src/app/core/model/invoice-electric-stations';
 // services
+import { Base64ToPdfService } from './services/base-64-to-pdf.service';
+import { Base64ToImageService } from './services/base-64-to-image.service';
 import { InvoiceElectricStationsService } from './services/invoice-electric-stations.service';
 
 @Component({
@@ -26,6 +28,9 @@ import { InvoiceElectricStationsService } from './services/invoice-electric-stat
 export default class InvoiceElectricStationsComponent {
 
   // variables propias del componente
+  public titulosGlobales = titles;
+  public visible: boolean = false;
+  public imageUrl: string | null = null;
   public invoices: InvoiceElectricStationModel[] = [];
   public invoice: InvoiceElectricStationModel = new InvoiceElectricStationModel();
 
@@ -47,6 +52,8 @@ export default class InvoiceElectricStationsComponent {
 
   constructor(
     public invoiceService: InvoiceElectricStationsService,
+    public base64ImageService: Base64ToImageService,
+    private base64ToPdfService: Base64ToPdfService
   ) { }
 
   ngOnInit(): void {
@@ -56,13 +63,13 @@ export default class InvoiceElectricStationsComponent {
 
   inicializaDatos() {
     this.cols = [
-      { field: 'idPaymentTransactionElectrolinera', header: 'Nombre o Razón social' },
+      { field: 'nombreRazonSocial', header: 'Nombre o Razón social' },
       { field: 'fechaHoraEmision', header: 'Fecha Emisión' },
       { field: 'cuf', header: 'CUF' },
-      { field: 'idPaymentTransactionElectrolinera', header: 'Número de documento' },
-      { field: 'idPaymentTransactionElectrolinera', header: 'Monto' },
-      { field: 'idPaymentTransactionElectrolinera', header: 'Email' },
-      { field: 'idPaymentTransactionElectrolinera', header: 'Nombre Cliente' },
+      { field: 'numeroDocumento', header: 'Número de documento' },
+      { field: 'amount', header: 'Monto' },
+      { field: 'emailCliente', header: 'Email' },
+      { field: 'nombreCliente', header: 'Nombre Cliente' },
       { field: 'codigoDescripcion', header: 'Código' },
       { field: 'urlFacturaSiat', header: 'URL Factura' },
       { field: '', header: 'Ver Factura' },
@@ -82,46 +89,31 @@ export default class InvoiceElectricStationsComponent {
     this.bodyFilter.page = 1;
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
-    // TODO
-    if(field == 'nombreConsumidor') {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribConsumer;
+    this.bodyFilter.search.column = 'id'
+    if(field == 'fechaHoraEmision') {
+      this.bodyFilter.search.column = DBAttributeName.tabInvoice_AttribFechaEmision;
     }
-    if(field == 'aaaa') {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribNombreRazonSocial;
+    if(field == 'cuf') {
+      this.bodyFilter.search.column = DBAttributeName.tabInvoice_AttribCuf;
     }
-    if(field == 'aaaa') {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribNumeroDocumentoConsumer;
+    if(field == 'codigoDescripcion') {
+      this.bodyFilter.search.column = DBAttributeName.tabInvoice_AttribCodigoDescripcion;
     }
-    if(field == 'aaaa') {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribEmailCliente;
-    }
-    if(field == 'aaaa') {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribAmount;
-    }
-    if(field == 'aaaa') {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribRemainingAmount;
-    }
-    if(field == 'aaaa') {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribFechaRegistro;
-    }
-    if(field == 'aaaa') {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribExpiration;
-    }
-    if(field == 'aaaa') {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribPaymentDateConsumer;
-    }
-    if(field == 'aaaa') {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribGiftCard;
-    }
-    if(field == 'aaaa') {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribQrImage;
+    if(field == 'urlFacturaSiat') {
+      this.bodyFilter.search.column = DBAttributeName.tabInvoice_AttribUrlFacturaSiat;
     }
     this.bodyFilter.search.value = value;
     this.getInvoices();
   }
 
   onOpenFactura(item) {
+    const outputFileName = 'factura-electrolinera.pdf';
+    this.base64ToPdfService.convertBase64ToPdf(item.xmlBase64, outputFileName);
+  }
 
+  onOpenImagenQR(item) {
+    this.visible = true;
+    this.imageUrl = this.base64ImageService.base64ToImageUrl(item.idPaymentTransactionElectrolinera.qrImage);
   }
 
   onPageChange(event: any) {

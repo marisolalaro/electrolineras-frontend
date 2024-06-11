@@ -35,4 +35,11 @@ export class DBAttributeName {
     static tabPaymentPaymentDateConsumer = 'payment_date';
     static tabPaymentGiftCard = 'gift_card_number';
     static tabPaymentQrImage = 'qr_image';
-};
+
+    // tabla invoiceElectrolineras
+    static tabInvoice_AttribFechaEmision = 'fecha_hora_emision';
+    static tabInvoice_AttribCuf = 'cuf';
+    static tabInvoice_AttribCodigoDescripcion = 'codigo_descripcion';
+    static tabInvoice_AttribUrlFacturaSiat = 'url_factura_siat';
+
+}

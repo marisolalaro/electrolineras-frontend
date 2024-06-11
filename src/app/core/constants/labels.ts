@@ -39,6 +39,7 @@ export const titles: any = {
   create: 'Nuevo registro',
   filter: 'Filtrar por:',
   detail: 'Detalle registro',
+  info: 'Detalle Información',
 }
 
 export const buttons: any = {
