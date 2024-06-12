@@ -17,6 +17,7 @@ import { InvoiceElectricStationModel } from 'src/app/core/model/invoice-electric
 import { Base64ToPdfService } from './services/base-64-to-pdf.service';
 import { Base64ToImageService } from './services/base-64-to-image.service';
 import { InvoiceElectricStationsService } from './services/invoice-electric-stations.service';
+import { PdfService } from './services/pdf.service';
 
 @Component({
   selector: 'app-invoice-electric-stations',
@@ -53,7 +54,8 @@ export default class InvoiceElectricStationsComponent {
   constructor(
     public invoiceService: InvoiceElectricStationsService,
     public base64ImageService: Base64ToImageService,
-    private base64ToPdfService: Base64ToPdfService
+    private base64ToPdfService: Base64ToPdfService,
+    private pdfService: PdfService
   ) { }
 
   ngOnInit(): void {
@@ -63,16 +65,16 @@ export default class InvoiceElectricStationsComponent {
 
   inicializaDatos() {
     this.cols = [
-      { field: 'nombreRazonSocial', header: 'Nombre o Razón social' },
+      { field: 'nombreRazonSocial', header: 'Razón social' },
       { field: 'fechaHoraEmision', header: 'Fecha Emisión' },
       { field: 'cuf', header: 'CUF' },
       { field: 'numeroDocumento', header: 'Número de documento' },
       { field: 'amount', header: 'Monto' },
-      { field: 'emailCliente', header: 'Email' },
+      { field: 'emailCliente', header: 'Correo Electrónico' },
       { field: 'nombreCliente', header: 'Nombre Cliente' },
       { field: 'codigoDescripcion', header: 'Código' },
       { field: 'urlFacturaSiat', header: 'URL Factura' },
-      { field: '', header: 'Ver Factura' },
+      { field: '', header: 'Opciones' },
     ];
   }
 
@@ -108,7 +110,8 @@ export default class InvoiceElectricStationsComponent {
 
   onOpenFactura(item) {
     const outputFileName = 'factura-electrolinera.pdf';
-    this.base64ToPdfService.convertBase64ToPdf(item.xmlBase64, outputFileName);
+    // this.base64ToPdfService.convertBase64ToPdf(item.xmlBase64, outputFileName);
+    this.pdfService.generatePdf();
   }
 
   onOpenImagenQR(item) {

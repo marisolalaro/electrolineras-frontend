@@ -80,7 +80,8 @@ p-button {
     .p-datatable-striped .p-datatable-tbody>tr:nth-of-type(odd) {
         background-color: #fafafa;
     }
-// hover al pasar por la lista
+
+    // hover al pasar por la lista
     .p-datatable-tbody>tr:hover>td {
         background-color: #C1D8FC;
     }
@@ -101,7 +102,7 @@ input.p-inputtext {
 }
 
 button.mat-raised-button {
-    background-color: #ffa801; 
+    background-color: #ffa801;
     color: #fff;
     cursor: pointer;
     border-color: #F9A519;
@@ -130,4 +131,9 @@ button.mat-raised-button {
     .mat-paginator-page-size {
         margin-right: 16px;
     }
+}
+
+.tabla-contend-center {
+    text-align: center;
+    vertical-align: middle;
 }

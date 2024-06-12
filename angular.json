@@ -40,7 +40,9 @@
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+               "leaflet", "file-saver", "moment", "pako"]
           },
           "configurations": {
             "production": {

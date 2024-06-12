@@ -17,7 +17,7 @@
         MENÚ
     </ng-template>
     <ng-template pTemplate="content">
-        <p-menu [model]="itemsLateral"></p-menu>
+        <p-menu [model]="itemsLateral" (click) = "activeMenu($event)"></p-menu>
     </ng-template>
     <!-- <ng-template pTemplate="footer">Footer Content</ng-template> -->
 </p-sidebar>

@@ -21,30 +21,32 @@
           <tr>
             <th *ngFor="let col of columns" [ngSwitch]="col.field">
               <input *ngSwitchCase="'fechaHoraEmision'" pInputText type="text"
-                (input)="applyFilter($event, 'fechaHoraEmision', 'contains')" placeholder="Busca por nombres consumidor"
+                (input)="applyFilter($event, 'fechaHoraEmision', 'contains')" placeholder="Busca fecha emisión"
                 class="w-full">
               <input *ngSwitchCase="'cuf'" pInputText type="text" (input)="applyFilter($event, 'cuf', 'contains')"
-                placeholder="Busca por nombres consumidor" class="w-full">
+                placeholder="Busca cuf" class="w-full">
               <input *ngSwitchCase="'codigoDescripcion'" pInputText type="text"
                 (input)="applyFilter($event, 'codigoDescripcion', 'contains')"
-                placeholder="Busca por nombres consumidor" class="w-full">
+                placeholder="Busca codigo" class="w-full">
               <input *ngSwitchCase="'urlFacturaSiat'" pInputText type="text"
-                (input)="applyFilter($event, 'urlFacturaSiat', 'contains')" placeholder="Busca por nombres consumidor"
+                (input)="applyFilter($event, 'urlFacturaSiat', 'contains')" placeholder="Busca url"
                 class="w-full">
             </th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
           <tr>
-            <td>{{rowData['idPaymentTransactionElectrolinera'].nombreRazonSocial}}</td>
-            <td>{{rowData['fechaHoraEmision']}}</td>
+            <td style="text-align:center; vertical-align:middle">{{rowData['idPaymentTransactionElectrolinera'].nombreRazonSocial}}</td>
+            <td style="text-align:center; vertical-align:middle">{{rowData['fechaHoraEmision'] | formatFieldDate}}</td>
             <td>{{rowData['cuf']}}</td>
-            <td>{{rowData['idPaymentTransactionElectrolinera'].numeroDocumento}}</td>
-            <td>{{rowData['idPaymentTransactionElectrolinera'].amount}}</td>
+            <td style="text-align:center; vertical-align:middle">{{rowData['idPaymentTransactionElectrolinera'].numeroDocumento}}</td>
+            <td style="text-align:center; vertical-align:middle">{{rowData['idPaymentTransactionElectrolinera'].amount}}</td>
             <td>{{rowData['idPaymentTransactionElectrolinera'].emailCliente}}</td>
             <td>{{rowData['idPaymentTransactionElectrolinera'].nombreCliente}}</td>
-            <td>{{rowData['codigoDescripcion']}}</td>
-            <td>{{rowData['urlFacturaSiat']}}</td>
+            <td style="text-align:center; vertical-align:middle">{{rowData['codigoDescripcion']}}</td>
+            <td style="text-align:center; vertical-align:middle">
+              <a href="{{rowData['urlFacturaSiat']}}" target="_blank">LinkFactura</a>
+            </td>
             <td>
               <i class="pi pi-file-pdf" style="font-size: 1.5rem; color: #B30C00" (click)="onOpenFactura(rowData)"
                 tooltipPosition="top" pTooltip="Ver Factura"></i>

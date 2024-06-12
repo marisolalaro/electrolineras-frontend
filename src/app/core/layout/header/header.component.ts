@@ -17,11 +17,12 @@ export class HeaderComponent implements OnInit {
   // variables del menu Lateral
   public sidebarVisible: boolean = false;
   public itemsLateral: MenuItem[] | undefined;
-  
+
   // variables del menu horizontal
   public items: MenuItem[] | undefined;
   public activeItem: MenuItem | undefined;
- 
+  public activeItemLateral: MenuItem | undefined;
+
   constructor(private router: Router) { }
 
   ngOnInit() {
@@ -55,10 +56,15 @@ export class HeaderComponent implements OnInit {
       },
     ]
     this.activeItem = this.items[0];
+    this.activeItemLateral = this.items[0];
   }
 
   onActiveItemChange(event: MenuItem) {
     this.activeItem = event;
+  }
+
+  activeMenu(event) {
+    this.activeItemLateral = event;
   }
 
   salir() {
