@@ -24,17 +24,22 @@ export class DBAttributeName {
     static tabPaymentTransactions_AttribQrImage = 'qr_image';
 
     // dom tabPayment
-    static tabPaymentConsumerName = 'consumer_name';
-    static tabPaymentNombreRazonSocial = 'nombre_razon_social';
-    static tabPaymentDocumentoConsumer = 'numero_documento';
-    static tabPaymentEmailCliente = 'email_cliente';
+    static tabPaymentConsumerName = 'consumerName';
+    static tabPaymentNombreRazonSocial = 'nombreRazonSocial';
+    static tabPaymentDocumentoConsumer = 'numeroDocumento';
+    static tabPaymentEmailCliente = 'emailCliente';
     static tabPaymentAmount = 'amount';
-    static tabPaymentRemainingAmount = 'remaining_amount';
-    static tabPaymentFechaRegistro = 'fecha_registro';
-    static tabPaymentExpiration = 'expiration_dt';
-    static tabPaymentPaymentDateConsumer = 'payment_date';
-    static tabPaymentGiftCard = 'gift_card_number';
-    static tabPaymentQrImage = 'qr_image';
+    static tabPaymentFechaRegistro = 'registrationAt';
+    static tabPaymentGiftCard = 'giftCardNumber';
+    // static tabPaymentRemainingAmount = 'remaining_amount';
+    // static tabPaymentExpiration = 'expiration_dt';
+    // static tabPaymentPaymentDateConsumer = 'payment_date';
+    // static tabPaymentQrImage = 'qr_image';
+    static tabPaymentGloss = 'gloss';
+    static tabPaymentNombreCliente = 'nombreCliente';
+    static tabPaymentPlacaVehiculo = 'placaVehiculo';
+    static tabPaymentReciveBank = 'receiverBank';
+    static tabPaymentReciveDocument = 'receiverDocument';
 
     // tabla invoiceElectrolineras
     static tabInvoice_AttribFechaEmision = 'fecha_hora_emision';
