@@ -13,34 +13,71 @@
         [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th *ngFor="let col of columns" pSortableColumn="{{col.field}}">
-              {{col.header}}
-              <p-sortIcon field="{{col.field}}"></p-sortIcon>
+            <th pSortableColumn="'nombreRazonSocial'" rowspan="2">
+              Razón social
+            </th>
+            <th pSortableColumn="'fechaHoraEmision'">
+              Fecha Emisión
+              <p-sortIcon field="fechaHoraEmision" (click)="customSort('fechaHoraEmision', orden)"></p-sortIcon>
+            </th>
+            <th pSortableColumn="'cuf'">
+              CUF
+              <p-sortIcon field="cuf" (click)="customSort('cuf', orden)"></p-sortIcon>
+            </th>
+            <th pSortableColumn="'numeroDocumento'" rowspan="2">
+              Número de documento
+            </th>
+            <th pSortableColumn="'amount'" rowspan="2">
+              Monto
+            </th>
+            <th pSortableColumn="'emailCliente'" rowspan="2">
+              Correo Electrónico
+            </th>
+            <th pSortableColumn="'nombreCliente'" rowspan="2">
+              Nombre Cliente
+            </th>
+            <th pSortableColumn="'codigoDescripcion'">
+              Código
+              <p-sortIcon field="codigoDescripcion" (click)="customSort('codigoDescripcion', orden)"></p-sortIcon>
+            </th>
+            <th pSortableColumn="'urlFacturaSiat'">
+              URL Factura
+              <p-sortIcon field="urlFacturaSiat" (click)="customSort('urlFacturaSiat', orden)"></p-sortIcon>
+            </th>
+            <th pSortableColumn="'nombreRazonSocial'" rowspan="2">
+              Opciones
             </th>
           </tr>
+
           <tr>
-            <th *ngFor="let col of columns" [ngSwitch]="col.field">
-              <input *ngSwitchCase="'fechaHoraEmision'" pInputText type="text"
-                (input)="applyFilter($event, 'fechaHoraEmision', 'contains')" placeholder="Busca fecha emisión"
-                class="w-full">
-              <input *ngSwitchCase="'cuf'" pInputText type="text" (input)="applyFilter($event, 'cuf', 'contains')"
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'fechaHoraEmision', 'contains')"
+                placeholder="Busca fecha emisión" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'cuf', 'contains')"
                 placeholder="Busca cuf" class="w-full">
-              <input *ngSwitchCase="'codigoDescripcion'" pInputText type="text"
-                (input)="applyFilter($event, 'codigoDescripcion', 'contains')"
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'codigoDescripcion', 'contains')"
                 placeholder="Busca codigo" class="w-full">
-              <input *ngSwitchCase="'urlFacturaSiat'" pInputText type="text"
-                (input)="applyFilter($event, 'urlFacturaSiat', 'contains')" placeholder="Busca url"
-                class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'urlFacturaSiat', 'contains')"
+                placeholder="Busca url" class="w-full">
             </th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
           <tr>
-            <td style="text-align:center; vertical-align:middle">{{rowData['idPaymentTransactionElectrolinera'].nombreRazonSocial}}</td>
+            <td style="text-align:center; vertical-align:middle">
+              {{rowData['idPaymentTransactionElectrolinera'].nombreRazonSocial}}</td>
             <td style="text-align:center; vertical-align:middle">{{rowData['fechaHoraEmision'] | formatFieldDate}}</td>
             <td>{{rowData['cuf']}}</td>
-            <td style="text-align:center; vertical-align:middle">{{rowData['idPaymentTransactionElectrolinera'].numeroDocumento}}</td>
-            <td style="text-align:center; vertical-align:middle">{{rowData['idPaymentTransactionElectrolinera'].amount}}</td>
+            <td style="text-align:center; vertical-align:middle">
+              {{rowData['idPaymentTransactionElectrolinera'].numeroDocumento}}</td>
+            <td style="text-align:center; vertical-align:middle">{{rowData['idPaymentTransactionElectrolinera'].amount}}
+            </td>
             <td>{{rowData['idPaymentTransactionElectrolinera'].emailCliente}}</td>
             <td>{{rowData['idPaymentTransactionElectrolinera'].nombreCliente}}</td>
             <td style="text-align:center; vertical-align:middle">{{rowData['codigoDescripcion']}}</td>

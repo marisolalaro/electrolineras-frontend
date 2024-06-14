@@ -2,11 +2,11 @@
   <div class="card">
 
     <div class="row">
-      <h3><b>{{titleProduct.mainTitle}}</b></h3>
+      <h3><b>{{titleComponent.mainTitle}}</b></h3>
     </div>
 
     <div class="row">
-      <p-table #dt1 [columns]="cols" [value]="customers" dataKey="id"
+      <p-table #dt1 [columns]="cabeceras" [value]="customers" dataKey="id"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
         [showCurrentPageReport]="false"
         currentPageReportTemplate="Showing {first} to {last} of {{totalRecords}} entries"
@@ -14,36 +14,49 @@
 
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th *ngFor="let col of columns" pSortableColumn="{{col.field}}">
-              {{col.header}}
-              <p-sortIcon field="{{col.field}}"></p-sortIcon>
+            <th pSortableColumn="'names'">
+              Nombres
+              <p-sortIcon field="names" (click)="customSort('names', orden)"></p-sortIcon>
+            </th>
+            <th pSortableColumn="'lastName'">
+              Apellido Paterno
+              <p-sortIcon field="lastName" (click)="customSort('lastName', orden)"></p-sortIcon>
+            </th>
+            <th pSortableColumn="'motherLastName'">
+              Apellido Materno
+              <p-sortIcon field="motherLastName" (click)="customSort('motherLastName', orden)"></p-sortIcon>
+            </th>
+            <th pSortableColumn="'electronicMail'">
+              correo Electrónico
+              <p-sortIcon field="electronicMail" (click)="customSort('electronicMail', orden)"></p-sortIcon>
+            </th>
+            <th rowspan="2">
+              Ultima transacción
+            </th>
+            <th rowspan="2">
+              Ultima Carga
+            </th>
+            <th rowspan="2">
+              Opciones
             </th>
           </tr>
 
           <tr>
-            <th *ngFor="let col of columns" [ngSwitch]="col.field">
-              <input *ngSwitchCase="'names'" pInputText type="text" (input)="applyFilter($event, 'names', 'contains')"
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'names', 'contains')"
                 placeholder="Busca por nombres" class="w-full">
-
-              <input *ngSwitchCase="'lastName'" pInputText type="text"
-                (input)="applyFilter($event, 'lastName', 'contains')" placeholder="Busca por apellido paterno"
-                class="w-full">
-
-              <input *ngSwitchCase="'motherLastName'" pInputText type="text"
-                (input)="applyFilter($event, 'motherLastName', 'contains')" placeholder="Busca por apellido materno"
-                class="w-full">
-
-              <input *ngSwitchCase="'electronicMail'" pInputText type="text"
-                (input)="applyFilter($event, 'electronicMail', 'contains')" placeholder="Busca por email"
-                class="w-full">
-
-              <input *ngSwitchCase="'paymentTransactionsElectrolineraList'" pInputText type="text"
-                (input)="applyFilter($event, 'paymentTransactionsElectrolineraList', 'contains')"
-                placeholder="Busca por transacción" class="w-full">
-
-              <input *ngSwitchCase="'chargeClientList'" pInputText type="text"
-                (input)="applyFilter($event, 'chargeClientList', 'contains')" placeholder="Busca por carga"
-                class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'names', 'contains')"
+                placeholder="Busca por nombres" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'motherLastName', 'contains')"
+                placeholder="Busca por apellido materno" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'electronicMail', 'contains')"
+                placeholder="Busca por email" class="w-full">
             </th>
           </tr>
         </ng-template>
@@ -53,15 +66,17 @@
             <td>{{rowData['lastName']}}</td>
             <td>{{rowData['motherLastName']}}</td>
             <td>{{rowData['electronicMail']}}</td>
+
             <td *ngIf="rowData['paymentTransactionsElectrolineraList'][0]">
               {{rowData['paymentTransactionsElectrolineraList'][0].amount}}</td>
             <td *ngIf="!rowData['paymentTransactionsElectrolineraList'][0]"></td>
+
             <td *ngIf="rowData['chargeClientList'][0]">{{rowData['chargeClientList'][0].amount}}</td>
             <td *ngIf="!rowData['chargeClientList'][0]"></td>
+
             <td>
-              <button pButton pRipple type="button" icon="pi pi-info" pTooltip="Información" tooltipPosition="top"
-                class="p-button-rounded mr-2 p-button-warning" styleClass="p-button-sm"
-                (click)="onOpenDetail(rowData)"></button>
+              <i class="pi pi-eye" style="font-size: 1.5rem; color: #3498DB" (click)="onOpenDetail(rowData)"
+                tooltipPosition="top" pTooltip="Ver más"></i>
             </td>
           </tr>
         </ng-template>
@@ -73,7 +88,7 @@
 
     <!-- Dialog Detalle -->
     <p-dialog header={{titlesGlobales.detail}} [(visible)]="dialogDetalle" [modal]="true"
-      [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw' }" [draggable]="false"
+      [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw'}" [draggable]="false"
       [resizable]="false">
       <p-tabView>
         <p-tabPanel header="Cliente">
@@ -96,96 +111,102 @@
         </p-tabPanel>
 
         <p-tabPanel header="Transacciones">
-          <p-table [value]="customer.paymentTransactionsElectrolineraList" [paginator]="true" [rows]="5"
-            [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 5, 20]" #tableref
-            [globalFilterFields]="['nombreRazonSocial', 'numeroDocumento', 'complemento', 'gloss', 'amount']">
-            <ng-template pTemplate="caption">
-              <div class="flex">
-                <span class="p-input-icon-left ml-auto">
-                  <i class="pi pi-search"></i>
-                  <input type="text" pInputText (input)="tableref.filterGlobal(
-                   $any($event.target).value, 'contains')" />
-                </span>
-              </div>
-            </ng-template>
-            <ng-template pTemplate="header">
-              <tr>
-                <th style="width:20%" pSortableColumn="nombreRazonSocial">Razón Social <p-sortIcon
-                    field="nombreRazonSocial"></p-sortIcon> </th>
-                <th style="width:20%" pSortableColumn="numeroDocumento">N° Documento <p-sortIcon
-                    field="numeroDocumento"></p-sortIcon> </th>
-                <th style="width:20%" pSortableColumn="complemento">Complemento <p-sortIcon
-                    field="complemento"></p-sortIcon> </th>
-                <th style="width:20%" pSortableColumn="paymentDate">Fecha <p-sortIcon field="paymentDate"></p-sortIcon>
-                </th>
-                <th style="width:20%" pSortableColumn="gloss">Glosario <p-sortIcon field="gloss"></p-sortIcon> </th>
-                <th style="width:20%" pSortableColumn="amount">Transaccion <p-sortIcon field="amount"></p-sortIcon>
-                </th>
-                <th style="width:20%" pSortableColumn="processPayment">Procesar Pago <p-sortIcon
-                    field="processPayment"></p-sortIcon></th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-customer>
-              <tr>
-                <td>{{customer.nombreRazonSocial}}</td>
-                <td>{{customer.numeroDocumento}}</td>
-                <td *ngIf="customer.complemento != 'null'">{{customer.complemento}}</td>
-                <td *ngIf="customer.complemento == 'null'"></td>
-                <td>{{customer.paymentDate | formatFieldDate}}</td>
-                <td>{{customer.gloss}}</td>
-                <td>{{customer.amount}}</td>
-                <td>{{customer.processPayment}}</td>
-              </tr>
-            </ng-template>
-          </p-table>
+          <div style="padding-bottom: 3.250rem;">
+            <p-table [value]="customer.paymentTransactionsElectrolineraList" [paginator]="true" [rows]="5"
+              [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]" #tableref
+              [globalFilterFields]="['nombreRazonSocial', 'numeroDocumento', 'complemento', 'gloss', 'amount']">
+              <ng-template pTemplate="caption">
+                <div class="flex">
+                  <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input type="text" pInputText (input)="tableref.filterGlobal(
+                     $any($event.target).value, 'contains')" />
+                  </span>
+                </div>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width:20%" pSortableColumn="nombreRazonSocial">Razón Social <p-sortIcon
+                      field="nombreRazonSocial"></p-sortIcon> </th>
+                  <th style="width:20%" pSortableColumn="numeroDocumento">N° Documento <p-sortIcon
+                      field="numeroDocumento"></p-sortIcon> </th>
+                  <th style="width:20%" pSortableColumn="complemento">Complemento <p-sortIcon
+                      field="complemento"></p-sortIcon> </th>
+                  <th style="width:20%" pSortableColumn="paymentDate">Fecha <p-sortIcon
+                      field="paymentDate"></p-sortIcon>
+                  </th>
+                  <th style="width:20%" pSortableColumn="gloss">Glosario <p-sortIcon field="gloss"></p-sortIcon> </th>
+                  <th style="width:20%" pSortableColumn="amount">Transacción <p-sortIcon field="amount"></p-sortIcon>
+                  </th>
+                  <th style="width:20%" pSortableColumn="processPayment">Procesar Pago <p-sortIcon
+                      field="processPayment"></p-sortIcon></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-customer>
+                <tr>
+                  <td>{{customer.nombreRazonSocial}}</td>
+                  <td>{{customer.numeroDocumento}}</td>
+                  <td *ngIf="customer.complemento != 'null'">{{customer.complemento}}</td>
+                  <td *ngIf="customer.complemento == 'null'"></td>
+                  <td>{{customer.paymentDate | formatFieldDate}}</td>
+                  <td>{{customer.gloss}}</td>
+                  <td>{{customer.amount}}</td>
+                  <td>{{customer.processPayment}}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
         </p-tabPanel>
 
         <p-tabPanel header="Cargas">
-          <p-table [value]="customer.chargeClientList" [paginator]="true" [rows]="5"
-            [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]" #tableCargas
-            [globalFilterFields]="['nombreRazonSocial', 'numeroDocumento', 'complemento', 'gloss', 'amount']">
-            <ng-template pTemplate="caption">
-              <div class="flex">
-                <span class="p-input-icon-left ml-auto">
-                  <i class="pi pi-search"></i>
-                  <input type="text" pInputText (input)="tableCargas.filterGlobal(
+          <div style="padding-bottom: 3.250rem;">
+            <p-table [value]="customer.chargeClientList" [paginator]="true" [rows]="5"
+              [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]" #tableCargas
+              [globalFilterFields]="['nombreRazonSocial', 'numeroDocumento', 'complemento', 'gloss', 'amount']">
+              <ng-template pTemplate="caption">
+                <div class="flex">
+                  <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input type="text" pInputText (input)="tableCargas.filterGlobal(
                    $any($event.target).value, 'contains')" />
-                </span>
-              </div>
-            </ng-template>
-            <ng-template pTemplate="header">
-              <tr>
-                <th style="width:20%" pSortableColumn="amount">Monto de carga <p-sortIcon field="amount"></p-sortIcon>
-                </th>
-                <th style="width:20%" pSortableColumn="changeFee">Comision por uso <p-sortIcon
-                    field="changeFee"></p-sortIcon></th>
-                <th style="width:20%" pSortableColumn="staredChargingAt">Carga inicio <p-sortIcon
-                    field="staredChargingAt"></p-sortIcon></th>
-                <th style="width:20%" pSortableColumn="finisheAt">Carga final <p-sortIcon
-                    field="finisheAt"></p-sortIcon>
-                </th>
-                <th style="width:20%" pSortableColumn="duration">duracion <p-sortIcon field="duration"></p-sortIcon>
-                </th>
-                <th style="width:20%" pSortableColumn="energyComsumed">Energia Consumida (Kwh) <p-sortIcon
-                    field="energyComsumed"></p-sortIcon></th>
-                <th style="width:20%" pSortableColumn="status">estado <p-sortIcon field="status"></p-sortIcon></th>
-                <th style="width:20%" pSortableColumn="chargingStation">Estacion de carga <p-sortIcon
-                    field="chargingStation"></p-sortIcon></th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-customer>
-              <tr>
-                <td>{{customer.amount}}</td>
-                <td>{{customer.changeFee}}</td>
-                <td>{{customer.staredChargingAt | formatFieldTime }}</td>
-                <td>{{customer.finisheAt | formatFieldTime}}</td>
-                <td>{{customer.duration}}</td>
-                <td>{{customer.energyComsumed}}</td>
-                <td>{{customer.status}}</td>
-                <td>{{customer.chargingStation}}</td>
-              </tr>
-            </ng-template>
-          </p-table>
+                  </span>
+                </div>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width:20%" pSortableColumn="amount">Monto de carga <p-sortIcon field="amount"></p-sortIcon>
+                  </th>
+                  <th style="width:20%" pSortableColumn="changeFee">Comision por uso <p-sortIcon
+                      field="changeFee"></p-sortIcon></th>
+                  <th style="width:20%" pSortableColumn="staredChargingAt">Carga inicio <p-sortIcon
+                      field="staredChargingAt"></p-sortIcon></th>
+                  <th style="width:20%" pSortableColumn="finisheAt">Carga final <p-sortIcon
+                      field="finisheAt"></p-sortIcon>
+                  </th>
+                  <th style="width:20%" pSortableColumn="duration">duracion <p-sortIcon field="duration"></p-sortIcon>
+                  </th>
+                  <th style="width:20%" pSortableColumn="energyComsumed">Energia Consumida (Kwh) <p-sortIcon
+                      field="energyComsumed"></p-sortIcon></th>
+                  <th style="width:20%" pSortableColumn="status">estado <p-sortIcon field="status"></p-sortIcon></th>
+                  <th style="width:20%" pSortableColumn="chargingStation">Estacion de carga <p-sortIcon
+                      field="chargingStation"></p-sortIcon></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-customer>
+                <tr>
+                  <td>{{customer.amount}}</td>
+                  <td>{{customer.changeFee}}</td>
+                  <td>{{customer.staredChargingAt | formatFieldTime }}</td>
+                  <td>{{customer.finisheAt | formatFieldTime}}</td>
+                  <td>{{customer.duration}}</td>
+                  <td>{{customer.energyComsumed}}</td>
+                  <td>{{customer.status}}</td>
+                  <td>{{customer.chargingStation}}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
         </p-tabPanel>
       </p-tabView>
 

@@ -1,10 +1,14 @@
-import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
-import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
+// Primeng
+import { Table } from 'primeng/table';
+import { SortEvent } from 'primeng/api';
 // cores
 import { Global } from 'src/app/core/variables/globales';
-import { mainTitles, titles } from 'src/app/core/constants/labels';
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
+import { mainTitles, titles } from 'src/app/core/constants/labels';
+import { DBAttributeName } from 'src/app/core/constants/dbAttributeName';
 // modules
 import { CustomersModule } from './customers.module';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
@@ -13,65 +17,66 @@ import { Customer } from 'src/app/core/model/customer';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 // services
 import { CustomerService } from './services/customer.service';
-import { NgxPaginationModule } from 'ngx-pagination'; // <-- import the module
-
-import { ViewChild } from '@angular/core';
-import { Table } from 'primeng/table';
-import { DBAttributeName } from 'src/app/core/constants/dbAttributeName';
-
-
-interface PageEvent {
-  first: number;
-  rows: number;
-  page: number;
-  pageCount: number;
-}
 
 @Component({
   selector: 'app-customers',
   standalone: true,
-  imports: [CustomersModule, NgFor, NgIf, PipesModule, NgxPaginationModule, FormsModule, NgSwitch, NgSwitchCase],
+  imports: [CustomersModule, NgFor, NgIf, PipesModule, FormsModule, NgSwitch, NgSwitchCase],
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.scss']
 })
 
 export default class CustomersComponent {
 
-  // variables
+  // variables de control
+  public orden: boolean = false;
+
+  // variables del paginador
   public page: number = 1;
   public itemsPerPage: number = 5;
   public totalRecords: number = 0;
+
+  // variables propias del componente
   public customers: Customer[] = [];
   public customer: Customer = new Customer();
-  public titleProduct: any = mainTitles['clientes'];
-  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
 
+  // variables globales
   public titlesGlobales = titles;
+  public titleComponent: any = mainTitles['clientes'];
+
   // Variables Dialog
   public dialogDetalle: boolean = false;
-  selectedCustomers!: Customer;
+  public selectedCustomers!: Customer;
 
-  // products: Product[] = [];
-  cols: any[] = [];
-
-  value: any = null;
-
+  // variables de tabla
   @ViewChild('dt1') dt!: Table;
+  public cabeceras: any[] = [];
+
+  // variables para el filtro
+  public bodyFilter: BodyFilterModel = new BodyFilterModel(
+    this.page,
+    this.itemsPerPage,
+    decodeLocal().user.roles[0].id,
+    decodeLocal().user.id
+  );
 
   constructor(
     public customerService: CustomerService,
     public global: Global,
   ) { }
 
-
   ngOnInit() {
     this.getCustomers();
-    this.cols = [
+    this.inicializaDatos();
+  }
+
+  inicializaDatos() {
+    this.cabeceras = [
       { field: 'names', header: 'Nombres' },
       { field: 'lastName', header: 'Apellido Paterno' },
       { field: 'motherLastName', header: 'Apellido Materno' },
       { field: 'electronicMail', header: 'Email' },
-      { field: 'paymentTransactionsElectrolineraList', header: 'Última Transacción'},
+      { field: 'paymentTransactionsElectrolineraList', header: 'Última Transacción' },
       { field: 'chargeClientList', header: 'Última Carga' },
       { field: '', header: 'Opciones' },
     ];
@@ -104,25 +109,56 @@ export default class CustomersComponent {
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
 
-    if(field == 'names') {
+    if (field == 'names') {
       this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribName;
     }
-    if(field == 'lastName') {
+    if (field == 'lastName') {
       this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribLastName;
     }
-    if(field == 'motherLastName') {
+    if (field == 'motherLastName') {
       this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribMotherLastName;
     }
-    if(field == 'electronicMail') {
+    if (field == 'electronicMail') {
       this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribElectronicMail;
     }
-    if(field == 'paymentTransactionsElectrolineraList') {
+    if (field == 'paymentTransactionsElectrolineraList') {
       this.bodyFilter.search.column = 'paymentTransactionsElectrolineraList.amount';
     }
-    if(field == 'chargeClientList') {
+    if (field == 'chargeClientList') {
       this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribChargeClientList;
     }
     this.bodyFilter.search.value = value;
+    this.getCustomers();
+  }
+
+  customSort(field, orden) {
+    this.orden = !orden;
+    this.bodyFilter.search.column = "";
+    this.bodyFilter.search.value = "";
+    this.bodyFilter.sort.column = "";
+    if (field == 'names') {
+      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribName;
+    }
+    if (field == 'lastName') {
+      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribLastName;
+    }
+    if (field == 'motherLastName') {
+      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribMotherLastName;
+    }
+    if (field == 'electronicMail') {
+      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribElectronicMail;
+    }
+
+    if (this.bodyFilter.sort.column == "") {
+      this.bodyFilter.sort.direction = ""
+    } else {
+      if (this.orden) {
+        this.bodyFilter.sort.direction = "desc"
+      } else {
+        this.bodyFilter.sort.direction = "asc"
+      }
+    }
+    this.bodyFilter.page = 1;
     this.getCustomers();
   }
 

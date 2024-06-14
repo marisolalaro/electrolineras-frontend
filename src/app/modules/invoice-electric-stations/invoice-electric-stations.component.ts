@@ -28,6 +28,9 @@ import { PdfService } from './services/pdf.service';
 })
 export default class InvoiceElectricStationsComponent {
 
+  // variables de control
+  public orden: boolean = false;
+  
   // variables propias del componente
   public titulosGlobales = titles;
   public visible: boolean = false;
@@ -107,6 +110,8 @@ export default class InvoiceElectricStationsComponent {
     this.bodyFilter.search.value = value;
     this.getInvoices();
   }
+
+  customSort(field, orden) {}
 
   onOpenFactura(item) {
     const outputFileName = 'factura-electrolinera.pdf';
