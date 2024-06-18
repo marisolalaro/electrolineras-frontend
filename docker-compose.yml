@@ -1,0 +1,39 @@
+services:
+  electrolineras-backend:
+    env_file:
+      - env_dev.env
+    image: '${REPO_NAME_BACKEND}:${TAG_BACKEND}'
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/electrolineras
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_SHOW_SQL=false
+      - DOMINIO.ET=http://10.241.74.31:8050/electrolinerasbackend/api/file/
+      - SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT=3600
+    ports:
+      - 8050:8050
+    depends_on:
+      - db
+    volumes:
+      - type: volume
+        source: certificates
+        target: /usr/electrolineras/media/certificates
+        volume:
+          nocopy: true
+  electrolineras-frontend:
+    env_file:
+      - env_dev.env
+    image: '${REPO_NAME_FRONTEND}:${TAG_FRONTEND}'    
+    ports:
+      - "5150:5150"
+  db:
+    env_file:
+      - env_dev.env
+    image: 'postgres:latest'
+    restart: always
+    volumes:
+      - ./electrolineras_data:/var/lib/postgresql/data
+    ports:
+      - 5450:5432
+volumes:
+  certificates:
