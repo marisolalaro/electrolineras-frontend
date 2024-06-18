@@ -1,0 +1,121 @@
+<div class="container">
+  <div class="card">
+
+    <div class="row">
+      <h3><b>{{titleComponent.mainTitle}}</b></h3>
+    </div>
+
+    <div class="row">
+      <p-table #dt1 [columns]="cabeceras" [value]="invoices" dataKey="id"
+        styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
+        [showCurrentPageReport]="false"
+        currentPageReportTemplate="Showing {first} to {last} of {{totalRecords}} entries"
+        [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
+
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th>
+              #
+            </th>
+            <th pSortableColumn="'mount'">
+              Monto
+              <p-sortIcon field="mount" (click)="customSort('mount', orden)"></p-sortIcon>
+            </th>
+            <th pSortableColumn="'cuf'">
+              CUF
+              <p-sortIcon field="cuf" (click)="customSort('cuf', orden)"></p-sortIcon>
+            </th>
+            
+            <th pSortableColumn="'siatInvoice'">
+              URL factura
+              <p-sortIcon field="siatInvoice" (click)="customSort('siatInvoice', orden)"></p-sortIcon>
+            </th>
+            <th pSortableColumn="'date'">
+              Fecha
+              <p-sortIcon field="date" (click)="customSort('date', orden)"></p-sortIcon>
+            </th>
+            <th pSortableColumn="'time'">
+              Hora
+              <p-sortIcon field="time" (click)="customSort('time', orden)"></p-sortIcon>
+            </th>
+            <th pSortableColumn="'razonSocial'">
+              Razón Social
+              <p-sortIcon field="razonSocial" (click)="customSort('razonSocial', orden)"></p-sortIcon>
+            </th>
+            <th pSortableColumn="'username'">
+              Nombre Cliente
+              <p-sortIcon field="username" (click)="customSort('username', orden)"></p-sortIcon>
+            </th>
+            <th pSortableColumn="'placa'">
+              Placa
+              <p-sortIcon field="placa" (click)="customSort('placa', orden)"></p-sortIcon>
+            </th>
+            <th rowspan="2">
+              Factura
+            </th>
+          </tr>
+
+          <tr>
+            <th>
+
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'amount', 'contains')" placeholder="Buscar "
+                class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'cuf', 'contains')" placeholder="Buscar "
+                class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'invoice', 'contains')" placeholder="Buscar "
+                class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'siatInvoice', 'contains')"
+                placeholder="Buscar " class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'date', 'contains')" placeholder="Buscar "
+                class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'time', 'contains')" placeholder="Buscar "
+                class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'razonSocial', 'contains')"
+                placeholder="Buscar " class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'userName', 'contains')" placeholder="Buscar "
+                class="w-full">
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+          <tr>
+            <td>{{ rowData?.totalUnits }} {{rowIndex + 1}}</td>
+            <td>{{rowData['codigoEstado']}}</td>
+            <td>{{rowData['codigoEstado']}}</td>
+            <td>{{rowData['codigoEstado']}}</td>
+            <td>{{rowData['codigoEstado']}}</td>
+            <td>{{rowData['codigoEstado']}}</td>
+            <td>{{rowData['codigoEstado']}}</td>
+            <td>{{rowData['codigoEstado']}}</td>
+            <td>{{rowData['codigoEstado']}}</td>
+            <td>
+              <i class="pi pi-file-pdf" style="font-size: 1.5rem; color: #B30C00" (click)="onOpenFactura(rowData)"
+                tooltipPosition="top" pTooltip="Ver más"></i>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-paginator (onPageChange)="onPageChange($event)" [first]="page" [rows]="itemsPerPage"
+        [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20]">
+      </p-paginator>
+    </div>
+
+    <!-- </section> -->
+  </div>
+</div>

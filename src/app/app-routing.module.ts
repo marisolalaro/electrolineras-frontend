@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { rutas } from './core/constants/rutas';
 
 const routes: Routes = [
   {
@@ -7,28 +8,32 @@ const routes: Routes = [
     loadChildren: () => import('./modules/login/login-routing.module').then(m => m.LoginRoutingModule),
   },
   {
-    path: 'administration',
+    path: rutas.rutaPrincipal,
     loadComponent: () => import('./modules/content/content.component'),
     children: [
       {
-        path: 'customers',
+        path: rutas.rutaClientes,
         loadComponent: () => import('./modules/customers/customers.component'),
       },
       {
-        path: 'administrators',
+        path: rutas.rutaAdministradores,
         loadComponent: () => import('./modules/administrators/administrators.component'),
       },
       {
-        path: 'electric-stations',
+        path: rutas.rutaElectrolineras,
         loadComponent: () => import('./modules/electric-stations/electric-stations.component'),
       },
       {
-        path: 'transactions',
+        path: rutas.rutaTransacciones,
         loadComponent: () => import('./modules/transactions/transactions.component'),
       },
       {
-        path: 'invoices',
+        path: rutas.rutaFacturaTransferencias,
         loadComponent: () => import('./modules/invoice-electric-stations/invoice-electric-stations.component'),
+      },
+      {
+        path: rutas.rutaFacturasCargasEnergia,
+        loadComponent: () => import('./modules/invoice-energy-charging/invoice-energy-charging.component'),
       },
     ]
   },

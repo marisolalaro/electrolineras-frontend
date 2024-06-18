@@ -111,12 +111,14 @@ export default class InvoiceElectricStationsComponent {
     this.getInvoices();
   }
 
-  customSort(field, orden) {}
+  customSort(field, orden) {
+    
+  }
 
   onOpenFactura(item) {
     const outputFileName = 'factura-electrolinera.pdf';
     // this.base64ToPdfService.convertBase64ToPdf(item.xmlBase64, outputFileName);
-    this.pdfService.generatePdf();
+    this.pdfService.generatePdfInvoiceTransaction();
   }
 
   onOpenImagenQR(item) {

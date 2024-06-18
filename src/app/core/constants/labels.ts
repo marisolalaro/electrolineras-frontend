@@ -87,6 +87,10 @@ export const mainTitles: IMainTitles = {
   },
   facturas: {
     mainTitle: 'Facturas-compra-venta',
-    secondaryTitle: 'Listado de Facturas'
+    secondaryTitle: 'Listado de Facturas Compras de crédito'
+  },
+  facturasCargaEnergia: {
+    mainTitle: 'Facturas suministro de energía ',
+    secondaryTitle: 'Listado de Facturas Carga de Energía'
   },
 }

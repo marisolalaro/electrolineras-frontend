@@ -23,8 +23,10 @@ export class EndPoins {
     static transaction = "/paymentElectrolinera";
     static transactionCharges = "/paymentListCharges";
 
-    // Invoices electric stations
+    // Invoices transaction
     static invoiceElectrolinera = "/invoiceElectrolinera";
     static invoicesCompraVenta = "/getAllInvoicesCompraVenta";
 
+    // Invoices charging stations
+    static invoiceChargingStation = "/invoiceChargingStation";
 };

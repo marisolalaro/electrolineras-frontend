@@ -1,0 +1,23 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { EndPoins } from 'src/app/core/constants/endPoints';
+import { BodyFilterModel } from 'src/app/core/model/body-filter';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class InvoiveEnergyChargingService {
+
+  private apiService: string;
+
+  constructor(private http: HttpClient) {
+    // this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.invoiceChargingStation;
+    this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.invoiceElectrolinera;
+  }
+
+  getAllFilter(bodyFilter: BodyFilterModel) {
+    // return this.http.post(this.apiService, bodyFilter);
+    return this.http.post(this.apiService + EndPoins.invoicesCompraVenta, bodyFilter);
+
+  }
+}

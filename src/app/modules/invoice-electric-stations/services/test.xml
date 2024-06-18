@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<facturaElectronicaSuministroEnergia>
+	<cabecera>
+		<nitEmisor>1020613020</nitEmisor>
+		<razonSocialEmisor>DISTRIBUIDORA DE ELECTRICIDAD LA PAZ S.A. DELAPAZ</razonSocialEmisor>
+		<municipio>LA PAZ</municipio>
+		<telefono>2222200</telefono>
+		<numeroFactura>2</numeroFactura>
+		<cuf>45D54B10B1E67EE33FB9141AE6A5EB937D14E28D555659E081E8B8E74</cuf>
+		<cufd>BQUFDTkdDQkE=NzTgzRjQxOUVGNTc=Qm9CRk9LRkdZVUNc3MEI3MDQyQzJCR</cufd>
+		<codigoSucursal>0</codigoSucursal>
+		<direccion>AVENIDA ILLIMANI NRO: 1987 ZONA MIRAFLORES, A UNA CUADRA STADIUM HERNANDO SILES</direccion>
+		<codigoPuntoVenta>2</codigoPuntoVenta>
+		<fechaEmision>2024-06-04T10:22:11.922</fechaEmision>
+		<nombreRazonSocial>Coronel</nombreRazonSocial>
+		<codigoTipoDocumentoIdentidad>3</codigoTipoDocumentoIdentidad>
+		<numeroDocumento>6833022</numeroDocumento>
+		<complemento
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+			<codigoCliente>9</codigoCliente>
+			<codigoPais>22</codigoPais>
+			<placaVehiculo>3156YGH</placaVehiculo>
+			<codigoMetodoPago>27</codigoMetodoPago>
+			<numeroTarjeta>10000014</numeroTarjeta>
+			<montoTotal>1.00</montoTotal>
+			<montoTotalSujetoIva>0.00</montoTotalSujetoIva>
+			<montoGiftCard>1.00</montoGiftCard>
+			<descuentoAdicional>0.00</descuentoAdicional>
+			<codigoExcepcion>0</codigoExcepcion>
+			<cafc
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+				<codigoMoneda>1</codigoMoneda>
+				<tipoCambio>1.00</tipoCambio>
+				<montoTotalMoneda>1.00</montoTotalMoneda>
+				<leyenda>Ley N° 453: El proveedor de servicios debe habilitar medios e instrumentos para efectuar consultas y reclamaciones.</leyenda>
+				<usuario>epagosegsa</usuario>
+				<codigoDocumentoSector>31</codigoDocumentoSector>
+			</cabecera>
+			<detalle>
+				<actividadEconomica>351000</actividadEconomica>
+				<codigoProductoSin>86312</codigoProductoSin>
+				<codigoProducto>1</codigoProducto>
+				<descripcion>CARGA DE VEHICULO ELÉCTRICO</descripcion>
+				<cantidad>1</cantidad>
+				<unidadMedida>58</unidadMedida>
+				<precioUnitario>1.00</precioUnitario>
+				<montoDescuento>0.00</montoDescuento>
+				<subTotal>1.00</subTotal>
+			</detalle>
+			<Signature
+				xmlns="http://www.w3.org/2000/09/xmldsig#">
+				<SignedInfo>
+					<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+					<SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+					<Reference URI="">
+						<Transforms>
+							<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+							<Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments"/>
+						</Transforms>
+						<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+						<DigestValue>Cg40g8svtUih0Bn6gn73MV6rkdS8Io2DBpI5qT8IiO8=</DigestValue>
+					</Reference>
+				</SignedInfo>
+				<SignatureValue>
+ksSB4+58lRRnRV9sW3n0UMhhnYxTkebQ31IFDFNF/zS7b33p40BYRz7l48fpjrXRUL9Fpk/1jj02
+1GcDz1LWzzWeIx5tpvdnMtGvy0w7UGoApDUI0GGFCmDA5kusaGv5s2QqKI6PEw2Je92ztrXxMnYh
+ggOJhoFOQ3A6SIFldr7XIECN5c8/ZPHxXWFGNfK2BJcuEh38DVlmcTpgz+eqB01N7v+Ts/qSbv96
+F1JVV1/9lIXhG7kh1g1FFi3Qj7fs+E4MfgTwpZkdfZ1edbksRwoHDxSnDmofTcAj0F7gA7TR2ssg
+2pXtiNo/IGz/320yz6Abaduc315lii86HuIMVg==
+</SignatureValue>
+				<KeyInfo>
+					<X509Data>
+						<X509Certificate>
+MIIEYTCCA0mgAwIBAgIIL2jAo6U/DkYwDQYJKoZIhvcNAQELBQAwgegxFjAUBgNVBAMTDURBTklF
+TCBaRVJBSU4xOjA4BgNVBAoTMURJU1RSSUJVSURPUkEgREUgRUxFQ1RSSUNJREFEIExBIFBBWiBT
+LkEuIERFTEFQQVoxDDAKBgNVBAsTA1NHQzEWMBQGA1UEDBMNREVTQVJST0xMQURPUjELMAkGA1UE
+BhMCQk8xCzAJBgNVBC4TAkNJMRQwEgYHKwYBAQEBABMHNDM3NjcwNjETMBEGA1UEBRMKMTAyMDYx
+MzAyMDEnMCUGCSqGSIb3DQEJARYYZGFuaWVsLnplcmFpbkBlbmRlc3ljLmJvMB4XDTI0MDMwMTEz
+MzIwMFoXDTI1MDMwMTEzMzIwMFowgegxFjAUBgNVBAMTDURBTklFTCBaRVJBSU4xOjA4BgNVBAoT
+MURJU1RSSUJVSURPUkEgREUgRUxFQ1RSSUNJREFEIExBIFBBWiBTLkEuIERFTEFQQVoxDDAKBgNV
+BAsTA1NHQzEWMBQGA1UEDBMNREVTQVJST0xMQURPUjELMAkGA1UEBhMCQk8xCzAJBgNVBC4TAkNJ
+MRQwEgYHKwYBAQEBABMHNDM3NjcwNjETMBEGA1UEBRMKMTAyMDYxMzAyMDEnMCUGCSqGSIb3DQEJ
+ARYYZGFuaWVsLnplcmFpbkBlbmRlc3ljLmJvMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAng6kXKQashveCMOJiBldDFf+Qvg8xBv0nVzgZelfTB2gcB/lz0vz0KX+3mNIjXiqNrm7V3uz
+yjN9hyrpLqSUJyFCtGFEI0KysESXCdc3YVTBCAtoVWkiAP0uJWTX1pj9h/AT70ZigHJbnMuMGz8U
+TRw+y6f1uU4Rn8CZJXhUR7IsyBbBOyPHsPjaqFrTTafH3Txv5bD6sLueEDzgC7QoikyG4VbvO1nK
+JPG/oDdxSkCQRuqATaS8f+BPoIXZzGnTMbtB+HR9Ei22u0Bl1/MXAebBqsjmF4SaBf/K6mat2m9m
+OWEBn8Ur+xZgyihQ37cybPl+SumJH2FCq9v+/9jbBwIDAQABow0wCzAJBgNVHRMEAjAAMA0GCSqG
+SIb3DQEBCwUAA4IBAQA2JhohmlUtBqgk8ypQ1BRsXab0RRoKlx51uXukY/crI7YHVd2yd9bLur/p
+pZAR8JfvJjxXG9UTepR7Kr+i6QdNrAA2W+7GtPV/KDVSpG45QNC2vpxjkmHa68SXSpfIGe4kDR4c
+2uTEGuQ7QrEFfFgbBXmUJg5DJvKEQjMpfJ0jU7/qIXahIOz6O0FagFJBBgYt+ZKJdV2Lnwcnqdpb
+Vi8wR7HZhrQTuHBhUgRuXoK+IFz1AGtbNH59Ams/NfeMv99kSrWsjVnWDS0kqIofKhwHAsXe4LRA
+aiQ2RDqcJc82VVsdJPlRUCsN9NCBwnJquKm7A2uZA6q/dEuNNv3NqYyO
+</X509Certificate>
+					</X509Data>
+				</KeyInfo>
+			</Signature>
+		</facturaElectronicaSuministroEnergia>

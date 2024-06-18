@@ -11,7 +11,7 @@ export class Base64ToPdfService {
   constructor() { }
   
   // Función para decodificar Base64 a una cadena
-  private decodeBase64(base64: string): string {
+  public decodeBase64(base64: string): string {
     return atob(base64);
   }
 

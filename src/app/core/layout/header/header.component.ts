@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PrimeModule } from 'src/app/prime.module';
 import { MenuItem } from 'primeng/api';
 import { mainTitles } from '../../constants/labels';
+import { rutas } from '../../constants/rutas';
 
 @Component({
   selector: 'app-header',
@@ -30,29 +31,34 @@ export class HeaderComponent implements OnInit {
       {
         label: mainTitles['administradores'].mainTitle,
         icon: 'pi pi-fw pi-user',
-        routerLink: ['/administration/administrators'],
+        routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaAdministradores],
       },
       {
         label: mainTitles['clientes'].mainTitle,
         icon: 'pi pi-fw pi-users',
-        routerLink: ['/administration/customers'],
+        routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaClientes],
       },
     ];
     this.itemsLateral = [
       {
         label: mainTitles['electrolineras'].mainTitle,
         icon: 'pi pi-fw pi-bolt',
-        routerLink: ['/administration/electric-stations'],
+        routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaElectrolineras],
       },
       {
         label: mainTitles['transacciones'].mainTitle,
         icon: 'pi pi-fw pi-money-bill',
-        routerLink: ['/administration/transactions'],
+        routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaTransacciones],
       },
       {
         label: mainTitles['facturas'].mainTitle,
         icon: 'pi pi-fw pi-file',
-        routerLink: ['/administration/invoices'],
+        routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaFacturaTransferencias],
+      },
+      {
+        label: mainTitles['facturasCargaEnergia'].mainTitle,
+        icon: 'pi pi-fw pi-list',
+        routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaFacturasCargasEnergia],
       },
     ]
     this.activeItem = this.items[0];
