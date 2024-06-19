@@ -21,7 +21,7 @@ export class EndPoins {
 
     // Transacciones
     static transaction = "/paymentElectrolinera";
-    static transactionCharges = "/paymentListCharges";
+    static transactionCharges = "/PagePaymenTransactions";
 
     // Invoices transaction
     static invoiceElectrolinera = "/invoiceElectrolinera";

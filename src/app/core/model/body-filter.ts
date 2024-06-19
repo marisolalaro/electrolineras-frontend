@@ -8,6 +8,7 @@ export class BodyFilterModel {
   idUsuario: number;
   sort: SortFilterModel;
   search: SearchFilterModel;
+  filtro?: SortFilterModel;
 
   constructor(page, size, idRol?, idUsuario?) {
     this.page = page;

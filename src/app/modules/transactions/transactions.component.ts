@@ -34,7 +34,7 @@ export default class TransactionsComponent implements OnInit {
   public transaction: TransactionsModel = new TransactionsModel();
 
   // variables del paginator
-  public page: number = 1;
+  public page: number = 0;
   public itemsPerPage: number = 5;
   public totalRecords: number = 0;
 
@@ -97,8 +97,8 @@ export default class TransactionsComponent implements OnInit {
   getTransactions(): void {
     this.transactionService.getAllFilter(this.bodyFilter).subscribe(
       (resp: any) => {
-        this.transactions = resp.data.paymentElectrolineraList;
-        this.totalRecords = resp.data.totalRecords;
+        this.transactions = resp.data.content;
+        this.totalRecords = resp.data.totalElements;
       }
     )
   }
