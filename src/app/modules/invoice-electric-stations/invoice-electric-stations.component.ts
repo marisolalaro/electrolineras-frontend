@@ -17,14 +17,19 @@ import { InvoiceElectricStationModel } from 'src/app/core/model/invoice-electric
 import { Base64ToPdfService } from './services/base-64-to-pdf.service';
 import { Base64ToImageService } from './services/base-64-to-image.service';
 import { InvoiceElectricStationsService } from './services/invoice-electric-stations.service';
-import { PdfService } from './services/pdf.service';
+
+import { xmlToJsonUtil } from 'xml-to-json-util';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { InvoiceTransaction } from './services/invoice-transaction';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-invoice-electric-stations',
   templateUrl: './invoice-electric-stations.component.html',
   styleUrls: ['./invoice-electric-stations.component.scss'],
   standalone: true,
-  imports: [InvoiceElectricStationsModule, NgFor, NgIf, PipesModule, NgSwitch, NgSwitchCase],
+  imports: [InvoiceElectricStationsModule, NgFor, NgIf, PipesModule, NgSwitch, NgSwitchCase]
 })
 export default class InvoiceElectricStationsComponent {
 
@@ -57,8 +62,8 @@ export default class InvoiceElectricStationsComponent {
   constructor(
     public invoiceService: InvoiceElectricStationsService,
     public base64ImageService: Base64ToImageService,
-    private base64ToPdfService: Base64ToPdfService,
-    private pdfService: PdfService
+    public base64aXML: Base64ToPdfService,
+    private invoiceTransaction: InvoiceTransaction
   ) { }
 
   ngOnInit(): void {
@@ -116,9 +121,13 @@ export default class InvoiceElectricStationsComponent {
   }
 
   onOpenFactura(item) {
-    const outputFileName = 'factura-electrolinera.pdf';
+    const xmlContext = this.base64aXML.decodeBase64(item.xmlBase64);
+    const jsonData: any = xmlToJsonUtil(xmlContext);
+    var doc = this.invoiceTransaction.getFactura(jsonData);
+    pdfMake.createPdf(doc).open();
     // this.base64ToPdfService.convertBase64ToPdf(item.xmlBase64, outputFileName);
-    this.pdfService.generatePdfInvoiceTransaction();
+    // this.pdfService.generatePdfInvoiceTransaction(xmlContext);
+
   }
 
   onOpenImagenQR(item) {

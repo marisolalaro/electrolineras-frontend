@@ -5,6 +5,7 @@ import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { FilterInformationComponent } from 'src/app/shared/components/filter-information/filter-information.component';
 import { InvoiceElectricStationsService } from './services/invoice-electric-stations.service';
 import { InvoiceElectricStationsRoutingModule } from './invoice-electric-stations-routing.module';
+import { InvoiceTransaction } from './services/invoice-transaction';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { InvoiceElectricStationsRoutingModule } from './invoice-electric-station
   ],
   providers: [
     InvoiceElectricStationsService,
+    InvoiceTransaction,
   ]
 })
 export class InvoiceElectricStationsModule { }

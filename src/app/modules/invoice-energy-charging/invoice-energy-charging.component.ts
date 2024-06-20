@@ -15,7 +15,6 @@ import { InvoiceEnergyChargingModule } from './invoice-energy-charging.module';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 import { InvoiceEnergyChargingModel } from 'src/app/core/model/invoice-energy-charging';
 // services
-import { PdfService } from '../invoice-electric-stations/services/pdf.service';
 import { InvoiveEnergyChargingService } from './services/invoive-energy-charging.service';
 import { Base64ToPdfService } from '../invoice-electric-stations/services/base-64-to-pdf.service';
 
@@ -62,7 +61,6 @@ export default class InvoiceEnergyChargingComponent {
   constructor(
     public InvoiceService: InvoiveEnergyChargingService,
     public global: Global,
-    private pdfService: PdfService,
     public base64aXML: Base64ToPdfService
   ) { }
 
@@ -122,7 +120,7 @@ export default class InvoiceEnergyChargingComponent {
   onOpenFactura(item) {
     const outputFileName = 'factura-carga-electrolinera.pdf';
     const xmlContext = this.base64aXML.decodeBase64(item.xmlBase64);
-    this.pdfService.generatePdfInvoiceCharging(xmlContext);
+    // this.pdfService.generatePdfInvoiceCharging(xmlContext);
   }
 
   applyFilter($event: any, field: string, matchMode: string) {
