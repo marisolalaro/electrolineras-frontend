@@ -106,6 +106,8 @@ export default class CustomersComponent {
 
   applyFilter($event: any, field: string, matchMode: string) {
     this.bodyFilter.page = 1;
+    this.bodyFilter.sort.column = '';
+    this.bodyFilter.sort.direction = '';
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
 

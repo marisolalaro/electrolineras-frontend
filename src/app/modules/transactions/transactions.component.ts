@@ -107,6 +107,8 @@ export default class TransactionsComponent implements OnInit {
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
     this.bodyFilter.page = 1;
+    this.bodyFilter.sort.column = '';
+    this.bodyFilter.sort.direction = '';
 
     if (field == this.nombreConsumidor) {
       this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribConsumer;

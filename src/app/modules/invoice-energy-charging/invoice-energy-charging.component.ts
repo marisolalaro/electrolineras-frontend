@@ -131,6 +131,8 @@ export default class InvoiceEnergyChargingComponent {
 
   applyFilter($event: any, field: string, matchMode: string) {
     this.bodyFilter.page = 0;
+    this.bodyFilter.sort.column = '';
+    this.bodyFilter.sort.direction = '';
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
     if (field == 'amount') {

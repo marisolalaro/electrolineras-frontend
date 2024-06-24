@@ -97,6 +97,8 @@ export default class InvoiceElectricStationsComponent {
 
   applyFilter($event: any, field: string, matchMode: string) {
     this.bodyFilter.page = 1;
+    this.bodyFilter.sort.column = '';
+    this.bodyFilter.sort.direction = '';
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
     this.bodyFilter.search.column = 'id'
@@ -117,7 +119,33 @@ export default class InvoiceElectricStationsComponent {
   }
 
   customSort(field, orden) {
-    
+    this.orden = !orden;
+    this.bodyFilter.search.column = "";
+    this.bodyFilter.search.value = "";
+    this.bodyFilter.sort.column = "";
+    if (field == 'fechaHoraEmision') {
+      this.bodyFilter.sort.column = DBAttributeName.tabInvoice_AttribFechaEmision;
+    }
+    if (field == 'cuf') {
+      this.bodyFilter.sort.column = DBAttributeName.tabInvoice_AttribCuf;
+    }
+    if (field == 'codigoDescripcion') {
+      this.bodyFilter.sort.column = DBAttributeName.tabInvoice_AttribCodigoDescripcion;
+    }
+    if (field == 'urlFacturaSiat') {
+      this.bodyFilter.sort.column = DBAttributeName.tabInvoice_AttribUrlFacturaSiat;
+    }
+    if (this.bodyFilter.sort.column == "") {
+      this.bodyFilter.sort.direction = ""
+    } else {
+      if (this.orden) {
+        this.bodyFilter.sort.direction = "desc"
+      } else {
+        this.bodyFilter.sort.direction = "asc"
+      }
+    }
+    this.bodyFilter.page = 0;
+    this.getInvoices();
   }
 
   onOpenFactura(item) {
