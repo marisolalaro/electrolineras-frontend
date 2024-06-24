@@ -15,6 +15,7 @@ import { BodyFilterModel } from 'src/app/core/model/body-filter';
 import { TransactionsModel } from 'src/app/core/model/transactions';
 // services
 import { TransactionsService } from './services/transactions.service';
+import { Base64ToImageService } from '../invoice-electric-stations/services/base-64-to-image.service';
 
 @Component({
   selector: 'app-transactions',
@@ -28,8 +29,11 @@ export default class TransactionsComponent implements OnInit {
 
   // variables de control
   public orden: boolean = false;
+  public visible: boolean = false;
 
   // variables propias del componente
+  public titulosGlobales = titles;
+  public imageUrl: string | null = null;
   public transactions: TransactionsModel[] = [];
   public transaction: TransactionsModel = new TransactionsModel();
 
@@ -51,7 +55,7 @@ export default class TransactionsComponent implements OnInit {
   );
 
   // variables clave json
-  public nombreConsumidor = DBAttributeName.tabPaymentConsumerName;
+  // public nombreConsumidor = DBAttributeName.tabPaymentConsumerName;
   public nombreRazonSocial = DBAttributeName.tabPaymentNombreRazonSocial;
   public numeroDocumento = DBAttributeName.tabPaymentDocumentoConsumer;
   public email = DBAttributeName.tabPaymentEmailCliente;
@@ -70,6 +74,7 @@ export default class TransactionsComponent implements OnInit {
 
   constructor(
     public transactionService: TransactionsService,
+    public base64ImageService: Base64ToImageService,
   ) { }
 
   ngOnInit(): void {
@@ -79,7 +84,7 @@ export default class TransactionsComponent implements OnInit {
 
   inicializaDatos() {
     this.cabeceras = [
-      { field: this.nombreConsumidor, header: 'Nombres Consumidor' },
+      // { field: this.nombreConsumidor, header: 'Nombres Consumidor' },
       { field: this.nombreRazonSocial, header: 'Nombre / Razón Social' },
       { field: this.numeroDocumento, header: 'Número de documento' },
       { field: this.email, header: 'Email' },
@@ -87,18 +92,19 @@ export default class TransactionsComponent implements OnInit {
       { field: this.fechaRegistro, header: 'Fecha registro' },
       { field: this.giftCard, header: 'Numero Gift card' },
       { field: this.glosa, header: 'Glosa' },
-      { field: this.nombreCliente, header: 'Nombre Cliente' },
+      // { field: this.nombreCliente, header: 'Nombre Cliente' },
       { field: this.placaVehiculo, header: 'Placa Vehículo' },
       { field: this.recibeBanck, header: 'Banco recibido' },
-      { field: this.recibeeDocument, header: 'Documento Recibido' }
+      { field: this.recibeeDocument, header: 'Documento Recibido' },
+      { field: 'QR', header: 'Opciones' }
     ];
   }
 
   getTransactions(): void {
     this.transactionService.getAllFilter(this.bodyFilter).subscribe(
       (resp: any) => {
-        this.transactions = resp.data.content;
-        this.totalRecords = resp.data.totalElements;
+        this.transactions = resp.data.paymentTransactionElectrolinerasList;
+        this.totalRecords = resp.data.totalRecords;
       }
     )
   }
@@ -110,9 +116,9 @@ export default class TransactionsComponent implements OnInit {
     this.bodyFilter.sort.column = '';
     this.bodyFilter.sort.direction = '';
 
-    if (field == this.nombreConsumidor) {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribConsumer;
-    }
+    // if (field == this.nombreConsumidor) {
+    //   this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribConsumer;
+    // }
     if (field == this.nombreRazonSocial) {
       this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribNombreRazonSocial;
     }
@@ -134,17 +140,17 @@ export default class TransactionsComponent implements OnInit {
     if (field == this.glosa) {
       this.bodyFilter.search.column = DBAttributeName.tabPaymentGloss;
     }
-    if (field == this.nombreCliente) {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentNombreCliente;
-    }
+    // if (field == this.nombreCliente) {
+    //   this.bodyFilter.search.column = DBAttributeName.tabPaymentNombreCliente;
+    // }
     if (field == this.placaVehiculo) {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentPlacaVehiculo;
+      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribPlaca;
     }
     if (field == this.recibeBanck) {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentReciveBank;
+      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribBank;
     }
     if (field == this.recibeeDocument) {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentReciveDocument;
+      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribDocReciveid;
     }
     this.bodyFilter.search.value = value;
     this.getTransactions();
@@ -155,9 +161,9 @@ export default class TransactionsComponent implements OnInit {
     this.bodyFilter.search.column = "";
     this.bodyFilter.search.value = "";
 
-    if (field == this.nombreConsumidor) {
-      this.bodyFilter.sort.column = DBAttributeName.tabPaymentTransactions_AttribConsumer;
-    }
+    // if (field == this.nombreConsumidor) {
+    //   this.bodyFilter.sort.column = DBAttributeName.tabPaymentTransactions_AttribConsumer;
+    // }
     if (field == this.nombreRazonSocial) {
       this.bodyFilter.sort.column = DBAttributeName.tabPaymentTransactions_AttribNombreRazonSocial;
     }
@@ -179,9 +185,9 @@ export default class TransactionsComponent implements OnInit {
     if (field == this.glosa) {
       this.bodyFilter.sort.column = DBAttributeName.tabPaymentGloss;
     }
-    if (field == this.nombreCliente) {
-      this.bodyFilter.sort.column = DBAttributeName.tabPaymentNombreCliente;
-    }
+    // if (field == this.nombreCliente) {
+    //   this.bodyFilter.sort.column = DBAttributeName.tabPaymentNombreCliente;
+    // }
     if (field == this.placaVehiculo) {
       this.bodyFilter.sort.column = DBAttributeName.tabPaymentPlacaVehiculo;
     }
@@ -206,4 +212,8 @@ export default class TransactionsComponent implements OnInit {
     this.getTransactions();
   }
 
+  onOpenImagenQR(item) {
+    this.visible = true;
+    this.imageUrl = this.base64ImageService.base64ToImageUrl(item.qrImage);
+  }
 }

@@ -22,6 +22,9 @@ export class DBAttributeName {
     static tabPaymentTransactions_AttribPaymentDateConsumer = 'payment_date';
     static tabPaymentTransactions_AttribGiftCard = 'gift_card_number';
     static tabPaymentTransactions_AttribQrImage = 'qr_image';
+    static tabPaymentTransactions_AttribBank = 'receiver_bank';
+    static tabPaymentTransactions_AttribDocReciveid = 'receiver_document';
+    static tabPaymentTransactions_AttribPlaca = 'placa_vehiculo';
 
     // dom tabPayment
     static tabPaymentConsumerName = 'consumerName';
