@@ -14,41 +14,33 @@
 
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th>
+            <th rowspan="2">
               #
             </th>
-            <th pSortableColumn="'mount'">
+            <th pSortableColumn="'amount'">
               Monto
-              <p-sortIcon field="mount" (click)="customSort('mount', orden)"></p-sortIcon>
+              <p-sortIcon field="amount" (click)="customSort('amount', orden)"></p-sortIcon>
             </th>
             <th pSortableColumn="'cuf'">
               CUF
               <p-sortIcon field="cuf" (click)="customSort('cuf', orden)"></p-sortIcon>
             </th>
             
-            <th pSortableColumn="'siatInvoice'">
+            <th pSortableColumn="'urlFacturaSiat'">
               URL factura
-              <p-sortIcon field="siatInvoice" (click)="customSort('siatInvoice', orden)"></p-sortIcon>
+              <p-sortIcon field="urlFacturaSiat" (click)="customSort('urlFacturaSiat', orden)"></p-sortIcon>
             </th>
-            <th pSortableColumn="'date'">
-              Fecha
-              <p-sortIcon field="date" (click)="customSort('date', orden)"></p-sortIcon>
+            <th rowspan="2">
+              Número GiftCard
             </th>
-            <th pSortableColumn="'time'">
-              Hora
-              <p-sortIcon field="time" (click)="customSort('time', orden)"></p-sortIcon>
-            </th>
-            <th pSortableColumn="'razonSocial'">
+            <th rowspan="2">
               Razón Social
-              <p-sortIcon field="razonSocial" (click)="customSort('razonSocial', orden)"></p-sortIcon>
             </th>
-            <th pSortableColumn="'username'">
+            <th rowspan="2">
               Nombre Cliente
-              <p-sortIcon field="username" (click)="customSort('username', orden)"></p-sortIcon>
             </th>
-            <th pSortableColumn="'placa'">
+            <th rowspan="2">
               Placa
-              <p-sortIcon field="placa" (click)="customSort('placa', orden)"></p-sortIcon>
             </th>
             <th rowspan="2">
               Factura
@@ -56,9 +48,6 @@
           </tr>
 
           <tr>
-            <th>
-
-            </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'amount', 'contains')" placeholder="Buscar "
                 class="w-full">
@@ -68,27 +57,7 @@
                 class="w-full">
             </th>
             <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'invoice', 'contains')" placeholder="Buscar "
-                class="w-full">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'siatInvoice', 'contains')"
-                placeholder="Buscar " class="w-full">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'date', 'contains')" placeholder="Buscar "
-                class="w-full">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'time', 'contains')" placeholder="Buscar "
-                class="w-full">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'razonSocial', 'contains')"
-                placeholder="Buscar " class="w-full">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'userName', 'contains')" placeholder="Buscar "
+              <input pInputText type="text" (input)="applyFilter($event, 'urlFacturaSiat', 'contains')" placeholder="Buscar "
                 class="w-full">
             </th>
           </tr>
@@ -96,14 +65,15 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
           <tr>
             <td>{{ rowData?.totalUnits }} {{rowIndex + 1}}</td>
-            <td>{{rowData['codigoEstado']}}</td>
-            <td>{{rowData['codigoEstado']}}</td>
-            <td>{{rowData['codigoEstado']}}</td>
-            <td>{{rowData['codigoEstado']}}</td>
-            <td>{{rowData['codigoEstado']}}</td>
-            <td>{{rowData['codigoEstado']}}</td>
-            <td>{{rowData['codigoEstado']}}</td>
-            <td>{{rowData['codigoEstado']}}</td>
+            <td>{{rowData['amount']}}</td>
+            <td>{{rowData['cuf']}}</td>
+            <td>
+              <a href="{{rowData['urlFacturaSiat']}}" target="_blank">Factura Siat</a>
+            </td>
+            <td>{{rowData['giftCardNumber']}}</td>
+            <td>{{rowData['razonSocial']}}</td>
+            <td>{{rowData['nombreCliente']}}</td>
+            <td>{{rowData['placaVehiculo']}}</td>
             <td>
               <i class="pi pi-file-pdf" style="font-size: 1.5rem; color: #B30C00" (click)="onOpenFactura(rowData)"
                 tooltipPosition="top" pTooltip="Ver más"></i>

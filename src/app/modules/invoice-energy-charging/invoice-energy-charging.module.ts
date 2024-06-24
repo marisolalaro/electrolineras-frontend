@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { FilterInformationComponent } from 'src/app/shared/components/filter-information/filter-information.component';
 import { InvoiveEnergyChargingService } from './services/invoive-energy-charging.service';
+import { InvoiceTransaction } from './services/invoice-transaction';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { InvoiveEnergyChargingService } from './services/invoive-energy-charging
   ],
   providers: [
     InvoiveEnergyChargingService,
+    InvoiceTransaction
   ]
 })
 export class InvoiceEnergyChargingModule { }

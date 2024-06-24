@@ -23,7 +23,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         // Handle the error here
         if (error.status == 404) {
           // this.messageService.add({ severity: 'info', summary: 'Info', detail: 'No se encontró la página que estás buscando' });
-          // console.log('error de interceptor');
+          // ('error de interceptor');
           
         }
 

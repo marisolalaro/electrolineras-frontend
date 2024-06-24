@@ -11,13 +11,10 @@ export class InvoiveEnergyChargingService {
   private apiService: string;
 
   constructor(private http: HttpClient) {
-    // this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.invoiceChargingStation;
-    this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.invoiceElectrolinera;
+    this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.invoicePaymentTransaction;
   }
 
   getAllFilter(bodyFilter: BodyFilterModel) {
-    // return this.http.post(this.apiService, bodyFilter);
-    return this.http.post(this.apiService + EndPoins.invoicesCompraVenta, bodyFilter);
-
+    return this.http.post(this.apiService + EndPoins.invoiceChargingStation, bodyFilter);
   }
 }

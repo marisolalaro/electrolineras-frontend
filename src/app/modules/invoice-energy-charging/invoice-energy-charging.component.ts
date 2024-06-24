@@ -17,6 +17,11 @@ import { InvoiceEnergyChargingModel } from 'src/app/core/model/invoice-energy-ch
 // services
 import { InvoiveEnergyChargingService } from './services/invoive-energy-charging.service';
 import { Base64ToPdfService } from '../invoice-electric-stations/services/base-64-to-pdf.service';
+import { xmlToJsonUtil } from 'xml-to-json-util';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { InvoiceTransaction } from './services/invoice-transaction';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-invoice-energy-charging',
@@ -31,7 +36,7 @@ export default class InvoiceEnergyChargingComponent {
   public orden: boolean = false;
 
   // variables del paginador
-  public page: number = 1;
+  public page: number = 0;
   public itemsPerPage: number = 5;
   public totalRecords: number = 0;
 
@@ -59,9 +64,10 @@ export default class InvoiceEnergyChargingComponent {
   );
 
   constructor(
-    public InvoiceService: InvoiveEnergyChargingService,
     public global: Global,
-    public base64aXML: Base64ToPdfService
+    public base64aXML: Base64ToPdfService,
+    private invoiceTransaction: InvoiceTransaction,
+    public InvoiceService: InvoiveEnergyChargingService,
   ) { }
 
   ngOnInit() {
@@ -105,7 +111,6 @@ export default class InvoiceEnergyChargingComponent {
           this.totalRecords = result.data.totalRecords;
         },
         (error: any) => {
-          // console.log(JSON.stringify(error));
         })
   }
 
@@ -118,33 +123,24 @@ export default class InvoiceEnergyChargingComponent {
   }
 
   onOpenFactura(item) {
-    const outputFileName = 'factura-carga-electrolinera.pdf';
-    const xmlContext = this.base64aXML.decodeBase64(item.xmlBase64);
-    // this.pdfService.generatePdfInvoiceCharging(xmlContext);
+    const xmlContext = this.base64aXML.decodeBase64(item.facturaXmlbase64);
+    const jsonData: any = xmlToJsonUtil(xmlContext);
+    var doc = this.invoiceTransaction.getFactura(jsonData);
+    pdfMake.createPdf(doc).open();
   }
 
   applyFilter($event: any, field: string, matchMode: string) {
-    this.bodyFilter.page = 1;
+    this.bodyFilter.page = 0;
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
-
-    if (field == 'names') {
-      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribName;
+    if (field == 'amount') {
+      this.bodyFilter.search.column = DBAttributeName.tabInvPayTranAmount;
     }
-    if (field == 'lastName') {
-      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribLastName;
+    if (field == 'cuf') {
+      this.bodyFilter.search.column = DBAttributeName.tabInvPayCuf;
     }
-    if (field == 'motherLastName') {
-      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribMotherLastName;
-    }
-    if (field == 'electronicMail') {
-      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribElectronicMail;
-    }
-    if (field == 'paymentTransactionsElectrolineraList') {
-      this.bodyFilter.search.column = 'paymentTransactionsElectrolineraList.amount';
-    }
-    if (field == 'chargeClientList') {
-      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribChargeClientList;
+    if (field == 'urlFacturaSiat') {
+      this.bodyFilter.search.column = DBAttributeName.tabInvPayUrlSiat;
     }
     this.bodyFilter.search.value = value;
     this.getInvoicesCharging();
@@ -155,19 +151,15 @@ export default class InvoiceEnergyChargingComponent {
     this.bodyFilter.search.column = "";
     this.bodyFilter.search.value = "";
     this.bodyFilter.sort.column = "";
-    if (field == 'names') {
-      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribName;
+    if (field == 'amount') {
+      this.bodyFilter.sort.column = DBAttributeName.tabInvPayTranAmount;
     }
-    if (field == 'lastName') {
-      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribLastName;
+    if (field == 'cuf') {
+      this.bodyFilter.sort.column = DBAttributeName.tabInvPayCuf;
     }
-    if (field == 'motherLastName') {
-      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribMotherLastName;
+    if (field == 'urlFacturaSiat') {
+      this.bodyFilter.sort.column = DBAttributeName.tabInvPayUrlSiat;
     }
-    if (field == 'electronicMail') {
-      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribElectronicMail;
-    }
-
     if (this.bodyFilter.sort.column == "") {
       this.bodyFilter.sort.direction = ""
     } else {
@@ -177,12 +169,12 @@ export default class InvoiceEnergyChargingComponent {
         this.bodyFilter.sort.direction = "asc"
       }
     }
-    this.bodyFilter.page = 1;
+    this.bodyFilter.page = 0;
     this.getInvoicesCharging();
   }
 
   onPageChange(event: any) {
-    this.bodyFilter.page = event.page + 1;
+    this.bodyFilter.page = event.page;
     this.bodyFilter.size = event.rows;
     this.getInvoicesCharging();
   }

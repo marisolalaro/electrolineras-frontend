@@ -47,4 +47,11 @@ export class DBAttributeName {
     static tabInvoice_AttribCodigoDescripcion = 'codigo_descripcion';
     static tabInvoice_AttribUrlFacturaSiat = 'url_factura_siat';
 
+    // tabla para factura de recarga de energia
+    // tabla invoices_payment_transactions
+    static tabInvPayTranAmount = 'amount';
+    static tabInvPayCuf = 'cuf';
+    static tabInvPayUrlSiat = 'url_factura_siat';
+    static tabInvPayCliente = 'nombre_cliente';
+
 }

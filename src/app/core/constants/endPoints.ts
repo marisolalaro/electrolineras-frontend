@@ -28,5 +28,6 @@ export class EndPoins {
     static invoicesCompraVenta = "/getAllInvoicesCompraVenta";
 
     // Invoices charging stations
-    static invoiceChargingStation = "/invoiceChargingStation";
+    static invoicePaymentTransaction = "/invoicesPaymentTransactions";
+    static invoiceChargingStation = "/getAllInvoicesSuministroEnergia";
 };
