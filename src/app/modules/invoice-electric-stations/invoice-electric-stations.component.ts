@@ -123,8 +123,6 @@ export default class InvoiceElectricStationsComponent {
   onOpenFactura(item) {
     const xmlContext = this.base64aXML.decodeBase64(item.xmlBase64);
     const jsonData: any = xmlToJsonUtil(xmlContext);
-    console.log(JSON.stringify(jsonData) );
-    
     var doc = this.invoiceTransaction.getFactura(jsonData);
     pdfMake.createPdf(doc).open();
   }
