@@ -207,7 +207,8 @@ export default class TransactionsComponent implements OnInit {
   }
 
   onPageChange(event: any) {
-    this.bodyFilter.page = event.page + 1;
+    // this.bodyFilter.page = event.page + 1;
+    this.bodyFilter.page = event.page;
     this.bodyFilter.size = event.rows;
     this.getTransactions();
   }

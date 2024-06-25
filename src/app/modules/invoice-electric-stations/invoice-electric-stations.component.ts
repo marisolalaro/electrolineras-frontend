@@ -44,7 +44,7 @@ export default class InvoiceElectricStationsComponent {
   public invoice: InvoiceElectricStationModel = new InvoiceElectricStationModel();
 
   // variables del paginator
-  public page: number = 1;
+  public page: number = 0;
   public itemsPerPage: number = 5;
   public totalRecords: number = 0;
 
@@ -96,7 +96,7 @@ export default class InvoiceElectricStationsComponent {
   }
 
   applyFilter($event: any, field: string, matchMode: string) {
-    this.bodyFilter.page = 1;
+    this.bodyFilter.page = 0;
     this.bodyFilter.sort.column = '';
     this.bodyFilter.sort.direction = '';
     let value = ($event.target as HTMLInputElement)?.value;
@@ -161,7 +161,8 @@ export default class InvoiceElectricStationsComponent {
   }
 
   onPageChange(event: any) {
-    this.bodyFilter.page = event.page + 1;
+    // this.bodyFilter.page = event.page + 1;
+    this.bodyFilter.page = event.page;
     this.bodyFilter.size = event.rows;
     this.getInvoices();
   }
