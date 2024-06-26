@@ -4,6 +4,7 @@ FROM node:20 AS build
 # Establecer el directorio de trabajo
 WORKDIR /app
 
+ENV PATH /app/node_modules/.bin:$PATH2
 # Copiar el package.json y el package-lock.json (si está presente)
 COPY package*.json ./
 
@@ -11,7 +12,7 @@ COPY package*.json ./
 RUN npm install --force
 
 # Copiar el resto del código de la aplicación
-COPY . .
+COPY . /app
 
 # Construir la aplicación Angular
 RUN npm run build --prod
@@ -20,6 +21,8 @@ RUN npm run build --prod
 FROM nginx:alpine
 
 # Copiar los archivos construidos desde la etapa de construcción
+
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /app/dist/electrolineras-frontend /usr/share/nginx/html
 
 # Exponer el puerto en el que NGINX servirá la aplicación
