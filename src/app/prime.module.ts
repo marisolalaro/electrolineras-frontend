@@ -38,7 +38,9 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
 import { SidebarModule } from 'primeng/sidebar';
 import { SharedModule } from 'primeng/api';
 import { ImageModule } from 'primeng/image';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
+// import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { SplitterModule } from 'primeng/splitter';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
 
 @NgModule({
   exports: [
@@ -79,7 +81,9 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
     TieredMenuModule,
     SidebarModule,
     SharedModule,
-    ImageModule
+    ImageModule,
+    SplitterModule,
+    ScrollPanelModule
   ],
 })
 export class PrimeModule {}

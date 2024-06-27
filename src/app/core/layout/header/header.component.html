@@ -1,6 +1,6 @@
 <p-toolbar styleClass="p-mb-4">
     <ng-template pTemplate="start">
-        <p-button (click)="sidebarVisible = true" icon="pi pi-bars"></p-button>
+        <p-button icon="pi pi-bars" (click)="onClickMenu()"></p-button>
     </ng-template>
     <ng-template pTemplate="center">
         <p-tabMenu [model]="items" [activeItem]="activeItem"
@@ -12,13 +12,13 @@
     </ng-template>
 </p-toolbar>
 
-<p-sidebar [(visible)]="sidebarVisible" [showCloseIcon]="true">
+<!-- <p-sidebar [(visible)]="sidebarVisible" [showCloseIcon]="true">
     <ng-template pTemplate="header">
         MENÚ
     </ng-template>
     <ng-template pTemplate="content">
-        <p-menu [model]="itemsLateral" (click) = "activeMenu($event)"></p-menu>
+        <p-menu [model]="itemsLateral" (click) = "activeMenu($event); sidebarVisible = false "></p-menu>
     </ng-template>
     
-    <!-- <ng-template pTemplate="footer">Footer Content</ng-template> -->
 </p-sidebar>
+<ng-template pTemplate="footer">Footer Content</ng-template> -->
