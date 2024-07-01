@@ -41,6 +41,7 @@ import { ImageModule } from 'primeng/image';
 // import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { SplitterModule } from 'primeng/splitter';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { DataViewModule } from 'primeng/dataview';
 
 @NgModule({
   exports: [
@@ -83,7 +84,8 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
     SharedModule,
     ImageModule,
     SplitterModule,
-    ScrollPanelModule
+    ScrollPanelModule,
+    DataViewModule
   ],
 })
 export class PrimeModule {}

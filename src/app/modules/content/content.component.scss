@@ -8,7 +8,7 @@ app-header {
 }
 
 .container {
-    display: flex;
+    // display: flex;
     height: calc(100vh - 70px);
 }
 
@@ -26,4 +26,9 @@ app-header {
 /*Im using hover event to expand sidebar for example, you can use JS to handle click event*/
 .container:hover app-sidebar {
     width: 200px;
+}
+
+.p-splitter-panel.p-splitter-panel-nested.ng-star-inserted {
+    display: flex;
+    min-width: 0;
 }

@@ -81,6 +81,10 @@ export const mainTitles: IMainTitles = {
     mainTitle: 'Electrolineras',
     secondaryTitle: 'Listado de Electrolineras'
   },
+  dashboard: {
+    mainTitle: 'Dashboard',
+    secondaryTitle: 'Dashboard'
+  },
   transacciones: {
     mainTitle: 'Transacciones',
     secondaryTitle: 'Listado de Transacciones'

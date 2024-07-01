@@ -1,0 +1,32 @@
+<div class="container">
+  <p-card header="ELECTROLINERAS">
+    <div class="row">
+      <div class="grid">
+        <div class="col-12 lg:col-6 xl:col-3" *ngFor="let item of electricStations">
+          <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+              <div>
+                <span class="block text-500 font-medium mb-3">{{item.nameStation}}</span>
+                <div class="text-900 font-medium text-xl"><span class="text-500">Cargas</span> 152
+                </div>
+              </div>
+              <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
+                [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                <i class="pi pi-bolt text-orange-600 text-xl"></i>
+              </div>
+              &nbsp;
+              <div class="flex align-items-center justify-content-center bg-green-100 border-round"
+                [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                <i class="pi pi-mobile text-green-500 text-xl"></i>
+              </div>
+            </div>
+            <span class="text-500">{{item.direccion}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Ver Mas" [text]="true" icon="pi pi-chevron-right" (click)="onVerTodasElectrolineras()"></p-button>
+    </ng-template>
+  </p-card>
+</div>

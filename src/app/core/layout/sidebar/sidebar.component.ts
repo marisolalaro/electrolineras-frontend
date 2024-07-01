@@ -17,6 +17,11 @@ export class SidebarComponent implements OnInit {
       label: 'Menu',
       items: [
         {
+          label: mainTitles['dashboard'].mainTitle,
+          icon: 'pi pi-fw pi-home',
+          routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaDashboard],
+        },
+        {
           label: mainTitles['electrolineras'].mainTitle,
           icon: 'pi pi-fw pi-bolt',
           routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaElectrolineras],

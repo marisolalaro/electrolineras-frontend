@@ -7,4 +7,6 @@ export const rutas: any =
     rutaTransacciones: 'transactions',
     rutaFacturaTransferencias: 'invoices',
     rutaFacturasCargasEnergia: 'invoices-energy-charging',
+    rutaDashboard: 'dashboard',
+    rutaOnlineElectricStation: 'online-energy-charging',
 }

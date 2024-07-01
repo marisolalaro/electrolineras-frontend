@@ -10,7 +10,6 @@ import { MapaComponent } from './components/mapa/mapa.component';
 
 @NgModule({
   declarations: [
-  
     MapaComponent
   ],
   imports: [
@@ -23,7 +22,7 @@ import { MapaComponent } from './components/mapa/mapa.component';
     CommonModule,
     PrimeModule
   ],
-  exports:[
+  exports: [
     PrimeModule,
     MapaComponent
   ],

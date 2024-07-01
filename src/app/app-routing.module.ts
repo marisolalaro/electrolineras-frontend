@@ -12,6 +12,10 @@ const routes: Routes = [
     loadComponent: () => import('./modules/content/content.component'),
     children: [
       {
+        path: rutas.rutaDashboard,
+        loadComponent: () => import('./modules/dashboard/dashboard.component'),
+      },
+      {
         path: rutas.rutaClientes,
         loadComponent: () => import('./modules/customers/customers.component'),
       },
