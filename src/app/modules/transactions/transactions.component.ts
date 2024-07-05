@@ -112,7 +112,7 @@ export default class TransactionsComponent implements OnInit {
   applyFilter($event: any, field: string, matchMode: string) {
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
-    this.bodyFilter.page = 1;
+    this.bodyFilter.page = 0;
     this.bodyFilter.sort.column = '';
     this.bodyFilter.sort.direction = '';
 
@@ -156,7 +156,7 @@ export default class TransactionsComponent implements OnInit {
     this.getTransactions();
   }
 
-  customSort(field: SortEvent, orden) {
+  customSort(field, orden) {
     this.orden = !orden;
     this.bodyFilter.search.column = "";
     this.bodyFilter.search.value = "";
@@ -202,7 +202,7 @@ export default class TransactionsComponent implements OnInit {
     } else {
       this.bodyFilter.sort.direction = "asc"
     }
-    this.bodyFilter.page = 1;
+    this.bodyFilter.page = 0;
     this.getTransactions();
   }
 

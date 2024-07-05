@@ -20,7 +20,7 @@ export default class DashboardComponent {
   public electricStations: ElectricStationModel[] = [];
 
   // variables del paginador
-  public page: number = 1;
+  public page: number = 0;
   public itemsPerPage: number = 4;
   public totalRecords: number = 0;
 

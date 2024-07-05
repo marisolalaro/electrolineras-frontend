@@ -1,34 +1,60 @@
-* {
-    margin: 0;
-}
+// * {
+//     margin: 0;
+// }
 
-app-header {
-    height: 70px;
-    background-color: green;
-}
+// app-header {
+//     height: 70px;
+//     background-color: green;
+// }
 
-.container {
-    // display: flex;
-    height: calc(100vh - 70px);
-}
+// .container {
+//     height: calc(100vh - 70px);
+// }
 
-.container .main-body {
-    width: 100%;
-}
+// .container .main-body {
+//     width: 100%;
+// }
 
-.container app-sidebar {
-    width: 0;
-    overflow-y: auto;
-    transition: all 0.5s;
-    background-color: yellow;
-}
+// .container app-sidebar {
+//     width: 0;
+//     overflow-y: auto;
+//     transition: all 0.5s;
+//     background-color: yellow;
+// }
 
-/*Im using hover event to expand sidebar for example, you can use JS to handle click event*/
-.container:hover app-sidebar {
-    width: 200px;
-}
+// .container:hover app-sidebar {
+//     width: 200px;
+// }
 
-.p-splitter-panel.p-splitter-panel-nested.ng-star-inserted {
+// .p-splitter-panel.p-splitter-panel-nested.ng-star-inserted {
+//     display: flex;
+//     min-width: 0;
+// }
+
+.layout-wrapper {
     display: flex;
-    min-width: 0;
-}
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  app-header {
+    flex: 0 0 auto;
+  }
+  
+  .layout-content {
+    display: flex;
+    flex: 1 1 auto;
+  }
+  
+  app-sidebar {
+    flex: 0 0 250px;
+  }
+  
+  .content {
+    flex: 1 1 auto;
+    padding: 1rem;
+  }
+  
+  app-footer {
+    flex: 0 0 auto;
+  }

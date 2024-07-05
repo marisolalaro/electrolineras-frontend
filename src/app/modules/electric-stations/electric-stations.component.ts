@@ -21,7 +21,7 @@ import { ElectricStationModel } from 'src/app/core/model/electric-station';
 import { HelpersService } from 'src/app/core/services/helpers.service';
 import { ElectricStationsService } from './services/electric-stations.service';
 import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
- 
+
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
   query: string;
@@ -48,7 +48,7 @@ export default class ElectricStationsComponent implements OnInit {
   public titlesGlobales = titles;
 
   // variables del paginador
-  public page: number = 1;
+  public page: number = 0;
   public itemsPerPage: number = 5;
   public totalRecords: number = 0;
 
@@ -83,7 +83,6 @@ export default class ElectricStationsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.inicializaDatos();
     this.getAllElectricStations();
     this.getTasaDeCarga();
   }
@@ -100,22 +99,11 @@ export default class ElectricStationsComponent implements OnInit {
     this.filteredCountries = filtered;
   }
 
-  inicializaDatos() {
-    this.cols = [
-      { field: 'nameStation', header: 'Nombre' },
-      { field: 'direccion', header: 'Dirección' },
-      { field: 'descripcion', header: 'Descripción' },
-      { field: 'latitude', header: 'Latitud' },
-      { field: 'longitude', header: 'Longitud' },
-      { field: '', header: 'Opciones' }
-    ];
-  }
-
   getAllElectricStations(): void {
     this.electricStationsService.getAll().subscribe(
       (resp: any) => {
         this.electricStations = resp.data;
-        this.totalRecords = resp.data.totalRecords;
+        this.totalRecords = resp.data.length;
       }
     )
   }
@@ -141,7 +129,7 @@ export default class ElectricStationsComponent implements OnInit {
     if (this.formRegistro.valid) {
       if (this.electricStation.id) {
         this.onUpdateRegistro();
-        } else {
+      } else {
         this.onCreateRegistro();
       }
     }
@@ -219,14 +207,14 @@ export default class ElectricStationsComponent implements OnInit {
   }
 
   applyFilter($event: any, field: string, matchMode: string) {
-    this.bodyFilter.page = 1;
+    this.bodyFilter.page = 0;
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
     this.getAllElectricStations();
   }
 
   onPageChange(event: any) {
-    this.bodyFilter.page = event.page + 1;
+    this.bodyFilter.page = event.page;
     this.bodyFilter.size = event.rows;
     this.getAllElectricStations();
   }
@@ -250,5 +238,19 @@ export default class ElectricStationsComponent implements OnInit {
 
   cerrarMapa(evet) {
     this.mapaVisible = false
+  }
+
+  customSort(event) {
+    event.data.sort((data1, data2) => {
+      let value1 = data1[event.field];
+      let value2 = data2[event.field];
+      let result = null;
+      if (value1 == null && value2 != null) result = -1;
+      else if (value1 != null && value2 == null) result = 1;
+      else if (value1 == null && value2 == null) result = 0;
+      else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2);
+      else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+      return event.order * result;
+    });
   }
 }

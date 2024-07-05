@@ -1,0 +1,19 @@
+import { environment } from 'src/app/core/environments/environment.development';
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'duration',
+})
+export class FormatFieldTimeCargaPipe implements PipeTransform {
+  transform(value: number): string {
+    const hours = Math.floor(value / 3600);
+    const minutes = Math.floor((value % 3600) / 60);
+    const seconds = value % 60;
+
+    const hoursStr = hours > 0 ? `${hours}h ` : '';
+    const minutesStr = minutes > 0 ? `${minutes}m ` : '';
+    const secondsStr = `${seconds}s`;
+
+    return `${hoursStr}${minutesStr}${secondsStr}`;
+  }
+}

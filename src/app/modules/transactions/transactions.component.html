@@ -3,53 +3,106 @@
 
     <div class="row">
       <h3><b>{{titleComponent.mainTitle}}</b></h3>
+      <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
+        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getTransactions()" pTooltip="Actualizar" tooltipPosition="left"></p-button>
+      </div>
     </div>
 
     <div class="row">
       <p-table #dt1 [columns]="cabeceras" [value]="transactions" dataKey="id"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
-        [showCurrentPageReport]="false"
-        currentPageReportTemplate="Showing {first} to {last} of {{totalRecords}} entries"
         [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th *ngFor="let col of columns" pSortableColumn="{{col.field}}" >
-              {{col.header}}
-              <p-sortIcon field="{{col.field}}" (click)="customSort(col.field, orden)"></p-sortIcon>
-            </th>
+            <th rowspan="2"> # </th>
+            <th pSortableColumn="'nombreRazonSocial'">Razón Social<p-sortIcon field="nombreRazonSocial"
+                (click)="customSort('nombreRazonSocial', orden)"></p-sortIcon></th>
+            <th pSortableColumn="'numeroDocumento'">Número Documento<p-sortIcon field="numeroDocumento"
+                (click)="customSort('numeroDocumento', orden)"></p-sortIcon></th>
+            <th pSortableColumn="'emailCliente'">Email<p-sortIcon field="emailCliente"
+                (click)="customSort('emailCliente', orden)"></p-sortIcon></th>
+            <th pSortableColumn="'amount'">Monto Transacción Bs.<p-sortIcon field="amount"
+                (click)="customSort('amount', orden)"></p-sortIcon></th>
+            <th pSortableColumn="'registrationAt'">Fecha Transacción<p-sortIcon field="registrationAt"
+                (click)="customSort('registrationAt', orden)"></p-sortIcon></th>
+            <th pSortableColumn="'giftCardNumber'">Numero Gift card<p-sortIcon field="giftCardNumber"
+                (click)="customSort('giftCardNumber', orden)"></p-sortIcon></th>
+            <th pSortableColumn="'gloss'">Glosa<p-sortIcon field="gloss"
+                (click)="customSort('gloss', orden)"></p-sortIcon></th>
+            <th pSortableColumn="'placaVehiculo'">Placa Vehículo<p-sortIcon field="placaVehiculo"
+                (click)="customSort('placaVehiculo', orden)"></p-sortIcon></th>
+            <th pSortableColumn="'receiverBank'">Banco Recibido<p-sortIcon field="receiverBank"
+                (click)="customSort('receiverBank', orden)"></p-sortIcon></th>
+            <th pSortableColumn="'receiverDocument'">Documento Recibido<p-sortIcon field="receiverDocument"
+                (click)="customSort('receiverDocument', orden)"></p-sortIcon></th>
+            <th rowspan="2">Opciones</th>
           </tr>
           <tr>
-            <th *ngFor="let col of columns" [ngSwitch]="col.field">
-              <input *ngSwitchCase="col.field" pInputText type="text"
-                (input)="applyFilter($event, col.field, 'contains')" placeholder="{{col.header}}"
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'nombreRazonSocial', 'contains')"
+                placeholder="Busca Razón Social" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'numeroDocumento', 'contains')"
+                placeholder="Busca Número Documento" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'emailCliente', 'contains')"
+                placeholder="Busca Email Cliente" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'amount', 'contains')"
+                placeholder="Busca Monto Transacción" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'registrationAt', 'contains')"
+                placeholder="Busca Fecha Transacción" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'giftCardNumber', 'contains')"
+                placeholder="Busca Gift Card" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'gloss', 'contains')" placeholder="Busca Glosa"
                 class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'placaVehiculo', 'contains')"
+                placeholder="Busca Placa Vehículo" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'receiverBank', 'contains')"
+                placeholder="Busca Banco recibido" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'receiverDocument', 'contains')"
+                placeholder="Busca Documento Recibido" class="w-full">
             </th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
           <tr>
-            <!-- <td>{{rowData['consumerName']}}</td> -->
-            <td>{{rowData['nombreRazonSocial']}}</td>
+            <td style="text-align:right; vertical-align:middle">{{rowIndex + 1}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['nombreRazonSocial']}}</td>
             <td style="text-align:center; vertical-align:middle">{{rowData['numeroDocumento']}}</td>
-            <td>{{rowData['emailCliente']}}</td>
-            <td style="text-align:center; vertical-align:middle">{{rowData['amount']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['emailCliente']}}</td>
+            <td style="text-align:right; vertical-align:middle">{{rowData['amount'] | numberDecimal:2}}</td>
             <td style="text-align:center; vertical-align:middle">{{rowData['registrationAt'] | formatFieldDate}}</td>
             <td style="text-align:center; vertical-align:middle">{{rowData['giftCardNumber']}}</td>
-            <td>{{rowData['gloss']}}</td>
-            <!-- <td>{{rowData['nombreCliente']}}</td> -->
-            <td style="text-align:center; vertical-align:middle">{{rowData['placaVehiculo']}}</td>
-            <td style="text-align:center; vertical-align:middle">{{rowData['receiverBank']}}</td>
-            <td style="text-align:center; vertical-align:middle">{{rowData['receiverDocument']}}</td>
-            <td> 
-
-              <i class="pi pi-qrcode" style="font-size: 1.5rem; color: #000000" (click)="onOpenImagenQR(rowData)"
-                  tooltipPosition="top" pTooltip="Ver QR"></i>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['gloss']}}</td>
+            <td style="text-align:center; vertical-align:middle" class="uppercase">{{rowData['placaVehiculo']}}</td>
+            <td style="text-align:center; vertical-align:middle" class="uppercase">{{rowData['receiverBank']}}</td>
+            <td style="text-align:center; vertical-align:middle" class="uppercase">{{rowData['receiverDocument']}}</td>
+            <td style="text-align:center; vertical-align:middle">
+              <i class="pi pi-qrcode" style="font-size: 1.5rem; color: var(--primary-color)" (click)="onOpenImagenQR(rowData)"
+                tooltipPosition="top" pTooltip="Ver QR"></i>
             </td>
           </tr>
         </ng-template>
       </p-table>
       <p-paginator (onPageChange)="onPageChange($event)" [first]="page" [rows]="itemsPerPage"
-        [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20]">
+        [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros">
       </p-paginator>
     </div>
 
@@ -59,6 +112,6 @@
         <img *ngIf="imageUrl" [src]="imageUrl" alt="Converted Image" />
       </p-dialog>
     </div>
-    
+
   </div>
 </div>

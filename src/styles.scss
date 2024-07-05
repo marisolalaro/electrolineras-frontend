@@ -1,139 +1,183 @@
 $gutter: 1rem;
 
-@import "assets/layout/styles/theme/saga-blue/theme.css";
-@import "assets/layout/styles/layout/layout.scss";
-@import "assets/layout/custom-styles/layout.scss";
+@import "assets/layout/styles/theme/custom/theme.css"; // estilo personalizado
+@import "assets/layout/styles/layout/layout.scss"; // este pone margenescontenidos, tipo letra
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
 @import "primeflex/primeflex.css";
 
-
 h3 {
     text-align: center;
     text-transform: uppercase;
-    color: #414042;
+    color: var(--primary-color-text);
 }
 
 .container {
-    padding: 1rem;
-    background-color: #E6E7E8;
+    padding: 0rem;
 }
 
 .body-color {
-    background-color: #E6E7E8;
+    // background-color: var(--primary-color-60);
 }
 
-.listado {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+// .listado {
+//     background-color: #ffffff;
+//     padding: 20px;
+//     border-radius: 8px;
+//     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+// }
 
-.title-electric-stations {
-    margin-bottom: 16px;
-    font-size: 24px;
-    font-weight: 600;
-    color: #333;
-}
+// .title-electric-stations {
+//     margin-bottom: 16px;
+//     font-size: 24px;
+//     font-weight: 600;
+//     color: #333;
+// }
 
-p-button {
-    margin-bottom: 16px;
-}
 
-.p-datatable {
-    border: none;
 
-    .p-datatable-header {
-        background-color: #2266D3;
-        color: #ffffff;
-        font-size: 16px;
-        font-weight: 500;
-        padding: 8px;
-        border-radius: 8px 8px 0 0;
-    }
 
-    .p-datatable-thead>tr>th {
-        background-color: #2266D3;
-        color: #ffffff;
-        font-size: 14px;
-        font-weight: 500;
-        text-align: left;
-        padding: 12px;
-    }
 
-    .p-datatable-tbody>tr>td {
-        font-size: 14px;
-        color: #555;
-        padding: 12px;
-        border-bottom: 1px solid #eeeeee;
+// .p-datatable {
+//     border: none;
 
-        &:last-child {
-            text-align: center;
-        }
-    }
+//     .p-datatable-header {
+//         background-color: var(--primary-color);
+//         color: #ffffff;
+//         font-size: 16px;
+//         font-weight: 500;
+//         padding: 8px;
+//         border-radius: 8px 8px 0 0;
+//     }
 
-    .p-datatable-gridlines .p-datatable-tbody>tr>td {
-        border-right: 1px solid #eeeeee;
-    }
+//     .p-datatable-thead>tr>th {
+//         background-color: var(--primary-color);
+//         color: #ffffff;
+//         font-size: 14px;
+//         font-weight: 500;
+//         text-align: left;
+//         padding: 12px;
+//     }
 
-    .p-datatable-striped .p-datatable-tbody>tr:nth-of-type(odd) {
-        background-color: #fafafa;
-    }
+//     .p-datatable-tbody>tr>td {
+//         font-size: 14px;
+//         color: #555;
+//         padding: 12px;
+//         border-bottom: 1px solid #eeeeee;
 
-    // hover al pasar por la lista
-    .p-datatable-tbody>tr:hover>td {
-        background-color: #C1D8FC;
-    }
-}
+//         &:last-child {
+//             text-align: center;
+//         }
+//     }
 
-input.p-inputtext {
-    width: 100%;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    margin-bottom: 8px;
+//     .p-datatable-gridlines .p-datatable-tbody>tr>td {
+//         border-right: 1px solid #eeeeee;
+//     }
 
-    &:focus {
-        border-color: #3498db;
-        box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
-    }
-}
+//     .p-datatable-striped .p-datatable-tbody>tr:nth-of-type(odd) {
+//         background-color: #fafafa;
+//     }
 
-button.mat-raised-button {
-    background-color: #ffa801;
-    color: #fff;
-    cursor: pointer;
-    border-color: #F9A519;
-    border-radius: 6px;
-    padding: 10px;
+//     .p-datatable-tbody>tr:hover>td {
+//         background-color: #C1D8FC;
+//     }
+// }
 
-    &:hover {
-        background-color: #FFC91D;
-        color: #fff;
-        border-color: #F9A519;
-    }
-}
+// input.p-inputtext {
+//     width: 100%;
+//     padding: 8px;
+//     border-radius: 4px;
+//     border: 1px solid #ccc;
+//     font-size: 14px;
+//     margin-bottom: 8px;
 
-.mat-elevation-z8 {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
+//     &:focus {
+//         border-color: #3498db;
+//         box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
+//     }
+// }
 
-.paginator {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px;
-    background-color: #ffffff;
-    border-top: 1px solid #eeeeee;
+// .mat-elevation-z8 {
+//     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+// }
 
-    .mat-paginator-page-size {
-        margin-right: 16px;
-    }
-}
+// .paginator {
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     padding: 16px;
+//     background-color: #ffffff;
+//     border-top: 1px solid #eeeeee;
 
-.tabla-contend-center {
-    text-align: center;
-    vertical-align: middle;
-}
+//     .mat-paginator-page-size {
+//         margin-right: 16px;
+//     }
+// }
+
+// .tabla-contend-center {
+//     text-align: center;
+//     vertical-align: middle;
+// }
+
+///// nuevbo de chat gpt
+// .layout-wrapper {
+//     display: flex;
+//     flex-direction: column;
+//     height: 100vh;
+// }
+
+// app-header {
+//     flex: 0 0 auto;
+// }
+
+// .layout-content {
+//     display: flex;
+//     flex: 1 1 auto;
+//     transition: margin-left 0.3s;
+// }
+
+// .content {
+//     flex: 1 1 auto;
+//     padding: 1rem;
+// }
+
+// .sidebar-visible .layout-content {
+//     margin-left: 250px;
+// }
+
+// app-footer {
+//     flex: 0 0 auto;
+// }
+
+
+// estilos generales
+
+// estilos para botones
+// p-button {
+//     margin-bottom: 16px;
+// }
+
+// .p-button {
+//     background-color: var(--primary-color);
+//     border: 0px;
+// }
+
+// .p-button:hover {
+//     background-color: var(--primary-color);
+//     border: 0px;
+// }
+
+// button.mat-raised-button {
+//     background-color: #ffa801;
+//     color: #fff;
+//     cursor: pointer;
+//     border-color: #F9A519;
+//     border-radius: 6px;
+//     padding: 10px;
+
+//     &:hover {
+//         background-color: #FFC91D;
+//         color: #fff;
+//         border-color: #F9A519;
+//     }
+// }

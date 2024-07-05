@@ -1,0 +1,7 @@
+:host ::ng-deep .p-panelmenu .p-panelmenu-header .p-panelmenu-content .p-menu-list .p-panelmenu-icon .p-menuitem-icon{
+    background-color: var(--primary-color);
+}
+
+:host ::ng-deep .p-menuitem-text {
+    color: var(--primary-color-text);
+}

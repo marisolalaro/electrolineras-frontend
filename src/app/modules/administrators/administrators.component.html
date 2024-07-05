@@ -3,53 +3,70 @@
     <div class="row">
       <h3><b>{{componentTitle.mainTitle}}</b></h3>
       <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
-        <button class="mat-raised-button" (click)="openDialog(true,false, 'crear')">Nuevo Registro</button>
+        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllAdministrations()"
+          pTooltip="Actualizar" tooltipPosition="left"></p-button> &nbsp;
+        <button pButton pRipple class="mat-raised-button" (click)="openDialog(true,false, 'crear')">Nuevo Registro</button>
       </div>
     </div>
 
     <div class="row">
-      <p-table #dt1 [columns]="cols" [value]="administradors" dataKey="id"
+      <p-table #dt1 [value]="administradors" dataKey="id"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
-        [showCurrentPageReport]="false" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES">
-
+        [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES"
+        currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros"
+        (sortFunction)="customSort($event)" [customSort]="true">
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th *ngFor="let col of columns" pSortableColumn="{{col.field}}">
-              {{col.header}}
-              <p-sortIcon field="{{col.field}}"></p-sortIcon>
+            <th rowspan="2">
+              #
             </th>
+            <th pSortableColumn="username">Usuario<p-sortIcon field="username"></p-sortIcon></th>
+            <th pSortableColumn="names">Nombres<p-sortIcon field="names"></p-sortIcon></th>
+            <th pSortableColumn="lastName">Apellido Paterno<p-sortIcon field="lastName"></p-sortIcon></th>
+            <th pSortableColumn="motherLastName">Apellido Materno<p-sortIcon field="motherLastName"></p-sortIcon></th>
+            <th pSortableColumn="electronicMail">Email<p-sortIcon field="electronicMail"></p-sortIcon></th>
+            <th pSortableColumn="cellPhoneNumber">Celular<p-sortIcon field="cellPhoneNumber"></p-sortIcon></th>
+            <th rowspan="2">Opciones</th>
           </tr>
           <tr>
-            <th *ngFor="let col of columns" [ngSwitch]="col.field">
-              <input *ngSwitchCase="'username'" pInputText type="text"
-                (input)="applyFilter($event, 'username', 'contains')" placeholder="Busca por Usuario" class="w-full">
-              <input *ngSwitchCase="'names'" pInputText type="text" (input)="applyFilter($event, 'names', 'contains')"
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'username', 'contains')"
+                placeholder="Busca por username" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'names', 'contains')"
                 placeholder="Busca por Nombres" class="w-full">
-              <input *ngSwitchCase="'lastName'" pInputText type="text"
-                (input)="applyFilter($event, 'lastName', 'contains')" placeholder="Busca por Apellido Paterno" class="w-full">
-              <input *ngSwitchCase="'motherLastName'" pInputText type="text"
-                (input)="applyFilter($event, 'motherLastName', 'contains')" placeholder="Busca por Apellido Materno"
-                class="w-full">
-              <input *ngSwitchCase="'electronicMail'" pInputText type="text"
-                (input)="applyFilter($event, 'electronicMail', 'contains')" placeholder="Busca por Email"
-                class="w-full">
-              <input *ngSwitchCase="'cellPhoneNumber'" pInputText type="text"
-                (input)="applyFilter($event, 'cellPhoneNumber', 'contains')" placeholder="Busca por Nro Celular"
-                class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'lastName', 'contains')"
+                placeholder="Busca por Apellido Paterno" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'motherLastName', 'contains')"
+                placeholder="Busca por Apellido Materno" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'electronicMail', 'contains')"
+                placeholder="Busca por Email" class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'cellPhoneNumber', 'contains')"
+                placeholder="Busca por Nro Celular" class="w-full">
             </th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
           <tr>
-            <td *ngFor="let col of columns">
-              <div *ngIf="col.field != '';then normal_content else icon_content"></div>
-              <ng-template #normal_content>
-                {{rowData[col.field]}}
-              </ng-template>
-              <ng-template #icon_content>
-                <i class="pi pi-user-edit" style="font-size: 1.5rem; color: #3498db;" data-bs-toggle="modal"
-                  data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
-              </ng-template>
+            <td style="text-align:right; vertical-align:middle">{{rowIndex + 1}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['username']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['names']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['lastName']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['motherLastName']}}</td>
+            <td style="text-align:left; vertical-align:middle">{{rowData['electronicMail']}}</td>
+            <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['cellPhoneNumber']}}</td>
+            <td style="text-align:center; vertical-align:middle">
+              <i class="pi pi-user-edit" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
+                data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
             </td>
           </tr>
         </ng-template>
@@ -127,8 +144,7 @@
 
             <div class="form-group field">
               <label for="phoneNumber">{{labelsGlobales.telefono}}</label>
-              <input type="text" pInputText formControlName="phoneNumber"
-                />
+              <input type="text" pInputText formControlName="phoneNumber" />
               <!-- <div *ngIf="submitted && formRegistro.controls['phoneNumber'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('phoneNumber')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
@@ -275,7 +291,7 @@
 
             <div class="form-group field">
               <label for="phoneNumber">{{labelsGlobales.telefono}}</label>
-              <input type="text" pInputText formControlName="phoneNumber"/>
+              <input type="text" pInputText formControlName="phoneNumber" />
               <!-- <div *ngIf="submitted && formRegistro.controls['phoneNumber'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('phoneNumber')?.hasError('required')">
                   {{messagesGlobales.requiredField}}

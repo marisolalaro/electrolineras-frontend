@@ -4,6 +4,11 @@
     bottom: 0;
     width: 100%;
     text-align: center;
-    background: var(--terciary-color);
+    background: var(--dark-primary-color);
     color: var(--primary-color-text);
+    padding: 1rem
+ }
+
+ a {
+    color: var(--text-color);
  }

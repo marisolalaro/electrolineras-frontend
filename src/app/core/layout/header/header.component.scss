@@ -1,0 +1,32 @@
+// toolbar
+:host ::ng-deep .p-toolbar {
+    background-color: var(--text-color);
+}
+
+
+// tabMenu
+// :host ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+//     border-width: 0 0 2px 0;
+//     background: var(--primary-color);
+//     color: var(--text-color);
+//     padding: 1rem;
+//     font-weight: 600;
+//     transition: box-shadow 0.2s;
+//     margin: 0 0 -2px 0;
+//     border-radius: 0%;
+// }
+
+// :host ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link:focus {
+//     box-shadow: none;
+// }
+
+// estilos para botones
+// .p-button {
+//     background-color: var(--primary-color);
+//     border: 0px;
+// }
+
+// .p-button:hover {
+//     background-color: var(--primary-color);
+//     border: 0px;
+// }

@@ -26,7 +26,7 @@ import { AdministratorsService } from './services/administrators.service';
   templateUrl: './administrators.component.html',
   styleUrls: ['./administrators.component.scss'],
   providers: [HelpersService, MessageService],
-  imports: [AdministratorsModule, PipesModule, ReactiveFormsModule,NgFor, NgClass, NgIf, NgSwitch, NgSwitchCase],
+  imports: [AdministratorsModule, PipesModule, ReactiveFormsModule, NgFor, NgClass, NgIf, NgSwitch, NgSwitchCase],
 })
 export default class AdministratorsComponent {
 
@@ -44,8 +44,9 @@ export default class AdministratorsComponent {
   public messagesGlobales = messages;
 
   // Variables Paaginador
-  public page: number = 1;
+  public page: number = 0;
   public itemsPerPage: number = 9999;
+  public totalRecords: number = 0;
 
   // variables propias del componete
   @ViewChild('dt1') dt!: Table;
@@ -63,26 +64,14 @@ export default class AdministratorsComponent {
 
   ngOnInit(): void {
     this.getAllAdministrations();
-    this.inicializaDatos();
   }
 
-  inicializaDatos() {
-    this.cols = [
-      { field: 'username', header: 'Usuario' },
-      { field: 'names', header: 'Nombres' },
-      { field: 'lastName', header: 'Apellido Paterno' },
-      { field: 'motherLastName', header: 'Apellido Materno' },
-      { field: 'electronicMail', header: 'Email' },
-      { field: 'cellPhoneNumber', header: 'Celular' },
-      { field: '', header: 'Opciones' },
-    ];
-  }
-  
   getAllAdministrations() {
     this.administratorsService.getAll(this.bodyFilter).subscribe(
       (resp: any) => {
         if (resp) {
           this.administradors = resp.data;
+          this.totalRecords = resp.data.length;
         }
       }
     )
@@ -127,7 +116,7 @@ export default class AdministratorsComponent {
     this.administrador = item;
     this.formRegistro.patchValue(JSON.parse(JSON.stringify(item)));
     this.formRegistro.controls['username'].setValue(item.username);
-    this.formRegistro.controls['birthdate'].setValue(new Date (moment(item.birthdate).toString()));
+    this.formRegistro.controls['birthdate'].setValue(new Date(moment(item.birthdate).toString()));
     this.dialogEdit = true;
     // this.formRegistro.removeControl('password');
   }
@@ -211,10 +200,24 @@ export default class AdministratorsComponent {
   }
 
   applyFilter($event: any, field: string, matchMode: string) {
-    this.bodyFilter.page = 1;
+    this.bodyFilter.page = 0;
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
     // this.getAllElectricStations();
+  }
+
+  customSort(event) {
+    event.data.sort((data1, data2) => {
+      let value1 = data1[event.field];
+      let value2 = data2[event.field];
+      let result = null;
+      if (value1 == null && value2 != null) result = -1;
+      else if (value1 != null && value2 == null) result = 1;
+      else if (value1 == null && value2 == null) result = 0;
+      else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2);
+      else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+      return event.order * result;
+    });
   }
 
 }

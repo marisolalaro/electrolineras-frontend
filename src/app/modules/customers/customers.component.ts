@@ -32,7 +32,7 @@ export default class CustomersComponent {
   public orden: boolean = false;
 
   // variables del paginador
-  public page: number = 1;
+  public page: number = 0;
   public itemsPerPage: number = 5;
   public totalRecords: number = 0;
 
@@ -67,26 +67,13 @@ export default class CustomersComponent {
 
   ngOnInit() {
     this.getCustomers();
-    this.inicializaDatos();
-  }
-
-  inicializaDatos() {
-    this.cabeceras = [
-      { field: 'names', header: 'Nombres' },
-      { field: 'lastName', header: 'Apellido Paterno' },
-      { field: 'motherLastName', header: 'Apellido Materno' },
-      { field: 'electronicMail', header: 'Email' },
-      { field: 'paymentTransactionsElectrolineraList', header: 'Última Transacción' },
-      { field: 'chargeClientList', header: 'Última Carga' },
-      { field: '', header: 'Opciones' },
-    ];
   }
 
   getCustomers(): void {
     this.customerService.getAllFilter(this.bodyFilter).subscribe(
       (resp: any) => {
         this.customers = resp.data.clientList;
-        this.totalRecords = resp.data.totalRecords;
+        this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0;        
       }
     )
   }
@@ -105,7 +92,7 @@ export default class CustomersComponent {
   }
 
   applyFilter($event: any, field: string, matchMode: string) {
-    this.bodyFilter.page = 1;
+    this.bodyFilter.page = 0;
     this.bodyFilter.sort.column = '';
     this.bodyFilter.sort.direction = '';
     let value = ($event.target as HTMLInputElement)?.value;
@@ -160,12 +147,13 @@ export default class CustomersComponent {
         this.bodyFilter.sort.direction = "asc"
       }
     }
-    this.bodyFilter.page = 1;
+    this.bodyFilter.page = 0;
     this.getCustomers();
   }
 
   onPageChange(event: any) {
-    this.bodyFilter.page = event.page + 1;
+    // this.bodyFilter.page = event.page + 1; // cuando el paginador empieza en 1
+    this.bodyFilter.page = event.page;
     this.bodyFilter.size = event.rows;
     this.getCustomers();
   }

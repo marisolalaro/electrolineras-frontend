@@ -1,65 +1,139 @@
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+body {
+  margin: 0;
+  padding: 0;
+  background: url("../../../assets/img/woman-charging-car.jpg") no-repeat center center fixed;
+  background-size: cover;
+  background-size: 100% 100%;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  // background-color: rgb(39, 238, 32);
+}
+
+.upper {
+  background-color: var(--primary-color-60);
+  padding-bottom: 100px;
+}
+
+.login {
+  margin: 0 auto;
+  width: 500px;
+  background-color: var(--primary-color-60);
+  border-radius: 5px;
+  padding: 30px 70px 143px;
+}
+
+.login h4 {
+  color: white;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.input-text {
+  margin-bottom: 20px;
+}
+
+.input-text input {
+  width: 100%;
+  height: 45px;
+  background-color: #333;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  outline: transparent;
+  text-indent: 18px;
+}
+
+.input-text input::input-placeholder {
+  font-size: 1rem;
+  color: #999;
+}
+
+.input-text input::placeholder {
+  font-size: 1rem;
+  color: #999;
+  text-indent: 40px;
+}
+
+.signin-button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 13px;
+  border-radius: 5px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  font-weight: bold;
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+
+.warning-input {
+  display: none;
+  color: #e87c03;
+  font-size: 0.8rem;
+  margin-top: 6px;
+}
+
+@media screen and (width <= 740px) {
+  body {
+    background: black;
   }
-  
-  .login-form {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+
+  .img-logo {
+    margin-left: 22px;
+  }
+
+  .login {
+    padding: 0 10px;
     width: 100%;
   }
-  
-  .login-form h2 {
-    text-align: center;
-    margin-bottom: 20px;
+
+  .login-div {
+    width: 90%;
+    margin: 0 auto;
   }
-  
-  .login-form label {
-    display: block;
-    margin-bottom: 10px;
+
+  .bottom {
+    border-top: 1px solid #737373;
   }
-  
-  .login-form input[type="text"],
-  .login-form input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+
+  .upper {
+    padding-bottom: 93px;
   }
-  
-  .login-form button[type="submit"] {
-    background-color: #2266D3;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
+
+  .list-bottom {
+    width: 33%;
   }
-  
-  .login-form button[type="submit"]:hover {
-    background-color: #2266D3;
+}
+
+@media screen and (width <= 500px) {
+  .list-bottom {
+    width: 50%;
   }
-  
-  .password-wrapper label {
-    position: relative;
-  }
-  
-  .username-icon,
-  .password-toggle-icon {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 10px; 
-  }
-  
-  .password-toggle-icon {
-    cursor: pointer;
-  }
+}
+
+// // fffdfdfd aditionals
+// footer {
+//   position: fixed;
+//   bottom: 0;
+//   width: 100%;
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   background: #fff;
+//   padding: 1em;
+//   box-sizing: border-box;
+//   z-index: 3;
+//   box-shadow: 1px -2px 5px 1px rgba(0, 0, 0, 0.2);
+// }
+
+// footer a {
+//   text-decoration: none;
+//   color: #6059ff;
+// }
+
+// @media screen and (max-width: 640px) {
+//   footer .author {
+//     display: none;
+//   }
+// }
+

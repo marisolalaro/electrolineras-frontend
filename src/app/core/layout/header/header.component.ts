@@ -21,9 +21,14 @@ export class HeaderComponent implements OnInit {
   // public activeItemLateral: MenuItem | undefined;
 
   public menu: boolean = true;
-  @Output() newItemEvent = new EventEmitter<any>();
+  // @Output() newItemEvent = new EventEmitter<any>();
+  @Output() toggleSidebar = new EventEmitter<void>();
 
   constructor(private router: Router) { }
+
+  onToggleSidebar() {
+    this.toggleSidebar.emit();
+  }
 
   ngOnInit() {
     this.items = [
@@ -59,7 +64,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onClickMenu() {
-    this.newItemEvent.emit(this.menu);
+    // this.newItemEvent.emit(this.menu);
   }
 }
 

@@ -28,7 +28,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/assets/layout/styles/theme/saga-blue/theme.css",
+              "src/assets/layout/styles/theme/custom/theme.css",
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images/",
@@ -39,7 +39,6 @@
               "src/styles.scss",
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css",
-              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css"
             ],
             "scripts": [],
@@ -124,7 +123,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/assets/layout/styles/theme/saga-blue/theme.css",
+              "src/assets/layout/styles/theme/custom/theme.css",
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images/",
@@ -135,7 +134,6 @@
               "src/styles.scss",
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css",
-              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css"
             ],
             "scripts": []
