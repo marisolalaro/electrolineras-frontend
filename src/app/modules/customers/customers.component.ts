@@ -116,6 +116,9 @@ export default class CustomersComponent {
     if (field == 'chargeClientList') {
       this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribChargeClientList;
     }
+    if (field == 'enabled') {
+      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribEnabled;
+    }
     this.bodyFilter.search.value = value;
     this.getCustomers();
   }
@@ -149,6 +152,22 @@ export default class CustomersComponent {
     }
     this.bodyFilter.page = 0;
     this.getCustomers();
+  }
+
+  onCheckEstado(estado, item) {
+    if (estado.checked) {
+      this.customerService.enabledCustomer(item.id).subscribe(
+        (resp: any) => {
+          this.getCustomers();       
+        }
+      )
+    } else {
+      this.customerService.disabledCustomer(item.id).subscribe(
+        (resp: any) => {
+          this.getCustomers();       
+        }
+      )
+    }
   }
 
   onPageChange(event: any) {

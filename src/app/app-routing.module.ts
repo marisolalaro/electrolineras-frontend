@@ -28,6 +28,10 @@ const routes: Routes = [
         loadComponent: () => import('./modules/electric-stations/electric-stations.component'),
       },
       {
+        path: rutas.rutaElectrolinerasOnline,
+        loadComponent: () => import('./modules/electric-station-online/electric-station-online.component'),
+      },
+      {
         path: rutas.rutaTransacciones,
         loadComponent: () => import('./modules/transactions/transactions.component'),
       },

@@ -15,20 +15,11 @@ import { rutas } from '../../constants/rutas';
 })
 export class HeaderComponent implements OnInit {
 
-  // variables del menu horizontal
   public items: MenuItem[] | undefined;
-  public activeItem: MenuItem | undefined;
-  // public activeItemLateral: MenuItem | undefined;
-
-  public menu: boolean = true;
-  // @Output() newItemEvent = new EventEmitter<any>();
+  
   @Output() toggleSidebar = new EventEmitter<void>();
 
   constructor(private router: Router) { }
-
-  onToggleSidebar() {
-    this.toggleSidebar.emit();
-  }
 
   ngOnInit() {
     this.items = [
@@ -43,17 +34,11 @@ export class HeaderComponent implements OnInit {
         routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaClientes],
       },
     ];
-    this.activeItem = this.items[0];
-    // this.activeItemLateral = this.items[0];
   }
 
-  onActiveItemChange(event: MenuItem) {
-    this.activeItem = event;
+  onToggleSidebar() {
+    this.toggleSidebar.emit();
   }
-
-  // activeMenu(event) {
-  //   this.activeItemLateral = event;
-  // }
 
   salir() {
     var c = confirm("¿Salir del sitio web?");
@@ -63,8 +48,5 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  onClickMenu() {
-    // this.newItemEvent.emit(this.menu);
-  }
 }
 

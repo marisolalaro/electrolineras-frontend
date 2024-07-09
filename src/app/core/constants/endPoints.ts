@@ -9,6 +9,8 @@ export class EndPoins {
     // clientes
     static customer = "/clientUser";
     static charges = "/clientListCharges";
+    static enabled = "/enableClient";
+    static disabled = "/disableClient";
 
     // estaciones de carga
     static electricStations = "/chargingStation";

@@ -45,9 +45,7 @@ export default class DashboardComponent {
   }
 
   onVerTodasElectrolineras() {
-    // this.router.navigate(['/' + rutas.rutaPrincipal + '/' + rutas.rutaElectrolineras + '/' + rutas.rutaOnlineElectricStation]);
-    this.router.navigate([ '/' + rutas.rutaOnlineElectricStation]);
-    // this.router.navigate(['/administration/customers']);
+    this.router.navigate(['/' + rutas.rutaPrincipal + '/' + rutas.rutaElectrolinerasOnline]);
   }
 
 }

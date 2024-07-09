@@ -3,13 +3,13 @@
 
     <div class="row">
       <h3><b>{{titleComponent.mainTitle}}</b></h3>
-      <div style="display: flex; justify-content:flex-end;">
+      <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
         <p-button icon="pi pi-refresh" [rounded]="true" (click)="getCustomers()" pTooltip="Actualizar" tooltipPosition="left"></p-button>
       </div>
     </div>
 
     <div class="row">
-      <p-table #dt1 [value]="customers" dataKey="id"
+      <p-table responsiveLayout="stack" #dt1 [value]="customers" dataKey="id"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
         [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
 
@@ -39,6 +39,10 @@
             </th>
             <th rowspan="2">
               Ultima Carga kW
+            </th>
+            <th rowspan="2" pSortableColumn="'enabled'">
+              Estado
+              <p-sortIcon field="enabled" (click)="customSort('enabled', orden)"></p-sortIcon>
             </th>
             <th rowspan="2">
               Opciones
@@ -81,6 +85,11 @@
               {{rowData['chargeClientList'][0].amount | numberDecimal:2}}</td>
             <td *ngIf="!rowData['chargeClientList'][0]"></td>
 
+            <td style="text-align:left; vertical-align:middle">
+              <p-toggleButton [(ngModel)]="rowData['enabled']" onLabel="Habilitado" offLabel="Deshabilitado" (onChange)="onCheckEstado($event, rowData)"></p-toggleButton>
+              <!-- {{rowData['enabled']}} -->
+            </td>
+
             <td style="text-align:center; vertical-align:middle">
               <i class="pi pi-eye" style="font-size: 1.5rem; color: var(--primary-color)" (click)="onOpenDetail(rowData)"
                 tooltipPosition="top" pTooltip="Ver más"></i>
@@ -98,6 +107,8 @@
     <p-dialog header={{titlesGlobales.detail}} [(visible)]="dialogDetalle" [modal]="true"
       [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw'}" [draggable]="false"
       [resizable]="false">
+      <!-- <p-dialog header="Header" [(visible)]="visible" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false"> -->
+
       <p-tabView>
         <p-tabPanel header="Cliente">
           <div class="form-group field">

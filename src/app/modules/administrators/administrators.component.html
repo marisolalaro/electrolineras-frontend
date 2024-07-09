@@ -10,7 +10,7 @@
     </div>
 
     <div class="row">
-      <p-table #dt1 [value]="administradors" dataKey="id"
+      <p-table responsiveLayout="stack" #dt1 [value]="administradors" dataKey="id"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
         [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES"
         currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros"
@@ -76,7 +76,8 @@
     <!-- modal Crear nuevo -->
     <section class="dialogCrear">
       <p-dialog header={{titlesGlobales.create}} [(visible)]="dialogRegistro" [style]="{width: '50vw'}" class="p-fluid"
-        [dismissableMask]="true">
+        [dismissableMask]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [draggable]="false"
+        [resizable]="false">
         <ng-template pTemplate="content">
           <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
 
@@ -223,7 +224,8 @@
     <!-- modal Editar -->
     <section class="dialogEdit">
       <p-dialog header={{titlesGlobales.edit}} [(visible)]="dialogEdit" [style]="{width: '50vw'}" class="p-fluid"
-        [dismissableMask]="true">
+        [dismissableMask]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [draggable]="false"
+        [resizable]="false">
         <ng-template pTemplate="content">
           <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
 

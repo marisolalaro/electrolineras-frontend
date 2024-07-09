@@ -4,6 +4,7 @@ export const rutas: any =
     rutaAdministradores: 'administrators',
     rutaClientes: 'customers',
     rutaElectrolineras: 'electric-stations',
+    rutaElectrolinerasOnline: 'electric-stations-online',
     rutaTransacciones: 'transactions',
     rutaFacturaTransferencias: 'invoices',
     rutaFacturasCargasEnergia: 'invoices-energy-charging',

@@ -16,4 +16,12 @@ export class CustomerService {
   getAllFilter(bodyFilter: BodyFilterModel) {
     return this.http.post(this.apiService + EndPoins.charges, bodyFilter);
   }
+
+  enabledCustomer(idCustomer: number) {
+    return this.http.get(this.apiService + EndPoins.enabled + '/' + idCustomer);
+  }
+
+  disabledCustomer(idCustomer: number) {
+    return this.http.get(this.apiService + EndPoins.disabled + '/' + idCustomer);
+  }
 }

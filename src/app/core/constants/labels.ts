@@ -97,4 +97,9 @@ export const mainTitles: IMainTitles = {
     mainTitle: 'Facturas suministro de energía ',
     secondaryTitle: 'Listado de Facturas Carga de Energía'
   },
+
+  electrolinerasOnline: {
+    mainTitle: 'Electrolineras en Linea',
+    secondaryTitle: 'Listado de Electrolineras en Linea'
+  },
 }

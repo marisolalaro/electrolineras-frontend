@@ -7,6 +7,7 @@ import { MessageService } from 'primeng/api';
 import { LoginModule } from './login.module';
 // servicios
 import { LoginService } from './services/login.service';
+import { ColorServiceService } from './services/color-service.service';
 
 @Component({
   selector: 'app-login',
@@ -36,9 +37,12 @@ export default class LoginComponent {
     private router: Router,
     public loginService: LoginService,
     private global: Global,
-    private messageService: MessageService) { }
+    private messageService: MessageService,
+    private colorService: ColorServiceService
+  ) { }
 
   ngOnInit() {
+    this.changePrimaryColor('#2980b9');
   }
 
   onIniciaSesion(): void {
@@ -68,6 +72,10 @@ export default class LoginComponent {
           return false;
         }
       });
+  }
+
+  changePrimaryColor(newColor: string) {
+    this.colorService.updateColors(newColor);
   }
 
   validaCampos() {

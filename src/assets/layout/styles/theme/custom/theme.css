@@ -36,6 +36,7 @@
   --color-3:#ced4da;
   --color-4:#343a40;
   --color-white: #FFFFFF;
+  --color-black: #000000;
   --color-error: #e24c4c;
 
   --surface-0: var(--color-white);

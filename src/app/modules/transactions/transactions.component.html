@@ -9,7 +9,7 @@
     </div>
 
     <div class="row">
-      <p-table #dt1 [columns]="cabeceras" [value]="transactions" dataKey="id"
+      <p-table responsiveLayout="stack" #dt1 [columns]="cabeceras" [value]="transactions" dataKey="id"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
         [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
         <ng-template pTemplate="header" let-columns>
@@ -85,7 +85,7 @@
             <td style="text-align:right; vertical-align:middle">{{rowIndex + 1}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['nombreRazonSocial']}}</td>
             <td style="text-align:center; vertical-align:middle">{{rowData['numeroDocumento']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['emailCliente']}}</td>
+            <td style="text-align:left; vertical-align:middle">{{rowData['emailCliente']}}</td>
             <td style="text-align:right; vertical-align:middle">{{rowData['amount'] | numberDecimal:2}}</td>
             <td style="text-align:center; vertical-align:middle">{{rowData['registrationAt'] | formatFieldDate}}</td>
             <td style="text-align:center; vertical-align:middle">{{rowData['giftCardNumber']}}</td>
@@ -108,7 +108,8 @@
 
     <div class="row">
       <p-dialog header={{titulosGlobales.info}} [(visible)]="visible" [breakpoints]="{ '960px': '75vw' }"
-        [draggable]="false" [resizable]="false">
+        [draggable]="false" [resizable]="false"  [draggable]="false"
+        [resizable]="false">
         <img *ngIf="imageUrl" [src]="imageUrl" alt="Converted Image" />
       </p-dialog>
     </div>

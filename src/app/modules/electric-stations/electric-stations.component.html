@@ -5,67 +5,69 @@
     </div>
     <div class="row">
       <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
-        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllElectricStations()"
-          pTooltip="Actualizar" tooltipPosition="left"></p-button> &nbsp;
-        <button pButton pRipple class="mat-raised-button" (click)="openDialog(true, false, 'crear')">Nuevo Registro</button>
+        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllElectricStations()" pTooltip="Actualizar"
+          tooltipPosition="left"></p-button> &nbsp;
+        <button pButton pRipple class="mat-raised-button" (click)="openDialog(true, false, 'crear')">Nuevo
+          Registro</button>
       </div>
     </div>
     <div class="row">
-      <p-table #dt1 [value]="electricStations" dataKey="id"
-        styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
-        [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES"
-        currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros"
-        (sortFunction)="customSort($event)" [customSort]="true">
-        <ng-template pTemplate="header" let-columns>
-          <tr>
-            <th rowspan="2"> # </th>
-            <th pSortableColumn="nameStation">Nombre<p-sortIcon field="nameStation"></p-sortIcon></th>
-            <th pSortableColumn="direccion">Dirección<p-sortIcon field="direccion"></p-sortIcon></th>
-            <th pSortableColumn="descripcion">Descripción<p-sortIcon field="descripcion"></p-sortIcon></th>
-            <th pSortableColumn="latitude">Latitud<p-sortIcon field="latitude"></p-sortIcon></th>
-            <th pSortableColumn="longitude">Longitud<p-sortIcon field="longitude"></p-sortIcon></th>
-            <th rowspan="2">Opciones</th>
-          </tr>
-          <tr>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'nameStation', 'contains')"
-                placeholder="Busca por Nombre" class="w-full">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'direccion', 'contains')"
-                placeholder="Busca por Dirección" class="w-full">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'descripcion', 'contains')"
-                placeholder="Busca por Descripción" class="w-full">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'latitude', 'contains')"
-                placeholder="Busca por Latitud" class="w-full">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'longitude', 'contains')"
-                placeholder="Busca por Longitud" class="w-full">
-            </th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
-          <tr>
-            <td style="text-align:right; vertical-align:middle">{{rowIndex + 1}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['nameStation']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['direccion']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['descripcion']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['latitude']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['longitude']}}</td>
-            <td style="text-align:center; vertical-align:middle">
-              <i class="pi pi-pencil" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
-                data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
-              <i class="pi pi-map-marker" style="font-size: 1.5rem; color: var(--decorative-color);" data-bs-toggle="modal"
-                data-bs-target="#exampleModal" (click)="onVerMapa(rowData);"></i>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
+        <p-table responsiveLayout="stack" #dt1 [value]="electricStations" dataKey="id"
+          styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
+          [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES"
+          currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros"
+          (sortFunction)="customSort($event)" [customSort]="true">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th rowspan="2"> # </th>
+              <th pSortableColumn="nameStation">Nombre<p-sortIcon field="nameStation"></p-sortIcon></th>
+              <th pSortableColumn="direccion">Dirección<p-sortIcon field="direccion"></p-sortIcon></th>
+              <th pSortableColumn="descripcion">Descripción<p-sortIcon field="descripcion"></p-sortIcon></th>
+              <th pSortableColumn="latitude">Latitud<p-sortIcon field="latitude"></p-sortIcon></th>
+              <th pSortableColumn="longitude">Longitud<p-sortIcon field="longitude"></p-sortIcon></th>
+              <th rowspan="2">Opciones</th>
+            </tr>
+            <tr>
+              <th>
+                <input pInputText type="text" (input)="applyFilter($event, 'nameStation', 'contains')"
+                  placeholder="Busca por Nombre" class="w-full">
+              </th>
+              <th>
+                <input pInputText type="text" (input)="applyFilter($event, 'direccion', 'contains')"
+                  placeholder="Busca por Dirección" class="w-full">
+              </th>
+              <th>
+                <input pInputText type="text" (input)="applyFilter($event, 'descripcion', 'contains')"
+                  placeholder="Busca por Descripción" class="w-full">
+              </th>
+              <th>
+                <input pInputText type="text" (input)="applyFilter($event, 'latitude', 'contains')"
+                  placeholder="Busca por Latitud" class="w-full">
+              </th>
+              <th>
+                <input pInputText type="text" (input)="applyFilter($event, 'longitude', 'contains')"
+                  placeholder="Busca por Longitud" class="w-full">
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+            <tr>
+              <td style="text-align:right; vertical-align:middle">{{rowIndex + 1}}</td>
+              <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['nameStation']}}</td>
+              <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['direccion']}}</td>
+              <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['descripcion']}}</td>
+              <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['latitude']}}</td>
+              <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['longitude']}}</td>
+              <td style="text-align:center; vertical-align:middle">
+                <i class="pi pi-pencil" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
+                  data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
+                <i class="pi pi-map-marker" style="font-size: 1.5rem; color: var(--decorative-color);"
+                  data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="onVerMapa(rowData);"></i>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+
     </div>
     <div class="row">
       <div *ngIf="mapaVisible" class="map-modal">
@@ -75,7 +77,8 @@
     <!-- modal Crear nuevo -->
     <div class="row">
       <p-dialog header={{titlesGlobales.create}} [(visible)]="dialogRegistro" [style]="{width: '50vw'}" class="p-fluid"
-        [dismissableMask]="true">
+        [dismissableMask]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [draggable]="false"
+        [resizable]="false">
         <ng-template pTemplate="content">
           <form class="row g-2" [formGroup]="formRegistro">
             <div class="form-group field">
@@ -171,7 +174,8 @@
     <!-- modal Editar Registro -->
     <div class="row">
       <p-dialog header={{titlesGlobales.edit}} [(visible)]="dialogEdit" [style]="{width: '50vw'}" class="p-fluid"
-        [closeOnEscape]="true" [closable]="true">
+        [closeOnEscape]="true" [closable]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [draggable]="false"
+        [resizable]="false">
         <ng-template pTemplate="content">
           <form class="row g-2" [formGroup]="formRegistro">
             <div class="form-group field">

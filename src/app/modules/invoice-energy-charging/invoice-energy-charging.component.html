@@ -9,7 +9,7 @@
     </div>
 
     <div class="row">
-      <p-table #dt1 [columns]="cabeceras" [value]="invoices" dataKey="id"
+      <p-table responsiveLayout="stack" #dt1 [columns]="cabeceras" [value]="invoices" dataKey="id"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
         [showCurrentPageReport]="false"
         currentPageReportTemplate="Showing {first} to {last} of {{totalRecords}} entries"

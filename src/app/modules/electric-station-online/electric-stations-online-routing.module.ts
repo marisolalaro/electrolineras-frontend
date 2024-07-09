@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    loadComponent : () => import('./electric-stations.component'),
+    loadComponent : () => import('./electric-station-online.component'),
   }
 ];
 
@@ -12,4 +12,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ElectricStationsRoutingModule { }
+export class ElectricStationsOnlineRoutingModule { }

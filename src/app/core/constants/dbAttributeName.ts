@@ -9,6 +9,7 @@ export class DBAttributeName {
     static tabClientUser_AttribElectronicMail = 'electronic_mail';
     static tabClientUser_AttribChargeClientList = 'chargeClientList';
     static tabClientUser_AttribPaymentTransactionsElectrolineraList = 'paymentTransactionsElectrolineraList';
+    static tabClientUser_AttribEnabled = 'enabled';
 
     // tabla payment_transactions_electrolinera
     static tabPaymentTransactions_AttribConsumer = 'consumer_name';

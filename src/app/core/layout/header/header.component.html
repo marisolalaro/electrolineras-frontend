@@ -1,26 +1,12 @@
-<p-toolbar styleClass="p-mb-4">
-    <ng-template pTemplate="start">
-        <button pButton pRipple icon="pi pi-bars" (click)="onToggleSidebar()"></button>
-    </ng-template>
-    <ng-template pTemplate="center">
-        <p-tabMenu [model]="items" [activeItem]="activeItem"
-            (activeItemChange)="onActiveItemChange($event)"></p-tabMenu>
-    </ng-template>
-    <ng-template pTemplate="end">
-        <button pButton pRipple icon="pi pi-power-off" (click)="salir()" class="mr-2" pTooltip="Salir"
-            tooltipPosition="bottom"></button>
-    </ng-template>
-</p-toolbar>
-
-<!-- <p-menubar>
-    <div class="ui-g">
-      <div class="ui-g-12">
-        <div class="ui-inputgroup">
-          <button pButton type="button" icon="pi pi-bars" (click)="onToggleSidebar()"></button>
-          <span class="ui-inputgroup-addon"><i class="pi pi-search"></i></span>
-          <input type="text" pInputText placeholder="Search">
-        </div>
-      </div>
-    </div>
-  </p-menubar> -->
-  
+<p-menubar [model]="items">
+  <ng-template pTemplate="menuicon">
+    <i class="pi pi-angle-down"></i>
+  </ng-template>
+  <ng-template pTemplate="start">
+    <button pButton pRipple icon="pi pi-bars" (click)="onToggleSidebar()"></button>
+  </ng-template>
+  <ng-template pTemplate="end">
+    <button pButton pRipple icon="pi pi-power-off" (click)="salir()" class="mr-2" pTooltip="Salir"
+      tooltipPosition="bottom"></button>
+  </ng-template>
+</p-menubar>
