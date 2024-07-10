@@ -14,12 +14,12 @@ import { ElectricStationOnlineService } from './services/electric-station-online
     FormsModule,
     ReactiveFormsModule,
     PipesModule,
-    CommonModule,
     PrimeModule,
-    PipesModule
   ],
   exports: [
     PrimeModule,
+    PipesModule,
+    CommonModule,
   ],
   providers: [
     ElectricStationOnlineService,

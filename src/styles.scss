@@ -12,8 +12,18 @@ h3 {
     color: var(--primary-color-text);
 }
 
+.align-center {
+    text-align: center;
+}
+
 .container {
     padding: 0rem;
+}
+
+.align-object-center {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
 }
 
 .body-color {

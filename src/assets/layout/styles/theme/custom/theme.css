@@ -26,7 +26,8 @@
   --cta-color: #FF9800;
   --decorative-color: #9C27B0;
   --background-color: #F0F0F0;
-  --text-color: var(--color-white);
+  /* color de texto en general */
+  --text-color: var(--primary-color-text); 
   --primary-color-text:#212121;
   
   --pdf:#B30C00;

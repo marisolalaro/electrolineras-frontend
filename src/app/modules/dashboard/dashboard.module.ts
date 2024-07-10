@@ -21,7 +21,9 @@ import { ElectricStationsService } from '../electric-stations/services/electric-
     CommonModule,
   ],
   exports:[
-    PrimeModule
+    PrimeModule,
+    PipesModule,
+    CommonModule
   ],
   providers: [
     ElectricStationsService

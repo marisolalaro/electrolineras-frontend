@@ -6,6 +6,7 @@ import { ElectricStationsService } from '../electric-stations/services/electric-
 import { ElectricStationModel } from 'src/app/core/model/electric-station';
 import { Router } from '@angular/router';
 import { rutas } from 'src/app/core/constants/rutas';
+import { SocketService } from '../electric-station-online/services/socket.service';
 
 @Component({
   standalone: true,
@@ -17,6 +18,7 @@ import { rutas } from 'src/app/core/constants/rutas';
 export default class DashboardComponent {
 
   // variables propias del componente
+  public data: any;
   public electricStations: ElectricStationModel[] = [];
 
   // variables del paginador
@@ -29,11 +31,23 @@ export default class DashboardComponent {
 
   constructor(
     private router: Router,
-    private electricStationsService: ElectricStationsService
+    private electricStationsService: ElectricStationsService,
+    private socketService: SocketService
   ) { }
 
   ngOnInit() {
+    this.inicializaDatos();
     this.getFourElectricStations();
+    this.getOnline();
+  }
+
+  inicializaDatos() {
+    // this.data.value = '0.00';
+  }
+  getOnline() {
+    this.socketService.listen('data').subscribe((data: any) => {
+      this.data = data;
+    });
   }
 
   getFourElectricStations(): void {
