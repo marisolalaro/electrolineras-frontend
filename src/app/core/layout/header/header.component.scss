@@ -1,0 +1,8 @@
+:host ::ng-deep .p-menuitem-icon{
+    color: var(--primary-color);
+}
+
+:host ::ng-deep .p-menuitem-text{
+    color: var(--primary-color-text);
+    font-weight: bold;
+}

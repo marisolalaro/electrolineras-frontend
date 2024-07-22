@@ -15,6 +15,7 @@ import { PrimeModule } from 'src/app/prime.module';
     PrimeModule
   ],
   exports: [
+    CommonModule,
     FormsModule,
     PrimeModule,
     ReactiveFormsModule

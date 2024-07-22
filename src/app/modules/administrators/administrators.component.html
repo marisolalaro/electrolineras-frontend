@@ -26,6 +26,7 @@
             <th pSortableColumn="motherLastName">Apellido Materno<p-sortIcon field="motherLastName"></p-sortIcon></th>
             <th pSortableColumn="electronicMail">Email<p-sortIcon field="electronicMail"></p-sortIcon></th>
             <th pSortableColumn="cellPhoneNumber">Celular<p-sortIcon field="cellPhoneNumber"></p-sortIcon></th>
+            <th rowspan="2" pSortableColumn="enabled">Estado<p-sortIcon field="enabled"></p-sortIcon></th>
             <th rowspan="2">Opciones</th>
           </tr>
           <tr>
@@ -64,6 +65,9 @@
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['motherLastName']}}</td>
             <td style="text-align:left; vertical-align:middle">{{rowData['electronicMail']}}</td>
             <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['cellPhoneNumber']}}</td>
+            <td style="text-align:right; vertical-align:middle" class="uppercase">
+              <p-toggleButton [(ngModel)]="rowData['enabled']" onLabel="Habilitado" offLabel="Deshabilitado" (onChange)="onCheckEstado($event, rowData)"></p-toggleButton>
+            </td>
             <td style="text-align:center; vertical-align:middle">
               <i class="pi pi-user-edit" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
                 data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
@@ -90,8 +94,9 @@
 
             <div class="form-group field">
               <label for="names">{{labelsGlobales.name}}</label>
-              <input type="text" pInputText required formControlName="names"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['names'].invalid}" />
+              <input type="text" pInputText required formControlName="names" appUppercase
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['names'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
               <div *ngIf="submitted && formRegistro.controls['names'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('names')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
@@ -102,7 +107,8 @@
             <div class="form-group field">
               <label for="lastName">{{labelsGlobales.apellidoPaterno}}</label>
               <input type="text" pInputText required formControlName="lastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['lastName'].invalid}" />
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['lastName'].invalid}" 
+                oninput="this.value = this.value.toUpperCase()"/>
               <div *ngIf="submitted && formRegistro.controls['lastName'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('lastName')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
@@ -113,7 +119,8 @@
             <div class="form-group field">
               <label for="motherLastName">{{labelsGlobales.apellidoMaterno}}</label>
               <input type="text" pInputText required formControlName="motherLastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['motherLastName'].invalid}" />
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['motherLastName'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
               <div *ngIf="submitted && formRegistro.controls['motherLastName'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('motherLastName')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
@@ -124,7 +131,8 @@
             <div class="form-group field">
               <label for="identificationNumber">{{labelsGlobales.ci}}</label>
               <input type="text" pInputText required formControlName="identificationNumber"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['identificationNumber'].invalid}" />
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['identificationNumber'].invalid}" 
+                oninput="this.value = this.value.toUpperCase()"/>
               <div *ngIf="submitted && formRegistro.controls['identificationNumber'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('identificationNumber')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
@@ -239,7 +247,8 @@
             <div class="form-group field">
               <label for="names">{{labelsGlobales.name}}</label>
               <input type="text" pInputText required formControlName="names"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['names'].invalid}" />
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['names'].invalid}" 
+                oninput="this.value = this.value.toUpperCase()"/>
               <div *ngIf="submitted && formRegistro.controls['names'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('names')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
@@ -250,7 +259,8 @@
             <div class="form-group field">
               <label for="lastName">{{labelsGlobales.apellidoPaterno}}</label>
               <input type="text" pInputText required formControlName="lastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['lastName'].invalid}" />
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['lastName'].invalid}" 
+                oninput="this.value = this.value.toUpperCase()"/>
               <div *ngIf="submitted && formRegistro.controls['lastName'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('lastName')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
@@ -261,7 +271,8 @@
             <div class="form-group field">
               <label for="motherLastName">{{labelsGlobales.apellidoMaterno}}</label>
               <input type="text" pInputText required formControlName="motherLastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['motherLastName'].invalid}" />
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['motherLastName'].invalid}" 
+                oninput="this.value = this.value.toUpperCase()"/>
               <div *ngIf="submitted && formRegistro.controls['motherLastName'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('motherLastName')?.hasError('required')">
                   {{messagesGlobales.requiredField}}

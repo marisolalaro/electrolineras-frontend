@@ -25,4 +25,20 @@ export class ElectricStationsService {
   update(electricStation: ElectricStationModel) {
     return this.http.put(this.apiService,electricStation)
   }
+
+  getForDashboard() {
+    return this.http.get(this.apiService + EndPoins.cardElectricStations);
+  }
+
+  getOne(id: number) {
+    return this.http.get(this.apiService + EndPoins.cardElectricStationsId + '/' + id);
+  }
+
+  enabledCustomer(idStation: number) {
+    return this.http.get(this.apiService + EndPoins.enabledStation + '/' + idStation);
+  }
+
+  disabledCustomer(idStation: number) {
+    return this.http.get(this.apiService + EndPoins.disableStation + '/' + idStation);
+  }
 }

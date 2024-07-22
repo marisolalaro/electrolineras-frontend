@@ -27,4 +27,12 @@ export class AdministratorsService {
   update(adminitration: AdministratorModel) {
     return this.http.post(this.apiService + '/update', adminitration);
   }
+
+  enabledCustomer(idCustomer: number) {
+    return this.http.get(this.apiService + EndPoins.enabledAdmin + '/' + idCustomer);
+  }
+
+  disabledCustomer(idCustomer: number) {
+    return this.http.get(this.apiService + EndPoins.disabledAdmin + '/' + idCustomer);
+  }
 }

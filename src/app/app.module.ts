@@ -18,6 +18,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { TabViewModule } from 'primeng/tabview';
 import { SharedModule } from 'primeng/api';
 import { ErrorInterceptor } from './error.interceptor';
+// import { UppercaseDirective } from './core/directives/uppercase.directive';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -25,7 +26,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    // UppercaseDirective
   ],
   imports: [
     BrowserModule,

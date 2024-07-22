@@ -103,7 +103,7 @@ export default class ElectricStationsComponent implements OnInit {
     this.electricStationsService.getAll().subscribe(
       (resp: any) => {
         this.electricStations = resp.data;
-        this.totalRecords = resp.data.length;
+        this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0; 
       }
     )
   }
@@ -252,5 +252,21 @@ export default class ElectricStationsComponent implements OnInit {
       else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
       return event.order * result;
     });
+  }
+
+  onCheckEstado(estado, item) {
+    if (estado.checked) {
+      this.electricStationsService.enabledCustomer(item.id).subscribe(
+        (resp: any) => {
+          this.getAllElectricStations();       
+        }
+      )
+    } else {
+      this.electricStationsService.disabledCustomer(item.id).subscribe(
+        (resp: any) => {
+          this.getAllElectricStations();       
+        }
+      )
+    }
   }
 }

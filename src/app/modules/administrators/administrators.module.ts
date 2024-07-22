@@ -5,10 +5,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { AdministratorsService } from './services/administrators.service';
 import { PrimeModule } from 'src/app/prime.module';
+// import { UppercaseDirective } from 'src/app/core/directives/uppercase.directive';
 
 @NgModule({
   declarations: [
-    
+    // UppercaseDirective
   ],
   imports: [
     AdministratorsRoutingModule,
@@ -16,10 +17,10 @@ import { PrimeModule } from 'src/app/prime.module';
     ReactiveFormsModule,
     PipesModule,
     CommonModule,
-    PrimeModule
+    PrimeModule,
   ],
   exports: [
-    PrimeModule
+    PrimeModule,
   ],
   providers: [
     AdministratorsService,

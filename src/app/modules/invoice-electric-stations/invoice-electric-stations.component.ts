@@ -90,7 +90,7 @@ export default class InvoiceElectricStationsComponent {
     this.invoiceService.getAllFilter(this.bodyFilter).subscribe(
       (resp: any) => {
         this.invoices = resp.data.invoceElectrolineraList;
-        this.totalRecords = resp.data.totalRecords;
+        this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0; 
       }
     )
   }

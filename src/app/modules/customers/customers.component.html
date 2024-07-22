@@ -45,7 +45,7 @@
               <p-sortIcon field="enabled" (click)="customSort('enabled', orden)"></p-sortIcon>
             </th>
             <th rowspan="2">
-              Opciones
+              Detalles
             </th>
           </tr>
 
@@ -111,21 +111,23 @@
 
       <p-tabView>
         <p-tabPanel header="Cliente">
-          <div class="form-group field">
-            <label for="names">Nombres</label>
-            <input id="disabled-input" type="text" pInputText [disabled]="true" [(ngModel)]="customer.names" />
-          </div>
-          <div class="form-group field">
-            <label htmlFor="lastName">Apellido Paterno</label>
-            <input id="disabled-input" type="text" pInputText [disabled]="true" [(ngModel)]="customer.lastName" />
-          </div>
-          <div class="form-group field">
-            <label htmlFor="motherLastName">Apellido Materno</label>
-            <input id="disabled-input" type="text" pInputText [disabled]="true" [(ngModel)]="customer.motherLastName" />
-          </div>
-          <div class="form-group field">
-            <label htmlFor="phoneNumber">Número de Celular</label>
-            <input id="disabled-input" type="text" pInputText [disabled]="true" [(ngModel)]="customer.phoneNumber" />
+          <div class="grid">
+            <div class="col-3" style="text-align: left;">
+              <ul>
+                <li><i class="pi pi-user" style="color: var(--primary-color)"></i> &nbsp; <b>Nombres: </b></li>
+                <li><i class="pi pi-user" style="color: var(--primary-color)"></i> &nbsp; <b>Apellido Paterno: </b></li>
+                <li><i class="pi pi-user" style="color: var(--primary-color)"></i> &nbsp; <b>Apellido Materno: </b></li>
+                <li><i class="pi pi-phone" style="color: var(--primary-color)"></i> &nbsp; <b>Número de Celular: </b></li>
+              </ul>
+            </div>
+            <div class="col-9" style="text-align: left;">
+              <ul>
+                <li><label>{{customer.names}}</label></li>
+                <li><label>{{customer.lastName}}</label></li>
+                <li><label>{{customer.motherLastName}}</label></li>
+                <li><label>{{customer.phoneNumber}}</label></li>
+              </ul>
+            </div>
           </div>
         </p-tabPanel>
 

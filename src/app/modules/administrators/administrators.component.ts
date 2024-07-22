@@ -220,4 +220,20 @@ export default class AdministratorsComponent {
     });
   }
 
+  onCheckEstado(estado, item) {
+    if (estado.checked) {
+      this.administratorsService.enabledCustomer(item.id).subscribe(
+        (resp: any) => {
+          this.getAllAdministrations();       
+        }
+      )
+    } else {
+      this.administratorsService.disabledCustomer(item.id).subscribe(
+        (resp: any) => {
+          this.getAllAdministrations();       
+        }
+      )
+    }
+  }
+
 }

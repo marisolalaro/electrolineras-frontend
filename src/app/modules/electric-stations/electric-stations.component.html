@@ -25,6 +25,7 @@
               <th pSortableColumn="descripcion">Descripción<p-sortIcon field="descripcion"></p-sortIcon></th>
               <th pSortableColumn="latitude">Latitud<p-sortIcon field="latitude"></p-sortIcon></th>
               <th pSortableColumn="longitude">Longitud<p-sortIcon field="longitude"></p-sortIcon></th>
+              <th rowspan="2" pSortableColumn="enabled">Estado<p-sortIcon field="enabled"></p-sortIcon></th>
               <th rowspan="2">Opciones</th>
             </tr>
             <tr>
@@ -58,6 +59,9 @@
               <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['descripcion']}}</td>
               <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['latitude']}}</td>
               <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['longitude']}}</td>
+              <td style="text-align:left; vertical-align:middle" class="uppercase">
+                <p-toggleButton [(ngModel)]="rowData['enabled']" onLabel="Habilitado" offLabel="Deshabilitado" (onChange)="onCheckEstado($event, rowData)"></p-toggleButton>
+              </td>
               <td style="text-align:center; vertical-align:middle">
                 <i class="pi pi-pencil" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
                   data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;

@@ -1,30 +1,53 @@
 body {
-  margin: 0;
-  padding: 0;
   background: url("../../../assets/img/woman-charging-car.jpg") no-repeat center center fixed;
+  // margin: 0;
+  // padding: 0;
+  // background-size: cover;
+  // font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  // height: 100%;
+
+  background-position: center;
   background-size: cover;
-  background-size: 100% 100%;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  // background-color: rgb(39, 238, 32);
+  background-repeat:no-repeat ;
+  max-width: 100%;
 }
 
 .upper {
-  background-color: var(--primary-color-60);
-  padding-bottom: 100px;
+  background-color: var(--primary-color-60); // este cambiar a blanco
+  // padding-bottom: 100px;
+  padding-bottom: 100vh;
+  // padding-bottom: 200px;
+  // height: 100%;
+
+ 
+}
+
+.login-div {
+  width: 100%;
+  margin: 0 auto;
 }
 
 .login {
-  margin: 0 auto;
+  /* arriba y abajo | izquierda y derecha */
+  // margin: 0 auto;
   width: 500px;
-  background-color: var(--primary-color-60);
+  background-color: var(--color-white-60);
   border-radius: 5px;
+  /* arriba | izquierda y derecha | abajo */
   padding: 30px 70px 143px;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .login h4 {
   color: white;
   padding-bottom: 10px;
   text-align: center;
+  font-weight: bold;
+  font-size: 1.5rem;
 }
 
 .input-text {
@@ -73,7 +96,7 @@ body {
   margin-top: 6px;
 }
 
-@media screen and (width <= 740px) {
+@media screen and (width <=740px) {
   body {
     background: black;
   }
@@ -87,25 +110,19 @@ body {
     width: 100%;
   }
 
-  .login-div {
-    width: 90%;
-    margin: 0 auto;
-  }
+
 
   .bottom {
     border-top: 1px solid #737373;
   }
 
-  .upper {
-    padding-bottom: 93px;
-  }
 
   .list-bottom {
     width: 33%;
   }
 }
 
-@media screen and (width <= 500px) {
+@media screen and (width <=500px) {
   .list-bottom {
     width: 50%;
   }
@@ -136,4 +153,3 @@ body {
 //     display: none;
 //   }
 // }
-

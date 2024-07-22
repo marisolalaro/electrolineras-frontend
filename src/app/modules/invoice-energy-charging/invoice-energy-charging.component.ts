@@ -108,7 +108,7 @@ export default class InvoiceEnergyChargingComponent {
       .subscribe(
         (result: any) => {
           this.invoices = result.data.invoceElectrolineraList;
-          this.totalRecords = result.data.totalRecords;
+          this.totalRecords = result.data.totalRecords ? result.data.totalRecords : 0; 
         },
         (error: any) => {
         })

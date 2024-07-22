@@ -19,13 +19,19 @@
             <th rowspan="2">
               #
             </th>
-            <th pSortableColumn="'amount'">
-              Monto
-              <p-sortIcon field="amount" (click)="customSort('amount', orden)"></p-sortIcon>
-            </th>
             <th pSortableColumn="'cuf'">
               CUF
               <p-sortIcon field="cuf" (click)="customSort('cuf', orden)"></p-sortIcon>
+            </th>
+            <th rowspan="2">
+              Razón Social
+            </th>
+            <th rowspan="2">
+              Nombre Cliente
+            </th>
+            <th pSortableColumn="'amount'">
+              Monto
+              <p-sortIcon field="amount" (click)="customSort('amount', orden)"></p-sortIcon>
             </th>
             
             <th pSortableColumn="'urlFacturaSiat'">
@@ -34,12 +40,6 @@
             </th>
             <th rowspan="2">
               Número GiftCard
-            </th>
-            <th rowspan="2">
-              Razón Social
-            </th>
-            <th rowspan="2">
-              Nombre Cliente
             </th>
             <th rowspan="2">
               Placa
@@ -51,11 +51,11 @@
 
           <tr>
             <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'amount', 'contains')" placeholder="Buscar "
+              <input pInputText type="text" (input)="applyFilter($event, 'cuf', 'contains')" placeholder="Buscar "
                 class="w-full">
             </th>
             <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'cuf', 'contains')" placeholder="Buscar "
+              <input pInputText type="text" (input)="applyFilter($event, 'amount', 'contains')" placeholder="Buscar "
                 class="w-full">
             </th>
             <th>
@@ -67,14 +67,14 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
           <tr>
             <td style="text-align:right; vertical-align:middle" class="uppercase">{{ rowData?.totalUnits }} {{rowIndex + 1}}</td>
-            <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['amount'] | numberDecimal:2}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['cuf']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['razonSocial']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['nombreCliente']}}</td>
+            <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['amount'] | numberDecimal:2}}</td>
             <td>
               <a href="{{rowData['urlFacturaSiat']}}" target="_blank">Factura Siat</a>
             </td>
             <td>{{rowData['giftCardNumber']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['razonSocial']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['nombreCliente']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['placaVehiculo']}}</td>
             <td>
               <i class="pi pi-file-pdf" style="font-size: 1.5rem; color: var(--pdf)" (click)="onOpenFactura(rowData)"

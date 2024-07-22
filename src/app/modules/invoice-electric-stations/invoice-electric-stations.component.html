@@ -17,26 +17,27 @@
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th rowspan="2"> # </th>
-            <th pSortableColumn="'nombreRazonSocial'" rowspan="2">Razón Social</th>
-            <th pSortableColumn="'fechaHoraEmision'">
-              Fecha Emisión
-              <p-sortIcon field="fechaHoraEmision" (click)="customSort('fechaHoraEmision', orden)"></p-sortIcon>
-            </th>
             <th pSortableColumn="'cuf'">
               CUF
               <p-sortIcon field="cuf" (click)="customSort('cuf', orden)"></p-sortIcon>
             </th>
-            <th pSortableColumn="'numeroDocumento'" rowspan="2">
-              Número Documento
-            </th>
-            <th pSortableColumn="'amount'" rowspan="2">
-              Monto Bs.
+            <th pSortableColumn="'nombreCliente'" rowspan="2">
+              Nombre Cliente
             </th>
             <th pSortableColumn="'emailCliente'" rowspan="2">
               Correo Electrónico
             </th>
-            <th pSortableColumn="'nombreCliente'" rowspan="2">
-              Nombre Cliente
+            <th pSortableColumn="'nombreRazonSocial'" rowspan="2">Razón Social</th>
+            <th pSortableColumn="'numeroDocumento'" rowspan="2">
+              Número Documento
+            </th>
+            <th pSortableColumn="'fechaHoraEmision'">
+              Fecha Emisión
+              <p-sortIcon field="fechaHoraEmision" (click)="customSort('fechaHoraEmision', orden)"></p-sortIcon>
+            </th>
+            
+            <th pSortableColumn="'amount'" rowspan="2">
+              Monto Bs.
             </th>
             <th pSortableColumn="'codigoDescripcion'">
               Código
@@ -53,12 +54,12 @@
 
           <tr>
             <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'fechaHoraEmision', 'contains')"
-                placeholder="Busca fecha emisión" class="w-full">
-            </th>
-            <th>
               <input pInputText type="text" (input)="applyFilter($event, 'cuf', 'contains')" placeholder="Busca cuf"
                 class="w-full">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'fechaHoraEmision', 'contains')"
+                placeholder="Busca fecha emisión" class="w-full">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'codigoDescripcion', 'contains')"
@@ -73,16 +74,16 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
           <tr>
             <td style="text-align:right; vertical-align:middle">{{rowIndex + 1}}</td>
+            <td>{{rowData['cuf']}}</td>
+            <td>{{rowData['idPaymentTransactionElectrolinera'].nombreCliente}}</td>
             <td style="text-align:center; vertical-align:middle">
               {{rowData['idPaymentTransactionElectrolinera'].nombreRazonSocial}}</td>
             <td style="text-align:center; vertical-align:middle">{{rowData['fechaHoraEmision'] | formatFieldDate}}</td>
-            <td>{{rowData['cuf']}}</td>
             <td style="text-align:right; vertical-align:middle">
               {{rowData['idPaymentTransactionElectrolinera'].numeroDocumento}}</td>
             <td style="text-align:right; vertical-align:middle">{{rowData['idPaymentTransactionElectrolinera'].amount | numberDecimal:2}}
             </td>
             <td>{{rowData['idPaymentTransactionElectrolinera'].emailCliente}}</td>
-            <td>{{rowData['idPaymentTransactionElectrolinera'].nombreCliente}}</td>
             <td style="text-align:center; vertical-align:middle">{{rowData['codigoDescripcion']}}</td>
             <td style="text-align:center; vertical-align:middle">
               <a href="{{rowData['urlFacturaSiat']}}" target="_blank">Factura Siat</a>

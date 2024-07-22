@@ -104,7 +104,7 @@ export default class TransactionsComponent implements OnInit {
     this.transactionService.getAllFilter(this.bodyFilter).subscribe(
       (resp: any) => {
         this.transactions = resp.data.paymentTransactionElectrolinerasList;
-        this.totalRecords = resp.data.totalRecords;
+        this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0; 
       }
     )
   }

@@ -11,9 +11,15 @@ export class EndPoins {
     static charges = "/clientListCharges";
     static enabled = "/enableClient";
     static disabled = "/disableClient";
+    static enabledAdmin = "/enableAdmin";
+    static disabledAdmin = "/disableAdmin";
 
     // estaciones de carga
     static electricStations = "/chargingStation";
+    static cardElectricStations = "/cardChargingStation";
+    static cardElectricStationsId = "/cardChargingStationById";
+    static enabledStation = "/enableStation";
+    static disableStation = "/disableStation";
 
     // tasa de carga
     static chargeRate = "/chargeRate";

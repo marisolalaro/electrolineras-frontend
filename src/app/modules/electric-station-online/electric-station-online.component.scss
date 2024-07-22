@@ -1,9 +1,30 @@
 #contenedor {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-  
-  #contenedor > div {
-    width: 50%;
-  }
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#contenedor>div {
+  width: 50%;
+}
+
+ul {
+  list-style-type: none; /* Elimina los puntos de las listas, si es necesario */
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  padding: 8px 0; /* Espaciado entre los elementos de la lista */
+}
+
+.claseDelDiv{
+  background-image: url("../../../assets/img/woman-charging-car.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.transp
+{
+  background-color: var(--color-11);
+}

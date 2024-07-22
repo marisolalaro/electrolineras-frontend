@@ -28,7 +28,7 @@ const routes: Routes = [
         loadComponent: () => import('./modules/electric-stations/electric-stations.component'),
       },
       {
-        path: rutas.rutaElectrolinerasOnline,
+        path: rutas.rutaElectrolinerasOnline + '/:id',
         loadComponent: () => import('./modules/electric-station-online/electric-station-online.component'),
       },
       {
