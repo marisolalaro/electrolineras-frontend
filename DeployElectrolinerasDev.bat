@@ -7,10 +7,10 @@ REM Listar las imágenes
 docker images
 
 REM Borrar la imagen del proyecto usando el tag ingresado
-docker rmi %IMAGE_FRONTEND%:%TAG_FRONTEND%
+REM docker rmi %IMAGE_FRONTEND%:%TAG_FRONTEND%
 
 REM Construir la imagen de backend con el tag ingresado
-docker image build -t %IMAGE_FRONTEND%:%TAG_FRONTEND% .
+REM docker image build -t %IMAGE_FRONTEND%:%TAG_FRONTEND% .
 
 REM Etiquetar y hacer push de la imagen de backend
 REM Reemplazar la etiqueta, la dirección del servidor registry
