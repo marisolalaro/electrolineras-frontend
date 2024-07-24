@@ -14,28 +14,28 @@
         [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th rowspan="2"> # </th>
-            <th pSortableColumn="'nombreRazonSocial'">Razón Social<p-sortIcon field="nombreRazonSocial"
+            <th style="text-align:center; vertical-align:middle" rowspan="2"> # </th>
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'nombreRazonSocial'">Razón Social<p-sortIcon field="nombreRazonSocial"
                 (click)="customSort('nombreRazonSocial', orden)"></p-sortIcon></th>
-            <th pSortableColumn="'numeroDocumento'">Número Documento<p-sortIcon field="numeroDocumento"
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'numeroDocumento'">Número Documento<p-sortIcon field="numeroDocumento"
                 (click)="customSort('numeroDocumento', orden)"></p-sortIcon></th>
-            <th pSortableColumn="'emailCliente'">Email<p-sortIcon field="emailCliente"
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'emailCliente'">Correo Electrónico<p-sortIcon field="emailCliente"
                 (click)="customSort('emailCliente', orden)"></p-sortIcon></th>
-            <th pSortableColumn="'amount'">Monto Transacción Bs.<p-sortIcon field="amount"
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'amount'">Monto Transacción Bs.<p-sortIcon field="amount"
                 (click)="customSort('amount', orden)"></p-sortIcon></th>
-            <th pSortableColumn="'registrationAt'">Fecha Transacción<p-sortIcon field="registrationAt"
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'registrationAt'">Fecha Transacción<p-sortIcon field="registrationAt"
                 (click)="customSort('registrationAt', orden)"></p-sortIcon></th>
-            <th pSortableColumn="'giftCardNumber'">Numero Gift card<p-sortIcon field="giftCardNumber"
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'giftCardNumber'">Numero Gift card<p-sortIcon field="giftCardNumber"
                 (click)="customSort('giftCardNumber', orden)"></p-sortIcon></th>
-            <th pSortableColumn="'gloss'">Glosa<p-sortIcon field="gloss"
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'gloss'">Glosa<p-sortIcon field="gloss"
                 (click)="customSort('gloss', orden)"></p-sortIcon></th>
-            <th pSortableColumn="'placaVehiculo'">Placa Vehículo<p-sortIcon field="placaVehiculo"
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'placaVehiculo'">Placa Vehículo<p-sortIcon field="placaVehiculo"
                 (click)="customSort('placaVehiculo', orden)"></p-sortIcon></th>
-            <th pSortableColumn="'receiverBank'">Banco Recibido<p-sortIcon field="receiverBank"
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'receiverBank'">Banco Recibido<p-sortIcon field="receiverBank"
                 (click)="customSort('receiverBank', orden)"></p-sortIcon></th>
-            <th pSortableColumn="'receiverDocument'">Documento Recibido<p-sortIcon field="receiverDocument"
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'receiverDocument'">Documento Recibido<p-sortIcon field="receiverDocument"
                 (click)="customSort('receiverDocument', orden)"></p-sortIcon></th>
-            <th rowspan="2">Opciones</th>
+            <th style="text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
           </tr>
           <tr>
             <th>
@@ -48,7 +48,7 @@
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'emailCliente', 'contains')"
-                placeholder="Busca Email Cliente" class="w-full">
+                placeholder="Busca Correo Electrónico" class="w-full">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'amount', 'contains')"

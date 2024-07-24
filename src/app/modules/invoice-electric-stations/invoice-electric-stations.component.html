@@ -4,7 +4,8 @@
     <div class="row">
       <h3><b>{{titleComponent.mainTitle}}</b></h3>
       <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
-        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getInvoices()" pTooltip="Actualizar" tooltipPosition="left"></p-button>
+        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getInvoices()" pTooltip="Actualizar"
+          tooltipPosition="left"></p-button>
       </div>
     </div>
 
@@ -16,38 +17,39 @@
         [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th rowspan="2"> # </th>
-            <th pSortableColumn="'cuf'">
+            <th style="text-align:center; vertical-align:middle" rowspan="2"> # </th>
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'cuf'">
               CUF
               <p-sortIcon field="cuf" (click)="customSort('cuf', orden)"></p-sortIcon>
             </th>
-            <th pSortableColumn="'nombreCliente'" rowspan="2">
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'nombreCliente'" rowspan="2">
               Nombre Cliente
             </th>
-            <th pSortableColumn="'emailCliente'" rowspan="2">
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'emailCliente'" rowspan="2">
               Correo Electrónico
             </th>
-            <th pSortableColumn="'nombreRazonSocial'" rowspan="2">Razón Social</th>
-            <th pSortableColumn="'numeroDocumento'" rowspan="2">
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'nombreRazonSocial'" rowspan="2">Razón
+              Social</th>
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'numeroDocumento'" rowspan="2">
               Número Documento
             </th>
-            <th pSortableColumn="'fechaHoraEmision'">
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'fechaHoraEmision'">
               Fecha Emisión
               <p-sortIcon field="fechaHoraEmision" (click)="customSort('fechaHoraEmision', orden)"></p-sortIcon>
             </th>
-            
-            <th pSortableColumn="'amount'" rowspan="2">
+
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'amount'" rowspan="2">
               Monto Bs.
             </th>
-            <th pSortableColumn="'codigoDescripcion'">
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'codigoDescripcion'">
               Código
               <p-sortIcon field="codigoDescripcion" (click)="customSort('codigoDescripcion', orden)"></p-sortIcon>
             </th>
-            <th pSortableColumn="'urlFacturaSiat'">
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'urlFacturaSiat'">
               URL Factura
               <p-sortIcon field="urlFacturaSiat" (click)="customSort('urlFacturaSiat', orden)"></p-sortIcon>
             </th>
-            <th pSortableColumn="'nombreRazonSocial'" rowspan="2">
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'nombreRazonSocial'" rowspan="2">
               Opciones
             </th>
           </tr>
@@ -74,26 +76,30 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
           <tr>
             <td style="text-align:right; vertical-align:middle">{{rowIndex + 1}}</td>
-            <td>{{rowData['cuf']}}</td>
-            <td>{{rowData['idPaymentTransactionElectrolinera'].nombreCliente}}</td>
-            <td style="text-align:center; vertical-align:middle">
-              {{rowData['idPaymentTransactionElectrolinera'].nombreRazonSocial}}</td>
-            <td style="text-align:center; vertical-align:middle">{{rowData['fechaHoraEmision'] | formatFieldDate}}</td>
+            <td [pTooltip]="rowData['cuf']" tooltipPosition="bottom">{{rowData['cuf'] | truncate:15}}</td>
+            <td style="text-align:left; vertical-align:middle">
+              {{rowData['idPaymentTransactionElectrolinera'].nombreCliente}}</td>
+            <td style="text-align:left; vertical-align:middle">
+              {{rowData['idPaymentTransactionElectrolinera'].emailCliente}}</td>
+            <td style="text-align:left; vertical-align:middle">
+              {{rowData['idPaymentTransactionElectrolinera'].nombreRazonSocial}}
+            </td>
             <td style="text-align:right; vertical-align:middle">
               {{rowData['idPaymentTransactionElectrolinera'].numeroDocumento}}</td>
-            <td style="text-align:right; vertical-align:middle">{{rowData['idPaymentTransactionElectrolinera'].amount | numberDecimal:2}}
+            <td style="text-align:right; vertical-align:middle">{{rowData['fechaHoraEmision'] | formatFieldDate}}
             </td>
-            <td>{{rowData['idPaymentTransactionElectrolinera'].emailCliente}}</td>
+            <td style="text-align:right; vertical-align:middle">{{rowData['idPaymentTransactionElectrolinera'].amount |
+              numberDecimal:2}}</td>
             <td style="text-align:center; vertical-align:middle">{{rowData['codigoDescripcion']}}</td>
             <td style="text-align:center; vertical-align:middle">
               <a href="{{rowData['urlFacturaSiat']}}" target="_blank">Factura Siat</a>
             </td>
-            <td>
+            <td style="text-align:center; vertical-align:middle">
               <i class="pi pi-file-pdf" style="font-size: 1.5rem; color: var(--pdf)" (click)="onOpenFactura(rowData)"
                 tooltipPosition="top" pTooltip="Ver Factura"></i>
               &nbsp;
-              <i class="pi pi-qrcode" style="font-size: 1.5rem; color: var(--primary-color)" (click)="onOpenImagenQR(rowData)"
-                tooltipPosition="top" pTooltip="Ver QR"></i>
+              <i class="pi pi-qrcode" style="font-size: 1.5rem; color: var(--primary-color)"
+                (click)="onOpenImagenQR(rowData)" tooltipPosition="top" pTooltip="Ver QR"></i>
             </td>
           </tr>
         </ng-template>

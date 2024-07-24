@@ -17,13 +17,15 @@ import { Customer } from 'src/app/core/model/customer';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 // services
 import { CustomerService } from './services/customer.service';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-customers',
   standalone: true,
   imports: [CustomersModule, NgFor, NgIf, PipesModule, FormsModule, NgSwitch, NgSwitchCase],
   templateUrl: './customers.component.html',
-  styleUrls: ['./customers.component.scss']
+  styleUrls: ['./customers.component.scss'],
+  providers: [ConfirmationService]
 })
 
 export default class CustomersComponent {
@@ -35,6 +37,8 @@ export default class CustomersComponent {
   public page: number = 0;
   public itemsPerPage: number = 5;
   public totalRecords: number = 0;
+  public totalTransacciones: number = 0;
+  public totalCargas: number = 0;
 
   // variables propias del componente
   public customers: Customer[] = [];
@@ -63,6 +67,7 @@ export default class CustomersComponent {
   constructor(
     public customerService: CustomerService,
     public global: Global,
+    private confirmationService: ConfirmationService,
   ) { }
 
   ngOnInit() {
@@ -73,7 +78,7 @@ export default class CustomersComponent {
     this.customerService.getAllFilter(this.bodyFilter).subscribe(
       (resp: any) => {
         this.customers = resp.data.clientList;
-        this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0;        
+        this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0;
       }
     )
   }
@@ -88,6 +93,10 @@ export default class CustomersComponent {
 
   onOpenDetail(customer) {
     this.customer = customer;
+    
+    this.totalTransacciones = customer.paymentTransactionsElectrolineraList.length;
+    this.totalCargas = customer.chargeClientList.length;
+
     this.dialogDetalle = true;
   }
 
@@ -154,20 +163,30 @@ export default class CustomersComponent {
     this.getCustomers();
   }
 
-  onCheckEstado(estado, item) {
-    if (estado.checked) {
-      this.customerService.enabledCustomer(item.id).subscribe(
-        (resp: any) => {
-          this.getCustomers();       
+  confirm(event, item, tipo) {
+    var texto = tipo? 'Habilitar' : 'Deshabilitar';
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `¿${texto} a ${item.lastName} ${item.motherLastName} ${item.names} ?`,
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Si',
+      rejectLabel: 'No',
+      accept: () => {
+        if (tipo) {
+          this.customerService.enabledCustomer(item.id).subscribe(
+            (resp: any) => {
+              this.getCustomers();
+            }
+          )
+        } else {
+          this.customerService.disabledCustomer(item.id).subscribe(
+            (resp: any) => {
+              this.getCustomers();
+            }
+          )
         }
-      )
-    } else {
-      this.customerService.disabledCustomer(item.id).subscribe(
-        (resp: any) => {
-          this.getCustomers();       
-        }
-      )
-    }
+      }
+    });
   }
 
   onPageChange(event: any) {

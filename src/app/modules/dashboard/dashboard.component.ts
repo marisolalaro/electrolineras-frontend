@@ -57,7 +57,7 @@ export default class DashboardComponent implements OnInit, OnDestroy{
     // Llama al servicio cada 5 segundos
     this.subscription = interval(2000) // Intervalo de 5 segundos
       .pipe(
-        switchMap(() => this.electricStationsService.getForDashboard()) // Llama al servicio cada 5 segundos
+        switchMap(() => this.electricStationsService.getForDashboard()) // Llama al servicio cada 2 segundos
       )
       .subscribe(
         (response:any) => {

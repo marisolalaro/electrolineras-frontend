@@ -19,13 +19,13 @@ import { AdministratorModel } from 'src/app/core/model/administrators';
 // services
 import { HelpersService } from 'src/app/core/services/helpers.service';
 import { AdministratorsService } from './services/administrators.service';
-
+import { ConfirmationService } from 'primeng/api';
 @Component({
   standalone: true,
   selector: 'app-administrators',
   templateUrl: './administrators.component.html',
   styleUrls: ['./administrators.component.scss'],
-  providers: [HelpersService, MessageService],
+  providers: [HelpersService, MessageService, ConfirmationService],
   imports: [AdministratorsModule, PipesModule, ReactiveFormsModule, NgFor, NgClass, NgIf, NgSwitch, NgSwitchCase],
 })
 export default class AdministratorsComponent {
@@ -58,8 +58,9 @@ export default class AdministratorsComponent {
   public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
 
   constructor(
-    public administratorsService: AdministratorsService,
     private helpersService: HelpersService,
+    private confirmationService: ConfirmationService,
+    public administratorsService: AdministratorsService,
   ) { }
 
   ngOnInit(): void {
@@ -220,20 +221,30 @@ export default class AdministratorsComponent {
     });
   }
 
-  onCheckEstado(estado, item) {
-    if (estado.checked) {
-      this.administratorsService.enabledCustomer(item.id).subscribe(
-        (resp: any) => {
-          this.getAllAdministrations();       
+  confirm(event, item, tipo) {
+    var texto = tipo ? 'Habilitar' : 'Deshabilitar';
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `¿${texto} a ${item.lastName} ${item.motherLastName} ${item.names} ?`,
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Si',
+      rejectLabel: 'No',
+      accept: () => {
+        if (tipo) {
+          this.administratorsService.enabledCustomer(item.id).subscribe(
+            (resp: any) => {
+              this.getAllAdministrations();
+            }
+          )
+        } else {
+          this.administratorsService.disabledCustomer(item.id).subscribe(
+            (resp: any) => {
+              this.getAllAdministrations();
+            }
+          )
         }
-      )
-    } else {
-      this.administratorsService.disabledCustomer(item.id).subscribe(
-        (resp: any) => {
-          this.getAllAdministrations();       
-        }
-      )
-    }
+      }
+    });
   }
 
 }

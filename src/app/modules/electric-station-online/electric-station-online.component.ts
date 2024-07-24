@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ElectricStationsModule } from '../electric-stations/electric-stations.module';
 import { ElectricStationOnlineModule } from './electric-station-online.module';
 import { mainTitles } from 'src/app/core/constants/labels';
@@ -8,6 +8,8 @@ import { ElectricStationsService } from '../electric-stations/services/electric-
 import { NgFor, NgStyle } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Base64ToImageService } from '../invoice-electric-stations/services/base-64-to-image.service';
+import { interval, Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   standalone: true,
@@ -16,7 +18,7 @@ import { Base64ToImageService } from '../invoice-electric-stations/services/base
   styleUrls: ['./electric-station-online.component.scss'],
   imports: [ElectricStationOnlineModule, NgStyle, NgFor]
 })
-export default class ElectricStationOnlineComponent {
+export default class ElectricStationOnlineComponent implements OnInit, OnDestroy {
 
   public id: number;
   public data: any;
@@ -30,7 +32,9 @@ export default class ElectricStationOnlineComponent {
 
   cities!: any[];
 
-    selectedCity!: any;
+  selectedCity!: any;
+  private subscription: Subscription;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -39,22 +43,16 @@ export default class ElectricStationOnlineComponent {
     private electricStationsService: ElectricStationsService,
   ) { }
 
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe(); // Limpia la suscripción cuando el componente se destruya
+    }
+  }
+
   ngOnInit(): void {
     this.inicializaDatos()
-      .then(datosInicializados => {
-        if (datosInicializados) {
-          return this.getOneElectricStation()
-        } else {
-          return false;
-        }
-      })
-      .then(oneElectricStation => {
-        if (oneElectricStation) {
-          return this.getOnline();
-        } else {
-          return false;
-        }
-      });
+    this.getOneElectricStation()
+    this.getOnline();
   }
 
   inicializaDatos() {
@@ -67,31 +65,38 @@ export default class ElectricStationOnlineComponent {
         { name: 'London', code: 'LDN' },
         { name: 'Istanbul', code: 'IST' },
         { name: 'Paris', code: 'PRS' }
-    ];
+      ];
 
       resolve(true);
     })
   }
 
   getOneElectricStation() {
-    return new Promise((resolve) => {
-      this.electricStationsService.getOne(this.id).subscribe(
-        (resp: any) => {
-          this.electricStation = resp.data;
-          this.imageUrl = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
-        }
+
+    this.electricStationsService.getOne(this.id).subscribe(
+      (resp: any) => {
+        this.electricStation = resp.data;
+        this.imageUrl = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
+      }
+    )
+    this.subscription = interval(3000)
+      .pipe(
+        switchMap(() => this.electricStationsService.getOne(this.id))
       )
-      resolve(true);
-    })
+      .subscribe(
+        (response: any) => {
+          this.electricStation = response.data;
+        },
+        error => {
+          console.error('Error al obtener datos:', error);
+        }
+      );
   }
 
   getOnline() {
-    return new Promise((resolve) => {
-      this.socketService.listen('data').subscribe((data: any) => {
-        this.data = data;
-      });
-      resolve(true);
-    })
+    this.socketService.listen('data').subscribe((data: any) => {
+      this.data = data;
+    });
   }
 
 }

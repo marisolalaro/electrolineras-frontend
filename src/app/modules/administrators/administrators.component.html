@@ -3,9 +3,10 @@
     <div class="row">
       <h3><b>{{componentTitle.mainTitle}}</b></h3>
       <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
-        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllAdministrations()"
-          pTooltip="Actualizar" tooltipPosition="left"></p-button> &nbsp;
-        <button pButton pRipple class="mat-raised-button" (click)="openDialog(true,false, 'crear')">Nuevo Registro</button>
+        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllAdministrations()" pTooltip="Actualizar"
+          tooltipPosition="left"></p-button> &nbsp;
+        <button pButton pRipple class="mat-raised-button" (click)="openDialog(true,false, 'crear')">Nuevo
+          Registro</button>
       </div>
     </div>
 
@@ -14,20 +15,25 @@
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
         [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES"
         currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros"
-        (sortFunction)="customSort($event)" [customSort]="true">
+        (sortFunction)="customSort($event)" [customSort]="true" width="100%">
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th rowspan="2">
-              #
-            </th>
-            <th pSortableColumn="username">Usuario<p-sortIcon field="username"></p-sortIcon></th>
-            <th pSortableColumn="names">Nombres<p-sortIcon field="names"></p-sortIcon></th>
-            <th pSortableColumn="lastName">Apellido Paterno<p-sortIcon field="lastName"></p-sortIcon></th>
-            <th pSortableColumn="motherLastName">Apellido Materno<p-sortIcon field="motherLastName"></p-sortIcon></th>
-            <th pSortableColumn="electronicMail">Email<p-sortIcon field="electronicMail"></p-sortIcon></th>
-            <th pSortableColumn="cellPhoneNumber">Celular<p-sortIcon field="cellPhoneNumber"></p-sortIcon></th>
-            <th rowspan="2" pSortableColumn="enabled">Estado<p-sortIcon field="enabled"></p-sortIcon></th>
-            <th rowspan="2">Opciones</th>
+            <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">#</th>
+            <th style="width:15%; text-align:center; vertical-align:middle" pSortableColumn="username">
+              Usuario<p-sortIcon field="username"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="names">Nombres<p-sortIcon
+                field="names"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="lastName">Apellido
+              Paterno<p-sortIcon field="lastName"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="motherLastName">Apellido
+              Materno<p-sortIcon field="motherLastName"></p-sortIcon></th>
+            <th style="width:15%; text-align:center; vertical-align:middle" pSortableColumn="electronicMail">Correo
+              Electrónico<p-sortIcon field="electronicMail"></p-sortIcon></th>
+            <th style="width:8%; text-align:center; vertical-align:middle" pSortableColumn="cellPhoneNumber">
+              Celular<p-sortIcon field="cellPhoneNumber"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" rowspan="2" pSortableColumn="enabled">
+              Estado<p-sortIcon field="enabled"></p-sortIcon></th>
+            <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
           </tr>
           <tr>
             <th>
@@ -48,7 +54,7 @@
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'electronicMail', 'contains')"
-                placeholder="Busca por Email" class="w-full">
+                placeholder="Busca por Correo Electrónico" class="w-full">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'cellPhoneNumber', 'contains')"
@@ -58,15 +64,20 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
           <tr>
-            <td style="text-align:right; vertical-align:middle">{{rowIndex + 1}}</td>
+            <td style="text-align:center; vertical-align:middle">{{rowIndex + 1}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['username']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['names']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['lastName']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['motherLastName']}}</td>
             <td style="text-align:left; vertical-align:middle">{{rowData['electronicMail']}}</td>
             <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['cellPhoneNumber']}}</td>
-            <td style="text-align:right; vertical-align:middle" class="uppercase">
-              <p-toggleButton [(ngModel)]="rowData['enabled']" onLabel="Habilitado" offLabel="Deshabilitado" (onChange)="onCheckEstado($event, rowData)"></p-toggleButton>
+            <td style="text-align:center; vertical-align:middle">
+              <p-confirmPopup>
+              </p-confirmPopup>
+              <button *ngIf="rowData['enabled']" pButton pRipple class="mat-raised-button"
+                (click)="confirm($event, rowData, false)">Habilitar</button>
+              <p-button *ngIf="!rowData['enabled']" [outlined]="true" severity="secondary"
+                (click)="confirm($event, rowData, true)">Deshabilitar</p-button>
             </td>
             <td style="text-align:center; vertical-align:middle">
               <i class="pi pi-user-edit" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
@@ -107,8 +118,8 @@
             <div class="form-group field">
               <label for="lastName">{{labelsGlobales.apellidoPaterno}}</label>
               <input type="text" pInputText required formControlName="lastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['lastName'].invalid}" 
-                oninput="this.value = this.value.toUpperCase()"/>
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['lastName'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
               <div *ngIf="submitted && formRegistro.controls['lastName'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('lastName')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
@@ -131,8 +142,8 @@
             <div class="form-group field">
               <label for="identificationNumber">{{labelsGlobales.ci}}</label>
               <input type="text" pInputText required formControlName="identificationNumber"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['identificationNumber'].invalid}" 
-                oninput="this.value = this.value.toUpperCase()"/>
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['identificationNumber'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
               <div *ngIf="submitted && formRegistro.controls['identificationNumber'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('identificationNumber')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
@@ -247,8 +258,8 @@
             <div class="form-group field">
               <label for="names">{{labelsGlobales.name}}</label>
               <input type="text" pInputText required formControlName="names"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['names'].invalid}" 
-                oninput="this.value = this.value.toUpperCase()"/>
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['names'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
               <div *ngIf="submitted && formRegistro.controls['names'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('names')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
@@ -259,8 +270,8 @@
             <div class="form-group field">
               <label for="lastName">{{labelsGlobales.apellidoPaterno}}</label>
               <input type="text" pInputText required formControlName="lastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['lastName'].invalid}" 
-                oninput="this.value = this.value.toUpperCase()"/>
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['lastName'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
               <div *ngIf="submitted && formRegistro.controls['lastName'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('lastName')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
@@ -271,8 +282,8 @@
             <div class="form-group field">
               <label for="motherLastName">{{labelsGlobales.apellidoMaterno}}</label>
               <input type="text" pInputText required formControlName="motherLastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['motherLastName'].invalid}" 
-                oninput="this.value = this.value.toUpperCase()"/>
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['motherLastName'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
               <div *ngIf="submitted && formRegistro.controls['motherLastName'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('motherLastName')?.hasError('required')">
                   {{messagesGlobales.requiredField}}

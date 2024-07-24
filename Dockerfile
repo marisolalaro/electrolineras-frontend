@@ -4,7 +4,7 @@ FROM node:20 AS build
 # Establecer el directorio de trabajo
 WORKDIR /app
 
-ENV PATH /app/node_modules/.bin:$PATH2
+ENV PATH /app/node_modules/.bin:$PATH
 # Copiar el package.json y el package-lock.json (si está presente)
 COPY package*.json ./
 

@@ -31,6 +31,7 @@ export default class LoginComponent {
 
   // variables propias dle componente
   private dataLogin: any;
+  public iconClass: string = 'pi pi-eye-slash';
 
   constructor(
     private fb: FormBuilder,
@@ -131,6 +132,7 @@ export default class LoginComponent {
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
+    this.iconClass = this.iconClass === 'pi pi-eye-slash' ? 'pi pi-eye' : 'pi pi-eye-slash';
   }
 
 }

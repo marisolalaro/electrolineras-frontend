@@ -10,19 +10,23 @@ https://github.com/mazipan/login-page-css/blob/master/src/15-netflix/index.html
       <form class="login" [formGroup]="loginForm">
         <img src="../../../assets/img/delapaz2.png" alt="delapaz" width="100%">
         <h4>SISTEMA DE GESTIÓN DE ELECTROLINERAS</h4>
-        <div class="input-text">
-          <input type="text" id="inputEmail" name="email" placeholder="Email or phone number"
-            formControlName="username" />
-          <div class="warning-input" id="warningEmail">
-            Please enter a valid email or phone number.
-          </div>
+
+        <div class="campo-texto">
+          <span class="p-input-icon-right">
+            <input type="text" pInputText id="inputEmail" name="email" placeholder="Usuario"
+              formControlName="username" />
+            <i class="pi pi-user"></i>
+          </span>
         </div>
-        <div class="input-text">
-          <input type="password" id="inputPassword" name="password" placeholder="Password" formControlName="password" />
-          <div class="warning-input" id="warningPassword">
-            Your password must contain between 4 and 60 characters.
-          </div>
+
+        <div class="campo-texto">
+          <span class="p-input-icon-right">
+            <input [type]="showPassword ? 'text' : 'password'" pInputText id="inputPassword" name="password"
+              placeholder="contraseña" formControlName="password" />
+            <i [class]="iconClass" (click)="togglePasswordVisibility()"></i>
+          </span>
         </div>
+
         <div>
           <button class="signin-button" (click)="onIniciaSesion()">Iniciar Sesión</button>
         </div>

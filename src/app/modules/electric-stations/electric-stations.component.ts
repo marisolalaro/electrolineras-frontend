@@ -21,6 +21,7 @@ import { ElectricStationModel } from 'src/app/core/model/electric-station';
 import { HelpersService } from 'src/app/core/services/helpers.service';
 import { ElectricStationsService } from './services/electric-stations.service';
 import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
+import { ConfirmationService } from 'primeng/api';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -32,7 +33,7 @@ interface AutoCompleteCompleteEvent {
   selector: 'app-electric-stations',
   templateUrl: './electric-stations.component.html',
   styleUrls: ['./electric-stations.component.scss'],
-  providers: [HelpersService, MessageService],
+  providers: [HelpersService, MessageService, ConfirmationService],
   imports: [ElectricStationsModule, NgFor, NgIf, PipesModule, ReactiveFormsModule, NgClass, NgSwitch, NgSwitchCase],
 })
 export default class ElectricStationsComponent implements OnInit {
@@ -79,6 +80,7 @@ export default class ElectricStationsComponent implements OnInit {
   constructor(
     private helpersService: HelpersService,
     public tasaCargaService: ParTasaCargaService,
+    private confirmationService: ConfirmationService,
     public electricStationsService: ElectricStationsService,
   ) { }
 
@@ -103,7 +105,7 @@ export default class ElectricStationsComponent implements OnInit {
     this.electricStationsService.getAll().subscribe(
       (resp: any) => {
         this.electricStations = resp.data;
-        this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0; 
+        this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : this.electricStations.length;
       }
     )
   }
@@ -254,19 +256,30 @@ export default class ElectricStationsComponent implements OnInit {
     });
   }
 
-  onCheckEstado(estado, item) {
-    if (estado.checked) {
-      this.electricStationsService.enabledCustomer(item.id).subscribe(
-        (resp: any) => {
-          this.getAllElectricStations();       
+  confirm(event, item, tipo) {
+    var texto = tipo ? 'Habilitar' : 'Deshabilitar';
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `¿${texto} la electrolinera ${item.nameStation}?`,
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Si',
+      rejectLabel: 'No',
+      accept: () => {
+        if (tipo) {
+          this.electricStationsService.enabledCustomer(item.id).subscribe(
+            (resp: any) => {
+              this.getAllElectricStations();
+            }
+          )
+        } else {
+          this.electricStationsService.disabledCustomer(item.id).subscribe(
+            (resp: any) => {
+              this.getAllElectricStations();
+            }
+          )
         }
-      )
-    } else {
-      this.electricStationsService.disabledCustomer(item.id).subscribe(
-        (resp: any) => {
-          this.getAllElectricStations();       
-        }
-      )
-    }
+      }
+    });
   }
+
 }

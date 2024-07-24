@@ -9,42 +9,42 @@
     </div>
 
     <div class="row">
-      <p-table responsiveLayout="stack" #dt1 [value]="customers" dataKey="id"
+      <p-table responsiveLayout="stack" #dt1 [value]="customers" dataKey="id" width="100%"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
         [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
 
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th rowspan="2">
+            <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">
               #
             </th>
-            <th pSortableColumn="'names'">
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="'names'">
               Nombres
               <p-sortIcon field="names" (click)="customSort('names', orden)"></p-sortIcon>
             </th>
-            <th pSortableColumn="'lastName'">
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="'lastName'">
               Apellido Paterno
               <p-sortIcon field="lastName" (click)="customSort('lastName', orden)"></p-sortIcon>
             </th>
-            <th pSortableColumn="'motherLastName'">
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="'motherLastName'">
               Apellido Materno
               <p-sortIcon field="motherLastName" (click)="customSort('motherLastName', orden)"></p-sortIcon>
             </th>
-            <th pSortableColumn="'electronicMail'">
+            <th style="width:16%; text-align:center; vertical-align:middle" pSortableColumn="'electronicMail'">
               Correo Electrónico
               <p-sortIcon field="electronicMail" (click)="customSort('electronicMail', orden)"></p-sortIcon>
             </th>
-            <th rowspan="2">
+            <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">
               Ultima Transacción Bs
             </th>
-            <th rowspan="2">
+            <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">
               Ultima Carga kW
             </th>
-            <th rowspan="2" pSortableColumn="'enabled'">
+            <th style="width:15%; text-align:center; vertical-align:middle" rowspan="2" pSortableColumn="'enabled'">
               Estado
               <p-sortIcon field="enabled" (click)="customSort('enabled', orden)"></p-sortIcon>
             </th>
-            <th rowspan="2">
+            <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">
               Detalles
             </th>
           </tr>
@@ -64,13 +64,13 @@
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'electronicMail', 'contains')"
-                placeholder="Busca por email" class="w-full">
+                placeholder="Busca por Correo Electrónico" class="w-full">
             </th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
           <tr>
-            <td style="text-align:right; vertical-align:middle">{{rowIndex + 1}}</td>
+            <td style="text-align:center; vertical-align:middle">{{rowIndex + 1}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['names']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['lastName']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['motherLastName']}}</td>
@@ -85,9 +85,11 @@
               {{rowData['chargeClientList'][0].amount | numberDecimal:2}}</td>
             <td *ngIf="!rowData['chargeClientList'][0]"></td>
 
-            <td style="text-align:left; vertical-align:middle">
-              <p-toggleButton [(ngModel)]="rowData['enabled']" onLabel="Habilitado" offLabel="Deshabilitado" (onChange)="onCheckEstado($event, rowData)"></p-toggleButton>
-              <!-- {{rowData['enabled']}} -->
+            <td style="text-align:center; vertical-align:middle">
+              <p-confirmPopup>
+              </p-confirmPopup>
+              <button *ngIf="rowData['enabled']" pButton pRipple class="mat-raised-button" (click)="confirm($event, rowData, false)">Habilitar</button>
+              <p-button *ngIf="!rowData['enabled']" [outlined]="true" severity="secondary" (click)="confirm($event, rowData, true)">Deshabilitar</p-button>
             </td>
 
             <td style="text-align:center; vertical-align:middle">
@@ -105,9 +107,8 @@
 
     <!-- Dialog Detalle -->
     <p-dialog header={{titlesGlobales.detail}} [(visible)]="dialogDetalle" [modal]="true"
-      [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw'}" [draggable]="false"
-      [resizable]="false">
-      <!-- <p-dialog header="Header" [(visible)]="visible" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false"> -->
+      [breakpoints]="{ '3500px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw'}" [draggable]="false"
+      [resizable]="false" [maximizable]="true">
 
       <p-tabView>
         <p-tabPanel header="Cliente">
@@ -134,8 +135,9 @@
         <p-tabPanel header="Transacciones">
           <div style="padding-bottom: 3.250rem;">
             <p-table [value]="customer.paymentTransactionsElectrolineraList" [paginator]="true" [rows]="5"
-              [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]" #tableref
-              [globalFilterFields]="['nombreRazonSocial', 'numeroDocumento', 'complemento', 'gloss', 'amount']">
+              [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]" #tableref width="100%"
+              [globalFilterFields]="['nombreRazonSocial', 'numeroDocumento', 'complemento', 'gloss', 'amount']"
+              [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {{totalTransacciones}} registros">
               <ng-template pTemplate="caption">
                 <div class="flex">
                   <span class="p-input-icon-left ml-auto">
@@ -147,34 +149,43 @@
               </ng-template>
               <ng-template pTemplate="header">
                 <tr>
-                  <th style="width:20%" pSortableColumn="nombreRazonSocial">Razón Social <p-sortIcon
+                  <th style="width:5%"> Nro.</th>
+
+                  <th style="width:15%" pSortableColumn="nombreRazonSocial">Razón Social <p-sortIcon
                       field="nombreRazonSocial"></p-sortIcon> </th>
-                  <th style="width:20%" pSortableColumn="numeroDocumento">N° Documento <p-sortIcon
+
+                  <th style="width:13%" pSortableColumn="numeroDocumento">N° Documento <p-sortIcon
                       field="numeroDocumento"></p-sortIcon> </th>
-                  <th style="width:20%" pSortableColumn="complemento">Complemento <p-sortIcon
+
+                  <th style="width:13%" pSortableColumn="complemento">Complemento <p-sortIcon
                       field="complemento"></p-sortIcon> </th>
-                  <th style="width:20%" pSortableColumn="paymentDate">Fecha Transacción<p-sortIcon
+
+                  <th style="width:15%" pSortableColumn="paymentDate">Fecha Transacción<p-sortIcon
                       field="paymentDate"></p-sortIcon>
                   </th>
-                  <th style="width:20%" pSortableColumn="gloss">Glosario <p-sortIcon field="gloss"></p-sortIcon> </th>
-                  <th style="width:20%" pSortableColumn="amount">Transacción Bs.<p-sortIcon field="amount"></p-sortIcon>
-                  </th>
-                  <th style="width:20%" pSortableColumn="processPayment">Procesar Pago <p-sortIcon
+
+                  <th style="width:15%" pSortableColumn="gloss">Glosario <p-sortIcon field="gloss"></p-sortIcon> </th>
+
+                  <th style="width:12%" pSortableColumn="amount">Transacción Bs.<p-sortIcon field="amount"></p-sortIcon> </th>
+
+                  <th style="width:12%" pSortableColumn="processPayment">Estado Pago <p-sortIcon
                       field="processPayment"></p-sortIcon></th>
                 </tr>
               </ng-template>
-              <ng-template pTemplate="body" let-customer>
+              <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
                 <tr>
+                  <td style="text-align:right; vertical-align:middle">{{rowIndex + 1}}</td>
                   <td style="text-align:left; vertical-align:middle" class="uppercase">{{customer.nombreRazonSocial}}</td>
                   <td style="text-align:right; vertical-align:middle" class="uppercase">{{customer.numeroDocumento}}</td>
 
                   <td style="text-align:left; vertical-align:middle" class="uppercase" *ngIf="customer.complemento != 'null'">{{customer.complemento}}</td>
-                  <td style="text-align:left; vertical-align:middle" class="uppercase" *ngIf="customer.complemento == 'null'"></td>
+                  <td style="text-align:left; vertical-align:middle" class="uppercase" *ngIf="customer.complemento == 'null'">s/c</td>
 
                   <td style="text-align:left; vertical-align:middle" class="uppercase">{{customer.paymentDate | formatFieldDate}}</td>
                   <td style="text-align:left; vertical-align:middle" class="uppercase">{{customer.gloss}}</td>
                   <td style="text-align:right; vertical-align:middle" class="uppercase">{{customer.amount | numberDecimal:2}}</td>
-                  <td style="text-align:right; vertical-align:middle" class="uppercase">{{customer.processPayment}}</td>
+                  <td *ngIf="customer.processPayment == 1" style="text-align:right; vertical-align:middle" class="uppercase">Pagado</td>
+                  <td *ngIf="customer.processPayment != 1" style="text-align:right; vertical-align:middle" class="uppercase">No Pagado</td>
                 </tr>
               </ng-template>
             </p-table>
@@ -185,7 +196,8 @@
           <div style="padding-bottom: 3.250rem;">
             <p-table [value]="customer.chargeClientList" [paginator]="true" [rows]="5"
               [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]" #tableCargas
-              [globalFilterFields]="['nombreRazonSocial', 'numeroDocumento', 'complemento', 'gloss', 'amount']">
+              [globalFilterFields]="['nombreRazonSocial', 'numeroDocumento', 'complemento', 'gloss', 'amount']"
+              [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {{totalCargas}} registros">
               <ng-template pTemplate="caption">
                 <div class="flex">
                   <span class="p-input-icon-left ml-auto">
@@ -197,26 +209,35 @@
               </ng-template>
               <ng-template pTemplate="header">
                 <tr>
-                  <th style="width:20%" pSortableColumn="amount">Monto Carga Bs <p-sortIcon field="amount"></p-sortIcon>
-                  </th>
-                  <th style="width:20%" pSortableColumn="changeFee">Comisión Uso <p-sortIcon
+                  <th style="width:5%"> Nro.</th>
+
+                  <th style="width:10%" pSortableColumn="amount">Monto Carga Bs <p-sortIcon field="amount"></p-sortIcon> </th>
+
+                  <th style="width:8%" pSortableColumn="changeFee">Comisión Uso <p-sortIcon
                       field="changeFee"></p-sortIcon></th>
-                  <th style="width:20%" pSortableColumn="staredChargingAt">Carga Inicio <p-sortIcon
+
+                  <th style="width:13%" pSortableColumn="staredChargingAt">Carga Inicio <p-sortIcon
                       field="staredChargingAt"></p-sortIcon></th>
-                  <th style="width:20%" pSortableColumn="finisheAt">Carga Final <p-sortIcon
+
+                  <th style="width:13%" pSortableColumn="finisheAt">Carga Final <p-sortIcon
                       field="finisheAt"></p-sortIcon>
                   </th>
-                  <th style="width:20%" pSortableColumn="duration">Duración Carga<p-sortIcon field="duration"></p-sortIcon>
+
+                  <th style="width:13%" pSortableColumn="duration">Duración Carga<p-sortIcon field="duration"></p-sortIcon>
                   </th>
-                  <th style="width:20%" pSortableColumn="energyComsumed">Energía Consumida kW <p-sortIcon
+
+                  <th style="width:10%" pSortableColumn="energyComsumed">Energía Consumida kW <p-sortIcon
                       field="energyComsumed"></p-sortIcon></th>
-                  <th style="width:20%" pSortableColumn="status">Estado <p-sortIcon field="status"></p-sortIcon></th>
-                  <th style="width:20%" pSortableColumn="chargingStation">Estación Carga <p-sortIcon
+
+                  <th style="width:10%" pSortableColumn="status">Estado <p-sortIcon field="status"></p-sortIcon></th>
+
+                  <th style="width:15%" pSortableColumn="chargingStation">Estación Carga <p-sortIcon
                       field="chargingStation"></p-sortIcon></th>
                 </tr>
               </ng-template>
-              <ng-template pTemplate="body" let-customer>
+              <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
                 <tr>
+                  <td style="text-align:right; vertical-align:middle">{{rowIndex + 1}}</td> 
                   <td style="text-align:right; vertical-align:middle">{{customer.amount | numberDecimal:2}}</td>
                   <td style="text-align:right; vertical-align:middle">{{customer.changeFee}}</td>
                   <td style="text-align:right; vertical-align:middle">{{customer.staredChargingAt | formatFieldTime }}</td>

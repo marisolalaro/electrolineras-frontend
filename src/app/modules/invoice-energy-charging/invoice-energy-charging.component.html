@@ -11,40 +11,40 @@
     <div class="row">
       <p-table responsiveLayout="stack" #dt1 [columns]="cabeceras" [value]="invoices" dataKey="id"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
-        [showCurrentPageReport]="false"
+        [showCurrentPageReport]="false" width="100%"
         currentPageReportTemplate="Showing {first} to {last} of {{totalRecords}} entries"
         [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th rowspan="2">
+            <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">
               #
             </th>
-            <th pSortableColumn="'cuf'">
+            <th style="width:10%; text-align:center; vertical-align:middle" pSortableColumn="'cuf'">
               CUF
               <p-sortIcon field="cuf" (click)="customSort('cuf', orden)"></p-sortIcon>
             </th>
-            <th rowspan="2">
+            <th style="width:15%; text-align:center; vertical-align:middle" rowspan="2">
               Razón Social
             </th>
-            <th rowspan="2">
+            <th style="width:15%; text-align:center; vertical-align:middle" rowspan="2">
               Nombre Cliente
             </th>
-            <th pSortableColumn="'amount'">
+            <th style="width:10%; text-align:center; vertical-align:middle" pSortableColumn="'amount'">
               Monto
               <p-sortIcon field="amount" (click)="customSort('amount', orden)"></p-sortIcon>
             </th>
             
-            <th pSortableColumn="'urlFacturaSiat'">
+            <th style="width:15%; text-align:center; vertical-align:middle" pSortableColumn="'urlFacturaSiat'">
               URL factura
               <p-sortIcon field="urlFacturaSiat" (click)="customSort('urlFacturaSiat', orden)"></p-sortIcon>
             </th>
-            <th rowspan="2">
+            <th style="width:15%; text-align:center; vertical-align:middle" rowspan="2">
               Número GiftCard
             </th>
-            <th rowspan="2">
+            <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">
               Placa
             </th>
-            <th rowspan="2">
+            <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">
               Factura
             </th>
           </tr>
@@ -66,8 +66,8 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
           <tr>
-            <td style="text-align:right; vertical-align:middle" class="uppercase">{{ rowData?.totalUnits }} {{rowIndex + 1}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['cuf']}}</td>
+            <td style="text-align:center; vertical-align:middle" class="uppercase">{{ rowData?.totalUnits }} {{rowIndex + 1}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase" [pTooltip]="rowData['cuf']" tooltipPosition="bottom">{{rowData['cuf'] | truncate:15}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['razonSocial']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['nombreCliente']}}</td>
             <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['amount'] | numberDecimal:2}}</td>
@@ -76,7 +76,7 @@
             </td>
             <td>{{rowData['giftCardNumber']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['placaVehiculo']}}</td>
-            <td>
+            <td style="text-align:center; vertical-align:middle">
               <i class="pi pi-file-pdf" style="font-size: 1.5rem; color: var(--pdf)" (click)="onOpenFactura(rowData)"
                 tooltipPosition="top" pTooltip="Ver más"></i>
             </td>

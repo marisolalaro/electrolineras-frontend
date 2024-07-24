@@ -1,11 +1,5 @@
 body {
   background: url("../../../assets/img/woman-charging-car.jpg") no-repeat center center fixed;
-  // margin: 0;
-  // padding: 0;
-  // background-size: cover;
-  // font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  // height: 100%;
-
   background-position: center;
   background-size: cover;
   background-repeat:no-repeat ;
@@ -13,13 +7,8 @@ body {
 }
 
 .upper {
-  background-color: var(--primary-color-60); // este cambiar a blanco
-  // padding-bottom: 100px;
+  background-color: var(--primary-color-60);
   padding-bottom: 100vh;
-  // padding-bottom: 200px;
-  // height: 100%;
-
- 
 }
 
 .login-div {
@@ -33,9 +22,7 @@ body {
   width: 500px;
   background-color: var(--color-white-60);
   border-radius: 5px;
-  /* arriba | izquierda y derecha | abajo */
-  padding: 30px 70px 143px;
-
+  padding: 30px 70px 143px;  /* arriba | izquierda y derecha | abajo */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -70,11 +57,38 @@ body {
   color: #999;
 }
 
-.input-text input::placeholder {
+// .input-text input::placeholder {
+//   font-size: 1rem;
+//   color: #999;
+//   text-indent: 40px;
+// }
+
+// casi
+.login-div span {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.campo-texto {
+  margin-bottom: 20px;
+}
+
+.campo-texto span input{
+  width: 100%;
+  height: 45px;
+  background-color: var(--color-white);
+  color: var(--primary-color-text);
+  border-radius: 5px;
+  border: none;
+  outline: transparent;
+  text-indent: 18px;
+}
+
+.input-text span input::input-placeholder {
   font-size: 1rem;
   color: #999;
-  text-indent: 40px;
 }
+
 
 .signin-button {
   margin-top: 20px;
@@ -127,29 +141,3 @@ body {
     width: 50%;
   }
 }
-
-// // fffdfdfd aditionals
-// footer {
-//   position: fixed;
-//   bottom: 0;
-//   width: 100%;
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   background: #fff;
-//   padding: 1em;
-//   box-sizing: border-box;
-//   z-index: 3;
-//   box-shadow: 1px -2px 5px 1px rgba(0, 0, 0, 0.2);
-// }
-
-// footer a {
-//   text-decoration: none;
-//   color: #6059ff;
-// }
-
-// @media screen and (max-width: 640px) {
-//   footer .author {
-//     display: none;
-//   }
-// }
