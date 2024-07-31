@@ -38,4 +38,11 @@ export class EndPoins {
     // Invoices charging stations
     static invoicePaymentTransaction = "/invoicesPaymentTransactions";
     static invoiceChargingStation = "/getAllInvoicesSuministroEnergia";
+
+    // Reportes
+    static facturasRelacionadas = "/invoicesRelationByDates"
+    static clientesCarga = "/chargeClient"
+    static cargasDatos = "/chargesByDates"
+    static cargasEnergia = "/paymentsByDates"
+    static facturaDatos = "/invoicesByDates"
 };

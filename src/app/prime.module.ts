@@ -43,6 +43,7 @@ import { SplitterModule } from 'primeng/splitter';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { DataViewModule } from 'primeng/dataview';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { BlockUIModule } from 'primeng/blockui';
 
 @NgModule({
   exports: [
@@ -87,7 +88,8 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     SplitterModule,
     ScrollPanelModule,
     DataViewModule,
-    ConfirmPopupModule
+    ConfirmPopupModule,
+    BlockUIModule
   ],
 })
 export class PrimeModule {}

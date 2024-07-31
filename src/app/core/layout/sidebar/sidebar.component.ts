@@ -43,6 +43,11 @@ export class SidebarComponent implements OnInit {
         label: mainTitles['facturasCargaEnergia'].mainTitle,
         icon: 'pi pi-fw pi-list',
         routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaFacturasCargasEnergia],
+      },
+      {
+        label: mainTitles['reportes'].mainTitle,
+        icon: 'pi pi-fw pi-file-excel',
+        routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaReportes],
       }
     ];
   }

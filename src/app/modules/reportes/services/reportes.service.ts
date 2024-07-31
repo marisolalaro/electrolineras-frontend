@@ -1,9 +1,43 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { EndPoins } from 'src/app/core/constants/endPoints';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class ReportesService {
 
-  constructor() { }
+  private apiService: string;
+
+  constructor(private http: HttpClient) {
+    this.apiService = EndPoins.apiUrl + EndPoins.api;
+  }
+
+
+
+  // 1er Reporte Facturas compra - venta
+  getFacturasCompraVenta(rangoFechas) {
+    return this.http.post(this.apiService + EndPoins.transaction + EndPoins.facturaDatos, rangoFechas);
+  }
+
+  // 2do Reporte Pagos de Crédito
+  getCargaEnergia(rangoFechas) {
+    return this.http.post(this.apiService + EndPoins.transaction + EndPoins.cargasEnergia, rangoFechas);
+  }
+
+  // 3er Reporte Facturas Relacionadas
+  getFacturasRelacionadas(rangoFechas) {
+    return this.http.post(this.apiService + EndPoins.transaction + EndPoins.facturasRelacionadas, rangoFechas);
+  }
+
+  // 4to Reporte Factura Suministro de Energía
+  getPagoDatos(rangoFechas) {
+    return this.http.post(this.apiService + EndPoins.invoicePaymentTransaction + EndPoins.cargasEnergia, rangoFechas);
+  }
+
+  // 5to Reporte - cargas de energia entre fechas
+  getSuministroEnergia(rangoFechas) {
+    return this.http.post(this.apiService + EndPoins.clientesCarga + EndPoins.cargasDatos, rangoFechas);
+  }
 }

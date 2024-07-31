@@ -43,6 +43,10 @@ const routes: Routes = [
         path: rutas.rutaFacturasCargasEnergia,
         loadComponent: () => import('./modules/invoice-energy-charging/invoice-energy-charging.component'),
       },
+      {
+        path: rutas.rutaReportes,
+        loadComponent: () => import('./modules/reportes/reportes.component'),
+      },
     ]
   },
 ];

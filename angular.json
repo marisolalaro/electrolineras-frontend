@@ -43,7 +43,15 @@
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
-               "leaflet", "file-saver", "moment", "pako", "core-js", "raf", "rgbcolor", "xml-to-json-util"]
+              "leaflet",
+              "file-saver",
+              "moment",
+              "pako",
+              "core-js",
+              "raf",
+              "rgbcolor",
+              "xml-to-json-util"
+            ]
           },
           "configurations": {
             "production": {
