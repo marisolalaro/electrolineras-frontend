@@ -4,6 +4,7 @@ import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { FormatFieldTimeCargaPipe } from 'src/app/core/pipes/format-field-time-carga';
 import * as moment from 'moment';
+import { reports } from 'src/app/core/constants/labels';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +16,11 @@ export class ExcelService {
   ) { }
 
   // 1er Reporte Facturas compra - venta
-  public excelFacturasCargaCredito(jsonData: any[], fileName: string, rangoFechas): void {
+  public excelFacturasCargaCredito(jsonData: any[], fileName: string, nombreHoja: string, rangoFechas): void {
     // Creacion del Libro
     const workbook = new ExcelJS.Workbook();
     // Agregando hoja de trabajo
-    const worksheet = workbook.addWorksheet('Factura Compra - Venta');
+    const worksheet = workbook.addWorksheet(nombreHoja);
 
     worksheet.addRow('');
     worksheet.addRow('');
@@ -76,7 +77,7 @@ export class ExcelService {
     });
 
     // poniendo titulo
-    worksheet.getCell('C2').value = `FACTURAS ENTRE EL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C2').value = reports.tituloReporte1;
     worksheet.getCell('C2').fill = {
       type: 'pattern',
       pattern: 'solid',
@@ -84,13 +85,14 @@ export class ExcelService {
       bgColor: { argb: 'afe' }
     };
     // poniendo subtitulo
-    worksheet.getCell('C3').value = `REPORTE ELECTROLINERAS - FACTURAS`;
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
     worksheet.getCell('C3').fill = {
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FFFFFF' },
       bgColor: { argb: 'afe' }
     };
+
 
     worksheet.getCell('C2').border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
     worksheet.getCell('C3').border = { left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
@@ -141,11 +143,11 @@ export class ExcelService {
   }
 
   // 2do Reporte Pagos de Crédito
-  public excelCargasEnergias(jsonData: any[], fileName: string, rangoFechas): void {
+  public excelCargasEnergias(jsonData: any[], fileName: string, nombreHoja: string, rangoFechas): void {
     // Creacion del Libro
     const workbook = new ExcelJS.Workbook();
     // Agregando hoja de trabajo
-    const worksheet = workbook.addWorksheet('Facturas por Fechas');
+    const worksheet = workbook.addWorksheet(nombreHoja);
     worksheet.addRow('');
     worksheet.addRow('');
     worksheet.addRow('');
@@ -201,15 +203,15 @@ export class ExcelService {
     });
 
     // poniendo titulo
-    worksheet.getCell('C2').value = `PAGOS DE FACTURAS POR FECHAS`;
+    worksheet.getCell('C2').value = reports.tituloReporte2;
     worksheet.getCell('C2').fill = {
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FFFFFF' },
       bgColor: { argb: 'afe' }
     };
-    // poniendo titulo
-    worksheet.getCell('C3').value = `FACTURAS ENTRE EL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    // poniendo subtitulo
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
     worksheet.getCell('C3').fill = {
       type: 'pattern',
       pattern: 'solid',
@@ -265,12 +267,12 @@ export class ExcelService {
   }
 
   // 3er Reporte Facturas Relacionadas
-  public excelFacturasRelacionadas(jsonData: any[], fileName: string, rangoFechas): void {
+  public excelFacturasRelacionadas(jsonData: any[], fileName: string, nombreHoja: string, rangoFechas): void {
 
     // Creacion del Libro
     const workbook = new ExcelJS.Workbook();
     // Agregando hoja de trabajo
-    const worksheet = workbook.addWorksheet('Facturas Relacionadas');
+    const worksheet = workbook.addWorksheet(nombreHoja);
 
     // titulos
     worksheet.addRow('');
@@ -328,6 +330,14 @@ export class ExcelService {
         row.getCell(row.actualCellCount + 1).value = key.paymentTransactionType
         row.getCell(row.actualCellCount + 1).value = moment(key.fechaRegistro).format('DD/MM/YYYY, HH:mm:ss')
         row.getCell(row.actualCellCount + 1).value = key.urlFacturaSiat
+        row.eachCell((cell) => {
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+          };
+        });
         if (data.invoicesPaymentTrasantionsResponseDtoList.length > 1) {
           for (let i = 1; i < data.invoicesPaymentTrasantionsResponseDtoList.length; i++) {
             var key1 = data.invoicesPaymentTrasantionsResponseDtoList[i];
@@ -353,6 +363,22 @@ export class ExcelService {
           }
         }
       }
+      else {
+        row.getCell(row.actualCellCount + 1).value = ''
+        row.getCell(row.actualCellCount + 1).value = ''
+        row.getCell(row.actualCellCount + 1).value = ''
+        row.getCell(row.actualCellCount + 1).value = ''
+        row.getCell(row.actualCellCount + 1).value = ''
+
+        row.eachCell((cell) => {
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+          };
+        });
+      }
 
     });
 
@@ -372,19 +398,20 @@ export class ExcelService {
     });
 
     // poniendo titulo
-    worksheet.getCell('C2').value = `FACTURAS ENTRE EL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C2').value = reports.tituloReporte3;
     worksheet.getCell('C2').fill = {
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FFFFFF' },
     };
     // poniendo subtitulo
-    worksheet.getCell('C3').value = `FACTURAS RELACIONADAS`;
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
     worksheet.getCell('C3').fill = {
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FFFFFF' },
     };
+
 
     // poniendo bordes a las cabeceras
     for (let i = 6; i < jsonData.length + 7; i++) {
@@ -410,15 +437,15 @@ export class ExcelService {
 
     worksheet.getCell('C2').border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
     worksheet.getCell('C3').border = { left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-    // titulo agrupado FACTURAS COMPRA - VENTA
+    // titulo agrupado 1
     worksheet.mergeCells('A5:D5');
-    worksheet.getCell('A5').value = `FACTURAS COMPRA - VENTA`;
+    worksheet.getCell('A5').value = reports.tituloAgrupador1Reporte3;
     worksheet.getCell('A5').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C93D82' } };
     worksheet.getCell('A5').font = { bold: true, color: { argb: 'FFFFFF' } };
     worksheet.getCell('A5').alignment = { vertical: 'middle', horizontal: 'center' };
-    // titulo agrupado FACTURAS - SUMINISTRO DE ENERGÍA
+    // titulo agrupado 2
     worksheet.mergeCells('E5:I5');
-    worksheet.getCell('E5').value = `FACTURAS - SUMINISTRO DE ENERGÍA`;
+    worksheet.getCell('E5').value = reports.tituloAgrupador1Reporte3;
     worksheet.getCell('E5').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '5457CD' } };
     worksheet.getCell('E5').font = { bold: true, color: { argb: 'FFFFFF' } };
     worksheet.getCell('E5').alignment = { vertical: 'middle', horizontal: 'center' };
@@ -453,11 +480,11 @@ export class ExcelService {
   }
 
   // 4to Reporte Factura Suministro de Energía
-  public excelPagoDatos(jsonData: any[], fileName: string, rangoFechas): void {
+  public excelPagoDatos(jsonData: any[], fileName: string, nombreHoja: string, rangoFechas): void {
     // Creacion del Libro
     const workbook = new ExcelJS.Workbook();
     // Agregando hoja de trabajo
-    const worksheet = workbook.addWorksheet('Facturas Consumo de Energía');
+    const worksheet = workbook.addWorksheet(nombreHoja);
     // titulos
     worksheet.addRow('');
     worksheet.addRow('');
@@ -511,14 +538,14 @@ export class ExcelService {
     });
 
     // poniendo titulo
-    worksheet.getCell('C2').value = `PAGOS DE FACTURAS POR TRANSACCIONES`;
+    worksheet.getCell('C2').value = reports.tituloReporte4;
     worksheet.getCell('C2').fill = {
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FFFFFF' },
     };
     // poniendo subtitulo
-    worksheet.getCell('C3').value = `FACTURAS ENTRE EL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
     worksheet.getCell('C3').fill = {
       type: 'pattern',
       pattern: 'solid',
@@ -570,13 +597,13 @@ export class ExcelService {
   }
 
   // 5to reporte - cargas de energia entre fechas
-  public excelSuministroEnergia(jsonData: any[], fileName: string, rangoFechas): void {
+  public excelSuministroEnergia(jsonData: any[], fileName: string, nombreHoja: string, rangoFechas): void {
 
     // Creacion del Libro
     const workbook = new ExcelJS.Workbook();
 
     // Agregando hoja de trabajo
-    const worksheet = workbook.addWorksheet('Suministro de Energía');
+    const worksheet = workbook.addWorksheet(nombreHoja);
 
     // titulos
     worksheet.addRow('');
@@ -616,7 +643,7 @@ export class ExcelService {
       const row = worksheet.addRow([
         data.username,
         data.changeFee,
-        data.status == 'charged' ? 'Cargado' : '',
+        data.status == 'charged' ? 'Cargado' : 'Finalizado',
         this.pipeTimeSegundos.segundosHoras(data.duration),
         data.chargingStation,
         moment(data.staredChargingAt).format('DD/MM/YYYY, HH:mm:ss'),
@@ -646,15 +673,16 @@ export class ExcelService {
     worksheet.getCell('K7').value = { formula: `SUM(I7:I${filas})` };
 
     // poniendo titulo
-    worksheet.getCell('C2').value = `FACTURAS ENTRE EL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C2').value = reports.tituloReporte5;
     worksheet.getCell('C2').fill = {
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FFFFFF' },
       bgColor: { argb: 'afe' }
     };
+
     // poniendo subtitulo
-    worksheet.getCell('C3').value = `FACTURAS CARGA DE ENERGÍA`;
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
     worksheet.getCell('C3').fill = {
       type: 'pattern',
       pattern: 'solid',
@@ -727,4 +755,443 @@ export class ExcelService {
     });
   }
 
+  // 6to Reporte
+  public excelFacturasCompraVenta(jsonData: any[], fileName: string, nombreHoja: string, rangoFechas): void {
+
+    // Creacion del Libro
+    const workbook = new ExcelJS.Workbook();
+    // Agregando hoja de trabajo
+    const worksheet = workbook.addWorksheet(nombreHoja);
+
+    // titulos
+    worksheet.addRow('');
+    worksheet.addRow('');
+    worksheet.addRow('');
+    worksheet.addRow('');
+    worksheet.addRow('');
+
+    // Agregar encabezados de las filas
+    const rowValues = [];
+    rowValues[1] = 'Correo Electrónico';
+    rowValues[2] = 'Nombres';
+    rowValues[3] = 'Apellido Paterno';
+    rowValues[4] = 'Apellido Materno';
+    rowValues[5] = 'Número de Identificación';
+
+    rowValues[6] = 'Cuf';
+    rowValues[7] = 'Código Descripción';
+    rowValues[8] = 'Código Recepción';
+    rowValues[9] = 'Fecha Registro';
+    rowValues[10] = 'Url Factura Siat';
+
+    worksheet.addRow(rowValues);
+
+    worksheet.getCell('A6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('B6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('C6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('D6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('E6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('F6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('G6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('H6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('I6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('J6').alignment = { vertical: 'middle', horizontal: 'center' };
+
+    // Agregar datos del json
+
+    jsonData.forEach((data: any) => {
+      var row = worksheet.addRow([
+        data.electronicMail,
+        data.names,
+        data.lastName,
+        data.motherLastName,
+        data.identificationNumber ? data.identificationNumber : '',
+      ]);
+      row.eachCell((cell) => {
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' }
+        };
+      });
+      if (data.clientInvoiceList.length > 0) {
+        const key = data.clientInvoiceList[0];
+        row.getCell(row.actualCellCount + 1).value = key.cuf
+        row.getCell(row.actualCellCount + 1).value = key.codigoDescripcion
+        row.getCell(row.actualCellCount + 1).value = key.codigoRecepcion
+        row.getCell(row.actualCellCount + 1).value = key.fechaRegistro
+        row.getCell(row.actualCellCount + 1).value = key.urlFacturaSiat
+        row.eachCell((cell) => {
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+          };
+        });
+        if (data.clientInvoiceList.length > 1) {
+          for (let i = 1; i < data.clientInvoiceList.length; i++) {
+            var key1 = data.clientInvoiceList[i];
+            const row = worksheet.addRow([
+              '',
+              '',
+              '',
+              '',
+              '',
+              key.cuf,
+              key.codigoDescripcion,
+              key.codigoRecepcion,
+              key.fechaRegistro,
+              key.urlFacturaSiat,
+            ]);
+            row.eachCell((cell) => {
+              cell.border = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' }
+              };
+            });
+          }
+        }
+      }
+      else {
+        row.getCell(row.actualCellCount + 1).value = ''
+        row.getCell(row.actualCellCount + 1).value = ''
+        row.getCell(row.actualCellCount + 1).value = ''
+        row.getCell(row.actualCellCount + 1).value = ''
+        row.getCell(row.actualCellCount + 1).value = ''
+        row.eachCell((cell) => {
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+          };
+        });
+      }
+
+    });
+
+    // Ajustar el ancho de las columnas según el contenido
+    worksheet.columns.forEach((column) => {
+      let maxLength = 0;
+      column.eachCell({ includeEmpty: true }, (cell) => {
+        const cellValue = cell.value as string;
+        if (cellValue) {
+          const columnLength = cellValue.toString().length;
+          if (columnLength > maxLength) {
+            maxLength = columnLength;
+          }
+        }
+      });
+      column.width = maxLength < 10 ? 10 + 10 : maxLength; // Ajusta el ancho mínimo si es necesario
+    });
+
+    // poniendo titulo
+    worksheet.getCell('C2').value = reports.tituloReporte6;
+    worksheet.getCell('C2').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFFFFF' },
+    };
+
+    // poniendo subtitulo
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C3').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFFFFF' },
+    };
+
+    // poniendo bordes a las cabeceras
+    for (let i = 6; i < jsonData.length + 7; i++) {
+      const element = jsonData[i];
+      worksheet.getCell(`A${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`B${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`C${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`D${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`E${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`F${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`G${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`H${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`I${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`J${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+    }
+
+    // poniendo estilos a los titulos y subtitulos
+    worksheet.mergeCells('C2:G2');
+    worksheet.mergeCells('C3:G3');
+    worksheet.getCell('C2').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('C3').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('C2').font = { bold: true, color: { argb: '000000' }, };
+    worksheet.getCell('C3').font = { bold: true, color: { argb: '000000' }, };
+
+    worksheet.getCell('C2').border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    worksheet.getCell('C3').border = { left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+    // titulo agrupado 1
+    worksheet.mergeCells('A5:E5');
+    worksheet.getCell('A5').value = reports.tituloAgrupador1Reporte6;
+    worksheet.getCell('A5').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C93D82' } };
+    worksheet.getCell('A5').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('A5').alignment = { vertical: 'middle', horizontal: 'center' };
+    // titulo agrupado 2
+    worksheet.mergeCells('F5:J5');
+    worksheet.getCell('F5').value = reports.tituloAgrupador2Reporte6;
+    worksheet.getCell('F5').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '5457CD' } };
+    worksheet.getCell('F5').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('F5').alignment = { vertical: 'middle', horizontal: 'center' };
+
+    // estilo fondo azul a las cabeceras
+    worksheet.getCell('A6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('B6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('C6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('D6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('E6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('F6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('G6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('H6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('I6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('J6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+
+    // estilo letras blancas a las cabeceras
+    worksheet.getCell('A6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('B6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('C6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('D6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('E6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('F6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('G6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('H6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('I6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('J6').font = { bold: true, color: { argb: 'FFFFFF' } };
+
+    // Guardar el archivo
+    workbook.xlsx.writeBuffer().then((data: BlobPart) => {
+      const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, `${fileName}.xlsx`);
+    });
+  }
+
+  // 7mo Reporte
+  public excelFacturasSuministroEnergia(jsonData: any[], fileName: string, nombreHoja: string, rangoFechas): void {
+
+    // Creacion del Libro
+    const workbook = new ExcelJS.Workbook();
+    // Agregando hoja de trabajo
+    const worksheet = workbook.addWorksheet(nombreHoja);
+
+    // titulos
+    worksheet.addRow('');
+    worksheet.addRow('');
+    worksheet.addRow('');
+    worksheet.addRow('');
+    worksheet.addRow('');
+
+    // Agregar encabezados de las filas
+    const rowValues = [];
+    rowValues[1] = 'Correo Electrónico';
+    rowValues[2] = 'Nombres';
+    rowValues[3] = 'Apellido Paterno';
+    rowValues[4] = 'Apellido Materno';
+    rowValues[5] = 'Número de Identificación';
+
+    rowValues[6] = 'Cuf';
+    rowValues[7] = 'Código Descripción';
+    rowValues[8] = 'Código Recepción';
+    rowValues[9] = 'Fecha de Registro';
+    rowValues[10] = 'Url Factura Siat';
+
+    worksheet.addRow(rowValues);
+
+    worksheet.getCell('A6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('B6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('C6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('D6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('E6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('F6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('G6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('H6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('I6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('J6').alignment = { vertical: 'middle', horizontal: 'center' };
+
+    // Agregar datos del json
+
+    jsonData.forEach((data: any) => {
+      var row = worksheet.addRow([
+        data.electronicMail,
+        data.names,
+        data.lastName,
+        data.motherLastName,
+        data.identificationNumber ? data.identificationNumber : '',
+      ]);
+      row.eachCell((cell) => {
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' }
+        };
+      });
+      if (data.clientInvoiceList.length > 0) {
+        const key = data.clientInvoiceList[0];
+        row.getCell(row.actualCellCount + 1).value = key.cuf
+        row.getCell(row.actualCellCount + 1).value = key.codigoDescripcion
+        row.getCell(row.actualCellCount + 1).value = key.codigoRecepcion
+        row.getCell(row.actualCellCount + 1).value = key.fechaRegistro ? key.fechaRegistro : ''
+        row.getCell(row.actualCellCount + 1).value = key.urlFacturaSiat
+
+        row.eachCell((cell) => {
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+          };
+        });
+        if (data.clientInvoiceList.length > 1) {
+          for (let i = 1; i < data.clientInvoiceList.length; i++) {
+            var key1 = data.clientInvoiceList[i];
+            const row = worksheet.addRow([
+              '',
+              '',
+              '',
+              '',
+              '',
+              key.cuf,
+              key.codigoDescripcion,
+              key.codigoRecepcion,
+              key.fechaRegistro ? key.fechaRegistro : '',
+              key.urlFacturaSiat
+            ]);
+            row.eachCell((cell) => {
+              cell.border = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' }
+              };
+            });
+          }
+        }
+      }
+      else {
+        row.getCell(row.actualCellCount + 1).value = ''
+        row.getCell(row.actualCellCount + 1).value = ''
+        row.getCell(row.actualCellCount + 1).value = ''
+        row.getCell(row.actualCellCount + 1).value = ''
+        row.getCell(row.actualCellCount + 1).value = ''
+
+        row.eachCell((cell) => {
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+          };
+        });
+      }
+
+    });
+
+    // Ajustar el ancho de las columnas según el contenido
+    worksheet.columns.forEach((column) => {
+      let maxLength = 0;
+      column.eachCell({ includeEmpty: true }, (cell) => {
+        const cellValue = cell.value as string;
+        if (cellValue) {
+          const columnLength = cellValue.toString().length;
+          if (columnLength > maxLength) {
+            maxLength = columnLength;
+          }
+        }
+      });
+      column.width = maxLength < 10 ? 10 + 10 : maxLength; // Ajusta el ancho mínimo si es necesario
+    });
+
+    // poniendo titulo
+    worksheet.getCell('C2').value = reports.tituloReporte7;
+    worksheet.getCell('C2').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFFFFF' },
+    };
+    // poniendo subtitulo
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C3').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFFFFF' },
+    };
+
+
+    // poniendo bordes a las cabeceras
+    for (let i = 6; i < jsonData.length + 7; i++) {
+      const element = jsonData[i];
+      worksheet.getCell(`A${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`B${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`C${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`D${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`E${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`F${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`G${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`H${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`I${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`J${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+    }
+
+    // poniendo estilos a los titulos y subtitulos
+    worksheet.mergeCells('C2:G2');
+    worksheet.mergeCells('C3:G3');
+    worksheet.getCell('C2').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('C3').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('C2').font = { bold: true, color: { argb: '000000' }, };
+    worksheet.getCell('C3').font = { bold: true, color: { argb: '000000' }, };
+
+    worksheet.getCell('C2').border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    worksheet.getCell('C3').border = { left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+    // titulo agrupado 1
+    worksheet.mergeCells('A5:E5');
+    worksheet.getCell('A5').value = reports.tituloAgrupador1Reporte7;
+    worksheet.getCell('A5').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C93D82' } };
+    worksheet.getCell('A5').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('A5').alignment = { vertical: 'middle', horizontal: 'center' };
+    // titulo agrupado 2
+    worksheet.mergeCells('F5:J5');
+    worksheet.getCell('F5').value = reports.tituloAgrupador2Reporte7;
+    worksheet.getCell('F5').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '5457CD' } };
+    worksheet.getCell('F5').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('F5').alignment = { vertical: 'middle', horizontal: 'center' };
+
+    // estilo fondo azul a las cabeceras
+    worksheet.getCell('A6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('B6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('C6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('D6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('E6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('F6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('G6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('H6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('I6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('J6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+
+    // estilo letras blancas a las cabeceras
+    worksheet.getCell('A6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('B6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('C6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('D6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('E6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('F6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('G6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('H6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('I6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('J6').font = { bold: true, color: { argb: 'FFFFFF' } };
+
+    // Guardar el archivo
+    workbook.xlsx.writeBuffer().then((data: BlobPart) => {
+      const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, `${fileName}.xlsx`);
+    });
+  }
 }

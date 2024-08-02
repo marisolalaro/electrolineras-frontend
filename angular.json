@@ -50,7 +50,8 @@
               "core-js",
               "raf",
               "rgbcolor",
-              "xml-to-json-util"
+              "xml-to-json-util",
+              "pdfmake/build/vfs_fonts"
             ]
           },
           "configurations": {

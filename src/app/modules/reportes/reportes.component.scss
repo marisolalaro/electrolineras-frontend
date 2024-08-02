@@ -1,0 +1,30 @@
+
+:host ::ng-deep .custom-p-table .p-datatable-tbody > tr {
+    // border: 1px solid var(--secondary-color);
+}
+
+:host ::ng-deep .custom-p-table .p-datatable-tbody > tr {
+    position: relative;
+    border-collapse: separate;
+}
+
+:host ::ng-deep .custom-p-table .p-datatable-tbody > tr:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid var(--primary-color);
+    pointer-events: none; /* Para asegurarse de que el borde no afecte la interacción del usuario */
+}
+
+.numero {
+    text-align:right; 
+    vertical-align:middle
+}
+
+.normal {
+    text-align:left; 
+    vertical-align:middle
+}

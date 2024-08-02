@@ -34,6 +34,47 @@ export const labels: any = {
   createdAt: 'Fecha Creación'
 }
 
+export const reports: any = {
+  labelReporte1: '1er reporte facturas crédito y suministro energía',
+  labelReporte2: '2do reporte facturas compras crédito',
+  labelReporte3: '3er reporte facturas crédito relacionado suministro energía',
+  labelReporte4: '4to reporte facturas suministro energía',
+  labelReporte5: '5to reporte detalle suministro energía',
+  labelReporte6: '6to reporte facturas compras crédito por cliente',
+  labelReporte7: '7mo reporte facturas suministro energía por cliente',
+
+  archivoReporte1: '1er_reporte_entre_fechas_facturas_credito_y_suministro_energia',
+  archivoReporte2: '2do_reporte_entre_fechas_facturas_compras_credito',
+  archivoReporte3: '3er_reporte_entre_fechas_facturas_credito_relacionado_suministro_energia',
+  archivoReporte4: '4to_reporte_entre_fechas_facturas_suministro_energia',
+  archivoReporte5: '5to_reporte_entre_fechas_detalle_suministro_energia',
+  archivoReporte6: '6to_reporte_entre_fechas_facturas_compras_credito_por_cliente',
+  archivoReporte7: '7mo_reporte_entre_fechas_facturas_suministro_energia_por_cliente',
+
+  hojaReporte1: 'facturas_credito_y_suministro_energia',
+  hojaReporte2: 'facturas_compras_credito',
+  hojaReporte3: 'facturas_credito_relacionado_suministro_energia',
+  hojaReporte4: 'facturas_suministro_energia',
+  hojaReporte5: 'detalle_suministro_energia',
+  hojaReporte6: 'facturas_compras_credito_por_cliente',
+  hojaReporte7: 'facturas_suministro_energia_por_cliente',
+
+  tituloReporte1: 'REPORTE FACTURAS CRÉDITO Y SUMINISTRO ENERGÍA',
+  tituloReporte2: 'REPORTE FACTURAS COMPRAS CRÉDITO',
+  tituloReporte3: 'REPORTE FACTURAS CRÉDITO RELACIONADO SUMINISTRO ENERGÍA',
+  tituloReporte4: 'REPORTE FACTURAS SUMINISTRO ENERGÍA',
+  tituloReporte5: 'REPORTE DETALLE SUMINISTRO ENERGÍA',
+  tituloReporte6: 'REPORTE FACTURAS COMPRAS CRÉDITO POR CLIENTE',
+  tituloReporte7: 'REPORTE FACTURAS SUMINISTRO ENERGÍA POR CLIENTE',
+
+  tituloAgrupador1Reporte3: 'Facturas Compra Venta Crédito',
+  tituloAgrupador2Reporte3: 'Facturas Suministro de Energía',
+  tituloAgrupador1Reporte6: 'Datos Cliente',
+  tituloAgrupador2Reporte6: 'Facturas Compra Venta Crédito',
+  tituloAgrupador1Reporte7: 'Datos Cliente',
+  tituloAgrupador2Reporte7: 'Facturas Suministro de Energía',
+}
+
 export const titles: any = {
   edit: 'Editar registro',
   create: 'Nuevo registro',

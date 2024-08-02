@@ -6,6 +6,7 @@ import { FormatFieldTimePipe } from './format-field-time.pipe';
 import { FormatFieldDecimalesPipe } from './format-field-decimales';
 import { FormatFieldTimeCargaPipe } from './format-field-time-carga';
 import { TruncatePipe } from './truncate.pipe';
+import { FormatFieldDateTimePipe } from './format-field-date-time.pipe';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { TruncatePipe } from './truncate.pipe';
     FormatFieldTimePipe,
     FormatFieldDecimalesPipe,
     FormatFieldTimeCargaPipe,
-    TruncatePipe
+    TruncatePipe,
+    FormatFieldDateTimePipe
   ],
   imports: [CommonModule],
   exports: [
@@ -23,7 +25,8 @@ import { TruncatePipe } from './truncate.pipe';
     FormatFieldTimePipe,
     FormatFieldDecimalesPipe,
     FormatFieldTimeCargaPipe,
-    TruncatePipe
+    FormatFieldDateTimePipe,
+    TruncatePipe,
   ],
 })
 export class PipesModule {}

@@ -45,4 +45,6 @@ export class EndPoins {
     static cargasDatos = "/chargesByDates"
     static cargasEnergia = "/paymentsByDates"
     static facturaDatos = "/invoicesByDates"
+    static facturaClienteCompraVenta = "/invoicesClientCompraVenta"
+    static facturaSuministro = "/invoicesPaymentsTransactionSuministro"
 };

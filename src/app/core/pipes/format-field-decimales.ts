@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'numberDecimal',
 })
 export class FormatFieldDecimalesPipe implements PipeTransform {
-  transform(value: number, decimals: number = 2): string {
+  transform(value: number, decimals: number = 2): string {    
     return value?.toFixed(decimals);
   }
 }
