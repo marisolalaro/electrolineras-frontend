@@ -1,0 +1,50 @@
+<!-- Reporte 1 simple, reportes 1,2,4,5 -->
+<p-table *ngIf="componenteVisible" [columns]="cols7" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%" class="custom-p-table">
+  <ng-template pTemplate="caption">
+    <p-button icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" [rounded]="true" [text]="true" [raised]="true"
+      severity="success"></p-button> &nbsp;
+    <label (click)="descargaArchivo()"><b>Descargar {{numeroReporte}} de {{rangoFechas.initialDate}} a {{rangoFechas.finalDate}}</b></label>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns">
+        {{ col.header }}
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowgroup="rowgroup" let-rowspan="rowspan">
+    <tr>
+      <td style="text-align:left; vertical-align:top"> {{rowData.electronicMail}}</td>
+      <td style="text-align:left; vertical-align:top"> {{rowData.names}}</td>
+      <td style="text-align:left; vertical-align:top"> {{rowData.lastName}}</td>
+      <td style="text-align:left; vertical-align:top"> {{rowData.motherLastName}}</td>
+      <td style="text-align:left; vertical-align:top"> {{rowData.identificationNumber}}</td>
+      <td *ngIf="rowData.clientInvoiceList.length > 0">
+        <p-table [value]="rowData.clientInvoiceList">
+          <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th>Cuf</th>
+      <th>Código Descripción</th>
+      <th>Código Recepción</th>
+      <th>Fecha Registro</th>
+      <th>Url Factura Siat</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
+    <tr>
+      <td style="text-align:left; vertical-align:middle"> {{rowData.cuf }}</td>
+      <td style="text-align:left; vertical-align:middle"> {{rowData.codigoDescripcion }}</td>
+      <td style="text-align:left; vertical-align:middle"> {{rowData.codigoRecepcion }}</td>
+      <td style="text-align:left; vertical-align:middle"> {{rowData.fechaRegistro }}</td>
+      <td style="text-align:left; vertical-align:middle"> {{rowData.urlFacturaSiat }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+</td>
+<td *ngIf="rowData.clientInvoiceList.length == 0">
+  SIN FACTURA
+</td>
+</tr>
+</ng-template>
+</p-table>
+<!-- Reporte 1 simple, reportes 1,2,4,5 -->

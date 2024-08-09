@@ -6,11 +6,18 @@ import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExcelService } from './services/excel.service';
 import { FormatFieldTimeCargaPipe } from 'src/app/core/pipes/format-field-time-carga';
-
-
+import { TableSuministroClienteComponent } from './components/table-suministro-cliente/table.component';
+import { TableReportSimpleComponent } from './components/table-report-simple/table.component';
+import { TableTransaccionesClienteComponent } from './components/table-transacciones-cliente/table.component';
+import { TableFacturaRelacionadaComponent } from './components/table-factura-relacionada/table.component';
 
 @NgModule({
   declarations: [
+    TableReportSimpleComponent,
+    TableReportSimpleComponent,
+    TableSuministroClienteComponent,
+    TableFacturaRelacionadaComponent,
+    TableTransaccionesClienteComponent,
   ],
   imports: [
     CommonModule,
@@ -19,15 +26,20 @@ import { FormatFieldTimeCargaPipe } from 'src/app/core/pipes/format-field-time-c
     FormsModule,
     ReactiveFormsModule,
   ],
-  exports:[
+  exports: [
     CommonModule,
     PrimeModule,
-    PipesModule
+    PipesModule,
+    TableReportSimpleComponent,
+    TableReportSimpleComponent,
+    TableSuministroClienteComponent,
+    TableFacturaRelacionadaComponent,
+    TableTransaccionesClienteComponent,
   ],
-  providers:[
+  providers: [
     ReportesService,
     ExcelService,
-    FormatFieldTimeCargaPipe
+    FormatFieldTimeCargaPipe,
   ]
 })
 export class ReportesModule { }

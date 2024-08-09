@@ -35,6 +35,16 @@ export const labels: any = {
 }
 
 export const reports: any = {
+
+  numeroReporte1: '1er reporte',
+  numeroReporte2: '2do reporte',
+  numeroReporte3: '3er reporte',
+  numeroReporte4: '4to reporte',
+  numeroReporte5: '5to reporte',
+  numeroReporte6: '6to reporte',
+  numeroReporte7: '7mo reporte',
+  xReporte: 'x reporte',
+
   labelReporte1: '1er reporte facturas crédito y suministro energía',
   labelReporte2: '2do reporte facturas compras crédito',
   labelReporte3: '3er reporte facturas crédito relacionado suministro energía',

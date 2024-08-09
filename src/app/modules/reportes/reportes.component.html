@@ -1,12 +1,8 @@
 <div class="container">
-  <p-blockUI [blocked]="blockedPanel">
-    <i class="pi pi-spin pi-spinner" style="font-size: 3rem; color: var(--primary-color)"></i>
-  </p-blockUI>
-
   <div class="card">
 
     <div class="row">
-      <h3><b>{{titleProduct.mainTitle}}</b></h3>
+      <h3><b>{{tituloComponente.mainTitle}}</b></h3>
     </div>
 
     <div class="row">
@@ -30,16 +26,15 @@
               </div>
               <div class="col">
                 <label>Seleccione Reporte: &nbsp;</label>
-                <p-autoComplete [(ngModel)]="reporteSeleccionado" [suggestions]="sugerencia"
-                  (completeMethod)="filterItems($event)" field="nombre" [dropdown]="true" placeholder="Buscar Reporte">
+                <p-autoComplete [(ngModel)]="reporteSeleccionado" [suggestions]="coincidenciasFiltro"
+                  (completeMethod)="filtraReporte($event)" field="nombre" [dropdown]="true" placeholder="Buscar Reporte">
                 </p-autoComplete>
               </div>
               <div class="col">
                 <p-button label="Generar Vista Previa" icon="pi pi-filter"
-                  [disabled]="rangeDates == undefined || !reporteSeleccionado" (click)="onDownloadReport()"></p-button>
+                  [disabled]="rangeDates == undefined || !reporteSeleccionado" (click)="onAdicionaTabs()"></p-button>
               </div>
             </div>
-
           </div>
         </div>
       </p-card>
@@ -60,199 +55,16 @@
             </div>
           </p-toolbar>
         </ng-template>
-
-        <!-- Reporte 1 simple, reportes 1,2,4,5 -->
-        <p-table [columns]="col" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%"
-          class="custom-p-table" *ngIf="vistaPrevia == 1">
-          <ng-template pTemplate="caption">
-            <p-button icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" [rounded]="true" [text]="true"
-              [raised]="true" severity="success">
-            </p-button> &nbsp;
-            <label (click)="descargaArchivo()"><b>Descargar {{numeroReporte}} </b></label>
-          </ng-template>
-          <ng-template pTemplate="header" let-columns>
-            <tr>
-              <th *ngFor="let col of columns">
-                {{ col.header }}
-              </th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr>
-              <td *ngFor="let col of columns" [class]="[col.field == 'amount' || col.field == 'monto'?'numero' : 'normal']">
-
-                <div *ngIf="col.field != 'amount' && col.field != 'monto' && col.field != 'finisheAt' && col.field != 'staredChargingAt'">
-                  {{rowData[col.field]}}
-                </div>
-
-                <div *ngIf="col.field == 'amount' || col.field == 'monto'">
-                  {{ rowData[col.field] | numberDecimal:2}}
-                </div>
-
-                <div *ngIf="col.field === 'finisheAt' || col.field === 'staredChargingAt'">
-                  {{ rowData[col.field] | formatFieldDateTime}}
-                </div>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-        <!-- Reporte 1 simple, reportes 1,2,4,5 -->
-
-        <!-- Reporte 2 anidado, reportes 3-->
-        <p-table [columns]="col" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%"
-          class="custom-p-table" *ngIf="vistaPrevia == 2">
-          <ng-template pTemplate="caption">
-            <p-button icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" [rounded]="true" [text]="true"
-              [raised]="true" severity="success"></p-button> &nbsp;
-            <label><b>Descargar {{numeroReporte}} Reporte </b></label>
-          </ng-template>
-          <ng-template pTemplate="header" let-columns>
-            <tr>
-              <th *ngFor="let col of columns">
-                {{ col.header }}
-              </th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowgroup="rowgroup" let-rowspan="rowspan">
-            <tr>
-              <td style="text-align:left; vertical-align:top"> {{rowData.codigoDescripcion}}</td>
-              <td style="text-align:left; vertical-align:top"> {{rowData.fechaRegistro}}</td>
-              <td style="text-align:left; vertical-align:top"> {{rowData.cuf}}</td>
-              <td style="text-align:left; vertical-align:top"> {{rowData.paymentTransactionType}}</td>
-              <td *ngIf="rowData.invoicesPaymentTrasantionsResponseDtoList.length > 0">
-                <p-table [value]="rowData.invoicesPaymentTrasantionsResponseDtoList">
-                  <ng-template pTemplate="header" let-columns>
-            <tr>
-              <th>Código Recepción</th>
-              <th>Cuf</th>
-              <th>Tipo de Pago</th>
-              <th>Fecha Registro</th>
-              <th>Url Factura Siat</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.codigoDescripcion }}</td>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.cuf }}</td>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.paymentTransactionType }}</td>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.fechaRegistro }}</td>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.urlFacturaSiat }}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-        </td>
-        <td *ngIf="rowData.invoicesPaymentTrasantionsResponseDtoList.length == 0">
-          SIN FACTURA
-        </td>
-        </tr>
-        </ng-template>
-        </p-table>
-        <!-- Reporte 2 anidado, reportes 3-->
-
-        <!-- Reporte 3 anidado, reportes 6 -->
-        <p-table [columns]="col" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%"
-          class="custom-p-table" *ngIf="vistaPrevia == 3">
-          <ng-template pTemplate="caption">
-            <p-button icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" [rounded]="true" [text]="true"
-              [raised]="true" severity="success"></p-button> &nbsp;
-            <label (click)="descargaArchivo()"><b>Descargar {{numeroReporte}} </b></label>
-          </ng-template>
-          <ng-template pTemplate="header" let-columns>
-            <tr>
-              <th *ngFor="let col of columns">
-                {{ col.header }}
-              </th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowgroup="rowgroup" let-rowspan="rowspan">
-            <tr>
-              <td style="text-align:left; vertical-align:top"> {{rowData.electronicMail}}</td>
-              <td style="text-align:left; vertical-align:top"> {{rowData.names}}</td>
-              <td style="text-align:left; vertical-align:top"> {{rowData.lastName}}</td>
-              <td style="text-align:left; vertical-align:top"> {{rowData.motherLastName}}</td>
-              <td style="text-align:left; vertical-align:top"> {{rowData.identificationNumber}}</td>
-              <td *ngIf="rowData.clientInvoiceList.length > 0">
-                <p-table [value]="rowData.clientInvoiceList">
-                  <ng-template pTemplate="header" let-columns>
-            <tr>
-              <th>Cuf</th>
-              <th>Código Descripción</th>
-              <th>Código Recepción</th>
-              <th>Fecha Registro</th>
-              <th>Url Factura Siat</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.cuf }}</td>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.codigoDescripcion }}</td>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.codigoRecepcion }}</td>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.fechaRegistro | formatFieldDateTime}}</td>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.urlFacturaSiat }}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-        </td>
-        <td *ngIf="rowData.clientInvoiceList.length == 0">
-          SIN FACTURA
-        </td>
-        </tr>
-        </ng-template>
-        </p-table>
-        <!-- Reporte 3 anidado, reportes 6 -->
-
-        <!-- Reporte 4 anidado, reportes 7 -->
-        <p-table [columns]="col" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%"
-          class="custom-p-table" *ngIf="vistaPrevia == 4">
-          <ng-template pTemplate="caption">
-            <p-button icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" [rounded]="true" [text]="true"
-              [raised]="true" severity="success"></p-button> &nbsp;
-            <label (click)="descargaArchivo()"><b>Descargar {{numeroReporte}} </b></label>
-          </ng-template>
-          <ng-template pTemplate="header" let-columns>
-            <tr>
-              <th *ngFor="let col of columns">
-                {{ col.header }}
-              </th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowgroup="rowgroup" let-rowspan="rowspan">
-            <tr>
-              <td style="text-align:left; vertical-align:top"> {{rowData.electronicMail}}</td>
-              <td style="text-align:left; vertical-align:top"> {{rowData.names}}</td>
-              <td style="text-align:left; vertical-align:top"> {{rowData.lastName}}</td>
-              <td style="text-align:left; vertical-align:top"> {{rowData.motherLastName}}</td>
-              <td style="text-align:left; vertical-align:top"> {{rowData.identificationNumber}}</td>
-              <td *ngIf="rowData.clientInvoiceList.length > 0">
-                <p-table [value]="rowData.clientInvoiceList">
-                  <ng-template pTemplate="header" let-columns>
-            <tr>
-              <th>Cuf</th>
-              <th>Código Descripción</th>
-              <th>Código Recepción</th>
-              <th>Fecha Registro</th>
-              <th>Url Factura Siat</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.cuf }}</td>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.codigoDescripcion }}</td>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.codigoRecepcion }}</td>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.fechaRegistro }}</td>
-              <td style="text-align:left; vertical-align:middle"> {{rowData.urlFacturaSiat }}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-        </td>
-        <td *ngIf="rowData.clientInvoiceList.length == 0">
-          SIN FACTURA
-        </td>
-        </tr>
-        </ng-template>
-        </p-table>
-        <!-- Reporte 4 anidado, reportes 7 -->
-
+      <div>      
+        <p-tabView (onChange)="onTabChange($event)" [(activeIndex)]="activeIndex">
+          <p-tabPanel *ngFor="let tab of tabs; let i = index"  [header]="tab.title" [closable]="true">
+            <app-table-report-simple *ngIf="showReport == 'x reporte'" [rangoFechas]="tab.content" [tipoReporte]="reporteSeleccionado"></app-table-report-simple>
+            <app-table-factura-relacionada *ngIf="showReport == '3er reporte'" [rangoFechas]="tab.content"></app-table-factura-relacionada>
+            <app-table-transacciones-cliente *ngIf="showReport == '6to reporte' && componenteVisible" [rangoFechas]="tab.content"></app-table-transacciones-cliente>
+            <app-table-suministro-cliente *ngIf="showReport == '7mo reporte' && componenteVisible" [rangoFechas]="tab.content" ></app-table-suministro-cliente>
+          </p-tabPanel>
+        </p-tabView>
+      </div>
       </p-card>
     </div>
     <div class="row">
