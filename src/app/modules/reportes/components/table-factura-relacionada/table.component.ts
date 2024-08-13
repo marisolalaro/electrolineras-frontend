@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ReportesService } from '../../services/reportes.service';
 import { ExcelService } from '../../services/excel.service';
 import { MessageService } from 'primeng/api';
@@ -10,13 +10,16 @@ import { reports } from 'src/app/core/constants/labels';
   styleUrls: ['./table.component.scss'],
 })
 
-export class TableFacturaRelacionadaComponent {
+export class TableFacturaRelacionadaComponent implements OnInit{
 
   // variables del componente padre
-  @Input() rangoFechas: any;
+  @Input() tab: any;
+
+  // variables para mandar al componente Padre 
+  @Output() datosEnviados: EventEmitter<string> = new EventEmitter<string>();
 
   // variables de control
-  public blockedPanel: boolean = false;
+  // public blockedPanel: boolean = false;
   public componenteVisible: boolean = false;
 
   // variables propias del componente
@@ -33,8 +36,8 @@ export class TableFacturaRelacionadaComponent {
   ngOnInit() {
     this.inicializaColumnas()
       .then(datosInicializados => {
-        if (datosInicializados) {
-          return this.getFacturasRelacionadas(this.rangoFechas);
+        if (datosInicializados && !this.tab.estado) {
+          return this.getFacturasRelacionadas(this.tab.content);
         } else {
           return false;
         }
@@ -66,26 +69,31 @@ export class TableFacturaRelacionadaComponent {
  // 3er Reporte Facturas Relacionadas
  getFacturasRelacionadas(rangoFechas) {
   this.reporte = [];
-  this.blockedPanel = true;
   return new Promise((resolve) => {
     this.reporteService.getFacturasRelacionadas(rangoFechas).subscribe(
       (resp: any) => {
-        this.reporte = JSON.parse(JSON.stringify(resp.data));
-        if (resp.data.length > 0) {
-        } else {
-          this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
+        if(resp) {
+          this.reporte = JSON.parse(JSON.stringify(resp.data));
+          if (resp.data.length > 0) {
+          } else {
+            this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
+          }
+          this.enviarDatos()
+          return resolve(true);
         }
-        this.blockedPanel = false;
       },
       error => {
-        this.blockedPanel = false;
+        return resolve(false);
       }
     )
-    resolve(true);
   })
 }
   descargaArchivo() {
-    this.excelService.excelFacturasRelacionadas(this.reporte, reports.archivoReporte3, reports.hojaReporte3, this.rangoFechas);
+    this.excelService.excelFacturasRelacionadas(this.reporte, reports.archivoReporte3, reports.hojaReporte3, this.tab.content);
   }
 
+  enviarDatos() {
+    this.tab.estado = true;
+    this.datosEnviados.emit(this.tab);
+  }
 }

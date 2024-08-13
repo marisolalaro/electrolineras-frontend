@@ -132,7 +132,7 @@ export default class TransactionsComponent implements OnInit {
       this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribAmount;
     }
     if (field == this.fechaRegistro) {
-      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribFechaRegistro;
+      this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribRegistrationAt;
     }
     if (field == this.giftCard) {
       this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribGiftCard;

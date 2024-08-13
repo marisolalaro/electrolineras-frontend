@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="card">
+  <p-card [style]="{ width: '100%' }">
 
     <div class="row">
       <h3><b>{{tituloComponente.mainTitle}}</b></h3>
@@ -27,7 +27,8 @@
               <div class="col">
                 <label>Seleccione Reporte: &nbsp;</label>
                 <p-autoComplete [(ngModel)]="reporteSeleccionado" [suggestions]="coincidenciasFiltro"
-                  (completeMethod)="filtraReporte($event)" field="nombre" [dropdown]="true" placeholder="Buscar Reporte">
+                  (completeMethod)="filtraReporte($event)" field="nombre" [dropdown]="true"
+                  placeholder="Buscar Reporte">
                 </p-autoComplete>
               </div>
               <div class="col">
@@ -44,8 +45,9 @@
       <div class="col"></div>
     </div>
 
-    <div class="row">
-      <p-card>
+    <div class="row" style="width: 100%;">
+      <p-card [style]="{ width: '100%' }">
+
         <ng-template pTemplate="header">
           <p-toolbar>
             <div class="p-toolbar-group-start">
@@ -55,22 +57,38 @@
             </div>
           </p-toolbar>
         </ng-template>
-      <div>      
-        <p-tabView (onChange)="onTabChange($event)" [(activeIndex)]="activeIndex">
-          <p-tabPanel *ngFor="let tab of tabs; let i = index"  [header]="tab.title" [closable]="true">
-            <app-table-report-simple *ngIf="showReport == 'x reporte'" [rangoFechas]="tab.content" [tipoReporte]="reporteSeleccionado"></app-table-report-simple>
-            <app-table-factura-relacionada *ngIf="showReport == '3er reporte'" [rangoFechas]="tab.content"></app-table-factura-relacionada>
-            <app-table-transacciones-cliente *ngIf="showReport == '6to reporte' && componenteVisible" [rangoFechas]="tab.content"></app-table-transacciones-cliente>
-            <app-table-suministro-cliente *ngIf="showReport == '7mo reporte' && componenteVisible" [rangoFechas]="tab.content" ></app-table-suministro-cliente>
-          </p-tabPanel>
+        <p-tabView (onChange)="onTabChange($event)" [(activeIndex)]="activeIndex" [scrollable]="true">
+          <!-- <div> -->
+            <p-tabPanel *ngFor="let tab of tabs; index as i" [header]="tab.title" [closable]="true">
+
+              <ng-container *ngIf="showReport === 'x reporte'">
+                <!-- <app-table-report-simple [rangoFechas]="tab.content" [tipoReporte]="reporteSeleccionado"></app-table-report-simple> -->
+                <app-table-report-simple [tab]="tab" [tipoReporte]="reporteSeleccionado" (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-report-simple>
+              </ng-container>
+
+              <ng-container *ngIf="showReport === '3er reporte'">
+                <app-table-factura-relacionada [tab]="tab" (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-factura-relacionada>
+              </ng-container>
+
+              <ng-container *ngIf="showReport === '6to reporte'">
+                <app-table-transacciones-cliente [tab]="tab" (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-transacciones-cliente>
+              </ng-container>
+
+              <ng-container *ngIf="showReport === '7mo reporte'">
+                <app-table-suministro-cliente [tab]="tab" (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-suministro-cliente>
+              </ng-container>
+
+            </p-tabPanel>
+          <!-- </div> -->
         </p-tabView>
-      </div>
+
       </p-card>
     </div>
+
     <div class="row">
       <div class="col"></div>
     </div>
-  </div>
+  </p-card>
 </div>
 
 <p-toast></p-toast>

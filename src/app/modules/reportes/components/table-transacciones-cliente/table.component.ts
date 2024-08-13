@@ -1,4 +1,4 @@
-import { Component, Input} from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ReportesService } from '../../services/reportes.service';
 import { ExcelService } from '../../services/excel.service';
 import { MessageService } from 'primeng/api';
@@ -11,7 +11,16 @@ import { reports } from 'src/app/core/constants/labels';
 })
 
 export class TableTransaccionesClienteComponent {
-  @Input() rangoFechas: any;
+
+  // variables de control
+  public componenteVisible: boolean = false;
+
+  // variables del componente padre
+  @Input() tab: any;
+
+  // variables para mandar al componente Padre 
+  @Output() datosEnviados: EventEmitter<string> = new EventEmitter<string>();
+
   public cols6!: any[];
   public reporte: any[] = [];
   public blockedPanel: boolean = false;
@@ -24,12 +33,27 @@ export class TableTransaccionesClienteComponent {
   ) { }
 
   ngOnInit() {
-    this.inicializaColumnas();
-    this.getFacturasCompraVenta(this.rangoFechas);
-    this.numeroReporte = JSON.parse(JSON.stringify(reports.labelReporte6));
+    this.inicializaColumnas()
+    .then(datosInicializados => {
+      if (datosInicializados && !this.tab.estado) {
+        return this.getFacturasCompraVenta(this.tab.content);
+      } else {
+        return false;
+      }
+    })
+    .then(consumoServicio => {
+      if (consumoServicio) {
+        this.numeroReporte = JSON.parse(JSON.stringify(reports.labelReporte6));
+        this.componenteVisible = true;
+      } else {
+        this.componenteVisible = true;
+        return false;
+      }
+    });
   }
 
   inicializaColumnas() {
+    return new Promise((resolve) => {
     this.cols6 = [
       { field: 'electronicMail', header: 'Correo Electrónico' },
       { field: 'names', header: 'Nombres' },
@@ -38,6 +62,8 @@ export class TableTransaccionesClienteComponent {
       { field: 'identificationNumber', header: 'Número de Identificación' },
       { field: '', header: 'Detalle Facturas' }
     ];
+    resolve(true);
+    })
   }
 
   // 6toReporte
@@ -47,27 +73,27 @@ export class TableTransaccionesClienteComponent {
     return new Promise((resolve) => {
       this.reporteService.getFacturaCompraVenta(rangoFechas).subscribe(
         (resp: any) => {
-          if (resp.data.length > 0) {
-            var respuesta = JSON.parse(JSON.stringify(resp.data));
-            this.reporte = respuesta.filter(item => item.clientInvoiceList.length > 0);
-            if (this.reporte.length == 0) {
+          if (resp) {
+            if (resp.data.length > 0) {
+              var respuesta = JSON.parse(JSON.stringify(resp.data));
+              this.reporte = respuesta.filter(item => item.clientInvoiceList.length > 0);
+              if (this.reporte.length == 0) {
+                this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
+              }
+            } else {
               this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
             }
-            resolve(true);
-          } else {
-            this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
-            resolve(true);
+            return resolve(true);
           }
-          this.blockedPanel = false;
         },
         error => {
-          this.blockedPanel = false;
+          return resolve(false);
         }
       )
     });
   }
 
   descargaArchivo() {
-    this.excelService.excelFacturasSuministroEnergia(this.reporte, reports.archivoReporte6, reports.hojaReporte6, this.rangoFechas);
+    this.excelService.excelFacturasSuministroEnergia(this.reporte, reports.archivoReporte6, reports.hojaReporte6, this.tab.content);
   }
 }

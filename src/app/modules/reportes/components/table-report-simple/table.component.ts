@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ReportesService } from '../../services/reportes.service';
 import { ExcelService } from '../../services/excel.service';
 import { MessageService } from 'primeng/api';
@@ -13,11 +13,13 @@ import { reports } from 'src/app/core/constants/labels';
 export class TableReportSimpleComponent {
 
   // variables del componente padre
-  @Input() rangoFechas: any;
+  @Input() tab: any;
   @Input() tipoReporte: any;
 
+  // variables para mandar al componente Padre 
+  @Output() datosEnviados: EventEmitter<string> = new EventEmitter<string>();
+
   // variables de control
-  public blockedPanel: boolean = false;
   public componenteVisible: boolean = false;
 
   // variables propias del componente
@@ -32,7 +34,7 @@ export class TableReportSimpleComponent {
     private reporteService: ReportesService,
   ) { }
 
-  ngOnInit() {    
+  ngOnInit() {
     this.identificaTipoReporte()
       .then(tipoIdentificado => {
         if (tipoIdentificado) {
@@ -97,7 +99,7 @@ export class TableReportSimpleComponent {
           { field: 'tipoFactura', header: 'Tipo de Factura', pipe: '' },
           { field: 'urlFacturaSiat', header: 'Url Factura Siat', pipe: '' },
         ];
-        resolve(true);
+        return resolve(true);
       }
       if (this.reporteX == 2) {
         this.cols = [
@@ -109,7 +111,7 @@ export class TableReportSimpleComponent {
           { field: 'horaCarga', header: 'Hora de Carga' },
           { field: 'cuf', header: 'Cuf' },
         ];
-        resolve(true);
+        return resolve(true);
       }
       if (this.reporteX == 4) {
         this.cols = [
@@ -120,7 +122,7 @@ export class TableReportSimpleComponent {
           { field: 'paymentTransactionType', header: 'Tipo de Transacción' },
           { field: 'urlFacturaSiat', header: 'Url Factura Siat' },
         ];
-        resolve(true);
+        return resolve(true);
       }
       if (this.reporteX == 5) {
         this.cols = [
@@ -134,27 +136,27 @@ export class TableReportSimpleComponent {
           { field: 'energyComsumed', header: 'Energía Consumida kW' },
           { field: 'amount', header: 'Monto Bs' },
         ];
-        resolve(true);
+        return resolve(true);
       }
     })
   }
 
   getReporte() {
     return new Promise((resolve) => {
-      if (this.reporteX == 1) {
-        this.geFacturasDatos(this.rangoFechas)
+      if (this.reporteX == 1 && !this.tab.estado) {
+        this.geFacturasDatos(this.tab.content)
         resolve(true);
       }
-      if (this.reporteX == 2) {
-        this.getCargasEnergia(this.rangoFechas)
+      if (this.reporteX == 2 && !this.tab.estado) {
+        this.getCargasEnergia(this.tab.content)
         resolve(true);
       }
-      if (this.reporteX == 4) {
-        this.getPagoDatos(this.rangoFechas)
+      if (this.reporteX == 4 && !this.tab.estado) {
+        this.getPagoDatos(this.tab.content)
         resolve(true);
       }
-      if (this.reporteX == 5) {
-        this.getFacturasSuministro(this.rangoFechas)
+      if (this.reporteX == 5 && !this.tab.estado) {
+        this.getFacturasSuministro(this.tab.content)
         resolve(true);
       }
     })
@@ -164,88 +166,92 @@ export class TableReportSimpleComponent {
   // 1er Reporte Facturas compra - venta
   geFacturasDatos(rangoFechas) {
     this.reporte = [];
-    this.blockedPanel = true;
     return new Promise((resolve) => {
       this.reporteService.getFacturasCompraVenta(rangoFechas).subscribe(
         (resp: any) => {
-          this.reporte = JSON.parse(JSON.stringify(resp.data));
-          if (resp.data.length > 0) {
-          } else {
-            this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
+          if (resp) {
+            this.reporte = JSON.parse(JSON.stringify(resp.data));
+            if (resp.data.length > 0) {
+            } else {
+              this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
+            }
+            this.enviarDatos()
+            return resolve(true);
           }
-          this.blockedPanel = false;
         },
         error => {
-          this.blockedPanel = false;
+          return resolve(false);
         }
       )
-      resolve(true);
     })
   }
 
   // 2do Reporte Pagos de Crédito
   getCargasEnergia(rangoFechas) {
     this.reporte = [];
-    this.blockedPanel = true;
     return new Promise((resolve) => {
       this.reporteService.getCargaEnergia(rangoFechas).subscribe(
         (resp: any) => {
-          this.reporte = JSON.parse(JSON.stringify(resp.data));
-          if (resp.data.length > 0) {
-          } else {
-            this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
+          if (resp) {
+            this.reporte = JSON.parse(JSON.stringify(resp.data));
+            if (resp.data.length > 0) {
+            } else {
+              this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
+            }
+            this.enviarDatos()
+            return resolve(true);
           }
-          this.blockedPanel = false;
         },
         error => {
-          this.blockedPanel = false;
+          return resolve(false);
         }
       )
-      resolve(true);
     })
   }
 
   // 4to Reporte Factura Suministro de Energía
   getPagoDatos(rangoFechas) {
     this.reporte = [];
-    this.blockedPanel = true;
     return new Promise((resolve) => {
       this.reporteService.getPagoDatos(rangoFechas).subscribe(
         (resp: any) => {
-          this.reporte = JSON.parse(JSON.stringify(resp.data));
-          if (resp.data.length > 0) {
-          } else {
-            this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
+          if (resp) {
+            this.reporte = JSON.parse(JSON.stringify(resp.data));
+            if (resp.data.length > 0) {
+            } else {
+              this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
+            }
+            this.enviarDatos()
+            return resolve(true);
           }
-          this.blockedPanel = false;
         },
         error => {
-          this.blockedPanel = false;
+          return resolve(false);
         }
       )
-      resolve(true);
     })
   }
 
   // 5to Reporte - cargas de energia entre fechas
   getFacturasSuministro(rangoFechas) {
     this.reporte = [];
-    this.blockedPanel = true;
     return new Promise((resolve) => {
       this.reporteService.getSuministroEnergia(rangoFechas).subscribe(
         (resp: any) => {
-          this.reporte = JSON.parse(JSON.stringify(resp.data));
-          if (resp.data.length > 0) {
-          } else {
-            this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
+          if (resp) {
+            this.reporte = JSON.parse(JSON.stringify(resp.data));
+            if (resp.data.length > 0) {
+            } else {
+              this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
+            }
+            this.enviarDatos()
+            return resolve(true);
           }
-          this.blockedPanel = false;
         },
         error => {
-          this.blockedPanel = false;
+          return resolve(false);
         }
       )
-      resolve(true);
     })
   }
 
@@ -253,33 +259,41 @@ export class TableReportSimpleComponent {
     return new Promise((resolve) => {
       if (this.reporteX == 1) {
         this.numeroReporte = JSON.parse(JSON.stringify(reports.labelReporte1));
+        return resolve(true);
       }
       if (this.reporteX == 2) {
         this.numeroReporte = JSON.parse(JSON.stringify(reports.labelReporte2));
+        return resolve(true);
       }
       if (this.reporteX == 4) {
         this.numeroReporte = JSON.parse(JSON.stringify(reports.labelReporte4));
+        return resolve(true);
       }
       if (this.reporteX == 5) {
         this.numeroReporte = JSON.parse(JSON.stringify(reports.labelReporte5));
+        return resolve(true);
       }
-      resolve(true);
     })
   }
 
   descargaArchivo() {
     if (this.reporteX == 1) {
-      this.excelService.excelFacturasCargaCredito(this.reporte, reports.archivoReporte1, reports.hojaReporte1, this.rangoFechas);
+      this.excelService.excelFacturasCargaCredito(this.reporte, reports.archivoReporte1, reports.hojaReporte1, this.tab.content);
     }
     if (this.reporteX == 2) {
-      this.excelService.excelCargasEnergias(this.reporte, reports.archivoReporte2, reports.hojaReporte2, this.rangoFechas);
+      this.excelService.excelCargasEnergias(this.reporte, reports.archivoReporte2, reports.hojaReporte2, this.tab.content);
     }
     if (this.reporteX == 4) {
-      this.excelService.excelPagoDatos(this.reporte, reports.archivoReporte4, reports.hojaReporte4, this.rangoFechas);
+      this.excelService.excelPagoDatos(this.reporte, reports.archivoReporte4, reports.hojaReporte4, this.tab.content);
     }
     if (this.reporteX == 5) {
-      this.excelService.excelSuministroEnergia(this.reporte, reports.archivoReporte5, reports.hojaReporte5, this.rangoFechas);
+      this.excelService.excelSuministroEnergia(this.reporte, reports.archivoReporte5, reports.hojaReporte5, this.tab.content);
     }
+  }
+
+  enviarDatos() {
+    this.tab.estado = true;
+    this.datosEnviados.emit(this.tab);
   }
 
 }

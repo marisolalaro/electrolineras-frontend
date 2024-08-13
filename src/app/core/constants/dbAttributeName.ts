@@ -26,6 +26,7 @@ export class DBAttributeName {
     static tabPaymentTransactions_AttribBank = 'receiver_bank';
     static tabPaymentTransactions_AttribDocReciveid = 'receiver_document';
     static tabPaymentTransactions_AttribPlaca = 'placa_vehiculo';
+    static tabPaymentTransactions_AttribRegistrationAt = 'registration_at';
 
     // dom tabPayment
     static tabPaymentConsumerName = 'consumerName';

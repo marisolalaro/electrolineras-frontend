@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter  } from '@angular/core';
 import { ReportesService } from '../../services/reportes.service';
 import { ExcelService } from '../../services/excel.service';
 import { MessageService } from 'primeng/api';
@@ -13,7 +13,10 @@ import { reports } from 'src/app/core/constants/labels';
 export class TableSuministroClienteComponent {
 
   // variables del componente padre
-  @Input() rangoFechas: any;
+  @Input() tab: any;
+
+  // variables para mandar al componente Padre 
+  @Output() datosEnviados: EventEmitter<string> = new EventEmitter<string>();
 
   // variables de control
   public blockedPanel: boolean = false;
@@ -33,8 +36,8 @@ export class TableSuministroClienteComponent {
   ngOnInit() {
     this.inicializaColumnas()
       .then(datosInicializados => {
-        if (datosInicializados) {
-          return this.getFacturasSuministroEnergia(this.rangoFechas);
+        if (datosInicializados && !this.tab.estado) {
+          return this.getFacturasSuministroEnergia(this.tab.content);
         } else {
           return false;
         }
@@ -68,31 +71,35 @@ export class TableSuministroClienteComponent {
   getFacturasSuministroEnergia(rangoFechas) {
     return new Promise((resolve) => {
       this.reporte = [];
-      this.blockedPanel = true;
       this.reporteService.getFacturaSuministroEnergia(rangoFechas).subscribe(
         (resp: any) => {
-          if (resp.data.length > 0) {
+          if (resp) {
             var respuesta = JSON.parse(JSON.stringify(resp.data));
+            if (resp.data.length > 0) {
             this.reporte = respuesta.filter(item => item.clientInvoiceList.length > 0);
             if (this.reporte.length == 0) {
               this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
             }
-            resolve(true);
           } else {
             this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
-            resolve(true);
           }
-          this.blockedPanel = false;
-        },
-        error => {
-          this.blockedPanel = false;
-          resolve(true);
+          this.enviarDatos()
+          return resolve(true);
+        }
+      },
+      error => {
+          return resolve(false);
         }
       )
     });
   }
 
   descargaArchivo() {
-    this.excelService.excelFacturasSuministroEnergia(this.reporte, reports.archivoReporte7, reports.hojaReporte7, this.rangoFechas);
+    this.excelService.excelFacturasSuministroEnergia(this.reporte, reports.archivoReporte7, reports.hojaReporte7, this.tab);
+  }
+
+  enviarDatos() {
+    this.tab.estado = true;
+    this.datosEnviados.emit(this.tab);
   }
 }
