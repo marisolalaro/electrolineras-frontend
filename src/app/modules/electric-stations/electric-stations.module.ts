@@ -24,7 +24,8 @@ import { MapaComponent } from './components/mapa/mapa.component';
   ],
   exports: [
     PrimeModule,
-    MapaComponent
+    MapaComponent,
+    PipesModule
   ],
   providers: [
     ElectricStationsService,

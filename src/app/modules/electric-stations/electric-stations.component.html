@@ -20,19 +20,19 @@
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2"> # </th>
-            <th style="width:15%; text-align:center; vertical-align:middle" pSortableColumn="nameStation">
+            <th style="width:12%; text-align:center; vertical-align:middle" pSortableColumn="nameStation">
               Nombre<p-sortIcon field="nameStation"></p-sortIcon></th>
             <th style="width:20%; text-align:center; vertical-align:middle" pSortableColumn="direccion">
               Dirección<p-sortIcon field="direccion"></p-sortIcon></th>
-            <th style="width:23%; text-align:center; vertical-align:middle" pSortableColumn="descripcion">
+            <th style="width:20%; text-align:center; vertical-align:middle" pSortableColumn="descripcion">
               Descripción<p-sortIcon field="descripcion"></p-sortIcon></th>
-            <th style="width:10%; text-align:center; vertical-align:middle" pSortableColumn="latitude">
+            <th style="width:8%; text-align:center; vertical-align:middle" pSortableColumn="latitude">
               Latitud<p-sortIcon field="latitude"></p-sortIcon></th>
-            <th style="width:10%; text-align:center; vertical-align:middle" pSortableColumn="longitude">
+            <th style="width:8%; text-align:center; vertical-align:middle" pSortableColumn="longitude">
               Longitud<p-sortIcon field="longitude"></p-sortIcon></th>
             <th style="width:12%; text-align:center; vertical-align:middle" rowspan="2" pSortableColumn="enabled">
               Estado<p-sortIcon field="enabled"></p-sortIcon></th>
-            <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
+            <th style="width:13%; text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
           </tr>
           <tr>
             <th>
@@ -74,10 +74,19 @@
                 (click)="confirm($event, rowData, true)">Deshabilitar</p-button>
             </td>
             <td style="text-align:center; vertical-align:middle">
+              <i class="pi pi-mobile" style="font-size: 1.5rem; color: var(--color-green);" data-bs-toggle="modal"
+                (click)="onDialogConnector(rowData)" pTooltip="Adicionar Conector de Carga"
+                tooltipPosition="bottom"></i> &nbsp;
+
               <i class="pi pi-pencil" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
-                data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
+                (click)="onSelecetedEdit(rowData)" pTooltip="Editar" tooltipPosition="bottom"></i> &nbsp;
+
               <i class="pi pi-map-marker" style="font-size: 1.5rem; color: var(--decorative-color);"
-                data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="onVerMapa(rowData);"></i>
+                data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="onVerMapa(rowData);" pTooltip="Ver Mapa"
+                tooltipPosition="bottom"></i> &nbsp;
+
+              <i class="pi pi-eye" style="font-size: 1.5rem; color: var(--blue-600);" data-bs-toggle="modal"
+                (click)="onDialogDetalles(rowData)" pTooltip="Ver Detalles" tooltipPosition="bottom"></i>
             </td>
           </tr>
         </ng-template>
@@ -89,6 +98,7 @@
         <app-mapa [lat]="latitude" [lon]="longitude" [titulo]="title" (newItemEvent)="cerrarMapa($event)"></app-mapa>
       </div>
     </div>
+
     <!-- modal Crear nuevo -->
     <div class="row">
       <p-dialog header={{titlesGlobales.create}} [(visible)]="dialogRegistro" [style]="{width: '50vw'}" class="p-fluid"
@@ -186,6 +196,7 @@
       </p-dialog>
     </div>
     <!-- modal Crear nuevo -->
+
     <!-- modal Editar Registro -->
     <div class="row">
       <p-dialog header={{titlesGlobales.edit}} [(visible)]="dialogEdit" [style]="{width: '50vw'}" class="p-fluid"
@@ -283,5 +294,198 @@
       </p-dialog>
     </div>
     <!-- modal Editar Registro -->
+
+    <!-- modal Adicionar Conector -->
+    <div class="row">
+      <p-dialog header={{titlesGlobales.createConnector}} [(visible)]="dialogConector" [style]="{width: '50vw'}"
+        class="p-fluid" [dismissableMask]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+        [draggable]="false" [resizable]="false">
+        <ng-template pTemplate="content">
+          <form class="row g-2" [formGroup]="formRegistroConector">
+
+            <div class="form-group field">
+              <label for="name">{{labelsGlobales.nombrePuerto}}</label>
+              <input type="text" pInputText id="name" required formControlName="name"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistroConector.controls['name'].invalid}" />
+              <div *ngIf="submitted && formRegistroConector.controls['name'].invalid">
+                <small class="p-error" *ngIf="formRegistroConector.get('name')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="description">{{labelsGlobales.descripcionPuerto}}</label>
+              <input type="text" pInputText id="description" required formControlName="description"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistroConector.controls['description'].invalid}" />
+              <div *ngIf="submitted && formRegistroConector.controls['description'].invalid">
+                <small class="p-error" *ngIf="formRegistroConector.get('description')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="maxAmperage">{{labelsGlobales.maximoAmperaje}}</label>
+              <input type="number" pInputText id="maxAmperage" required formControlName="maxAmperage"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistroConector.controls['maxAmperage'].invalid}" />
+              <div *ngIf="submitted && formRegistroConector.controls['maxAmperage'].invalid">
+                <small class="p-error" *ngIf="formRegistroConector.get('maxAmperage')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="maxPower">{{labelsGlobales.maximaPotencia}}</label>
+              <input type="number" pInputText id="maxPower" required formControlName="maxPower"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistroConector.controls['maxPower'].invalid}" />
+              <div *ngIf="submitted && formRegistroConector.controls['maxPower'].invalid">
+                <small class="p-error" *ngIf="formRegistroConector.get('maxPower')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="maxVoltage">{{labelsGlobales.maximoVoltaje}}</label>
+              <input type="number" pInputText id="maxVoltage" required formControlName="maxVoltage"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistroConector.controls['maxVoltage'].invalid}" />
+              <div *ngIf="submitted && formRegistroConector.controls['maxVoltage'].invalid">
+                <small class="p-error" *ngIf="formRegistroConector.get('maxVoltage')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+          </form>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+          <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
+            class="p-button-secondary p-button-rounded mr-2" (click)="openDialog(false,false, 'conector')"></button>
+          <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check" class="p-button-rounded mr-2"
+            (click)="onValidaFormularioConector()"></button>
+        </ng-template>
+      </p-dialog>
+    </div>
+    <!-- modal Adicionar Conector -->
+
+    <!-- modal Detalle Registro -->
+    <div class="row">
+      <p-dialog header={{titlesGlobales.detail}} [(visible)]="dialogDetalleRegistro" [style]="{width: '70vw'}"
+        class="p-fluid" [closeOnEscape]="true" [closable]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+        [draggable]="false" [resizable]="false">
+        <ng-template pTemplate="content">
+          <div class="row">
+            <div class="grid">
+              <div class="col-6" style="text-align: right;">
+                <!-- Contenido de la columna izquierda -->
+                <ul>
+                  <li>
+                    <i class="pi pi-align-justify" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Nombre Estación: </b>
+                  </li>
+                  <!-- <li>
+                    <i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Descripción:</b>
+                  </li> -->
+                  <li>
+                    <i class="pi pi-map" style="color: var(--primary-color)"></i> &nbsp; 
+                    <b>Dirección: </b>
+                  </li>
+                  <!-- <li>
+                    <i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>latitude:</b>
+                  </li>
+                  <li>
+                    <i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>longitude:</b>
+                  </li> -->
+                  <!-- <li>
+                    <i class="pi pi-sort-alt" style="color: var(--primary-color)"></i> &nbsp; 
+                    <b>Tasa de Carga: </b>
+                  </li> -->
+                  <li>
+                    <i class="pi pi-mobile" style="color: var(--primary-color)"></i> &nbsp; 
+                    <b>Modelo Electrolinera:</b>
+                  </li>
+                  <li>
+                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp; 
+                    <b>Código Modelo Electrolinera: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp; 
+                    <b>Código QR: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp; 
+                    <b>Imagen QR: </b>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-6" style="text-align: left;">
+                <!-- Contenido de la columna derecha -->
+                <ul>
+                  <li><label>{{electricStation.nameStation}}</label></li>
+                  <li><label>{{electricStation.direccion}}</label></li>
+                  <!-- <li><label>{{electricStation.descripcion}}</label></li> -->
+                  <!-- <li><label>{{electricStation.latitude}}</label></li>
+                  <li><label>{{electricStation.longitude}}</label></li> -->
+                  <!-- <li><label>{{electricStation.chargeRate.amount}}</label></li> -->
+                  <li><label>{{electricStation.modelModelCode}}</label></li>
+                  <li><label>{{electricStation.modelVendor}}</label></li>
+                  <li><label>{{electricStation.codeStationQR}}</label></li>
+                  <li>
+                    <img [src]="imageUrl" alt="Converted Image" />
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="card">
+              <p-table [value]="electricStation.chargingConnectors" [tableStyle]="{ 'min-width': '50rem' }"
+                responsiveLayout="stack">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Tipo</th>
+                    <th>Max Voltaje (V)</th>
+                    <th>Max Potencia (kW)</th>
+                    <th>Max Amperaje (A)</th>
+                    <th>Estado</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                  <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.type }}</td>
+                    <td>{{ item.maxVoltage }}</td>
+                    <td>{{ item.maxPower }}</td>
+                    <td>{{ item.maxAmperage }}</td>
+      
+                    <p-button *ngIf="item.statusName == 'DISPONIBLE'" label="Disponible" [raised]="true"
+                      severity="success"></p-button>
+                    <p-button *ngIf="item.statusName == 'OCUPADO'" label="Ocupado" [raised]="true"
+                      severity="warning"></p-button>
+                    <p-button *ngIf="item.statusName == 'BLOQUEADO'" label="Bloqueado" [raised]="true"
+                      severity="danger"></p-button>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <button pButton pRipple label="Cerrar" icon="pi pi-times" class="p-button-secondary p-button-rounded mr-2"
+            (click)="openDialog(false,false, 'detalle')"></button>
+        </ng-template>
+      </p-dialog>
+    </div>
+    <!-- modal Detalle Registro -->
+
   </div>
 </div>

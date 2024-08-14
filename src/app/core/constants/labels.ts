@@ -31,7 +31,15 @@ export const labels: any = {
   category: 'Categoría',
   startDate: 'Fecha Inicio',
   endDate: 'Fecha Fin',
-  createdAt: 'Fecha Creación'
+  createdAt: 'Fecha Creación',
+
+  // puertos
+  nombrePuerto: 'Nombre',
+  descripcionPuerto: 'Descripción',
+  maximoAmperaje: 'Máximo Amperaje',
+  maximoVoltaje: 'Máximo Voltaje',
+  maximaPotencia: 'Máximo Potencia',
+
 }
 
 export const reports: any = {
@@ -91,6 +99,7 @@ export const titles: any = {
   filter: 'Filtrar por:',
   detail: 'Detalle registro',
   info: 'Detalle Información',
+  createConnector: 'Adicionar Conector',
 }
 
 export const buttons: any = {

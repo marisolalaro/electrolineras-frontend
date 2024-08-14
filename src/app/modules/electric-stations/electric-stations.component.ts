@@ -22,6 +22,9 @@ import { HelpersService } from 'src/app/core/services/helpers.service';
 import { ElectricStationsService } from './services/electric-stations.service';
 import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
 import { ConfirmationService } from 'primeng/api';
+import { PortConnectionModel } from 'src/app/core/model/port-connection';
+import { PortConnectionService } from './services/port-connector.service';
+import { Base64ToImageService } from '../invoice-electric-stations/services/base-64-to-image.service';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -61,6 +64,8 @@ export default class ElectricStationsComponent implements OnInit {
   // variables dialog
   public dialogEdit: boolean = false;
   public dialogRegistro: boolean = false;
+  public dialogConector: boolean = false;
+  public dialogDetalleRegistro: boolean = false;
 
   // variables para el select
   public selectedCountry: any;
@@ -74,13 +79,17 @@ export default class ElectricStationsComponent implements OnInit {
   public electricStations: ElectricStationModel[] = [];
   public titleProduct: any = mainTitles['electrolineras'];
   public formRegistro: FormGroup = this.createFormGroup();
+  public formRegistroConector: FormGroup = this.createFormConector();
   public electricStation: ElectricStationModel = new ElectricStationModel();
   public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
+  public imageUrl: string | null = null;
 
   constructor(
     private helpersService: HelpersService,
     public tasaCargaService: ParTasaCargaService,
+    public base64ImageService: Base64ToImageService,
     private confirmationService: ConfirmationService,
+    public portConnectorService: PortConnectionService,
     public electricStationsService: ElectricStationsService,
   ) { }
 
@@ -126,6 +135,11 @@ export default class ElectricStationsComponent implements OnInit {
     this.dialogEdit = true;
   }
 
+  onDialogConnector(item) {
+    this.electricStation = item;
+    this.dialogConector = true;
+  }
+
   onValidaFormulario() {
     this.submitted = true;
     if (this.formRegistro.valid) {
@@ -134,6 +148,13 @@ export default class ElectricStationsComponent implements OnInit {
       } else {
         this.onCreateRegistro();
       }
+    }
+  }
+
+  onValidaFormularioConector() {
+    this.submitted = true;
+    if (this.formRegistroConector.valid) {
+      this.onCreatePuerto();
     }
   }
 
@@ -147,6 +168,18 @@ export default class ElectricStationsComponent implements OnInit {
       longitude: new FormControl('', [Validators.required]),
       chargeRate: new FormControl('', [Validators.required]),
       codeStationQr: new FormControl('', [Validators.required]),
+    });
+  }
+
+  // adicionar un coenctor
+  private createFormConector() {
+    return new FormGroup({
+      id: new FormControl(''),
+      name: new FormControl('', [Validators.required]),
+      description: new FormControl('', [Validators.required]),
+      maxAmperage: new FormControl('', [Validators.pattern(/^\d+(\.\d{1,2})?$/)]),
+      maxPower: new FormControl('', [Validators.pattern(/^\d+(\.\d{1,2})?$/)]),
+      maxVoltage: new FormControl('', [Validators.pattern(/^\d+(\.\d{1,2})?$/)]),
     });
   }
 
@@ -164,6 +197,34 @@ export default class ElectricStationsComponent implements OnInit {
           this.openDialog(false, false, 'crear');
           this.helpersService.messageNotification('success', messages.successCreate);
           this.getAllElectricStations();
+          this.submitted = false;
+        }),
+        catchError((err) =>
+          of(
+            'error',
+            err.map((message: any) => {
+              this.helpersService.messageNotification('error', message);
+            })
+          )
+        )
+      )
+      .subscribe()
+  }
+
+  onCreatePuerto() {
+    var registro: PortConnectionModel = {
+      ...this.formRegistroConector.value,
+    };
+    registro.status = 1;
+    registro.type = 'ELECTRICO';
+    registro.chargingStation = this.electricStation.id;
+    this.portConnectorService.create(registro)
+      .pipe(
+        tap(() => {
+          this.openDialog(false, false, 'conector');
+          this.helpersService.messageNotification('success', messages.successCreate);
+          this.getAllElectricStations();
+          this.submitted = false;
         }),
         catchError((err) =>
           of(
@@ -191,6 +252,7 @@ export default class ElectricStationsComponent implements OnInit {
           this.openDialog(false, false, 'edit');
           this.helpersService.messageNotification('success', messages.successUpdate);
           this.getAllElectricStations();
+          this.submitted = false;
         }),
         catchError((err) =>
           of(
@@ -232,8 +294,15 @@ export default class ElectricStationsComponent implements OnInit {
     if (tipo == 'crear') {
       this.dialogRegistro = state;
       this.formRegistro.reset();
-    } else {
+    }
+    if (tipo == 'conector') {
+      this.dialogConector = state;
+    }
+    if (tipo == 'editar') {
       this.dialogEdit = state;
+    }
+    if (tipo == 'detalle') {
+      this.dialogDetalleRegistro = state;
     }
     this.submitted = stateSubmitted;
   }
@@ -279,6 +348,30 @@ export default class ElectricStationsComponent implements OnInit {
           )
         }
       }
+    });
+  }
+
+  onDialogDetalles(electrolinera) {
+    // aqui llamar al servicio de la electrolinera online por id
+    this.getOneElectricStation(electrolinera.id)
+    .then( datosElectrolinera=>{
+      if (datosElectrolinera) {
+        // this.imageUrl = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
+        this.selectedCountry = this.electricStation.chargeRate;
+        this.dialogDetalleRegistro = true;
+      }
+    })
+  }
+
+  getOneElectricStation(idElectricStation) {
+    return new Promise((resolve) => {
+    this.electricStationsService.getOne(idElectricStation).subscribe(
+      (resp: any) => {
+        this.electricStation = resp.data;
+        this.imageUrl = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
+      }
+    )
+    resolve(true);
     });
   }
 
