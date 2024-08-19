@@ -13,6 +13,13 @@
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
         [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
 
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
+              (click)="clear(dt1) ; getCustomers()"></button>
+          </div>
+        </ng-template>
+
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">
@@ -52,21 +59,22 @@
           <tr>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'names', 'contains')"
-                placeholder="Busca por nombres" class="w-full">
+                placeholder="Busca por nombres" class="w-full" [(ngModel)]="names">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'lastName', 'contains')"
-                placeholder="Busca por nombres" class="w-full">
+                placeholder="Busca por nombres" class="w-full" [(ngModel)]="lastName">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'motherLastName', 'contains')"
-                placeholder="Busca por apellido materno" class="w-full">
+                placeholder="Busca por apellido materno" class="w-full" [(ngModel)]="motherLastName">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'electronicMail', 'contains')"
-                placeholder="Busca por Correo Electrónico" class="w-full">
+                placeholder="Busca por Correo Electrónico" class="w-full" [(ngModel)]="electronicMail">
             </th>
           </tr>
+          
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
           <tr>

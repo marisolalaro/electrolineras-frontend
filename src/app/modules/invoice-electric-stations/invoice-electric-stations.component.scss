@@ -2,3 +2,11 @@ p-dialog-content {
     align-content: center;
     background-color: aqua;
 }
+
+:host ::ng-deep .p-datepicker-touch-ui, .p-calendar .p-datepicker-touch-ui {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 33rem;
+    transform: translate(-50%, -50%);
+}

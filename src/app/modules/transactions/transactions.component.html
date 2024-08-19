@@ -4,79 +4,94 @@
     <div class="row">
       <h3><b>{{titleComponent.mainTitle}}</b></h3>
       <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
-        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getTransactions()" pTooltip="Actualizar" tooltipPosition="left"></p-button>
+        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getTransactions()" pTooltip="Actualizar"
+          tooltipPosition="left"></p-button>
       </div>
     </div>
 
     <div class="row">
       <p-table responsiveLayout="stack" #dt1 [columns]="cabeceras" [value]="transactions" dataKey="id"
-        styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
+        [scrollable]="true" styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
         [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
+
+        <!--  -->
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
+              (click)="clear(dt1) ; getTransactions()"></button>
+          </div>
+        </ng-template>
+        <!--  -->
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th style="text-align:center; vertical-align:middle" rowspan="2"> # </th>
-            <th style="text-align:center; vertical-align:middle" pSortableColumn="'nombreRazonSocial'">Razón Social<p-sortIcon field="nombreRazonSocial"
-                (click)="customSort('nombreRazonSocial', orden)"></p-sortIcon></th>
-            <th style="text-align:center; vertical-align:middle" pSortableColumn="'numeroDocumento'">Número Documento<p-sortIcon field="numeroDocumento"
-                (click)="customSort('numeroDocumento', orden)"></p-sortIcon></th>
-            <th style="text-align:center; vertical-align:middle" pSortableColumn="'emailCliente'">Correo Electrónico<p-sortIcon field="emailCliente"
-                (click)="customSort('emailCliente', orden)"></p-sortIcon></th>
-            <th style="text-align:center; vertical-align:middle" pSortableColumn="'amount'">Monto Transacción Bs.<p-sortIcon field="amount"
-                (click)="customSort('amount', orden)"></p-sortIcon></th>
-            <th style="text-align:center; vertical-align:middle" pSortableColumn="'registrationAt'">Fecha Transacción<p-sortIcon field="registrationAt"
-                (click)="customSort('registrationAt', orden)"></p-sortIcon></th>
-            <th style="text-align:center; vertical-align:middle" pSortableColumn="'giftCardNumber'">Numero Gift card<p-sortIcon field="giftCardNumber"
-                (click)="customSort('giftCardNumber', orden)"></p-sortIcon></th>
-            <th style="text-align:center; vertical-align:middle" pSortableColumn="'gloss'">Glosa<p-sortIcon field="gloss"
-                (click)="customSort('gloss', orden)"></p-sortIcon></th>
-            <th style="text-align:center; vertical-align:middle" pSortableColumn="'placaVehiculo'">Placa Vehículo<p-sortIcon field="placaVehiculo"
-                (click)="customSort('placaVehiculo', orden)"></p-sortIcon></th>
-            <th style="text-align:center; vertical-align:middle" pSortableColumn="'receiverBank'">Banco Recibido<p-sortIcon field="receiverBank"
-                (click)="customSort('receiverBank', orden)"></p-sortIcon></th>
-            <th style="text-align:center; vertical-align:middle" pSortableColumn="'receiverDocument'">Documento Recibido<p-sortIcon field="receiverDocument"
-                (click)="customSort('receiverDocument', orden)"></p-sortIcon></th>
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'nombreRazonSocial'">Razón
+              Social<p-sortIcon field="nombreRazonSocial" (click)="customSort('nombreRazonSocial', orden)"></p-sortIcon>
+            </th>
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'numeroDocumento'">Número
+              Documento<p-sortIcon field="numeroDocumento" (click)="customSort('numeroDocumento', orden)"></p-sortIcon>
+            </th>
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'emailCliente'">Correo
+              Electrónico<p-sortIcon field="emailCliente" (click)="customSort('emailCliente', orden)"></p-sortIcon></th>
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'amount'">Monto Transacción
+              Bs.<p-sortIcon field="amount" (click)="customSort('amount', orden)"></p-sortIcon></th>
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'registrationAt'">Fecha
+              Transacción<p-sortIcon field="registrationAt" (click)="customSort('registrationAt', orden)"></p-sortIcon>
+            </th>
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'giftCardNumber'">Numero Gift
+              card<p-sortIcon field="giftCardNumber" (click)="customSort('giftCardNumber', orden)"></p-sortIcon></th>
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'gloss'">Glosa<p-sortIcon
+                field="gloss" (click)="customSort('gloss', orden)"></p-sortIcon></th>
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'placaVehiculo'">Placa
+              Vehículo<p-sortIcon field="placaVehiculo" (click)="customSort('placaVehiculo', orden)"></p-sortIcon></th>
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'receiverBank'">Banco
+              Recibido<p-sortIcon field="receiverBank" (click)="customSort('receiverBank', orden)"></p-sortIcon></th>
+            <th style="text-align:center; vertical-align:middle" pSortableColumn="'receiverDocument'">Documento
+              Recibido<p-sortIcon field="receiverDocument" (click)="customSort('receiverDocument', orden)"></p-sortIcon>
+            </th>
             <th style="text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
           </tr>
           <tr>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'nombreRazonSocial', 'contains')"
-                placeholder="Busca Razón Social" class="w-full">
+                placeholder="Busca Razón Social" class="w-full" [(ngModel)]="campoNombreRazonSocial">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'numeroDocumento', 'contains')"
-                placeholder="Busca Número Documento" class="w-full">
+                placeholder="Busca Número Documento" class="w-full" [(ngModel)]="campoNumeroDocumento">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'emailCliente', 'contains')"
-                placeholder="Busca Correo Electrónico" class="w-full">
+                placeholder="Busca Correo Electrónico" class="w-full" [(ngModel)]="campoEmailCliente">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'amount', 'contains')"
-                placeholder="Busca Monto Transacción" class="w-full">
+                placeholder="Busca Monto Transacción" class="w-full" [(ngModel)]="campoAmount">
             </th>
             <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'registrationAt', 'contains')"
-                placeholder="Busca Fecha Transacción" class="w-full">
+              <p-calendar [touchUI]="true" [baseZIndex]="-2" dateFormat="dd/mm/yy" [showButtonBar]="true" [locale]="es"
+                (onSelect)="applyFilter($event, 'registrationAt', 'contains')" placeholder="Busca Fecha Transacción" [(ngModel)]="campoRegistrationAt">
+              </p-calendar>
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'giftCardNumber', 'contains')"
-                placeholder="Busca Gift Card" class="w-full">
+                placeholder="Busca Gift Card" class="w-full" [(ngModel)]="campoGiftCardNumber">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'gloss', 'contains')" placeholder="Busca Glosa"
-                class="w-full">
+                class="w-full" [(ngModel)]="campoGloss">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'placaVehiculo', 'contains')"
-                placeholder="Busca Placa Vehículo" class="w-full">
+                placeholder="Busca Placa Vehículo" class="w-full" [(ngModel)]="campoPlacaVehiculo">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'receiverBank', 'contains')"
-                placeholder="Busca Banco recibido" class="w-full">
+                placeholder="Busca Banco recibido" class="w-full" [(ngModel)]="campoReceiverBank">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'receiverDocument', 'contains')"
-                placeholder="Busca Documento Recibido" class="w-full">
+                placeholder="Busca Documento Recibido" class="w-full" [(ngModel)]="campoReceiverDocument">
             </th>
           </tr>
         </ng-template>
@@ -94,8 +109,8 @@
             <td style="text-align:center; vertical-align:middle" class="uppercase">{{rowData['receiverBank']}}</td>
             <td style="text-align:center; vertical-align:middle" class="uppercase">{{rowData['receiverDocument']}}</td>
             <td style="text-align:center; vertical-align:middle">
-              <i class="pi pi-qrcode" style="font-size: 1.5rem; color: var(--primary-color)" (click)="onOpenImagenQR(rowData)"
-                tooltipPosition="top" pTooltip="Ver QR"></i>
+              <i class="pi pi-qrcode" style="font-size: 1.5rem; color: var(--primary-color)"
+                (click)="onOpenImagenQR(rowData)" tooltipPosition="top" pTooltip="Ver QR"></i>
             </td>
           </tr>
         </ng-template>
@@ -108,8 +123,7 @@
 
     <div class="row">
       <p-dialog header={{titulosGlobales.info}} [(visible)]="visible" [breakpoints]="{ '960px': '75vw' }"
-        [draggable]="false" [resizable]="false"  [draggable]="false"
-        [resizable]="false">
+        [draggable]="false" [resizable]="false" [draggable]="false" [resizable]="false">
         <img *ngIf="imageUrl" [src]="imageUrl" alt="Converted Image" />
       </p-dialog>
     </div>

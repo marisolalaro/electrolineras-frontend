@@ -119,6 +119,7 @@ export default class LoginComponent {
       this.global.setDataLogin(this.dataLogin);
       this.global.setExpireTime();
       this.global.setToken(this.dataLogin.access_token);
+      this.global.setUser();
       resolve(true);
     });
   }

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Global } from 'src/app/core/variables/globales';
 import { EndPoins } from 'src/app/core/constants/endPoints';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 

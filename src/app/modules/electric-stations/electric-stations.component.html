@@ -7,7 +7,7 @@
       <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
         <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllElectricStations()" pTooltip="Actualizar"
           tooltipPosition="left"></p-button> &nbsp;
-        <button pButton pRipple class="mat-raised-button" (click)="openDialog(true, false, 'crear')">Nuevo
+        <button *ngIf="esSuperAdmin" pButton pRipple class="mat-raised-button" (click)="openDialog(true, false, 'crear')">Nuevo
           Registro</button>
       </div>
     </div>
@@ -17,6 +17,12 @@
         [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES"
         currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros"
         (sortFunction)="customSort($event)" [customSort]="true" width="100%">
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
+              (click)="clear(dt1) ; getAllElectricStations()"></button>
+          </div>
+        </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2"> # </th>
@@ -37,23 +43,23 @@
           <tr>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'nameStation', 'contains')"
-                placeholder="Busca por Nombre" class="w-full">
+                placeholder="Busca por Nombre" class="w-full" [(ngModel)]="nameStation">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'direccion', 'contains')"
-                placeholder="Busca por Dirección" class="w-full">
+                placeholder="Busca por Dirección" class="w-full" [(ngModel)]="direccion">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'descripcion', 'contains')"
-                placeholder="Busca por Descripción" class="w-full">
+                placeholder="Busca por Descripción" class="w-full" [(ngModel)]="descripcion">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'latitude', 'contains')"
-                placeholder="Busca por Latitud" class="w-full">
+                placeholder="Busca por Latitud" class="w-full" [(ngModel)]="campoLatitude">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'longitude', 'contains')"
-                placeholder="Busca por Longitud" class="w-full">
+                placeholder="Busca por Longitud" class="w-full" [(ngModel)]="campoLongitude">
             </th>
           </tr>
         </ng-template>
@@ -66,19 +72,25 @@
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['latitude']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['longitude']}}</td>
             <td style="text-align:center; vertical-align:middle">
-              <p-confirmPopup>
-              </p-confirmPopup>
-              <button *ngIf="rowData['enabled']" pButton pRipple class="mat-raised-button"
+              <div *ngIf="esSuperAdmin">
+                <p-confirmPopup>
+                </p-confirmPopup>
+                <button *ngIf="rowData['enabled']" pButton pRipple class="mat-raised-button"
                 (click)="confirm($event, rowData, false)">Habilitar</button>
               <p-button *ngIf="!rowData['enabled']" [outlined]="true" severity="secondary"
                 (click)="confirm($event, rowData, true)">Deshabilitar</p-button>
+              </div>
+              <div *ngIf="!esSuperAdmin">
+                <label *ngIf="rowData['enabled']">Habilitado</label>
+                <label *ngIf="!rowData['enabled']">Deshabilitado</label>
+              </div>
             </td>
             <td style="text-align:center; vertical-align:middle">
-              <i class="pi pi-mobile" style="font-size: 1.5rem; color: var(--color-green);" data-bs-toggle="modal"
+              <i *ngIf="esSuperAdmin" class="pi pi-mobile" style="font-size: 1.5rem; color: var(--color-green);" data-bs-toggle="modal"
                 (click)="onDialogConnector(rowData)" pTooltip="Adicionar Conector de Carga"
                 tooltipPosition="bottom"></i> &nbsp;
 
-              <i class="pi pi-pencil" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
+              <i *ngIf="esSuperAdmin" class="pi pi-pencil" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
                 (click)="onSelecetedEdit(rowData)" pTooltip="Editar" tooltipPosition="bottom"></i> &nbsp;
 
               <i class="pi pi-map-marker" style="font-size: 1.5rem; color: var(--decorative-color);"
@@ -93,6 +105,7 @@
       </p-table>
 
     </div>
+    
     <div class="row">
       <div *ngIf="mapaVisible" class="map-modal">
         <app-mapa [lat]="latitude" [lon]="longitude" [titulo]="title" (newItemEvent)="cerrarMapa($event)"></app-mapa>

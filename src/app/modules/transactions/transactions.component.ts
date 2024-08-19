@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
+import * as moment from 'moment';
 // Primeng
 import { Table } from 'primeng/table';
 import { SortEvent } from 'primeng/api';
@@ -67,11 +68,24 @@ export default class TransactionsComponent implements OnInit {
   public placaVehiculo = DBAttributeName.tabPaymentPlacaVehiculo;
   public recibeBanck = DBAttributeName.tabPaymentReciveBank;
   public recibeeDocument = DBAttributeName.tabPaymentReciveDocument;
-
+  public date: Date | undefined;
   // variables de tabla
   @ViewChild('dt1') dt!: Table;
   public cabeceras: any[] = [];
 
+  es: any;
+
+  public campoNombreRazonSocial: string = '';
+  public campoNumeroDocumento: string = '';
+  public campoEmailCliente: string = '';
+  public campoAmount: string = '';
+  public campoRegistrationAt: string = '';
+  public campoGiftCardNumber: string = '';
+  public campoGloss: string = '';
+  public campoPlacaVehiculo: string = '';
+  public campoReceiverBank: string = '';
+  public campoReceiverDocument: string = '';
+  
   constructor(
     public transactionService: TransactionsService,
     public base64ImageService: Base64ToImageService,
@@ -80,6 +94,16 @@ export default class TransactionsComponent implements OnInit {
   ngOnInit(): void {
     this.getTransactions();
     this.inicializaDatos();
+    this.es = {
+      firstDayOfWeek: 1,
+      dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+      dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+      dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+      monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+      monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
+      today: "Hoy",
+      clear: "Borrar",
+    };
   }
 
   inicializaDatos() {
@@ -101,10 +125,11 @@ export default class TransactionsComponent implements OnInit {
   }
 
   getTransactions(): void {
+    this.date = null
     this.transactionService.getAllFilter(this.bodyFilter).subscribe(
       (resp: any) => {
         this.transactions = resp.data.paymentTransactionElectrolinerasList;
-        this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0; 
+        this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0;
       }
     )
   }
@@ -132,6 +157,7 @@ export default class TransactionsComponent implements OnInit {
       this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribAmount;
     }
     if (field == this.fechaRegistro) {
+      value = moment($event).utc().format('YYYY-MM-DD')
       this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribRegistrationAt;
     }
     if (field == this.giftCard) {
@@ -216,5 +242,29 @@ export default class TransactionsComponent implements OnInit {
   onOpenImagenQR(item) {
     this.visible = true;
     this.imageUrl = this.base64ImageService.base64ToImageUrl(item.qrImage);
+  }
+
+  clear(table: Table) {
+    this.date = null;
+    table.clear();
+    table.clearFilterValues();
+
+    this.campoNombreRazonSocial = '';
+    this.campoNumeroDocumento = '';
+    this.campoEmailCliente = '';
+    this.campoAmount = '';
+    this.campoRegistrationAt = '';
+    this.campoGiftCardNumber = '';
+    this.campoGloss = '';
+    this.campoPlacaVehiculo = '';
+    this.campoReceiverBank = '';
+    this.campoReceiverDocument = '';
+
+    this.bodyFilter = new BodyFilterModel(
+      this.page,
+      this.itemsPerPage,
+      decodeLocal().user.roles[0].id,
+      decodeLocal().user.id
+    );
   }
 }

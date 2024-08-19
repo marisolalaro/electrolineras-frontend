@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
+import * as moment from 'moment';
 // Primeng
 import { Table } from 'primeng/table';
 // cores
-import { Global } from 'src/app/core/variables/globales';
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
 import { mainTitles, titles } from 'src/app/core/constants/labels';
 import { DBAttributeName } from 'src/app/core/constants/dbAttributeName';
@@ -22,6 +22,7 @@ import { xmlToJsonUtil } from 'xml-to-json-util';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { InvoiceTransaction } from './services/invoice-transaction';
+import { NgModel } from '@angular/forms';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -42,6 +43,11 @@ export default class InvoiceElectricStationsComponent {
   public imageUrl: string | null = null;
   public invoices: InvoiceElectricStationModel[] = [];
   public invoice: InvoiceElectricStationModel = new InvoiceElectricStationModel();
+  es: any;
+  public campoCuf: string = '';
+  public campoFechaHoraEmision: string = '';
+  public campoCodigoDescripcion: string = '';
+  public campoUrlFacturaSiat: string = '';
 
   // variables del paginator
   public page: number = 0;
@@ -59,6 +65,7 @@ export default class InvoiceElectricStationsComponent {
   @ViewChild('dt1') dt!: Table;
   public cols: any[] = [];
 
+
   constructor(
     public invoiceService: InvoiceElectricStationsService,
     public base64ImageService: Base64ToImageService,
@@ -67,6 +74,16 @@ export default class InvoiceElectricStationsComponent {
   ) { }
 
   ngOnInit(): void {
+    this.es = {
+      firstDayOfWeek: 1,
+      dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+      dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+      dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+      monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+      monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
+      today: "Hoy",
+      clear: "Borrar",
+    }; 
     this.getInvoices();
     this.inicializaDatos();
   }
@@ -103,6 +120,8 @@ export default class InvoiceElectricStationsComponent {
     this.dt.filter(value, field, matchMode);
     this.bodyFilter.search.column = 'id'
     if(field == 'fechaHoraEmision') {
+      value = moment($event).utc().format('YYYY-MM-DD')
+      // this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribRegistrationAt;
       this.bodyFilter.search.column = DBAttributeName.tabInvoice_AttribFechaEmision;
     }
     if(field == 'cuf') {
@@ -167,4 +186,21 @@ export default class InvoiceElectricStationsComponent {
     this.getInvoices();
   }
 
+  clear(table: Table) {
+    table.clear();
+    table.clearFilterValues();
+
+    this.campoCuf = '';
+    this.campoFechaHoraEmision = '';
+    this.campoCodigoDescripcion = '';
+    this.campoUrlFacturaSiat = '';
+
+    this.bodyFilter = new BodyFilterModel(
+      this.page,
+      this.itemsPerPage,
+      decodeLocal().user.roles[0].id,
+      decodeLocal().user.id
+    );
+  }
+  
 }

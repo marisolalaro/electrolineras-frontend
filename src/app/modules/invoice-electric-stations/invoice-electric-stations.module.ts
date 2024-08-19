@@ -20,6 +20,7 @@ import { InvoiceTransaction } from './services/invoice-transaction';
     FilterInformationComponent,
   ], 
   exports:[
+    CommonModule,
     PrimeModule
   ],
   providers: [

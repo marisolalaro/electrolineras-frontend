@@ -8,6 +8,7 @@ import { Injectable } from '@angular/core';
 export class Global {
 
     public token: any;
+    public esSuperAdmin: boolean = false;
     public user: any;
     public userId: number;
     public role: any;
@@ -36,9 +37,9 @@ export class Global {
         this.userId = this.decodeToken.user.id;
         this.setRol(this.decodeToken.user.roles[0])
     }
-
+    
     getUser() {
-        return this.user
+        return this.decodeToken.user
     }
 
     setRol(role) {
@@ -47,7 +48,11 @@ export class Global {
     }
 
     getRol() {
-        return this.role;
+        return this.decodeToken.user.roles[0];
+    }
+
+    getEsSuperAdmin() {
+        return this.decodeToken.user.roles[0].nameRole == 'ROLE_ADMIN_GRAL' ? false : true;
     }
 
     setExpireTime() {

@@ -5,7 +5,6 @@ import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { Table } from 'primeng/table';
 import { SortEvent } from 'primeng/api';
 // cores
-import { Global } from 'src/app/core/variables/globales';
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
 import { mainTitles, titles } from 'src/app/core/constants/labels';
 import { DBAttributeName } from 'src/app/core/constants/dbAttributeName';
@@ -44,6 +43,11 @@ export default class CustomersComponent {
   public customers: Customer[] = [];
   public customer: Customer = new Customer();
 
+  public names: string = '';
+  public lastName: string = '';
+  public motherLastName: string = '';
+  public electronicMail: string = '';
+
   // variables globales
   public titlesGlobales = titles;
   public titleComponent: any = mainTitles['clientes'];
@@ -66,7 +70,6 @@ export default class CustomersComponent {
 
   constructor(
     public customerService: CustomerService,
-    public global: Global,
     private confirmationService: ConfirmationService,
   ) { }
 
@@ -93,7 +96,7 @@ export default class CustomersComponent {
 
   onOpenDetail(customer) {
     this.customer = customer;
-    
+
     this.totalTransacciones = customer.paymentTransactionsElectrolineraList.length;
     this.totalCargas = customer.chargeClientList.length;
 
@@ -164,7 +167,7 @@ export default class CustomersComponent {
   }
 
   confirm(event, item, tipo) {
-    var texto = tipo? 'Habilitar' : 'Deshabilitar';
+    var texto = tipo ? 'Habilitar' : 'Deshabilitar';
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: `¿${texto} a ${item.lastName} ${item.motherLastName} ${item.names} ?`,
@@ -194,6 +197,24 @@ export default class CustomersComponent {
     this.bodyFilter.page = event.page;
     this.bodyFilter.size = event.rows;
     this.getCustomers();
+  }
+
+  clear(table: Table) {
+    table.clear();
+    table.clearFilterValues();
+
+    this.names = '';
+    this.lastName = '';
+    this.motherLastName = '';
+    this.electronicMail = '';
+
+    this.bodyFilter.search.value = '';
+    this.bodyFilter = new BodyFilterModel(
+      this.page,
+      this.itemsPerPage,
+      decodeLocal().user.roles[0].id,
+      decodeLocal().user.id
+    );
   }
 
 }

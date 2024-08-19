@@ -15,6 +15,12 @@
         [showCurrentPageReport]="false"
         currentPageReportTemplate="Showing {first} to {last} of {{totalRecords}} entries"
         [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
+              (click)="clear(dt1) ; getInvoices()"></button>
+          </div>
+        </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th style="text-align:center; vertical-align:middle" rowspan="2"> # </th>
@@ -57,19 +63,20 @@
           <tr>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'cuf', 'contains')" placeholder="Busca cuf"
-                class="w-full">
+                class="w-full" [(ngModel)]="campoCuf">
             </th>
             <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'fechaHoraEmision', 'contains')"
-                placeholder="Busca fecha emisión" class="w-full">
+              <p-calendar [touchUI]="true" [baseZIndex]="-2" dateFormat="dd/mm/yy" [showButtonBar]="true" [locale]="es"
+                (onSelect)="applyFilter($event, 'fechaHoraEmision', 'contains')" placeholder="Busca Fecha Emisión" [(ngModel)]="campoFechaHoraEmision">
+              </p-calendar>
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'codigoDescripcion', 'contains')"
-                placeholder="Busca codigo" class="w-full">
+                placeholder="Busca codigo" class="w-full" [(ngModel)]="campoCodigoDescripcion">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'urlFacturaSiat', 'contains')"
-                placeholder="Busca url" class="w-full">
+                placeholder="Busca url" class="w-full" [(ngModel)]="campoUrlFacturaSiat">
             </th>
           </tr>
         </ng-template>

@@ -5,7 +5,7 @@ import { PrimeModule } from 'src/app/prime.module';
 import { MenuItem } from 'primeng/api';
 import { mainTitles } from '../../constants/labels';
 import { rutas } from '../../constants/rutas';
-
+import { Global } from '../../variables/globales';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -16,12 +16,16 @@ import { rutas } from '../../constants/rutas';
 export class HeaderComponent implements OnInit {
 
   public items: MenuItem[] | undefined;
-  
+  public user: any;
   @Output() toggleSidebar = new EventEmitter<void>();
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private global: Global
+  ) { }
 
   ngOnInit() {
+    this.user = this.global.getUser();
     this.items = [
       {
         label: mainTitles['administradores'].mainTitle,

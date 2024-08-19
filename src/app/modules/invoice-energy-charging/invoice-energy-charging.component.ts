@@ -1,10 +1,10 @@
 import { FormsModule } from '@angular/forms';
 import { Component, ViewChild } from '@angular/core';
 import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
+import * as moment from 'moment';
 // Primeng
 import { Table } from 'primeng/table';
 // cores
-import { Global } from 'src/app/core/variables/globales';
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
 import { mainTitles, titles } from 'src/app/core/constants/labels';
 import { DBAttributeName } from 'src/app/core/constants/dbAttributeName';
@@ -43,6 +43,11 @@ export default class InvoiceEnergyChargingComponent {
   // variables propias del componente
   public invoices: InvoiceEnergyChargingModel[] = [];
   public invoice: InvoiceEnergyChargingModel = new InvoiceEnergyChargingModel();
+  es: any;
+  public campoCuf: string = '';
+  public campoAmount: string = '';
+  public campoFechaHoraEmision: string = '';
+  public campoUrlFacturaSiat: string = '';
 
   // variables globales
   public titlesGlobales = titles;
@@ -64,13 +69,22 @@ export default class InvoiceEnergyChargingComponent {
   );
 
   constructor(
-    public global: Global,
     public base64aXML: Base64ToPdfService,
     private invoiceTransaction: InvoiceTransaction,
     public InvoiceService: InvoiveEnergyChargingService,
   ) { }
 
   ngOnInit() {
+    this.es = {
+      firstDayOfWeek: 1,
+      dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+      dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+      dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+      monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+      monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
+      today: "Hoy",
+      clear: "Borrar",
+    };
     this.inicializaDatos()
     .then( datosInicializados => {
       if (datosInicializados) {
@@ -144,6 +158,10 @@ export default class InvoiceEnergyChargingComponent {
     if (field == 'urlFacturaSiat') {
       this.bodyFilter.search.column = DBAttributeName.tabInvPayUrlSiat;
     }
+    if(field == 'fechaHoraEmision') {
+      value = moment($event).utc().format('YYYY-MM-DD')
+      this.bodyFilter.search.column = DBAttributeName.tabInvoice_AttribFechaEmision;
+    }
     this.bodyFilter.search.value = value;
     this.getInvoicesCharging();
   }
@@ -179,5 +197,20 @@ export default class InvoiceEnergyChargingComponent {
     this.bodyFilter.page = event.page;
     this.bodyFilter.size = event.rows;
     this.getInvoicesCharging();
+  }
+
+  clear(table: Table) {
+    table.clear();
+    table.clearFilterValues();
+    this.campoCuf = '';
+    this.campoAmount = '';
+    this.campoFechaHoraEmision = '';
+    this.campoUrlFacturaSiat = '';
+    this.bodyFilter = new BodyFilterModel(
+      this.page,
+      this.itemsPerPage,
+      decodeLocal().user.roles[0].id,
+      decodeLocal().user.id
+    );
   }
 }

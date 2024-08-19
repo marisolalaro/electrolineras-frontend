@@ -5,7 +5,7 @@
       <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
         <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllAdministrations()" pTooltip="Actualizar"
           tooltipPosition="left"></p-button> &nbsp;
-        <button pButton pRipple class="mat-raised-button" (click)="openDialog(true,false, 'crear')">Nuevo
+        <button  *ngIf="esSuperAdmin" pButton pRipple class="mat-raised-button" (click)="openDialog(true,false, 'crear')">Nuevo
           Registro</button>
       </div>
     </div>
@@ -16,6 +16,12 @@
         [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES"
         currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros"
         (sortFunction)="customSort($event)" [customSort]="true" width="100%">
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
+              (click)="clear(dt1) ; getAllAdministrations()"></button>
+          </div>
+        </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">#</th>
@@ -38,27 +44,27 @@
           <tr>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'username', 'contains')"
-                placeholder="Busca por username" class="w-full">
+                placeholder="Busca por username" class="w-full" [(ngModel)]="username">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'names', 'contains')"
-                placeholder="Busca por Nombres" class="w-full">
+                placeholder="Busca por Nombres" class="w-full" [(ngModel)]="names">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'lastName', 'contains')"
-                placeholder="Busca por Apellido Paterno" class="w-full">
+                placeholder="Busca por Apellido Paterno" class="w-full" [(ngModel)]="lastName">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'motherLastName', 'contains')"
-                placeholder="Busca por Apellido Materno" class="w-full">
+                placeholder="Busca por Apellido Materno" class="w-full" [(ngModel)]="motherLastName">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'electronicMail', 'contains')"
-                placeholder="Busca por Correo Electrónico" class="w-full">
+                placeholder="Busca por Correo Electrónico" class="w-full" [(ngModel)]="electronicMail">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'cellPhoneNumber', 'contains')"
-                placeholder="Busca por Nro Celular" class="w-full">
+                placeholder="Busca por Nro Celular" class="w-full" [(ngModel)]="cellPhoneNumber">
             </th>
           </tr>
         </ng-template>
@@ -72,16 +78,28 @@
             <td style="text-align:left; vertical-align:middle">{{rowData['electronicMail']}}</td>
             <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['cellPhoneNumber']}}</td>
             <td style="text-align:center; vertical-align:middle">
-              <p-confirmPopup>
-              </p-confirmPopup>
-              <button *ngIf="rowData['enabled']" pButton pRipple class="mat-raised-button"
-                (click)="confirm($event, rowData, false)">Habilitar</button>
-              <p-button *ngIf="!rowData['enabled']" [outlined]="true" severity="secondary"
-                (click)="confirm($event, rowData, true)">Deshabilitar</p-button>
+              <div *ngIf="esSuperAdmin">
+                <p-confirmPopup>
+                </p-confirmPopup>
+                <button *ngIf="rowData['enabled']" pButton pRipple class="mat-raised-button"
+                  (click)="confirm($event, rowData, false)">Habilitar</button>
+                <p-button *ngIf="!rowData['enabled']" [outlined]="true" severity="secondary"
+                  (click)="confirm($event, rowData, true)">Deshabilitar</p-button>
+              </div>
+              <div *ngIf="!esSuperAdmin">
+                <label *ngIf="rowData['enabled']">Habilitado</label>
+                <label *ngIf="!rowData['enabled']">Deshabilitado</label>
+              </div>
             </td>
             <td style="text-align:center; vertical-align:middle">
-              <i class="pi pi-user-edit" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
-                data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
+              <div class="div" *ngIf="userLogin.id == rowData['id'] && !esSuperAdmin">
+                <i class="pi pi-user-edit" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
+                  data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
+              </div>
+              <div class="div" *ngIf="esSuperAdmin">
+                <i class="pi pi-user-edit" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
+                  data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
+              </div>
             </td>
           </tr>
         </ng-template>

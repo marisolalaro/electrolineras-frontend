@@ -25,6 +25,7 @@ import { ConfirmationService } from 'primeng/api';
 import { PortConnectionModel } from 'src/app/core/model/port-connection';
 import { PortConnectionService } from './services/port-connector.service';
 import { Base64ToImageService } from '../invoice-electric-stations/services/base-64-to-image.service';
+import { Global } from 'src/app/core/variables/globales';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -44,6 +45,7 @@ export default class ElectricStationsComponent implements OnInit {
   // variables de control
   public submitted: boolean = false;
   public mapaVisible: boolean = false;
+  public esSuperAdmin: boolean = false;
 
   // variables Globales del Core
   public labelsGlobales = labels;
@@ -84,7 +86,14 @@ export default class ElectricStationsComponent implements OnInit {
   public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
   public imageUrl: string | null = null;
 
+  public nameStation: string = '';
+  public direccion: string = '';
+  public descripcion: string = '';
+  public campoLatitude: string = '';
+  public campoLongitude: string = '';
+
   constructor(
+    public global: Global,
     private helpersService: HelpersService,
     public tasaCargaService: ParTasaCargaService,
     public base64ImageService: Base64ToImageService,
@@ -94,6 +103,7 @@ export default class ElectricStationsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.esSuperAdmin = this.global.getEsSuperAdmin();
     this.getAllElectricStations();
     this.getTasaDeCarga();
   }
@@ -375,4 +385,22 @@ export default class ElectricStationsComponent implements OnInit {
     });
   }
 
+  clear(table: Table) {
+    table.clear();
+    table.clearFilterValues();
+
+    this.nameStation = '';
+    this.direccion = '';
+    this.descripcion = '';
+    this.campoLatitude = '';
+    this.campoLongitude = '';
+    
+    this.bodyFilter = new BodyFilterModel(
+      this.page,
+      this.itemsPerPage,
+      decodeLocal().user.roles[0].id,
+      decodeLocal().user.id
+    );
+  }
+  
 }

@@ -20,6 +20,8 @@ import { AdministratorModel } from 'src/app/core/model/administrators';
 import { HelpersService } from 'src/app/core/services/helpers.service';
 import { AdministratorsService } from './services/administrators.service';
 import { ConfirmationService } from 'primeng/api';
+import { Global } from 'src/app/core/variables/globales';
+
 @Component({
   standalone: true,
   selector: 'app-administrators',
@@ -32,6 +34,7 @@ export default class AdministratorsComponent {
 
   // variables de control
   public submitted: boolean = false;
+  public esSuperAdmin: boolean = false;
 
   // variables de dialog
   public dialogEdit: boolean = false;
@@ -47,24 +50,40 @@ export default class AdministratorsComponent {
   public page: number = 0;
   public itemsPerPage: number = 9999;
   public totalRecords: number = 0;
-
+  
   // variables propias del componete
   @ViewChild('dt1') dt!: Table;
   public cols: any[] = [];
+  public userLogin: any;
   public administradors: AdministratorModel[] = [];
   public formRegistro: FormGroup = this.createFormGroup();
   public componentTitle: any = mainTitles['administradores'];
   public administrador: AdministratorModel = new AdministratorModel();
-  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
+  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, 2, decodeLocal().user.id);
+
+  public username: string = '';
+  public names: string = '';
+  public lastName: string = '';
+  public motherLastName: string = '';
+  public electronicMail: string = '';
+  public cellPhoneNumber: string = '';
+
 
   constructor(
+    public global: Global,
     private helpersService: HelpersService,
     private confirmationService: ConfirmationService,
     public administratorsService: AdministratorsService,
   ) { }
 
   ngOnInit(): void {
+    this.esSuperAdmin = this.global.getEsSuperAdmin();
+    this.userLogin = this.global.getUser();
     this.getAllAdministrations();
+  }
+
+  inicializaDatos() {
+
   }
 
   getAllAdministrations() {
@@ -245,6 +264,25 @@ export default class AdministratorsComponent {
         }
       }
     });
+  }
+
+  clear(table: Table) {
+    table.clear();
+    table.clearFilterValues();
+
+    this.username = '';
+    this.names = '';
+    this.lastName = '';
+    this.motherLastName = '';
+    this.electronicMail = '';
+    this.cellPhoneNumber = '';
+
+    this.bodyFilter = new BodyFilterModel(
+      this.page,
+      this.itemsPerPage,
+      decodeLocal().user.roles[0].id,
+      decodeLocal().user.id
+    );
   }
 
 }

@@ -6,6 +6,12 @@
     <button pButton pRipple icon="pi pi-bars" (click)="onToggleSidebar()"></button>
   </ng-template>
   <ng-template pTemplate="end">
+    <label style="text-align:center; vertical-align:middle">
+      <i class="pi pi-id-card"></i> &nbsp; 
+      <b *ngIf="user.roles[0].nameRole == 'ROLE_ADMIN_SYS'">Rol: Administrador</b>
+      <b *ngIf="user.roles[0].nameRole != 'ROLE_ADMIN_SYS'">Rol: General</b>
+    </label> &nbsp;
+    <label><i class="pi pi-user"></i> &nbsp; <b>{{user.electronicMail}}</b></label> &nbsp;
     <button pButton pRipple icon="pi pi-power-off" (click)="salir()" class="mr-2" pTooltip="Salir"
       tooltipPosition="bottom"></button>
   </ng-template>
