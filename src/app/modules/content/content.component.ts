@@ -14,14 +14,9 @@ import { NgClass, NgIf } from '@angular/common';
 })
 export default class ContentComponent {
 
-  // public isMenu: boolean = true;
   constructor() {
   }
 
-  // onClickMenu(event) {
-  //   this.isMenu = !this.isMenu;
-  // }
-  // TODO cambiar a false
   visibleSidebar: boolean = false;
 
   toggleSidebar() {

@@ -211,17 +211,14 @@ export default class TransactionsComponent implements OnInit {
     if (field == this.glosa) {
       this.bodyFilter.sort.column = DBAttributeName.tabPaymentGloss;
     }
-    // if (field == this.nombreCliente) {
-    //   this.bodyFilter.sort.column = DBAttributeName.tabPaymentNombreCliente;
-    // }
     if (field == this.placaVehiculo) {
-      this.bodyFilter.sort.column = DBAttributeName.tabPaymentPlacaVehiculo;
+      this.bodyFilter.sort.column = DBAttributeName.tabPaymentTransactions_AttribPlaca;
     }
     if (field == this.recibeBanck) {
-      this.bodyFilter.sort.column = DBAttributeName.tabPaymentReciveBank;
+      this.bodyFilter.sort.column = DBAttributeName.tabPaymentTransactions_AttribBank;
     }
     if (field == this.recibeeDocument) {
-      this.bodyFilter.sort.column = DBAttributeName.tabPaymentReciveDocument;
+      this.bodyFilter.sort.column = DBAttributeName.tabPaymentTransactions_AttribDocReciveid;
     }
     if (this.orden) {
       this.bodyFilter.sort.direction = "desc"

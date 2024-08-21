@@ -34,10 +34,10 @@ export default class LoginComponent {
   public iconClass: string = 'pi pi-eye-slash';
 
   constructor(
-    private fb: FormBuilder,
     private router: Router,
-    public loginService: LoginService,
     private global: Global,
+    private fb: FormBuilder,
+    public loginService: LoginService,
     private messageService: MessageService,
     private colorService: ColorServiceService
   ) { }
@@ -82,7 +82,6 @@ export default class LoginComponent {
   validaCampos() {
     return new Promise((resolve) => {
       if (this.loginForm.valid) {
-        
         resolve(true);
       } else {
         this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Nombre de usuario y contraseña, son campos requeridos' });
@@ -101,7 +100,7 @@ export default class LoginComponent {
           resolve(true);
         })
         .catch((err) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Usuario o Contraseña Incorrectos'});
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Usuario o Contraseña Incorrectos' });
           resolve(false);
         });
     });
@@ -117,6 +116,7 @@ export default class LoginComponent {
   addVariablesGlobales() {
     return new Promise((resolve) => {
       this.global.setDataLogin(this.dataLogin);
+      this.global.setDecode();
       this.global.setExpireTime();
       this.global.setToken(this.dataLogin.access_token);
       this.global.setUser();

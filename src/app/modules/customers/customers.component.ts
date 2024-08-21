@@ -17,6 +17,7 @@ import { BodyFilterModel } from 'src/app/core/model/body-filter';
 // services
 import { CustomerService } from './services/customer.service';
 import { ConfirmationService } from 'primeng/api';
+import { Global } from 'src/app/core/variables/globales';
 
 @Component({
   selector: 'app-customers',
@@ -31,6 +32,7 @@ export default class CustomersComponent {
 
   // variables de control
   public orden: boolean = false;
+  public esSuperAdmin: boolean = false;
 
   // variables del paginador
   public page: number = 0;
@@ -69,12 +71,14 @@ export default class CustomersComponent {
   );
 
   constructor(
+    public global: Global,
     public customerService: CustomerService,
     private confirmationService: ConfirmationService,
   ) { }
 
   ngOnInit() {
     this.getCustomers();
+    this.esSuperAdmin = this.global.getEsSuperAdmin();
   }
 
   getCustomers(): void {

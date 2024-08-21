@@ -1,10 +1,11 @@
 import { jwtDecode } from "jwt-decode";
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
-  })
-  
+})
+
 export class Global {
 
     public token: any;
@@ -17,11 +18,12 @@ export class Global {
     public expireTime: any;
     public decodeToken: any = localStorage.getItem('token') ? jwtDecode(localStorage.getItem('token')) : '';
 
-    constructor() { }
+    constructor(
+        private router: Router
+    ) { }
 
     setDataLogin(dataLogin) {
         this.dataLogin = dataLogin;
-        // const decoded = jwtDecode(dataLogin);
     }
 
     setToken(token) {
@@ -33,11 +35,17 @@ export class Global {
     }
 
     setUser() {
-        this.user = this.decodeToken.user;
-        this.userId = this.decodeToken.user.id;
-        this.setRol(this.decodeToken.user.roles[0])
+        if (this.decodeToken.user.id && this.decodeToken.user.roles[0]) {
+            setTimeout(() => {
+                this.user = this.decodeToken.user;
+                this.userId = this.decodeToken.user.id;
+                this.setRol(this.decodeToken.user.roles[0])
+            }, 1);
+        } else {
+            this.router.navigate(['/']);
+        }
     }
-    
+
     getUser() {
         return this.decodeToken.user
     }
@@ -61,6 +69,10 @@ export class Global {
 
     getExpireTime() {
         return this.expireTime;
+    }
+
+    setDecode() {
+        this.decodeToken = localStorage.getItem('token') ? jwtDecode(localStorage.getItem('token')) : '';
     }
 
 }

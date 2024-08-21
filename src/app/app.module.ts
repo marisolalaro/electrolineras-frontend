@@ -12,12 +12,12 @@ import { PrimeModule } from './prime.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
-import { ResponseInterceptor } from './core/interceptors/response.interceptor';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { TabViewModule } from 'primeng/tabview';
 import { SharedModule } from 'primeng/api';
-import { ErrorInterceptor } from './error.interceptor';
+import { ResponseInterceptor } from './core/interceptors/response.interceptor';
+import { MessageService } from 'primeng/api';
 // import { UppercaseDirective } from './core/directives/uppercase.directive';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -59,16 +59,12 @@ export function HttpLoaderFactory(http: HttpClient) {
       useClass: AuthInterceptor,
       multi: true
     },
-    // { 
-    //   provide: HTTP_INTERCEPTORS, 
-    //   useClass: ResponseInterceptor, 
-    //   multi: true 
-    // },
     {
       provide: HTTP_INTERCEPTORS, 
-      useClass: ErrorInterceptor, 
+      useClass: ResponseInterceptor, 
       multi: true
-    }
+    },
+    MessageService
   ],
   bootstrap: [AppComponent],
 })

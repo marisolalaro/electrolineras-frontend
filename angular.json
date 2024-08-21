@@ -51,7 +51,9 @@
               "raf",
               "rgbcolor",
               "xml-to-json-util",
-              "pdfmake/build/vfs_fonts"
+              "pdfmake/build/vfs_fonts",
+              "pdfmake/build/pdfmake",
+              "exceljs"
             ]
           },
           "configurations": {

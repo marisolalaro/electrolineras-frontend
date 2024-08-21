@@ -1,11 +1,13 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { PrimeModule } from 'src/app/prime.module';
-import { MenuItem } from 'primeng/api';
-import { mainTitles } from '../../constants/labels';
+import { Router, RouterModule } from '@angular/router';
+// core
 import { rutas } from '../../constants/rutas';
 import { Global } from '../../variables/globales';
+import { mainTitles } from '../../constants/labels';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -13,10 +15,17 @@ import { Global } from '../../variables/globales';
   imports: [CommonModule, RouterModule, PrimeModule],
   standalone: true,
 })
+
 export class HeaderComponent implements OnInit {
 
-  public items: MenuItem[] | undefined;
+  // variables de control
+  public componenteVisible: boolean = false;
+
+  // variables propias del componente
   public user: any;
+  public items: MenuItem[] | undefined;
+
+  // variables de salida
   @Output() toggleSidebar = new EventEmitter<void>();
 
   constructor(
@@ -25,19 +34,31 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.user = this.global.getUser();
-    this.items = [
-      {
-        label: mainTitles['administradores'].mainTitle,
-        icon: 'pi pi-fw pi-user',
-        routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaAdministradores],
-      },
-      {
-        label: mainTitles['clientes'].mainTitle,
-        icon: 'pi pi-fw pi-users',
-        routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaClientes],
-      },
-    ];
+    this.inicializaDatos()
+      .then((datosInicializados) => {
+        if (datosInicializados) {
+          this.componenteVisible = true;
+        }
+      });
+  }
+
+  inicializaDatos() {
+    return new Promise((resolve) => {
+      this.user = this.global.getUser();
+      this.items = [
+        {
+          label: mainTitles['administradores'].mainTitle,
+          icon: 'pi pi-fw pi-user',
+          routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaAdministradores],
+        },
+        {
+          label: mainTitles['clientes'].mainTitle,
+          icon: 'pi pi-fw pi-users',
+          routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaClientes],
+        },
+      ];
+      resolve(true);
+    })
   }
 
   onToggleSidebar() {

@@ -12,6 +12,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   constructor(private authService: LoginService, private router: Router) {}
 
+  // interceptor para ajuntar el token en el HEADER de TOKEN AUTORIZACION cada vez que se llame a un servicio
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this.authService.getToken();
     let authReq = req;
@@ -25,7 +26,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
-          // Token has expired or is invalid
+          // TOKEN EXPIRADO
           this.authService.logout();
           this.router.navigate(['/']);
         }

@@ -7,7 +7,8 @@
       <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
         <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllElectricStations()" pTooltip="Actualizar"
           tooltipPosition="left"></p-button> &nbsp;
-        <button *ngIf="esSuperAdmin" pButton pRipple class="mat-raised-button" (click)="openDialog(true, false, 'crear')">Nuevo
+        <button *ngIf="esSuperAdmin" pButton pRipple class="mat-raised-button"
+          (click)="openDialog(true, false, 'crear')">Nuevo
           Registro</button>
       </div>
     </div>
@@ -76,9 +77,9 @@
                 <p-confirmPopup>
                 </p-confirmPopup>
                 <button *ngIf="rowData['enabled']" pButton pRipple class="mat-raised-button"
-                (click)="confirm($event, rowData, false)">Habilitar</button>
-              <p-button *ngIf="!rowData['enabled']" [outlined]="true" severity="secondary"
-                (click)="confirm($event, rowData, true)">Deshabilitar</p-button>
+                  (click)="confirm($event, rowData, false)">Habilitar</button>
+                <p-button *ngIf="!rowData['enabled']" [outlined]="true" severity="secondary"
+                  (click)="confirm($event, rowData, true)">Deshabilitar</p-button>
               </div>
               <div *ngIf="!esSuperAdmin">
                 <label *ngIf="rowData['enabled']">Habilitado</label>
@@ -86,12 +87,13 @@
               </div>
             </td>
             <td style="text-align:center; vertical-align:middle">
-              <i *ngIf="esSuperAdmin" class="pi pi-mobile" style="font-size: 1.5rem; color: var(--color-green);" data-bs-toggle="modal"
-                (click)="onDialogConnector(rowData)" pTooltip="Adicionar Conector de Carga"
+              <i *ngIf="esSuperAdmin" class="pi pi-mobile" style="font-size: 1.5rem; color: var(--color-green);"
+                data-bs-toggle="modal" (click)="onDialogConnector(rowData)" pTooltip="Adicionar Conector de Carga"
                 tooltipPosition="bottom"></i> &nbsp;
 
-              <i *ngIf="esSuperAdmin" class="pi pi-pencil" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
-                (click)="onSelecetedEdit(rowData)" pTooltip="Editar" tooltipPosition="bottom"></i> &nbsp;
+              <i *ngIf="esSuperAdmin" class="pi pi-pencil" style="font-size: 1.5rem; color: var(--primary-color);"
+                data-bs-toggle="modal" (click)="onSelecetedEdit(rowData)" pTooltip="Editar"
+                tooltipPosition="bottom"></i> &nbsp;
 
               <i class="pi pi-map-marker" style="font-size: 1.5rem; color: var(--decorative-color);"
                 data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="onVerMapa(rowData);" pTooltip="Ver Mapa"
@@ -105,7 +107,7 @@
       </p-table>
 
     </div>
-    
+
     <div class="row">
       <div *ngIf="mapaVisible" class="map-modal">
         <app-mapa [lat]="latitude" [lon]="longitude" [titulo]="title" (newItemEvent)="cerrarMapa($event)"></app-mapa>
@@ -387,70 +389,148 @@
     <div class="row">
       <p-dialog header={{titlesGlobales.detail}} [(visible)]="dialogDetalleRegistro" [style]="{width: '70vw'}"
         class="p-fluid" [closeOnEscape]="true" [closable]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-        [draggable]="false" [resizable]="false">
+        [draggable]="false" [resizable]="false" [modal]="true">
         <ng-template pTemplate="content">
           <div class="row">
             <div class="grid">
               <div class="col-6" style="text-align: right;">
                 <!-- Contenido de la columna izquierda -->
                 <ul>
+                  <!-- <li> -->
+                    <p-divider align="right">
+                      <div class="inline-flex align-items-center">
+                        <i class="pi pi-user mr-2"></i>
+                        <b>Datos Generales</b>
+                      </div>
+                    </p-divider>
+                  <!-- </li> -->
                   <li>
                     <i class="pi pi-align-justify" style="color: var(--primary-color)"></i> &nbsp;
                     <b>Nombre Estación: </b>
                   </li>
-                  <!-- <li>
-                    <i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Descripción:</b>
-                  </li> -->
                   <li>
-                    <i class="pi pi-map" style="color: var(--primary-color)"></i> &nbsp; 
+                    <i class="pi pi-map" style="color: var(--primary-color)"></i> &nbsp;
                     <b>Dirección: </b>
                   </li>
-                  <!-- <li>
+                  <li>
+                    <i class="pi pi-map" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Marca: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-mobile" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Modelo Electrolinera:</b>
+                  </li>
+                  <li>
+                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Código Modelo Electrolinera: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Número de Serie de la electrolinera: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Número de Serie del medidor: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Version de Firmware: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>iccid: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>imsi: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Código QR: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Descripción:</b>
+                  </li>
+                  <li>
                     <i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp;
                     <b>latitude:</b>
                   </li>
                   <li>
                     <i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp;
                     <b>longitude:</b>
-                  </li> -->
-                  <!-- <li>
-                    <i class="pi pi-sort-alt" style="color: var(--primary-color)"></i> &nbsp; 
+                  </li>
+                  <li>
+                    <i class="pi pi-sort-alt" style="color: var(--primary-color)"></i> &nbsp;
                     <b>Tasa de Carga: </b>
-                  </li> -->
-                  <li>
-                    <i class="pi pi-mobile" style="color: var(--primary-color)"></i> &nbsp; 
-                    <b>Modelo Electrolinera:</b>
                   </li>
                   <li>
-                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp; 
-                    <b>Código Modelo Electrolinera: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp; 
-                    <b>Código QR: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp; 
+                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
                     <b>Imagen QR: </b>
+                  </li>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <p-divider align="right">
+                    <div class="inline-flex align-items-center">
+                      <i class="pi pi-user mr-2"></i>
+                      <b>Datos en Linea</b>
+                    </div>
+                  </p-divider>
+                  <li>
+                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Id de la Marca: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Id Mensaje: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Dato: </b>
                   </li>
                 </ul>
               </div>
               <div class="col-6" style="text-align: left;">
                 <!-- Contenido de la columna derecha -->
+                 
                 <ul>
+                  <li>
+                    <p-divider></p-divider>
+                  </li>
                   <li><label>{{electricStation.nameStation}}</label></li>
+                  
                   <li><label>{{electricStation.direccion}}</label></li>
-                  <!-- <li><label>{{electricStation.descripcion}}</label></li> -->
-                  <!-- <li><label>{{electricStation.latitude}}</label></li>
-                  <li><label>{{electricStation.longitude}}</label></li> -->
-                  <!-- <li><label>{{electricStation.chargeRate.amount}}</label></li> -->
+                  <li><label>Marca de la Electrolinera</label></li>
                   <li><label>{{electricStation.modelModelCode}}</label></li>
                   <li><label>{{electricStation.modelVendor}}</label></li>
+                  <li><label>Numero de serie</label></li>
+                  <li><label>serie del medidor</label></li>
+                  <li><label>Version de Firmware</label></li>
+                  <li><label>iccid</label></li>
+                  <li><label>imsi</label></li>
                   <li><label>{{electricStation.codeStationQR}}</label></li>
+                  <li><label>electricStation.descripcion</label></li>
+                  <li><label>electricStation.latitude</label></li>
+                  <li><label>electricStation.longitude</label></li>
+                  <li><label>electricStation.chargeRate.amount</label></li>
                   <li>
                     <img [src]="imageUrl" alt="Converted Image" />
                   </li>
+                  <li>
+                    <p-divider></p-divider>
+                  </li>
+                  <li><label>id de la marca</label></li>
+                  <li><label>id mensaje</label></li>
+                  <li><label>dato</label></li>
                 </ul>
               </div>
             </div>
@@ -479,7 +559,7 @@
                     <td>{{ item.maxVoltage }}</td>
                     <td>{{ item.maxPower }}</td>
                     <td>{{ item.maxAmperage }}</td>
-      
+
                     <p-button *ngIf="item.statusName == 'DISPONIBLE'" label="Disponible" [raised]="true"
                       severity="success"></p-button>
                     <p-button *ngIf="item.statusName == 'OCUPADO'" label="Ocupado" [raised]="true"

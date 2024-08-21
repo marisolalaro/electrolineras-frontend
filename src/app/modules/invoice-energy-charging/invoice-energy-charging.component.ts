@@ -180,6 +180,9 @@ export default class InvoiceEnergyChargingComponent {
     if (field == 'urlFacturaSiat') {
       this.bodyFilter.sort.column = DBAttributeName.tabInvPayUrlSiat;
     }
+    if (field == 'fechaHoraEmision') {
+      this.bodyFilter.sort.column = DBAttributeName.tabInvoice_AttribFechaEmision;
+    }
     if (this.bodyFilter.sort.column == "") {
       this.bodyFilter.sort.direction = ""
     } else {

@@ -119,7 +119,7 @@
 
     <div class="row">
       <p-dialog header={{titulosGlobales.info}} [(visible)]="visible" [breakpoints]="{ '960px': '75vw' }"
-        [draggable]="false" [resizable]="false">
+        [draggable]="false" [resizable]="false" [modal]="true">
         <img *ngIf="imageUrl" [src]="imageUrl" alt="Converted Image" />
       </p-dialog>
     </div>

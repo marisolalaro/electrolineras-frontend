@@ -1,4 +1,4 @@
-<p-menubar [model]="items" class="fixed-menubar">
+<p-menubar *ngIf="componenteVisible" [model]="items" class="fixed-menubar">
   <ng-template pTemplate="menuicon">
     <i class="pi pi-angle-down"></i>
   </ng-template>

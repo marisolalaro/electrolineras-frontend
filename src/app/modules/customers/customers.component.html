@@ -94,10 +94,16 @@
             <td *ngIf="!rowData['chargeClientList'][0]"></td>
 
             <td style="text-align:center; vertical-align:middle">
-              <p-confirmPopup>
-              </p-confirmPopup>
-              <button *ngIf="rowData['enabled']" pButton pRipple class="mat-raised-button" (click)="confirm($event, rowData, false)">Habilitar</button>
-              <p-button *ngIf="!rowData['enabled']" [outlined]="true" severity="secondary" (click)="confirm($event, rowData, true)">Deshabilitar</p-button>
+              <div *ngIf="esSuperAdmin">
+                <p-confirmPopup>
+                </p-confirmPopup>
+                <button *ngIf="rowData['enabled']" pButton pRipple class="mat-raised-button" (click)="confirm($event, rowData, false)">Habilitar</button>
+                <p-button *ngIf="!rowData['enabled']" [outlined]="true" severity="secondary" (click)="confirm($event, rowData, true)">Deshabilitar</p-button>
+              </div>
+              <div *ngIf="!esSuperAdmin">
+                <label *ngIf="rowData['enabled']">Habilitado</label>
+                <label *ngIf="!rowData['enabled']">Deshabilitado</label>
+              </div>
             </td>
 
             <td style="text-align:center; vertical-align:middle">
