@@ -3,10 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PrimeModule } from 'src/app/prime.module';
 
-
 @NgModule({
   declarations: [
-    
   ],
   imports: [
     CommonModule,

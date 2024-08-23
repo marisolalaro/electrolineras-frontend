@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { EndPoins } from 'src/app/core/constants/endPoints';
+// modelo
 import { ElectricStationModel } from 'src/app/core/model/electric-station';
 
 @Injectable({

@@ -15,7 +15,6 @@
     <div class="row claseDelDiv">
       <div class="grid transp">
         <div class="col-6" style="text-align: right;">
-          <!-- Contenido de la columna izquierda -->
           <ul>
             <li style="color: var(--color-white)"><i class="pi pi-align-justify"></i> &nbsp; <b>Nombre: </b></li>
             <li style="color: var(--color-white)"><i class="pi pi-map-marker"></i> &nbsp; <b>Dirección: </b></li>
@@ -27,7 +26,6 @@
           </ul>
         </div>
         <div class="col-6" style="text-align: left;">
-          <!-- Contenido de la columna derecha -->
           <ul>
             <li style="color: var(--color-white)"><label>{{electricStation.nameStation}}</label></li>
             <li style="color: var(--color-white)"><label>{{electricStation.direccion}}</label></li>
@@ -37,16 +35,11 @@
             <li style="color: var(--color-white)">
               <p-inputSwitch [(ngModel)]="electricStation.activo"></p-inputSwitch>
            </li>
-            <li><img [src]="imageUrl" alt="Converted Image" /></li>
+            <li><img [src]="imagenQR" alt="Converted Image" /></li>
           </ul>
         </div>
       </div>
     </div>
-
-    <!--
-    Los spuetos mas o menos en listao e tabla
-
-     -->
 
     <div class="row">
       <div class="card">
@@ -80,7 +73,6 @@
               <p-button *ngIf="item.statusName == 'BLOQUEADO'" label="Bloqueado" [raised]="true"
                 severity="danger"></p-button>
 
-
               <td *ngIf="item.statusName == 'OCUPADO'">{{data?.value | numberDecimal}} kW</td>
               <td *ngIf="item.statusName == 'DISPONIBLE'">00.00 kW</td>
               <td *ngIf="item.statusName == 'BLOQUEADO'">00.00 kW</td>
@@ -89,45 +81,5 @@
         </p-table>
       </div>
     </div>
-
-
-    <!-- <div class="row">
-      <div class="grid">
-        <div class="col-12 lg:col-6 xl:col-6" *ngFor="let item of electricStation.chargingConnectors">
-          <p-card header="" subheader="" [style]="{ width: '360px' }">
-            <span class="block text-500 font-medium mb-3 align-center">{{item.name}}</span>
-            <span class="block text-500">Descripción</span> {{item.description}}
-            <span class="block text-500">Tipo</span> {{item.type}}
-            <span class="block text-500">Estado</span> {{item.statusName}}
-
-            <ng-template pTemplate="footer">
-
-              <div *ngIf="item.statusName == 'DISPONIBLE'">
-                <div class="flex align-items-center justify-content-center bg-green-100 border-round"
-                  [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                  <i class="pi pi-mobile text-green-500 text-xl"></i>
-                </div>
-                <div class="text-900 font-medium text-xl"><span class="text-500">Puerto 2: </span>
-                </div>
-                0.00
-              </div>
-
-              <div *ngIf="item.statusName != 'DISPONIBLE'">
-                <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
-                  [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                  <i class="pi pi-bolt text-orange-600 text-xl"></i>
-                </div>
-                <div class="text-900 font-medium text-xl">
-                  <span class="text-500">Puerto 1: </span>
-                </div>
-                {{data?.value | numberDecimal}}
-              </div>
-
-            </ng-template>
-          </p-card>
-        </div>
-      </div>
-    </div> -->
-
   </div>
 </div>

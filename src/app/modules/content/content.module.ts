@@ -1,24 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { AppRoutingModule } from 'src/app/app-routing.module';
 import { PrimeModule } from 'src/app/prime.module';
 import { SidebarComponent } from 'src/app/core/layout/sidebar/sidebar.component';
-// import ContentComponent from './content.component';
+import { PipesModule } from 'src/app/core/pipes/pipes.module';
 
 @NgModule({
   declarations: [
-    // ContentComponent
     SidebarComponent
   ],
   imports: [
     CommonModule,
     PrimeModule,
-    // SidebarComponent
+    PipesModule,
   ],
   exports:[
     PrimeModule,
-    SidebarComponent
+    SidebarComponent,
+    PipesModule,
   ],
 })
 export class ContentModule { }

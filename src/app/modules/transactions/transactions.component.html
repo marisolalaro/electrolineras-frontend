@@ -10,18 +10,15 @@
     </div>
 
     <div class="row">
-      <p-table responsiveLayout="stack" #dt1 [columns]="cabeceras" [value]="transactions" dataKey="id"
+      <p-table responsiveLayout="stack" #dt1 [value]="transactions" dataKey="id"
         [scrollable]="true" styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
         [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
-
-        <!--  -->
         <ng-template pTemplate="caption">
           <div class="flex">
             <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
               (click)="clear(dt1) ; getTransactions()"></button>
           </div>
         </ng-template>
-        <!--  -->
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th style="text-align:center; vertical-align:middle" rowspan="2"> # </th>
@@ -102,7 +99,7 @@
             <td style="text-align:center; vertical-align:middle">{{rowData['numeroDocumento']}}</td>
             <td style="text-align:left; vertical-align:middle">{{rowData['emailCliente']}}</td>
             <td style="text-align:right; vertical-align:middle">{{rowData['amount'] | numberDecimal:2}}</td>
-            <td style="text-align:center; vertical-align:middle">{{rowData['registrationAt'] | formatFieldDate}}</td>
+            <td style="text-align:center; vertical-align:middle">{{rowData['registrationAt'] | formatDiaMesAnio}}</td>
             <td style="text-align:center; vertical-align:middle">{{rowData['giftCardNumber']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['gloss']}}</td>
             <td style="text-align:center; vertical-align:middle" class="uppercase">{{rowData['placaVehiculo']}}</td>

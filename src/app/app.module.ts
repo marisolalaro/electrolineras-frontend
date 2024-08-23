@@ -18,7 +18,6 @@ import { TabViewModule } from 'primeng/tabview';
 import { SharedModule } from 'primeng/api';
 import { ResponseInterceptor } from './core/interceptors/response.interceptor';
 import { MessageService } from 'primeng/api';
-// import { UppercaseDirective } from './core/directives/uppercase.directive';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -27,7 +26,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    // UppercaseDirective
   ],
   imports: [
     BrowserModule,
@@ -50,7 +48,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     LeafletModule,
     CommonModule,
     TabViewModule, 
-    SharedModule
+    SharedModule,
   ],
   providers: [
     DatePipe,

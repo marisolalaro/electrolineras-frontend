@@ -28,7 +28,6 @@ export const labels: any = {
   code: 'Código',
   price: 'Precio',
   stock: 'Stock',
-  category: 'Categoría',
   startDate: 'Fecha Inicio',
   endDate: 'Fecha Fin',
   createdAt: 'Fecha Creación',
@@ -116,15 +115,15 @@ export const buttons: any = {
   expand: 'Mas información'
 }
 
-export const tooltip: any = {
-  create: 'Crear',
-  edit: 'Editar',
-  delete: 'Eliminar',
-  info: 'Info',
-  clear: 'Limpiar',
-  export: 'Exportar',
-  reload: 'Actualizar',
-}
+// export const tooltip: any = {
+//   create: 'Crear',
+//   edit: 'Editar',
+//   delete: 'Eliminar',
+//   info: 'Info',
+//   clear: 'Limpiar',
+//   export: 'Exportar',
+//   reload: 'Actualizar',
+// }
 
 export const mainTitles: IMainTitles = {
   // menu Horizontal
@@ -157,7 +156,6 @@ export const mainTitles: IMainTitles = {
     mainTitle: 'Facturas suministro de energía ',
     secondaryTitle: 'Listado de Facturas Carga de Energía'
   },
-
   electrolinerasOnline: {
     mainTitle: 'Electrolineras en Linea',
     secondaryTitle: 'Listado de Electrolineras en Linea'

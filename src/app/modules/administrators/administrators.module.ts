@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdministratorsRoutingModule } from './administrators-routing.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PipesModule } from 'src/app/core/pipes/pipes.module';
-import { AdministratorsService } from './services/administrators.service';
 import { PrimeModule } from 'src/app/prime.module';
-// import { UppercaseDirective } from 'src/app/core/directives/uppercase.directive';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+// pipes
+import { PipesModule } from 'src/app/core/pipes/pipes.module';
+// Services
+import { AdministratorsService } from './services/administrators.service';
+// routes
+import { AdministratorsRoutingModule } from './administrators-routing.module';
 
 @NgModule({
   declarations: [
-    // UppercaseDirective
   ],
   imports: [
     AdministratorsRoutingModule,

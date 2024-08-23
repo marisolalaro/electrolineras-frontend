@@ -1,7 +1,12 @@
 import { FormsModule } from '@angular/forms';
 import { Component, ViewChild } from '@angular/core';
 import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
+// librerias
 import * as moment from 'moment';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import { xmlToJsonUtil } from 'xml-to-json-util';
 // Primeng
 import { Table } from 'primeng/table';
 // cores
@@ -15,21 +20,26 @@ import { InvoiceEnergyChargingModule } from './invoice-energy-charging.module';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 import { InvoiceEnergyChargingModel } from 'src/app/core/model/invoice-energy-charging';
 // services
+import { InvoiceTransaction } from './services/pdf-invoice-transaction';
+import { Base64ToPdfService } from '../../core/services/base-64-to-pdf.service';
 import { InvoiveEnergyChargingService } from './services/invoive-energy-charging.service';
-import { Base64ToPdfService } from '../invoice-electric-stations/services/base-64-to-pdf.service';
-import { xmlToJsonUtil } from 'xml-to-json-util';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { InvoiceTransaction } from './services/invoice-transaction';
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-invoice-energy-charging',
-  standalone: true,
-  imports: [InvoiceEnergyChargingModule, NgFor, NgIf, PipesModule, FormsModule, NgSwitch, NgSwitchCase],
   templateUrl: './invoice-energy-charging.component.html',
   styleUrls: ['./invoice-energy-charging.component.scss'],
+  standalone: true,
+  imports: [
+    NgIf,
+    NgFor,
+    NgSwitch,
+    PipesModule,
+    FormsModule,
+    NgSwitchCase,
+    InvoiceEnergyChargingModule,
+  ],
 })
+
 export default class InvoiceEnergyChargingComponent {
 
   // variables de control
@@ -41,26 +51,25 @@ export default class InvoiceEnergyChargingComponent {
   public totalRecords: number = 0;
 
   // variables propias del componente
+  public es: any;
   public invoices: InvoiceEnergyChargingModel[] = [];
   public invoice: InvoiceEnergyChargingModel = new InvoiceEnergyChargingModel();
-  es: any;
-  public campoCuf: string = '';
-  public campoAmount: string = '';
-  public campoFechaHoraEmision: string = '';
-  public campoUrlFacturaSiat: string = '';
-
+  
   // variables globales
   public titlesGlobales = titles;
   public titleComponent: any = mainTitles['facturasCargaEnergia'];
-
+  
   // Variables Dialog
   public dialogDetalle: boolean = false;
-
+  
   // variables de tabla
   @ViewChild('dt1') dt!: Table;
-  public cabeceras: any[] = [];
-
+  
   // variables para el filtro
+  public campoCuf: string = '';
+  public campoAmount: string = '';
+  public campoUrlFacturaSiat: string = '';
+  public campoFechaHoraEmision: string = '';
   public bodyFilter: BodyFilterModel = new BodyFilterModel(
     this.page,
     this.itemsPerPage,
@@ -75,16 +84,6 @@ export default class InvoiceEnergyChargingComponent {
   ) { }
 
   ngOnInit() {
-    this.es = {
-      firstDayOfWeek: 1,
-      dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
-      dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
-      dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
-      monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
-      monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
-      today: "Hoy",
-      clear: "Borrar",
-    };
     this.inicializaDatos()
     .then( datosInicializados => {
       if (datosInicializados) {
@@ -104,15 +103,16 @@ export default class InvoiceEnergyChargingComponent {
 
   inicializaDatos() {
     return new Promise((resolve) => {
-      this.cabeceras = [
-        { field: 'names', header: 'Nombres' },
-        { field: 'lastName', header: 'Apellido Paterno' },
-        { field: 'motherLastName', header: 'Apellido Materno' },
-        { field: 'electronicMail', header: 'Email' },
-        { field: 'paymentTransactionsElectrolineraList', header: 'Última Transacción' },
-        { field: 'chargeClientList', header: 'Última Carga' },
-        { field: '', header: 'Opciones' },
-      ];
+      this.es = {
+        firstDayOfWeek: 1,
+        dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+        dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+        dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+        monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+        monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
+        today: "Hoy",
+        clear: "Borrar",
+      };
       resolve(true);
     })
   }
@@ -202,7 +202,7 @@ export default class InvoiceEnergyChargingComponent {
     this.getInvoicesCharging();
   }
 
-  clear(table: Table) {
+  clearFilters(table: Table) {
     table.clear();
     table.clearFilterValues();
     this.campoCuf = '';

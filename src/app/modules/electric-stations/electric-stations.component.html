@@ -1,7 +1,7 @@
 <div class="container">
   <div class="card">
     <div class="row">
-      <h3><b>{{titleProduct.mainTitle}}</b></h3>
+      <h3><b>{{componentTitle.mainTitle}}</b></h3>
     </div>
     <div class="row">
       <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
@@ -21,7 +21,7 @@
         <ng-template pTemplate="caption">
           <div class="flex">
             <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
-              (click)="clear(dt1) ; getAllElectricStations()"></button>
+              (click)="clearFilters(dt1) ; getAllElectricStations()"></button>
           </div>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
@@ -82,8 +82,7 @@
                   (click)="confirm($event, rowData, true)">Deshabilitar</p-button>
               </div>
               <div *ngIf="!esSuperAdmin">
-                <label *ngIf="rowData['enabled']">Habilitado</label>
-                <label *ngIf="!rowData['enabled']">Deshabilitado</label>
+                <label>{{rowData['enabled'] | formatHabilitadoDeshabilitado}}</label>
               </div>
             </td>
             <td style="text-align:center; vertical-align:middle">
@@ -105,7 +104,6 @@
           </tr>
         </ng-template>
       </p-table>
-
     </div>
 
     <div class="row">
@@ -167,7 +165,6 @@
 
             <div class="form-group field">
               <label for="descripcion">{{labelsGlobales.tasaCarga}}</label>
-
               <p-autoComplete [(ngModel)]="selectedCountry" [dropdown]="true" [suggestions]="filteredCountries"
                 (completeMethod)="filterCountry($event)" field="amount" id="chargeRate" formControlName="chargeRate"
                 [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['chargeRate'].invalid}"></p-autoComplete>
@@ -265,7 +262,6 @@
 
             <div class="form-group field">
               <label for="descripcion">{{labelsGlobales.tasaCarga}}</label>
-
               <p-autoComplete [(ngModel)]="selectedCountry" [dropdown]="true" [suggestions]="filteredCountries"
                 (completeMethod)="filterCountry($event)" field="amount" id="chargeRate" formControlName="chargeRate"
                 [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['chargeRate'].invalid}"></p-autoComplete>
@@ -394,16 +390,13 @@
           <div class="row">
             <div class="grid">
               <div class="col-6" style="text-align: right;">
-                <!-- Contenido de la columna izquierda -->
                 <ul>
-                  <!-- <li> -->
-                    <p-divider align="right">
-                      <div class="inline-flex align-items-center">
-                        <i class="pi pi-user mr-2"></i>
-                        <b>Datos Generales</b>
-                      </div>
-                    </p-divider>
-                  <!-- </li> -->
+                  <p-divider align="right">
+                    <div class="inline-flex align-items-center">
+                      <i class="pi pi-user mr-2"></i>
+                      <b>Datos Generales</b>
+                    </div>
+                  </p-divider>
                   <li>
                     <i class="pi pi-align-justify" style="color: var(--primary-color)"></i> &nbsp;
                     <b>Nombre Estación: </b>
@@ -500,14 +493,11 @@
                 </ul>
               </div>
               <div class="col-6" style="text-align: left;">
-                <!-- Contenido de la columna derecha -->
-                 
                 <ul>
                   <li>
                     <p-divider></p-divider>
                   </li>
                   <li><label>{{electricStation.nameStation}}</label></li>
-                  
                   <li><label>{{electricStation.direccion}}</label></li>
                   <li><label>Marca de la Electrolinera</label></li>
                   <li><label>{{electricStation.modelModelCode}}</label></li>
@@ -523,7 +513,7 @@
                   <li><label>electricStation.longitude</label></li>
                   <li><label>electricStation.chargeRate.amount</label></li>
                   <li>
-                    <img [src]="imageUrl" alt="Converted Image" />
+                    <img [src]="imagenQR" alt="Converted Image" />
                   </li>
                   <li>
                     <p-divider></p-divider>
@@ -559,7 +549,6 @@
                     <td>{{ item.maxVoltage }}</td>
                     <td>{{ item.maxPower }}</td>
                     <td>{{ item.maxAmperage }}</td>
-
                     <p-button *ngIf="item.statusName == 'DISPONIBLE'" label="Disponible" [raised]="true"
                       severity="success"></p-button>
                     <p-button *ngIf="item.statusName == 'OCUPADO'" label="Ocupado" [raised]="true"

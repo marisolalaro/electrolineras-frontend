@@ -1,12 +1,14 @@
-import { NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { Component, ViewChild, OnInit } from '@angular/core';
+import { NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 // librerías
 import 'leaflet-routing-machine';
 import { Table } from 'primeng/table';
 import { catchError, of, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 // cores
+import { Global } from 'src/app/core/variables/globales';
 import { messages } from 'src/app/core/constants/messages';
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
@@ -16,16 +18,13 @@ import { ElectricStationsModule } from './electric-stations.module';
 // models
 import { TasaCargaModel } from 'src/app/core/model/tasa-carga';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
+import { PortConnectionModel } from 'src/app/core/model/port-connection';
 import { ElectricStationModel } from 'src/app/core/model/electric-station';
 // services
-import { HelpersService } from 'src/app/core/services/helpers.service';
+import { PortConnectionService } from './services/port-connector.service';
 import { ElectricStationsService } from './services/electric-stations.service';
 import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
-import { ConfirmationService } from 'primeng/api';
-import { PortConnectionModel } from 'src/app/core/model/port-connection';
-import { PortConnectionService } from './services/port-connector.service';
-import { Base64ToImageService } from '../invoice-electric-stations/services/base-64-to-image.service';
-import { Global } from 'src/app/core/variables/globales';
+import { Base64ToImageService } from '../../core/services/base-64-to-image.service';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -37,9 +36,22 @@ interface AutoCompleteCompleteEvent {
   selector: 'app-electric-stations',
   templateUrl: './electric-stations.component.html',
   styleUrls: ['./electric-stations.component.scss'],
-  providers: [HelpersService, MessageService, ConfirmationService],
-  imports: [ElectricStationsModule, NgFor, NgIf, PipesModule, ReactiveFormsModule, NgClass, NgSwitch, NgSwitchCase],
+  providers: [
+    MessageService, 
+    ConfirmationService
+  ],
+  imports: [
+    ElectricStationsModule, 
+    NgFor, 
+    NgIf, 
+    PipesModule, 
+    ReactiveFormsModule, 
+    NgClass, 
+    NgSwitch, 
+    NgSwitchCase
+  ],
 })
+
 export default class ElectricStationsComponent implements OnInit {
 
   // variables de control
@@ -75,26 +87,25 @@ export default class ElectricStationsComponent implements OnInit {
   public filteredCountries: any[] | undefined;
 
   // variables propias del componente
-  public cols: any[] = [];
   @ViewChild('dt1') dt!: Table;
+  public imagenQR: string | null = null;
   public tasasCarga: TasaCargaModel[] = [];
   public electricStations: ElectricStationModel[] = [];
-  public titleProduct: any = mainTitles['electrolineras'];
   public formRegistro: FormGroup = this.createFormGroup();
+  public componentTitle: any = mainTitles['electrolineras'];
   public formRegistroConector: FormGroup = this.createFormConector();
   public electricStation: ElectricStationModel = new ElectricStationModel();
-  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
-  public imageUrl: string | null = null;
-
+  
+  // variables para el filtro
   public nameStation: string = '';
   public direccion: string = '';
   public descripcion: string = '';
   public campoLatitude: string = '';
   public campoLongitude: string = '';
+  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
 
   constructor(
     public global: Global,
-    private helpersService: HelpersService,
     public tasaCargaService: ParTasaCargaService,
     public base64ImageService: Base64ToImageService,
     private confirmationService: ConfirmationService,
@@ -133,7 +144,6 @@ export default class ElectricStationsComponent implements OnInit {
     this.tasaCargaService.getAll().subscribe(
       (resp: any) => {
         this.countries = resp.data;
-        // this.tasasCarga = resp.data;
       }
     )
   }
@@ -181,7 +191,6 @@ export default class ElectricStationsComponent implements OnInit {
     });
   }
 
-  // adicionar un coenctor
   private createFormConector() {
     return new FormGroup({
       id: new FormControl(''),
@@ -205,7 +214,6 @@ export default class ElectricStationsComponent implements OnInit {
       .pipe(
         tap(() => {
           this.openDialog(false, false, 'crear');
-          this.helpersService.messageNotification('success', messages.successCreate);
           this.getAllElectricStations();
           this.submitted = false;
         }),
@@ -213,7 +221,6 @@ export default class ElectricStationsComponent implements OnInit {
           of(
             'error',
             err.map((message: any) => {
-              this.helpersService.messageNotification('error', message);
             })
           )
         )
@@ -232,7 +239,6 @@ export default class ElectricStationsComponent implements OnInit {
       .pipe(
         tap(() => {
           this.openDialog(false, false, 'conector');
-          this.helpersService.messageNotification('success', messages.successCreate);
           this.getAllElectricStations();
           this.submitted = false;
         }),
@@ -240,12 +246,10 @@ export default class ElectricStationsComponent implements OnInit {
           of(
             'error',
             err.map((message: any) => {
-              this.helpersService.messageNotification('error', message);
             })
           )
         )
-      )
-      .subscribe()
+      ).subscribe()
   }
 
   onUpdateRegistro() {
@@ -260,7 +264,6 @@ export default class ElectricStationsComponent implements OnInit {
       .pipe(
         tap(() => {
           this.openDialog(false, false, 'edit');
-          this.helpersService.messageNotification('success', messages.successUpdate);
           this.getAllElectricStations();
           this.submitted = false;
         }),
@@ -268,12 +271,10 @@ export default class ElectricStationsComponent implements OnInit {
           of(
             'error',
             err.map((message: any) => {
-              this.helpersService.messageNotification('error', message);
             })
           )
         )
-      )
-      .subscribe()
+      ).subscribe()
   }
 
   onOpenDetail(electricStation) {
@@ -297,7 +298,6 @@ export default class ElectricStationsComponent implements OnInit {
     this.mapaVisible = true;
     this.latitude = parseFloat(rowData.latitude);
     this.longitude = parseFloat(rowData.longitude);
-    // this.title = rowData.nameStation; // O cualquier otro título relevante
   }
 
   openDialog(state: any, stateSubmitted?: any, tipo?: any) {
@@ -317,7 +317,7 @@ export default class ElectricStationsComponent implements OnInit {
     this.submitted = stateSubmitted;
   }
 
-  cerrarMapa(evet) {
+  cerrarMapa(event) {
     this.mapaVisible = false
   }
 
@@ -362,11 +362,9 @@ export default class ElectricStationsComponent implements OnInit {
   }
 
   onDialogDetalles(electrolinera) {
-    // aqui llamar al servicio de la electrolinera online por id
     this.getOneElectricStation(electrolinera.id)
     .then( datosElectrolinera=>{
       if (datosElectrolinera) {
-        // this.imageUrl = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
         this.selectedCountry = this.electricStation.chargeRate;
         this.dialogDetalleRegistro = true;
       }
@@ -378,29 +376,27 @@ export default class ElectricStationsComponent implements OnInit {
     this.electricStationsService.getOne(idElectricStation).subscribe(
       (resp: any) => {
         this.electricStation = resp.data;
-        this.imageUrl = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
+        this.imagenQR = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
       }
     )
     resolve(true);
     });
   }
 
-  clear(table: Table) {
+  clearFilters(table: Table) {
     table.clear();
     table.clearFilterValues();
-
-    this.nameStation = '';
-    this.direccion = '';
-    this.descripcion = '';
-    this.campoLatitude = '';
-    this.campoLongitude = '';
-    
     this.bodyFilter = new BodyFilterModel(
       this.page,
       this.itemsPerPage,
       decodeLocal().user.roles[0].id,
       decodeLocal().user.id
     );
+    this.nameStation = '';
+    this.direccion = '';
+    this.descripcion = '';
+    this.campoLatitude = '';
+    this.campoLongitude = '';
   }
   
 }

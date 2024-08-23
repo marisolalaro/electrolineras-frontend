@@ -1,11 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ElectricStationsRoutingModule } from './electric-stations-routing.module';
+import { PrimeModule } from 'src/app/prime.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
-import { ElectricStationsService } from './services/electric-stations.service';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { PrimeModule } from 'src/app/prime.module';
+// modules
+import { ElectricStationsRoutingModule } from './electric-stations-routing.module';
+// services
+import { ElectricStationsService } from './services/electric-stations.service';
+// components
 import { MapaComponent } from './components/mapa/mapa.component';
 
 @NgModule({
@@ -17,7 +20,6 @@ import { MapaComponent } from './components/mapa/mapa.component';
     FormsModule,
     ReactiveFormsModule,
     PipesModule,
-    LeafletModule,
     LeafletModule,
     CommonModule,
     PrimeModule

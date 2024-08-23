@@ -1,9 +1,9 @@
-
-<!-- Reporte 2 anidado, reportes 3-->
- <p-table *ngIf="componenteVisible" [columns]="cols3" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%" class="custom-p-table">
+<!-- Reporte anidado, reportes 3-->
+<p-table *ngIf="componenteVisible" [columns]="cols3" [value]="reporte" [tableStyle]="{'min-width': '50rem'}"
+	width="100%" class="custom-p-table">
 	<ng-template pTemplate="caption">
-		<p-button icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" [rounded]="true" [text]="true" [raised]="true"
-			severity="success"></p-button> &nbsp;
+		<p-button icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" [rounded]="true" [text]="true"
+			[raised]="true" severity="success"></p-button> &nbsp;
 		<label><b>Descargar {{numeroReporte}} de {{tab.content.initialDate}} a {{tab.content.finalDate}}</b></label>
 	</ng-template>
 	<ng-template pTemplate="header" let-columns>
@@ -47,4 +47,4 @@
 </tr>
 </ng-template>
 </p-table>
-<!-- Reporte 2 anidado, reportes 3-->
+<!-- Reporte anidado, reportes 3-->

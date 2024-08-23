@@ -1,31 +1,3 @@
-<!-- <div>
-    <app-header (newItemEvent)="onClickMenu($event)"></app-header>
-    <div *ngIf="isMenu">
-        <p-splitter [panelSizes]="[15, 85]" [minSizes]="[15, 85]" styleClass="mb-5" >
-            <ng-template pTemplate>
-                <div>
-                    <app-sidebar></app-sidebar>
-                </div>
-            </ng-template>
-            <ng-template pTemplate>
-                <div class="layout-main-container" class="container">
-                    <div class="layout-main main-body">
-                        <router-outlet></router-outlet>
-                    </div>
-                </div>
-            </ng-template>
-        </p-splitter>
-    </div>
-    <div *ngIf="!isMenu">
-        <div class="layout-main-container" class="container">
-            <div class="layout-main main-body">
-                <router-outlet></router-outlet>
-            </div>
-        </div>
-    </div>
-    <app-footer></app-footer>
-</div> -->
-
 <div class="layout-wrapper">
     <app-header (toggleSidebar)="toggleSidebar()"></app-header>
     <p-sidebar [(visible)]="visibleSidebar" [baseZIndex]="10000">

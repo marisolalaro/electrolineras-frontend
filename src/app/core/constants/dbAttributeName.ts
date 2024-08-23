@@ -1,5 +1,3 @@
-import { environment } from 'src/app/core/environments/environment';
-
 export class DBAttributeName {
 
     // tabla client_user

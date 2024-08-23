@@ -1,8 +1,8 @@
 import { Base } from './base';
-import { Category } from './category';
+import { ChargeClientList } from './charge-client-list';
+import { PaymentTransactionsElectrolineraList } from './payment-transactions-electrolinera-list';
 
 export class Customer extends Base {
-
   id: number = null;
   electronicMail: string = '';
   phoneNumber: number = null;
@@ -12,34 +12,7 @@ export class Customer extends Base {
   lastRechargeAmount: number = null;
   remainingCredit: number = null;
   lastChargingStation: string = '';
+  enabled: boolean;
   paymentTransactionsElectrolineraList: PaymentTransactionsElectrolineraList[];
   chargeClientList: ChargeClientList[];
-}
-
-interface ChargeClientList {
-  id: number;
-  changeFee: string;
-  energyComsumed: string;
-  duration: string;
-  status: string;
-  staredChargingAt: string;
-  finisheAt: string;
-  chargingStation: string;
-  amount: number;
-  username: string;
-  idVoltBras: string;
-}
-
-interface PaymentTransactionsElectrolineraList {
-  id: number;
-  gloss: string;
-  amount: number;
-  paymentDate: string;
-  consumerName: null;
-  processPayment: number;
-  receiverBank: string;
-  nombreRazonSocial: string;
-  codigoTipoDocumentoIdentidad: string;
-  numeroDocumento: string;
-  complemento: string;
 }

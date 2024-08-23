@@ -58,28 +58,29 @@
           </p-toolbar>
         </ng-template>
         <p-tabView (onChange)="onTabChange($event)" [(activeIndex)]="activeIndex" [scrollable]="true">
-          <!-- <div> -->
-            <p-tabPanel *ngFor="let tab of tabs; index as i" [header]="tab.title" [closable]="true">
+          <p-tabPanel *ngFor="let tab of tabs; index as i" [header]="tab.title" [closable]="true">
 
-              <ng-container *ngIf="showReport === 'x reporte'">
-                <!-- <app-table-report-simple [rangoFechas]="tab.content" [tipoReporte]="reporteSeleccionado"></app-table-report-simple> -->
-                <app-table-report-simple [tab]="tab" [tipoReporte]="reporteSeleccionado" (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-report-simple>
-              </ng-container>
+            <ng-container *ngIf="showReport === 'x reporte'">
+              <app-table-report-simple [tab]="tab" [tipoReporte]="reporteSeleccionado"
+                (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-report-simple>
+            </ng-container>
 
-              <ng-container *ngIf="showReport === '3er reporte'">
-                <app-table-factura-relacionada [tab]="tab" (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-factura-relacionada>
-              </ng-container>
+            <ng-container *ngIf="showReport === '3er reporte'">
+              <app-table-factura-relacionada [tab]="tab"
+                (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-factura-relacionada>
+            </ng-container>
 
-              <ng-container *ngIf="showReport === '6to reporte'">
-                <app-table-transacciones-cliente [tab]="tab" (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-transacciones-cliente>
-              </ng-container>
+            <ng-container *ngIf="showReport === '6to reporte'">
+              <app-table-transacciones-cliente [tab]="tab"
+                (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-transacciones-cliente>
+            </ng-container>
 
-              <ng-container *ngIf="showReport === '7mo reporte'">
-                <app-table-suministro-cliente [tab]="tab" (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-suministro-cliente>
-              </ng-container>
+            <ng-container *ngIf="showReport === '7mo reporte'">
+              <app-table-suministro-cliente [tab]="tab"
+                (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-suministro-cliente>
+            </ng-container>
 
-            </p-tabPanel>
-          <!-- </div> -->
+          </p-tabPanel>
         </p-tabView>
 
       </p-card>

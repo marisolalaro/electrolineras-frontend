@@ -1,0 +1,41 @@
+import { Cliente } from "./cliente-transaction";
+import { IdCollectionCompany } from "./collection-company";
+import { IdPaymentType } from "./payment-type";
+
+export class IdPaymentTransactionElectrolinera {
+    id: number;
+    requestData: null;
+    gloss: string;
+    amount: number;
+    remainingAmount: number;
+    qrImage: string;
+    expirationDt: string;
+    responseStatus: null;
+    responseMessage: null;
+    responseData: null;
+    responseDescription: null;
+    idResponse: number;
+    authorizationNumber: null;
+    paymentDate: string;
+    registrationAt: string;
+    processIcon: number;
+    correlationId: string;
+    consumerName: string;
+    processPayment: number;
+    receiverAccount: string;
+    receiverName: string;
+    receiverDocument: string;
+    receiverBank: string;
+    cliente: Cliente;
+    nombreCliente: string;
+    emailCliente: string;
+    nombreRazonSocial: string;
+    codigoTipoDocumentoIdentidad: string;
+    numeroDocumento: string;
+    complemento: null;
+    codigoPais: number;
+    placaVehiculo: string;
+    giftCardNumber: number;
+    idCollectionCompany: IdCollectionCompany;
+    idPaymentType: IdPaymentType;
+}

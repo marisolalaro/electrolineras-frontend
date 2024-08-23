@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter  } from '@angular/core';
 import { ReportesService } from '../../services/reportes.service';
-import { ExcelService } from '../../services/excel.service';
+import { CrearExcelService } from '../../services/crear-excel.service';
 import { MessageService } from 'primeng/api';
 import { reports } from 'src/app/core/constants/labels';
 
@@ -28,7 +28,7 @@ export class TableSuministroClienteComponent {
   public numeroReporte = JSON.parse(JSON.stringify(reports.labelReporte7));
 
   constructor(
-    private excelService: ExcelService,
+    private excelService: CrearExcelService,
     private messageService: MessageService,
     private reporteService: ReportesService,
   ) { }

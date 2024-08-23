@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { EndPoins } from 'src/app/core/constants/endPoints';
+// models
 import { AdministratorModel } from 'src/app/core/model/administrators';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class AdministratorsService {
 
   private apiService: string;
 
-  constructor(private http: HttpClient) { 
+  constructor(
+    private http: HttpClient
+  ) { 
     this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.customer;
   }
 

@@ -19,7 +19,7 @@
         <ng-template pTemplate="caption">
           <div class="flex">
             <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
-              (click)="clear(dt1) ; getAllAdministrations()"></button>
+              (click)="clearFilters(dt1) ; getAllAdministrations()"></button>
           </div>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
@@ -87,8 +87,7 @@
                   (click)="confirm($event, rowData, true)">Deshabilitar</p-button>
               </div>
               <div *ngIf="!esSuperAdmin">
-                <label *ngIf="rowData['enabled']">Habilitado</label>
-                <label *ngIf="!rowData['enabled']">Deshabilitado</label>
+                <label>{{rowData['enabled'] | formatHabilitadoDeshabilitado}}</label>
               </div>
             </td>
             <td style="text-align:center; vertical-align:middle">
@@ -183,14 +182,6 @@
             <div class="form-group field">
               <label for="phoneNumber">{{labelsGlobales.telefono}}</label>
               <input type="text" pInputText formControlName="phoneNumber" />
-              <!-- <div *ngIf="submitted && formRegistro.controls['phoneNumber'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('phoneNumber')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-                <small class="p-error" *ngIf="formRegistro.get('phoneNumber')?.hasError('maxLength')">
-                  {{messagesGlobales.maxLength}}
-                </small>
-              </div> -->
             </div>
 
             <div class="form-group field">
@@ -334,14 +325,6 @@
             <div class="form-group field">
               <label for="phoneNumber">{{labelsGlobales.telefono}}</label>
               <input type="text" pInputText formControlName="phoneNumber" />
-              <!-- <div *ngIf="submitted && formRegistro.controls['phoneNumber'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('phoneNumber')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-                <small class="p-error" *ngIf="formRegistro.get('phoneNumber')?.hasError('maxLength')">
-                  {{messagesGlobales.maxLength}}
-                </small>
-              </div> -->
             </div>
 
             <div class="form-group field">

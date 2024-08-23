@@ -1,4 +1,4 @@
-<!-- Reporte 1 simple, reportes 1,2,4,5 -->
+<!-- Reporte simple, reportes 1,2,4,5 -->
 <p-table *ngIf="componenteVisible" [columns]="cols" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%"
 class="custom-p-table">
 <ng-template pTemplate="caption">
@@ -27,10 +27,10 @@ class="custom-p-table">
       </div>
 
       <div *ngIf="col.field === 'finisheAt' || col.field === 'staredChargingAt'">
-        {{ rowData[col.field] | formatFieldDateTime}}
+        {{ rowData[col.field] | formatDateAndTime}}
       </div>
     </td>
   </tr>
 </ng-template>
 </p-table>
-<!-- Reporte 1 simple, reportes 1,2,4,5 -->
+<!-- Reporte simple, reportes 1,2,4,5 -->

@@ -14,8 +14,6 @@ export class ReportesService {
     this.apiService = EndPoins.apiUrl + EndPoins.api;
   }
 
-
-
   // 1er Reporte Facturas compra - venta
   getFacturasCompraVenta(rangoFechas) {
     return this.http.post(this.apiService + EndPoins.transaction + EndPoins.facturaDatos, rangoFechas);

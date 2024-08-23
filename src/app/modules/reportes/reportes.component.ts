@@ -22,9 +22,6 @@ interface Tab {
 
 export default class ReportesComponent {
 
-  // variables de control
-  // public componenteVisible = false;
-
   // variables propias del componente  
   public tiposReportes: any[] = [];
   public tituloComponente: any = mainTitles['reportes'];
@@ -37,8 +34,8 @@ export default class ReportesComponent {
   // variables de filtros
   public rangoFechas;
   public reporteSeleccionado: any;
-  public coincidenciasFiltro: string[] = [];
   public rangeDates: Date[] | undefined;
+  public coincidenciasFiltro: string[] = [];
   
   // variables pestañas temporales
   public tabs: Tab[] = [];
@@ -144,7 +141,6 @@ export default class ReportesComponent {
   }
 
   onTabChange(event: any) {
-
     if (this.tabs[event.index].title == reports.numeroReporte1) {
       this.tabs[event.index].estado = false;
       this.showReport = 'nada';

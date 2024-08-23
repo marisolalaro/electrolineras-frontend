@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ReportesService } from '../../services/reportes.service';
-import { ExcelService } from '../../services/excel.service';
+import { CrearExcelService } from '../../services/crear-excel.service';
 import { MessageService } from 'primeng/api';
 import { reports } from 'src/app/core/constants/labels';
 
@@ -21,13 +21,14 @@ export class TableTransaccionesClienteComponent {
   // variables para mandar al componente Padre 
   @Output() datosEnviados: EventEmitter<string> = new EventEmitter<string>();
 
+  // variables propias del componente
   public cols6!: any[];
   public reporte: any[] = [];
   public blockedPanel: boolean = false;
   public numeroReporte = JSON.parse(JSON.stringify(reports.labelReporte6));
 
   constructor(
-    private excelService: ExcelService,
+    private excelService: CrearExcelService,
     private messageService: MessageService,
     private reporteService: ReportesService,
   ) { }

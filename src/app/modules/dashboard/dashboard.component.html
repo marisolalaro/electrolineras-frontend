@@ -9,7 +9,6 @@
             <div class="row">
               <div class="grid">
                 <div class="col-6" style="text-align: right;">
-                  <!-- Contenido de la columna izquierda -->
                   <ul>
                     <li><i class="pi pi-align-justify" style="color: var(--primary-color)"></i> &nbsp; <b>Descripción: </b></li>
                     <li><i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp; <b>Código QR: </b></li>
@@ -22,23 +21,16 @@
                   </ul>
                 </div>
                 <div class="col-6" style="text-align: left;">
-                  <!-- Contenido de la columna derecha -->
                   <ul>
                     <li><label [pTooltip]="item.descripcion" tooltipPosition="bottom" >{{item.descripcion | truncate:15}}</label></li>
                     <li><label>{{item.codeStationQr}}</label></li>
-
-                    <li><label *ngIf="item.stationConnectivityStatus">Online</label>
-                      <label *ngIf="!item.stationConnectivityStatus">Offline</label>
-                    
+                    <li>
+                      <label>{{item.stationConnectivityStatus | formatOnlineOffline}}</label>                    
                     </li>
-                    
                     <li><label>{{item.modelVendor}}</label></li>
                     <li><label>{{item.chargeRateAmount}}</label></li>
                     <li><label [pTooltip]="item.direccion" tooltipPosition="bottom" >{{item.direccion | truncate:15}}</label></li>
-
-                    <li *ngIf="item.ocppPublicAccessAllowed === true"><label>Si</label></li>
-                    <li *ngIf="item.ocppPublicAccessAllowed === false"><label>No</label></li>
-
+                    <li><label>{{item.ocppPublicAccessAllowed | formatSiNo}}</label></li>
                     <li>
                       <p-button size="small" *ngIf="item.chargingConnectorStatus == 'DISPONIBLE'" label="Disponible" [raised]="true"
                         severity="success" (click)="onVerTodasElectrolineras(item.id)"></p-button>
@@ -49,37 +41,13 @@
                       <p-button size="small" *ngIf="item.chargingConnectorStatus == 'BLOQUEADO'" label="Bloqueado" [raised]="true"
                         severity="danger" (click)="onVerTodasElectrolineras(item.id)"></p-button>
                     </li>
-
                   </ul>
                 </div>
               </div>
             </div>
-
-            
-            <!-- <span class="block text-500">Descripción</span> {{item.descripcion}}
-            <span class="block text-500">Código QR</span> {{item.codeStationQr}}
-            <span class="block text-500">Electrolinera Con Internet</span> {{item.stationConnectivityStatus}}
-            <span class="block text-500">Modelo</span> {{item.modelVendor}}
-            <span class="block text-500">Tasa de Carga</span> {{item.chargeRateAmount}}
-            <span class="block text-500">Publico</span>
-            <p *ngIf="item.ocppPublicAccessAllowed === true">Si</p>
-            <p *ngIf="item.ocppPublicAccessAllowed === false">No</p>
-            <span class="block text-500">Dirección</span> {{item.direccion}}
-            <span class="block text-500">Estado</span>
-
-            <p-button *ngIf="item.chargingConnectorStatus == 'DISPONIBLE'" label="Disponible" [raised]="true"
-              severity="success" (click)="onVerTodasElectrolineras(item.id)"></p-button>
-            <p-button *ngIf="item.chargingConnectorStatus == 'OCUPADO'" label="Ocupado" [raised]="true"
-              severity="warning" (click)="onVerTodasElectrolineras(item.id)"></p-button>
-            <p-button *ngIf="item.chargingConnectorStatus == 'NoConnector'" label="Sin Conectores" [raised]="true"
-              severity="secondary" (click)="onVerTodasElectrolineras(item.id)"></p-button>
-            <p-button *ngIf="item.chargingConnectorStatus == 'BLOQUEADO'" label="Bloqueado" [raised]="true"
-              severity="danger" (click)="onVerTodasElectrolineras(item.id)"></p-button> -->
-
             <ng-template pTemplate="footer">
               <p-button label="Mas Información" [text]="true" icon="pi pi-chevron-right"
                 (click)="onVerTodasElectrolineras(item.id)"></p-button>
-
             </ng-template>
           </p-card>
         </div>

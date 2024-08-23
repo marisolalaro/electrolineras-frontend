@@ -17,4 +17,9 @@ export const messages: any =
     selectionColumns: 'Seleccione las columnas.',
     searchCurrentView: 'Buscar en la vista actual',
     maxLength: 'A superado el limite requerido',
+    // login
+    error: 'Error',
+    datosIncorrectos: 'Usuario o Contraseña Incorrectos',
+    obligatorios: 'Campos obligatorios',
+    camposRequeridos: 'Nombre de usuario y contraseña, son campos requeridos',
 }

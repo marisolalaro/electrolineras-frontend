@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
-import * as moment from 'moment';
 // Primeng
 import { Table } from 'primeng/table';
 // cores
@@ -14,23 +13,30 @@ import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 import { InvoiceElectricStationModel } from 'src/app/core/model/invoice-electric-stations';
 // services
-import { Base64ToPdfService } from './services/base-64-to-pdf.service';
-import { Base64ToImageService } from './services/base-64-to-image.service';
+import { Base64ToPdfService } from '../../core/services/base-64-to-pdf.service';
+import { Base64ToImageService } from '../../core/services/base-64-to-image.service';
 import { InvoiceElectricStationsService } from './services/invoice-electric-stations.service';
-
-import { xmlToJsonUtil } from 'xml-to-json-util';
+import { InvoiceTransaction } from './services/pdf-invoice-transaction';
+// librerias
+import * as moment from 'moment';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { InvoiceTransaction } from './services/invoice-transaction';
-import { NgModel } from '@angular/forms';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import { xmlToJsonUtil } from 'xml-to-json-util';
 
 @Component({
   selector: 'app-invoice-electric-stations',
   templateUrl: './invoice-electric-stations.component.html',
   styleUrls: ['./invoice-electric-stations.component.scss'],
   standalone: true,
-  imports: [InvoiceElectricStationsModule, NgFor, NgIf, PipesModule, NgSwitch, NgSwitchCase]
+  imports: [
+    InvoiceElectricStationsModule, 
+    NgFor, 
+    NgIf, 
+    PipesModule, 
+    NgSwitch, 
+    NgSwitchCase
+  ]
 })
 export default class InvoiceElectricStationsComponent {
 
@@ -38,16 +44,12 @@ export default class InvoiceElectricStationsComponent {
   public orden: boolean = false;
   
   // variables propias del componente
+  public es: any;
   public titulosGlobales = titles;
   public visible: boolean = false;
   public imageUrl: string | null = null;
   public invoices: InvoiceElectricStationModel[] = [];
   public invoice: InvoiceElectricStationModel = new InvoiceElectricStationModel();
-  es: any;
-  public campoCuf: string = '';
-  public campoFechaHoraEmision: string = '';
-  public campoCodigoDescripcion: string = '';
-  public campoUrlFacturaSiat: string = '';
 
   // variables del paginator
   public page: number = 0;
@@ -59,21 +61,28 @@ export default class InvoiceElectricStationsComponent {
   public titleComponent: any = mainTitles['facturas'];
 
   // variables para el filtro
+  public campoCuf: string = '';
+  public campoUrlFacturaSiat: string = '';
+  public campoFechaHoraEmision: string = '';
+  public campoCodigoDescripcion: string = '';
   public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
 
   // variables de tabla
   @ViewChild('dt1') dt!: Table;
-  public cols: any[] = [];
-
 
   constructor(
-    public invoiceService: InvoiceElectricStationsService,
-    public base64ImageService: Base64ToImageService,
     public base64aXML: Base64ToPdfService,
-    private invoiceTransaction: InvoiceTransaction
+    private invoiceTransaction: InvoiceTransaction,
+    public base64ImageService: Base64ToImageService,
+    public invoiceService: InvoiceElectricStationsService,
   ) { }
 
   ngOnInit(): void {
+    this.getInvoices();
+    this.inicializaDatos();
+  }
+
+  inicializaDatos() {
     this.es = {
       firstDayOfWeek: 1,
       dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
@@ -84,23 +93,6 @@ export default class InvoiceElectricStationsComponent {
       today: "Hoy",
       clear: "Borrar",
     }; 
-    this.getInvoices();
-    this.inicializaDatos();
-  }
-
-  inicializaDatos() {
-    this.cols = [
-      { field: 'nombreRazonSocial', header: 'Razón social' },
-      { field: 'fechaHoraEmision', header: 'Fecha Emisión' },
-      { field: 'cuf', header: 'CUF' },
-      { field: 'numeroDocumento', header: 'Número de documento' },
-      { field: 'amount', header: 'Monto' },
-      { field: 'emailCliente', header: 'Correo Electrónico' },
-      { field: 'nombreCliente', header: 'Nombre Cliente' },
-      { field: 'codigoDescripcion', header: 'Código' },
-      { field: 'urlFacturaSiat', header: 'URL Factura' },
-      { field: '', header: 'Opciones' },
-    ];
   }
 
   getInvoices(): void {
@@ -121,7 +113,6 @@ export default class InvoiceElectricStationsComponent {
     this.bodyFilter.search.column = 'id'
     if(field == 'fechaHoraEmision') {
       value = moment($event).utc().format('YYYY-MM-DD')
-      // this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribRegistrationAt;
       this.bodyFilter.search.column = DBAttributeName.tabInvoice_AttribFechaEmision;
     }
     if(field == 'cuf') {
@@ -180,27 +171,24 @@ export default class InvoiceElectricStationsComponent {
   }
 
   onPageChange(event: any) {
-    // this.bodyFilter.page = event.page + 1;
     this.bodyFilter.page = event.page;
     this.bodyFilter.size = event.rows;
     this.getInvoices();
   }
 
-  clear(table: Table) {
+  clearFilters(table: Table) {
     table.clear();
     table.clearFilterValues();
-
-    this.campoCuf = '';
-    this.campoFechaHoraEmision = '';
-    this.campoCodigoDescripcion = '';
-    this.campoUrlFacturaSiat = '';
-
     this.bodyFilter = new BodyFilterModel(
       this.page,
       this.itemsPerPage,
       decodeLocal().user.roles[0].id,
       decodeLocal().user.id
     );
+    this.campoCuf = '';
+    this.campoFechaHoraEmision = '';
+    this.campoCodigoDescripcion = '';
+    this.campoUrlFacturaSiat = '';
   }
   
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ColorServiceService } from './modules/login/services/color-service.service';
+import { ColorServiceService } from './core/services/color-service.service';
+import { color } from './core/constants/colors';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ export class AppComponent {
   ) { }
 
   ngOnInit() {
-    this.changePrimaryColor('#2980b9');
+    this.changePrimaryColor(color.sistema);
   }
 
   changePrimaryColor(newColor: string) {

@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-// librerias
+// librerías
+import { tap } from 'rxjs';
 import * as moment from 'moment';
 import { Table } from 'primeng/table';
-import { catchError, of, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 // cores
 import { messages } from 'src/app/core/constants/messages';
@@ -17,18 +17,27 @@ import { AdministratorsModule } from './administrators.module';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 import { AdministratorModel } from 'src/app/core/model/administrators';
 // services
-import { HelpersService } from 'src/app/core/services/helpers.service';
-import { AdministratorsService } from './services/administrators.service';
 import { ConfirmationService } from 'primeng/api';
 import { Global } from 'src/app/core/variables/globales';
+import { AdministratorsService } from './services/administrators.service';
 
 @Component({
   standalone: true,
   selector: 'app-administrators',
   templateUrl: './administrators.component.html',
   styleUrls: ['./administrators.component.scss'],
-  providers: [HelpersService, MessageService, ConfirmationService],
-  imports: [AdministratorsModule, PipesModule, ReactiveFormsModule, NgFor, NgClass, NgIf, NgSwitch, NgSwitchCase],
+  providers: [
+    ConfirmationService
+  ],
+  imports: [
+    AdministratorsModule,
+    PipesModule,
+    ReactiveFormsModule,
+    NgFor,
+    NgClass,
+    NgIf,
+    NgSwitch,
+    NgSwitchCase],
 })
 export default class AdministratorsComponent {
 
@@ -45,22 +54,14 @@ export default class AdministratorsComponent {
   public titlesGlobales = titles;
   public botonesGlobales = buttons;
   public messagesGlobales = messages;
+  public componentTitle: any = mainTitles['administradores'];
 
-  // Variables Paaginador
+  // Variables Paginador
   public page: number = 0;
   public itemsPerPage: number = 9999;
   public totalRecords: number = 0;
-  
-  // variables propias del componete
-  @ViewChild('dt1') dt!: Table;
-  public cols: any[] = [];
-  public userLogin: any;
-  public administradors: AdministratorModel[] = [];
-  public formRegistro: FormGroup = this.createFormGroup();
-  public componentTitle: any = mainTitles['administradores'];
-  public administrador: AdministratorModel = new AdministratorModel();
-  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, 2, decodeLocal().user.id);
 
+  // variables para el filtro
   public username: string = '';
   public names: string = '';
   public lastName: string = '';
@@ -68,22 +69,29 @@ export default class AdministratorsComponent {
   public electronicMail: string = '';
   public cellPhoneNumber: string = '';
 
+  // variables propias del componente
+  @ViewChild('dt1') dt!: Table;
+  public userLogin: any;
+  public administradors: AdministratorModel[] = [];
+  public formRegistro: FormGroup = this.createFormGroup();
+  public administrador: AdministratorModel = new AdministratorModel();
+  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, 2, decodeLocal().user.id);
 
   constructor(
     public global: Global,
-    private helpersService: HelpersService,
+    private messageService: MessageService,
     private confirmationService: ConfirmationService,
     public administratorsService: AdministratorsService,
   ) { }
 
   ngOnInit(): void {
-    this.esSuperAdmin = this.global.getEsSuperAdmin();
-    this.userLogin = this.global.getUser();
+    this.inicializaDatos()
     this.getAllAdministrations();
   }
 
   inicializaDatos() {
-
+    this.esSuperAdmin = this.global.getEsSuperAdmin();
+    this.userLogin = this.global.getUser();
   }
 
   getAllAdministrations() {
@@ -138,7 +146,6 @@ export default class AdministratorsComponent {
     this.formRegistro.controls['username'].setValue(item.username);
     this.formRegistro.controls['birthdate'].setValue(new Date(moment(item.birthdate).toString()));
     this.dialogEdit = true;
-    // this.formRegistro.removeControl('password');
   }
 
   onCreateRegistro() {
@@ -161,25 +168,13 @@ export default class AdministratorsComponent {
       .pipe(
         tap(() => {
           this.openDialog(false, false, 'crear');
-          this.helpersService.messageNotification('success', messages.successCreate);
+          this.messageService.add({ severity: 'success', detail: messages.successCreate });
           this.getAllAdministrations();
-        }),
-        catchError((err) =>
-          of(
-            'error',
-            err.map((message: any) => {
-              this.helpersService.messageNotification('error', message);
-            })
-          )
-        )
-      )
-      .subscribe()
+        })
+      ).subscribe()
   }
 
   onUpdateRegistro() {
-    var registro: AdministratorModel = {
-      ...this.formRegistro.value,
-    };
     this.administrador.names = this.formRegistro.get('names').value;
     this.administrador.lastName = this.formRegistro.get('lastName').value;
     this.administrador.motherLastName = this.formRegistro.get('motherLastName').value;
@@ -203,27 +198,17 @@ export default class AdministratorsComponent {
     this.administratorsService.update(this.administrador)
       .pipe(
         tap(() => {
-          this.helpersService.messageNotification('success', messages.successCreate);
           this.getAllAdministrations();
           this.dialogEdit = false;
-        }),
-        catchError((err) =>
-          of(
-            'error',
-            err.map((message: any) => {
-              this.helpersService.messageNotification('error', message);
-            })
-          )
-        )
-      )
-      .subscribe()
+          this.messageService.add({ severity: 'success', detail: messages.successUpdate });
+        })
+      ).subscribe()
   }
 
   applyFilter($event: any, field: string, matchMode: string) {
     this.bodyFilter.page = 0;
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
-    // this.getAllElectricStations();
   }
 
   customSort(event) {
@@ -266,23 +251,21 @@ export default class AdministratorsComponent {
     });
   }
 
-  clear(table: Table) {
+  clearFilters(table: Table) {
     table.clear();
     table.clearFilterValues();
-
-    this.username = '';
-    this.names = '';
-    this.lastName = '';
-    this.motherLastName = '';
-    this.electronicMail = '';
-    this.cellPhoneNumber = '';
-
     this.bodyFilter = new BodyFilterModel(
       this.page,
       this.itemsPerPage,
       decodeLocal().user.roles[0].id,
       decodeLocal().user.id
     );
+    this.username = '';
+    this.names = '';
+    this.lastName = '';
+    this.motherLastName = '';
+    this.electronicMail = '';
+    this.cellPhoneNumber = '';
   }
 
 }

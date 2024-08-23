@@ -1,4 +1,7 @@
+import { Address } from './address';
 import { Base } from './base';
+import { ChargingConnector } from './charging-connector';
+import { ModelElectricStation } from './model-electric-station';
 import { TasaCargaModel } from './tasa-carga';
 
 export class ElectricStationModel extends Base {
@@ -20,7 +23,7 @@ export class ElectricStationModel extends Base {
   stationConnectivityStatus: null;
   visibility: null;
   address: Address;
-  model: Model;
+  model: ModelElectricStation;
 
   addressCity: string;
   addressDistrict: string;
@@ -39,27 +42,4 @@ export class ElectricStationModel extends Base {
   chargingConnectors: ChargingConnector[];
   chargingConnectorStatus: string
 
-}
-
-interface Model {
-  id: number;
-  vendor: string;
-  modelCode: string;
-  activo: boolean;
-}
-
-interface Address {
-  id: number;
-  city: string;
-  country: string;
-  district: string;
-}
-
-interface ChargingConnector {
-  id: number;
-  name: string;
-  description: string;
-  type: string;
-  chargingStationName: string;
-  statusName: string;
 }

@@ -1,35 +1,43 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, Validators } from '@angular/forms';
-import { Global } from 'src/app/core/variables/globales';
 import { MessageService } from 'primeng/api';
+import { FormBuilder, Validators } from '@angular/forms';
+// core
+import { rutas } from 'src/app/core/constants/rutas';
+import { color } from 'src/app/core/constants/colors';
+import { Global } from 'src/app/core/variables/globales';
+import { messages } from 'src/app/core/constants/messages';
 // modulos
 import { LoginModule } from './login.module';
 // servicios
 import { LoginService } from './services/login.service';
-import { ColorServiceService } from './services/color-service.service';
+import { ColorServiceService } from '../../core/services/color-service.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  standalone: true,
-  imports: [LoginModule],
   styleUrls: ['./login.component.scss'],
-  providers: [MessageService]
+  standalone: true,
+  imports: [
+    LoginModule
+  ],
+  providers: [
+    MessageService
+  ]
 })
+
 export default class LoginComponent {
 
   // variables de control
-  private isLoggedIn: boolean = false;
   public showPassword: boolean = false;
 
-  // variables de validacion
+  // variables de validación
   public loginForm = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
   });
 
-  // variables propias dle componente
+  // variables propias del componente
   private dataLogin: any;
   public iconClass: string = 'pi pi-eye-slash';
 
@@ -43,7 +51,7 @@ export default class LoginComponent {
   ) { }
 
   ngOnInit() {
-    this.changePrimaryColor('#2980b9');
+    this.changePrimaryColor(color.sistema);
   }
 
   onIniciaSesion(): void {
@@ -84,7 +92,7 @@ export default class LoginComponent {
       if (this.loginForm.valid) {
         resolve(true);
       } else {
-        this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Nombre de usuario y contraseña, son campos requeridos' });
+        this.messageService.add({ severity: 'info', summary: messages.obligatorios, detail: messages.camposRequeridos });
         resolve(false);
       }
     })
@@ -100,7 +108,7 @@ export default class LoginComponent {
           resolve(true);
         })
         .catch((err) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Usuario o Contraseña Incorrectos' });
+          this.messageService.add({ severity: 'error', summary: messages.error, detail: messages.datosIncorrectos });
           resolve(false);
         });
     });
@@ -126,7 +134,7 @@ export default class LoginComponent {
 
   redireccionaRuta() {
     return new Promise((resolve) => {
-      this.router.navigate(['/administration/customers']);
+      this.router.navigate(['/' + rutas.rutaPrincipal + '/' + rutas.rutaClientes]);
       resolve(true);
     });
   }

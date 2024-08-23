@@ -3,8 +3,9 @@ import { Component, ViewChild } from '@angular/core';
 import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 // Primeng
 import { Table } from 'primeng/table';
-import { SortEvent } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 // cores
+import { Global } from 'src/app/core/variables/globales';
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
 import { mainTitles, titles } from 'src/app/core/constants/labels';
 import { DBAttributeName } from 'src/app/core/constants/dbAttributeName';
@@ -16,16 +17,24 @@ import { Customer } from 'src/app/core/model/customer';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 // services
 import { CustomerService } from './services/customer.service';
-import { ConfirmationService } from 'primeng/api';
-import { Global } from 'src/app/core/variables/globales';
 
 @Component({
   selector: 'app-customers',
-  standalone: true,
-  imports: [CustomersModule, NgFor, NgIf, PipesModule, FormsModule, NgSwitch, NgSwitchCase],
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.scss'],
-  providers: [ConfirmationService]
+  standalone: true,
+  imports: [
+    CustomersModule,
+    NgFor,
+    NgIf,
+    PipesModule,
+    FormsModule,
+    NgSwitch,
+    NgSwitchCase
+  ],
+  providers: [
+    ConfirmationService
+  ]
 })
 
 export default class CustomersComponent {
@@ -45,11 +54,6 @@ export default class CustomersComponent {
   public customers: Customer[] = [];
   public customer: Customer = new Customer();
 
-  public names: string = '';
-  public lastName: string = '';
-  public motherLastName: string = '';
-  public electronicMail: string = '';
-
   // variables globales
   public titlesGlobales = titles;
   public titleComponent: any = mainTitles['clientes'];
@@ -60,9 +64,12 @@ export default class CustomersComponent {
 
   // variables de tabla
   @ViewChild('dt1') dt!: Table;
-  public cabeceras: any[] = [];
 
   // variables para el filtro
+  public names: string = '';
+  public lastName: string = '';
+  public motherLastName: string = '';
+  public electronicMail: string = '';
   public bodyFilter: BodyFilterModel = new BodyFilterModel(
     this.page,
     this.itemsPerPage,
@@ -100,10 +107,8 @@ export default class CustomersComponent {
 
   onOpenDetail(customer) {
     this.customer = customer;
-
     this.totalTransacciones = customer.paymentTransactionsElectrolineraList.length;
     this.totalCargas = customer.chargeClientList.length;
-
     this.dialogDetalle = true;
   }
 
@@ -113,7 +118,6 @@ export default class CustomersComponent {
     this.bodyFilter.sort.direction = '';
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
-
     if (field == 'names') {
       this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribName;
     }
@@ -156,7 +160,6 @@ export default class CustomersComponent {
     if (field == 'electronicMail') {
       this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribElectronicMail;
     }
-
     if (this.bodyFilter.sort.column == "") {
       this.bodyFilter.sort.direction = ""
     } else {
@@ -197,21 +200,14 @@ export default class CustomersComponent {
   }
 
   onPageChange(event: any) {
-    // this.bodyFilter.page = event.page + 1; // cuando el paginador empieza en 1
     this.bodyFilter.page = event.page;
     this.bodyFilter.size = event.rows;
     this.getCustomers();
   }
 
-  clear(table: Table) {
+  clearFilters(table: Table) {
     table.clear();
     table.clearFilterValues();
-
-    this.names = '';
-    this.lastName = '';
-    this.motherLastName = '';
-    this.electronicMail = '';
-
     this.bodyFilter.search.value = '';
     this.bodyFilter = new BodyFilterModel(
       this.page,
@@ -219,6 +215,10 @@ export default class CustomersComponent {
       decodeLocal().user.roles[0].id,
       decodeLocal().user.id
     );
+    this.names = '';
+    this.lastName = '';
+    this.motherLastName = '';
+    this.electronicMail = '';
   }
 
 }

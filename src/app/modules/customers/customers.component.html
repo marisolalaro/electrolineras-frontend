@@ -16,7 +16,7 @@
         <ng-template pTemplate="caption">
           <div class="flex">
             <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
-              (click)="clear(dt1) ; getCustomers()"></button>
+              (click)="clearFilters(dt1) ; getCustomers()"></button>
           </div>
         </ng-template>
 
@@ -101,8 +101,7 @@
                 <p-button *ngIf="!rowData['enabled']" [outlined]="true" severity="secondary" (click)="confirm($event, rowData, true)">Deshabilitar</p-button>
               </div>
               <div *ngIf="!esSuperAdmin">
-                <label *ngIf="rowData['enabled']">Habilitado</label>
-                <label *ngIf="!rowData['enabled']">Deshabilitado</label>
+                <label >{{rowData['enabled'] | formatHabilitadoDeshabilitado}}</label>
               </div>
             </td>
 
@@ -195,11 +194,10 @@
                   <td style="text-align:left; vertical-align:middle" class="uppercase" *ngIf="customer.complemento != 'null'">{{customer.complemento}}</td>
                   <td style="text-align:left; vertical-align:middle" class="uppercase" *ngIf="customer.complemento == 'null'">s/c</td>
 
-                  <td style="text-align:left; vertical-align:middle" class="uppercase">{{customer.paymentDate | formatFieldDate}}</td>
+                  <td style="text-align:left; vertical-align:middle" class="uppercase">{{customer.paymentDate | formatDiaMesAnio}}</td>
                   <td style="text-align:left; vertical-align:middle" class="uppercase">{{customer.gloss}}</td>
                   <td style="text-align:right; vertical-align:middle" class="uppercase">{{customer.amount | numberDecimal:2}}</td>
-                  <td *ngIf="customer.processPayment == 1" style="text-align:right; vertical-align:middle" class="uppercase">Pagado</td>
-                  <td *ngIf="customer.processPayment != 1" style="text-align:right; vertical-align:middle" class="uppercase">No Pagado</td>
+                  <td style="text-align:right; vertical-align:middle" class="uppercase">{{customer.processPayment | formatPagadoNoPagado}}</td>
                 </tr>
               </ng-template>
             </p-table>
@@ -237,7 +235,7 @@
                       field="finisheAt"></p-sortIcon>
                   </th>
 
-                  <th style="width:13%" pSortableColumn="duration">Duración Carga<p-sortIcon field="duration"></p-sortIcon>
+                  <th style="width:13%" pSortableColumn="duration">Duración Carga (Hrs)<p-sortIcon field="duration"></p-sortIcon>
                   </th>
 
                   <th style="width:10%" pSortableColumn="energyComsumed">Energía Consumida kW <p-sortIcon
@@ -254,9 +252,9 @@
                   <td style="text-align:right; vertical-align:middle">{{rowIndex + 1}}</td> 
                   <td style="text-align:right; vertical-align:middle">{{customer.amount | numberDecimal:2}}</td>
                   <td style="text-align:right; vertical-align:middle">{{customer.changeFee}}</td>
-                  <td style="text-align:right; vertical-align:middle">{{customer.staredChargingAt | formatFieldTime }}</td>
-                  <td style="text-align:right; vertical-align:middle">{{customer.finisheAt | formatFieldTime}}</td>
-                  <td style="text-align:right; vertical-align:middle">{{customer.duration | duration}}</td>
+                  <td style="text-align:right; vertical-align:middle">{{customer.staredChargingAt | formatHoraMinutoSegundo }}</td>
+                  <td style="text-align:right; vertical-align:middle">{{customer.finisheAt | formatHoraMinutoSegundo}}</td>
+                  <td style="text-align:right; vertical-align:middle">{{customer.duration | formatSegundosEnHoraMinutoSegundo}}</td>
                   <td style="text-align:right; vertical-align:middle">{{customer.energyComsumed}}</td>
                   <td style="text-align:center; vertical-align:middle" class="uppercase">{{customer.status}}</td>
                   <td style="text-align:left; vertical-align:middle" class="uppercase">{{customer.chargingStation}}</td>

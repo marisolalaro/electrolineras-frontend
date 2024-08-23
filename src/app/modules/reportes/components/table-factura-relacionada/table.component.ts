@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ReportesService } from '../../services/reportes.service';
-import { ExcelService } from '../../services/excel.service';
+import { CrearExcelService } from '../../services/crear-excel.service';
 import { MessageService } from 'primeng/api';
 import { reports } from 'src/app/core/constants/labels';
 
@@ -19,7 +19,6 @@ export class TableFacturaRelacionadaComponent implements OnInit{
   @Output() datosEnviados: EventEmitter<string> = new EventEmitter<string>();
 
   // variables de control
-  // public blockedPanel: boolean = false;
   public componenteVisible: boolean = false;
 
   // variables propias del componente
@@ -28,7 +27,7 @@ export class TableFacturaRelacionadaComponent implements OnInit{
   public numeroReporte = JSON.parse(JSON.stringify(reports.labelReporte3));
 
   constructor(
-    private excelService: ExcelService,
+    private excelService: CrearExcelService,
     private messageService: MessageService,
     private reporteService: ReportesService,
   ) { }

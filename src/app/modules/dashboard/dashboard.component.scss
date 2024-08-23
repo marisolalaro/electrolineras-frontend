@@ -1,37 +1,9 @@
-// .grid {
-//     display: flex;
-//     flex-wrap: wrap;
-//     margin-right: -0.5rem;
-//     margin-left: -0.5rem;
-//     margin-top: -0.5rem;
-    
-// }
-// .wrapper {
-//     display: grid;
-//     border-style: solid;
-//     border-color: red;
-//     grid-template-columns: repeat(4, 1fr);
-//     grid-gap: 10px;
-//     width: 100vw;
-//     height: 100vh;
-//   }
-
-//   .wrapper {
-//     position: fixed;
-//     display: grid;
-//     border-style: solid;
-//     border-color: red;
-//     grid-template-columns: repeat(3, 1fr);
-//     grid-template-rows: repeat(3, 1fr);
-//     grid-gap: 10px;
-//   }
-
 ul {
-    list-style-type: none; /* Elimina los puntos de las listas, si es necesario */
-    padding: 0;
-    margin: 0;
-  }
-  
-  li {
-    padding: 8px 0; /* Espaciado entre los elementos de la lista */
-  }
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  padding: 8px 0;
+}

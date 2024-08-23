@@ -1,5 +1,5 @@
 body {
-  background: url("../../../assets/img/woman-charging-car.jpg") no-repeat center center fixed;
+  background: url("../../../assets/img/woman-charging-car-min.jpg") no-repeat center center fixed;
   background-position: center;
   background-size: cover;
   background-repeat:no-repeat ;
@@ -17,8 +17,6 @@ body {
 }
 
 .login {
-  /* arriba y abajo | izquierda y derecha */
-  // margin: 0 auto;
   width: 500px;
   background-color: var(--color-white-60);
   border-radius: 5px;
@@ -57,13 +55,6 @@ body {
   color: #999;
 }
 
-// .input-text input::placeholder {
-//   font-size: 1rem;
-//   color: #999;
-//   text-indent: 40px;
-// }
-
-// casi
 .login-div span {
   width: 100%;
   margin: 0 auto;
@@ -124,12 +115,9 @@ body {
     width: 100%;
   }
 
-
-
   .bottom {
     border-top: 1px solid #737373;
   }
-
 
   .list-bottom {
     width: 33%;

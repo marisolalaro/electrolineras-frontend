@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -38,7 +37,6 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
 import { SidebarModule } from 'primeng/sidebar';
 import { SharedModule } from 'primeng/api';
 import { ImageModule } from 'primeng/image';
-// import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { SplitterModule } from 'primeng/splitter';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { DataViewModule } from 'primeng/dataview';

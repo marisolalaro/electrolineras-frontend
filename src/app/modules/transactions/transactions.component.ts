@@ -3,7 +3,6 @@ import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import * as moment from 'moment';
 // Primeng
 import { Table } from 'primeng/table';
-import { SortEvent } from 'primeng/api';
 // cores
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
 import { mainTitles, titles } from 'src/app/core/constants/labels';
@@ -16,16 +15,23 @@ import { BodyFilterModel } from 'src/app/core/model/body-filter';
 import { TransactionsModel } from 'src/app/core/model/transactions';
 // services
 import { TransactionsService } from './services/transactions.service';
-import { Base64ToImageService } from '../invoice-electric-stations/services/base-64-to-image.service';
+import { Base64ToImageService } from '../../core/services/base-64-to-image.service';
 
 @Component({
   selector: 'app-transactions',
   templateUrl: './transactions.component.html',
   styleUrls: ['./transactions.component.scss'],
   standalone: true,
-  imports: [TransactionsModule, NgFor, NgIf, PipesModule, NgSwitch, NgSwitchCase],
-
+  imports: [
+    TransactionsModule,
+    NgFor,
+    NgIf,
+    PipesModule,
+    NgSwitch,
+    NgSwitchCase
+  ],
 })
+
 export default class TransactionsComponent implements OnInit {
 
   // variables de control
@@ -33,6 +39,7 @@ export default class TransactionsComponent implements OnInit {
   public visible: boolean = false;
 
   // variables propias del componente
+  public es: any;
   public titulosGlobales = titles;
   public imageUrl: string | null = null;
   public transactions: TransactionsModel[] = [];
@@ -47,16 +54,7 @@ export default class TransactionsComponent implements OnInit {
   public titlesGlobales = titles;
   public titleComponent: any = mainTitles['transacciones'];
 
-  // variables para el filtro
-  public bodyFilter: BodyFilterModel = new BodyFilterModel(
-    this.page,
-    this.itemsPerPage,
-    decodeLocal().user.roles[0].id,
-    decodeLocal().user.id
-  );
-
   // variables clave json
-  // public nombreConsumidor = DBAttributeName.tabPaymentConsumerName;
   public nombreRazonSocial = DBAttributeName.tabPaymentNombreRazonSocial;
   public numeroDocumento = DBAttributeName.tabPaymentDocumentoConsumer;
   public email = DBAttributeName.tabPaymentEmailCliente;
@@ -69,12 +67,17 @@ export default class TransactionsComponent implements OnInit {
   public recibeBanck = DBAttributeName.tabPaymentReciveBank;
   public recibeeDocument = DBAttributeName.tabPaymentReciveDocument;
   public date: Date | undefined;
+
   // variables de tabla
   @ViewChild('dt1') dt!: Table;
-  public cabeceras: any[] = [];
 
-  es: any;
-
+  // variables para el filtro
+  public bodyFilter: BodyFilterModel = new BodyFilterModel(
+    this.page,
+    this.itemsPerPage,
+    decodeLocal().user.roles[0].id,
+    decodeLocal().user.id
+  );
   public campoNombreRazonSocial: string = '';
   public campoNumeroDocumento: string = '';
   public campoEmailCliente: string = '';
@@ -85,7 +88,7 @@ export default class TransactionsComponent implements OnInit {
   public campoPlacaVehiculo: string = '';
   public campoReceiverBank: string = '';
   public campoReceiverDocument: string = '';
-  
+
   constructor(
     public transactionService: TransactionsService,
     public base64ImageService: Base64ToImageService,
@@ -94,6 +97,9 @@ export default class TransactionsComponent implements OnInit {
   ngOnInit(): void {
     this.getTransactions();
     this.inicializaDatos();
+  }
+
+  inicializaDatos() {
     this.es = {
       firstDayOfWeek: 1,
       dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
@@ -104,24 +110,6 @@ export default class TransactionsComponent implements OnInit {
       today: "Hoy",
       clear: "Borrar",
     };
-  }
-
-  inicializaDatos() {
-    this.cabeceras = [
-      // { field: this.nombreConsumidor, header: 'Nombres Consumidor' },
-      { field: this.nombreRazonSocial, header: 'Nombre / Razón Social' },
-      { field: this.numeroDocumento, header: 'Número de documento' },
-      { field: this.email, header: 'Email' },
-      { field: this.montoTransaccion, header: 'Monto de Transacción' },
-      { field: this.fechaRegistro, header: 'Fecha registro' },
-      { field: this.giftCard, header: 'Numero Gift card' },
-      { field: this.glosa, header: 'Glosa' },
-      // { field: this.nombreCliente, header: 'Nombre Cliente' },
-      { field: this.placaVehiculo, header: 'Placa Vehículo' },
-      { field: this.recibeBanck, header: 'Banco recibido' },
-      { field: this.recibeeDocument, header: 'Documento Recibido' },
-      { field: 'QR', header: 'Opciones' }
-    ];
   }
 
   getTransactions(): void {
@@ -140,10 +128,6 @@ export default class TransactionsComponent implements OnInit {
     this.bodyFilter.page = 0;
     this.bodyFilter.sort.column = '';
     this.bodyFilter.sort.direction = '';
-
-    // if (field == this.nombreConsumidor) {
-    //   this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribConsumer;
-    // }
     if (field == this.nombreRazonSocial) {
       this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribNombreRazonSocial;
     }
@@ -166,9 +150,6 @@ export default class TransactionsComponent implements OnInit {
     if (field == this.glosa) {
       this.bodyFilter.search.column = DBAttributeName.tabPaymentGloss;
     }
-    // if (field == this.nombreCliente) {
-    //   this.bodyFilter.search.column = DBAttributeName.tabPaymentNombreCliente;
-    // }
     if (field == this.placaVehiculo) {
       this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribPlaca;
     }
@@ -186,10 +167,6 @@ export default class TransactionsComponent implements OnInit {
     this.orden = !orden;
     this.bodyFilter.search.column = "";
     this.bodyFilter.search.value = "";
-
-    // if (field == this.nombreConsumidor) {
-    //   this.bodyFilter.sort.column = DBAttributeName.tabPaymentTransactions_AttribConsumer;
-    // }
     if (field == this.nombreRazonSocial) {
       this.bodyFilter.sort.column = DBAttributeName.tabPaymentTransactions_AttribNombreRazonSocial;
     }
@@ -230,7 +207,6 @@ export default class TransactionsComponent implements OnInit {
   }
 
   onPageChange(event: any) {
-    // this.bodyFilter.page = event.page + 1;
     this.bodyFilter.page = event.page;
     this.bodyFilter.size = event.rows;
     this.getTransactions();
@@ -245,7 +221,12 @@ export default class TransactionsComponent implements OnInit {
     this.date = null;
     table.clear();
     table.clearFilterValues();
-
+    this.bodyFilter = new BodyFilterModel(
+      this.page,
+      this.itemsPerPage,
+      decodeLocal().user.roles[0].id,
+      decodeLocal().user.id
+    );
     this.campoNombreRazonSocial = '';
     this.campoNumeroDocumento = '';
     this.campoEmailCliente = '';
@@ -256,12 +237,5 @@ export default class TransactionsComponent implements OnInit {
     this.campoPlacaVehiculo = '';
     this.campoReceiverBank = '';
     this.campoReceiverDocument = '';
-
-    this.bodyFilter = new BodyFilterModel(
-      this.page,
-      this.itemsPerPage,
-      decodeLocal().user.roles[0].id,
-      decodeLocal().user.id
-    );
   }
 }

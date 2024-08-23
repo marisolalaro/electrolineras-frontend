@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PrimeModule } from 'src/app/prime.module';
-import { ReportesService } from './services/reportes.service';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ExcelService } from './services/excel.service';
-import { FormatFieldTimeCargaPipe } from 'src/app/core/pipes/format-field-time-carga';
-import { TableSuministroClienteComponent } from './components/table-suministro-cliente/table.component';
+// services
+import { ReportesService } from './services/reportes.service';
+import { CrearExcelService } from './services/crear-excel.service';
+// components
 import { TableReportSimpleComponent } from './components/table-report-simple/table.component';
-import { TableTransaccionesClienteComponent } from './components/table-transacciones-cliente/table.component';
+import { TableSuministroClienteComponent } from './components/table-suministro-cliente/table.component';
 import { TableFacturaRelacionadaComponent } from './components/table-factura-relacionada/table.component';
+import { TableTransaccionesClienteComponent } from './components/table-transacciones-cliente/table.component';
 
 @NgModule({
   declarations: [
@@ -38,8 +39,7 @@ import { TableFacturaRelacionadaComponent } from './components/table-factura-rel
   ],
   providers: [
     ReportesService,
-    ExcelService,
-    FormatFieldTimeCargaPipe,
+    CrearExcelService,
   ]
 })
 export class ReportesModule { }
