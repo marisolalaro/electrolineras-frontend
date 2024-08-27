@@ -55,6 +55,7 @@ interface AutoCompleteCompleteEvent {
 export default class ElectricStationsComponent implements OnInit {
 
   // variables de control
+  public previousState: boolean;
   public submitted: boolean = false;
   public mapaVisible: boolean = false;
   public esSuperAdmin: boolean = false;
@@ -335,16 +336,17 @@ export default class ElectricStationsComponent implements OnInit {
     });
   }
 
-  confirm(event, item, tipo) {
-    var texto = tipo ? 'Habilitar' : 'Deshabilitar';
+  confirm(event: any, item) {
+    var texto = item.enabled ? 'Habilitar' : 'Deshabilitar';
+    this.previousState = item.enabled;
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
+      target: event.originalEvent.target,
       message: `¿${texto} la electrolinera ${item.nameStation}?`,
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Si',
       rejectLabel: 'No',
       accept: () => {
-        if (tipo) {
+        if (item.enabled) {
           this.electricStationsService.enabledCustomer(item.id).subscribe(
             (resp: any) => {
               this.getAllElectricStations();
@@ -357,6 +359,9 @@ export default class ElectricStationsComponent implements OnInit {
             }
           )
         }
+      },
+      reject: () => {
+        item.enabled = !this.previousState;
       }
     });
   }

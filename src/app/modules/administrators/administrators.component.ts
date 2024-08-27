@@ -42,6 +42,7 @@ import { AdministratorsService } from './services/administrators.service';
 export default class AdministratorsComponent {
 
   // variables de control
+  public previousState: boolean;
   public submitted: boolean = false;
   public esSuperAdmin: boolean = false;
 
@@ -225,16 +226,16 @@ export default class AdministratorsComponent {
     });
   }
 
-  confirm(event, item, tipo) {
-    var texto = tipo ? 'Habilitar' : 'Deshabilitar';
+  confirmSwitchChange(event: any, item) {
+    var texto = item.enabled ? 'Habilitar' : 'Deshabilitar';    
+    this.previousState = item.enabled;
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
+      target: event.originalEvent.target,
       message: `¿${texto} a ${item.lastName} ${item.motherLastName} ${item.names} ?`,
       icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Si',
-      rejectLabel: 'No',
-      accept: () => {
-        if (tipo) {
+      accept: () => {        
+        item.enabled = !this.previousState;
+        if (!item.enabled) {
           this.administratorsService.enabledCustomer(item.id).subscribe(
             (resp: any) => {
               this.getAllAdministrations();
@@ -247,6 +248,9 @@ export default class AdministratorsComponent {
             }
           )
         }
+      },
+      reject: () => {
+        item.enabled = !this.previousState;
       }
     });
   }
