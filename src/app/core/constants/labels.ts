@@ -13,7 +13,7 @@ export const labels: any = {
   tasaCarga: 'Tasa de Carga',
 
   // Administradores
-  email: 'Email',
+  email: 'Correo Electrónico',
   username: 'Nombre de Usuario',
   name: 'Nombres',
   apellidoPaterno: 'Apellido Paterno',
