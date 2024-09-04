@@ -25,6 +25,7 @@ import { PortConnectionService } from './services/port-connector.service';
 import { ElectricStationsService } from './services/electric-stations.service';
 import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
 import { Base64ToImageService } from '../../core/services/base-64-to-image.service';
+import { ModelService } from '../models/services/model.service';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -83,9 +84,12 @@ export default class ElectricStationsComponent implements OnInit {
   public dialogDetalleRegistro: boolean = false;
 
   // variables para el select
+  public selectedModel: any;
   public selectedCountry: any;
+  public models: any[] | undefined;
   public countries: any[] | undefined;
   public filteredCountries: any[] | undefined;
+  public filteredModels: any[] | undefined;
 
   // variables propias del componente
   @ViewChild('dt1') dt!: Table;
@@ -108,6 +112,7 @@ export default class ElectricStationsComponent implements OnInit {
   constructor(
     public global: Global,
     public tasaCargaService: ParTasaCargaService,
+    public modelService: ModelService,
     public base64ImageService: Base64ToImageService,
     private confirmationService: ConfirmationService,
     public portConnectorService: PortConnectionService,
@@ -118,6 +123,7 @@ export default class ElectricStationsComponent implements OnInit {
     this.esSuperAdmin = this.global.getEsSuperAdmin();
     this.getAllElectricStations();
     this.getTasaDeCarga();
+    this.getModels();
   }
 
   filterCountry(event: AutoCompleteCompleteEvent) {
@@ -130,6 +136,18 @@ export default class ElectricStationsComponent implements OnInit {
       }
     }
     this.filteredCountries = filtered;
+  }
+
+  filterModel(event: AutoCompleteCompleteEvent) {
+    let filtered: any[] = [];
+    let query = event.query;
+    for (let i = 0; i < (this.models as any[]).length; i++) {
+      let model = (this.models as any[])[i];
+      if (model.modelCode.indexOf(query.toLowerCase()) == 0) {
+        filtered.push(model);
+      }
+    }
+    this.filteredModels = filtered;
   }
 
   getAllElectricStations(): void {
@@ -149,10 +167,21 @@ export default class ElectricStationsComponent implements OnInit {
     )
   }
 
+  getModels(): void {
+    this.modelService.getAll().subscribe(
+      (resp: any) => {
+        this.models = resp.data;
+        console.log(JSON.stringify(this.models) );
+        
+      }
+    )
+  }
+
   onSelecetedEdit(item) {
     this.electricStation = item;
     this.formRegistro.patchValue(item);
     this.selectedCountry = item.chargeRate;
+    this.selectedModel = item.model;
     this.dialogEdit = true;
   }
 
@@ -188,6 +217,7 @@ export default class ElectricStationsComponent implements OnInit {
       latitude: new FormControl('', [Validators.required]),
       longitude: new FormControl('', [Validators.required]),
       chargeRate: new FormControl('', [Validators.required]),
+      model: new FormControl('', [Validators.required]),
       codeStationQr: new FormControl('', [Validators.required]),
     });
   }
@@ -210,23 +240,20 @@ export default class ElectricStationsComponent implements OnInit {
     registro.chargeRate = {
       id: this.selectedCountry.id
     };
+    registro.model = {
+      id: this.selectedModel.id
+    };
     registro.activo = true;
-    this.electricStationsService.create(registro)
-      .pipe(
-        tap(() => {
-          this.openDialog(false, false, 'crear');
+    registro.enabled = true;
+    this.electricStationsService.create(registro).subscribe(
+      (resp: any) => {
+        this.openDialog(false, false, 'crear');
           this.getAllElectricStations();
           this.submitted = false;
-        }),
-        catchError((err) =>
-          of(
-            'error',
-            err.map((message: any) => {
-            })
-          )
-        )
-      )
-      .subscribe()
+      }, error => {
+        console.log(error);
+      }
+    )
   }
 
   onCreatePuerto() {
@@ -260,22 +287,20 @@ export default class ElectricStationsComponent implements OnInit {
     registro.chargeRate = {
       id: this.selectedCountry.id
     };
+    registro.model = {
+      id: this.selectedModel.id
+    };
     registro.activo = true;
-    this.electricStationsService.update(registro)
-      .pipe(
-        tap(() => {
-          this.openDialog(false, false, 'edit');
+    this.electricStationsService.update(registro).subscribe(
+      (resp: any) => {
+        this.openDialog(false, false, 'edit');
           this.getAllElectricStations();
           this.submitted = false;
-        }),
-        catchError((err) =>
-          of(
-            'error',
-            err.map((message: any) => {
-            })
-          )
-        )
-      ).subscribe()
+      }, error => {
+        console.log(error);
+        
+      }
+    )
   }
 
   onOpenDetail(electricStation) {

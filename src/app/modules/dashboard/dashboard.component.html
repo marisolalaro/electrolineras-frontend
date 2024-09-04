@@ -1,6 +1,11 @@
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.2/dist/sockjs.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <div class="container">
   <p-card header="">
     <div class="row">
+      {{heartbeat | json}}
+      <h4><b>Electrolineras</b></h4><br>
       <div class="grid">
         <div class="col-12 lg:col-6 xl:col-3" *ngFor="let item of electricStations">
           <p-card [header]="" subheader="" [style]="{ width: '360px' }">
@@ -10,72 +15,56 @@
               <div class="grid">
                 <div class="col-6" style="text-align: right;">
                   <ul>
-                    <li><i class="pi pi-align-justify" style="color: var(--primary-color)"></i> &nbsp; <b>Descripción:
-                      </b></li>
+                    <li><i class="pi pi-align-justify" style="color: var(--primary-color)"></i> &nbsp; <b>Descripción:</b></li>
                     <li><i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp; <b>Código QR: </b></li>
-                    <li><i class="pi pi-wifi" style="color: var(--primary-color)"></i> &nbsp; <b>Estado en linea: </b>
-                    </li>
-                    <li><i class="pi pi-bookmark" style="color: var(--primary-color)"></i> &nbsp; <b>Modelo: </b></li>
-                    <li><i class="pi pi-sort-alt" style="color: var(--primary-color)"></i> &nbsp; <b>Tasa de Carga: </b>
-                    </li>
-                    <li><i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp; <b>Dirección: </b>
-                    </li>
-                    <li><i class="pi pi-building" style="color: var(--primary-color)"></i> &nbsp; <b>Publico: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Estado: </b></li> <br> 
-
+                    <li><i class="pi pi-wifi" style="color: var(--primary-color)"></i> &nbsp; <b>Estado en linea: </b></li>
                     <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Proveedor del punto de carga: </b></li>
                     <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Modelo del punto de carga: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Número de serie de la caja de carga: </b></li>
+                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Tipo de medidor: </b></li>
+                    <li><i class="pi pi-sort-alt" style="color: var(--primary-color)"></i> &nbsp; <b>Tasa de Carga: </b></li>
+                    <li><i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp; <b>Dirección: </b></li>
+                    <li><i class="pi pi-building" style="color: var(--primary-color)"></i> &nbsp; <b>Publico: </b></li>
+                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Estado: </b></li> <br> 
+                    <!-- <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Número de serie de la caja de carga: </b></li>
                     <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Número de serie del punto de carga: </b></li>
                     <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Versión del firmware: </b></li>
                     <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>iccid: </b></li>
                     <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>imsi: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Número de serie del medidor: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Tipo de medidor: </b></li>
+                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Número de serie del medidor: </b></li> -->
                   </ul>
                 </div>
                 <div class="col-6" style="text-align: left;">
                   <ul>
-                    <li><label [pTooltip]="item.descripcion" tooltipPosition="bottom">{{item.descripcion |
-                        truncate:15}}</label></li>
+                    <li><label [pTooltip]="item.descripcion" tooltipPosition="bottom">{{item.descripcion | truncate:15}}</label></li>
                     <li><label>{{item.codeStationQr}}</label></li>
-                    <li>
-                      <label>{{item.stationConnectivityStatus | formatOnlineOffline}}</label>
-                    </li>
-                    <li><label>{{item.modelVendor}}</label></li>
+                    <li><label>{{item.stationConnectivityStatus | formatOnlineOffline}}</label></li>
+                    <li><label *ngIf="bootNotificationMessage.chargePointVendor">{{bootNotificationMessage.chargePointVendor}}<br><br></label><label *ngIf="!bootNotificationMessage.chargePointVendor"><br></label></li>
+                    <li><label *ngIf="bootNotificationMessage.chargePointModel">{{bootNotificationMessage.chargePointModel}}<br><br></label><label *ngIf="!bootNotificationMessage.chargePointModel"><br><br></label></li>
+                    <li><label *ngIf="bootNotificationMessage.meterType">{{bootNotificationMessage.meterType}}<br></label><label *ngIf="!bootNotificationMessage.meterType"><br><br></label></li>
                     <li><label>{{item.chargeRateAmount}}</label></li>
-                    <li><label [pTooltip]="item.direccion" tooltipPosition="bottom">{{item.direccion |
-                        truncate:15}}</label></li>
+                    <li><label [pTooltip]="item.direccion" tooltipPosition="bottom">{{item.direccion | truncate:15}}</label></li>
                     <li><label>{{item.ocppPublicAccessAllowed | formatSiNo}}</label></li>
                     <li>
                       <p-button size="small" *ngIf="statusMessage == 'Available'" label="Disponible" [raised]="true"
                         severity="success" (click)="onVerTodasElectrolineras(item.id)"></p-button>
+                      <p-button size="small" *ngIf="statusMessage == 'Offline'" label="Desconectado" [raised]="true"
+                        severity="danger" (click)="onVerTodasElectrolineras(item.id)"></p-button>
                       <!-- 
                       <p-button size="small" *ngIf="statusMessage == 'Preparing'" label="Disponible" [raised]="true"
                         severity="success" (click)="onVerTodasElectrolineras(item.id)"></p-button>
-
                       <p-button size="small" *ngIf="statusMessage == 'Available'" label="Ocupado" [raised]="true"
                         severity="warning" (click)="onVerTodasElectrolineras(item.id)"></p-button>
-
                       <p-button size="small" *ngIf="statusMessage == 'Available'" label="Sin Conectores"
                         [raised]="true" severity="secondary" (click)="onVerTodasElectrolineras(item.id)"></p-button>
-
                       <p-button size="small" *ngIf="statusMessage == 'Available'" label="Bloqueado" [raised]="true"
                         severity="danger" (click)="onVerTodasElectrolineras(item.id)"></p-button> -->
-
-                      <p-button size="small" *ngIf="statusMessage == 'Offline'" label="Desconectado" [raised]="true"
-                        severity="danger" (click)="onVerTodasElectrolineras(item.id)"></p-button>
                     </li>
-
-                    <li><label>{{bootNotificationMessage.chargePointVendor}}</label></li> <br> 
-                    <li><label>{{bootNotificationMessage.chargePointModel}}</label></li> <br> 
-                    <li><label>{{bootNotificationMessage.chargeBoxSerialNumber}}</label></li><br> 
+                    <!-- <li><label>{{bootNotificationMessage.chargeBoxSerialNumber}}</label></li><br> 
                     <li><label>{{bootNotificationMessage.chargePointSerialNumber}}</label></li><br> 
                     <li><label>{{bootNotificationMessage.firmwareVersion}}</label></li><br> 
                     <li><label>{{bootNotificationMessage.iccid}}</label></li><br> 
                     <li><label>{{bootNotificationMessage.imsi}}</label></li><br> 
-                    <li><label>{{bootNotificationMessage.meterSerialNumber}}</label></li><br> 
-                    <li><label>{{bootNotificationMessage.meterType}}</label></li>
+                    <li><label>{{bootNotificationMessage.meterSerialNumber}}</label></li><br>  -->
                   </ul>
                 </div>
               </div>

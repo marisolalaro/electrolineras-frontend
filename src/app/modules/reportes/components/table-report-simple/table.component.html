@@ -1,5 +1,5 @@
 <!-- Reporte simple, reportes 1,2,4,5 -->
-<p-table *ngIf="componenteVisible" [columns]="cols" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%"
+<p-table responsiveLayout="stack" *ngIf="componenteVisible" [columns]="cols" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%"
 class="custom-p-table">
 <ng-template pTemplate="caption">
   <p-button icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" [rounded]="true" [text]="true"

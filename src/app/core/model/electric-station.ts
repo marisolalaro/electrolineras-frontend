@@ -10,6 +10,7 @@ export class ElectricStationModel extends Base {
   descripcion: string;
   direccion: string;
   activo: boolean;
+  enabled: boolean;
   latitude: string;
   longitude: string;
   codeStationQr: string;

@@ -1,3 +1,5 @@
+
+(window as any).global = window;
 import { Component } from '@angular/core';
 import { ColorServiceService } from './core/services/color-service.service';
 import { color } from './core/constants/colors';

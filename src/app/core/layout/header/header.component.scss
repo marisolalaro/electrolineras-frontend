@@ -1,16 +1,16 @@
-:host ::ng-deep .p-menuitem-icon{
-    color: var(--primary-color);
+:host ::ng-deep .p-menuitem-icon {
+  color: var(--primary-color);
 }
 
-:host ::ng-deep .p-menuitem-text{
-    color: var(--primary-color-text);
-    font-weight: bold;
+:host ::ng-deep .p-menuitem-text {
+  color: var(--primary-color-text);
+  font-weight: bold;
 }
 
 .fixed-menubar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}

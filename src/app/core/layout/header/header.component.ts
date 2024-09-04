@@ -56,6 +56,20 @@ export class HeaderComponent implements OnInit {
           icon: 'pi pi-fw pi-users',
           routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaClientes],
         },
+        {
+          separator: true
+        },
+        {
+          label: this.user.roles[0].nameRole == 'ROLE_ADMIN_SYS' ? 'Rol: Administrador' : 'Rol: General',
+          icon: 'pi pi-id-card',
+          disabled: true,
+          
+        },
+        {
+          label: this.user.electronicMail,
+          icon: 'pi pi-user',
+          disabled: true,
+        },
       ];
       resolve(true);
     })

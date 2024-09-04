@@ -23,6 +23,9 @@ export class EndPoins {
 
     // tasa de carga
     static chargeRate = "/chargeRate";
+
+    // modelo de la electrolinera
+    static models = "/models";
     
     // administradores
     static administration = "/adminList";

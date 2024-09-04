@@ -11,8 +11,8 @@
 
     <div class="row">
       <p-table responsiveLayout="stack" #dt1 [value]="transactions" dataKey="id"
-        [scrollable]="true" styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
-        [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
+         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
+        [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES" width="100%">
         <ng-template pTemplate="caption">
           <div class="flex">
             <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"

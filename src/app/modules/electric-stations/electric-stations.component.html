@@ -163,6 +163,18 @@
             </div>
 
             <div class="form-group field">
+              <label>{{labelsGlobales.modelo}}</label>
+              <p-autoComplete [(ngModel)]="selectedModel" [dropdown]="true" [suggestions]="filteredModels"
+                (completeMethod)="filterModel($event)" field="modelCode" id="model" formControlName="model"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['model'].invalid}"></p-autoComplete>
+              <div *ngIf="submitted && formRegistro.controls['model'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('model')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
               <label for="descripcion">{{labelsGlobales.tasaCarga}}</label>
               <p-autoComplete [(ngModel)]="selectedCountry" [dropdown]="true" [suggestions]="filteredCountries"
                 (completeMethod)="filterCountry($event)" field="amount" id="chargeRate" formControlName="chargeRate"
@@ -254,6 +266,18 @@
                 [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['codeStationQr'].invalid}" />
               <div *ngIf="submitted && formRegistro.controls['codeStationQr'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('codeStationQr')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label>{{labelsGlobales.modelo}}</label>
+              <p-autoComplete [(ngModel)]="selectedModel" [dropdown]="true" [suggestions]="filteredModels"
+                (completeMethod)="filterModel($event)" field="modelCode" id="model" formControlName="model"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['model'].invalid}"></p-autoComplete>
+              <div *ngIf="submitted && formRegistro.controls['model'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('model')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>

@@ -11,6 +11,7 @@ export const labels: any = {
 
   // Tasa de carga
   tasaCarga: 'Tasa de Carga',
+  modelo: 'Modelo',
 
   // Administradores
   email: 'Correo Electrónico',

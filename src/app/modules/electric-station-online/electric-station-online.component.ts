@@ -9,7 +9,7 @@ import { ElectricStationOnlineModule } from './electric-station-online.module';
 // models
 import { ElectricStationModel } from 'src/app/core/model/electric-station';
 // services
-import { SocketService } from './services/socket.service';
+// import { SocketService } from './services/socket.service';
 import { ElectricStationsService } from '../electric-stations/services/electric-stations.service';
 import { Base64ToImageService } from '../../core/services/base-64-to-image.service';
 
@@ -40,7 +40,6 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   
   constructor(
     private route: ActivatedRoute,
-    private socketService: SocketService,
     public base64ImageService: Base64ToImageService,
     private electricStationsService: ElectricStationsService,
   ) { }
@@ -54,7 +53,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   ngOnInit(): void {
     this.inicializaDatos()
     this.getOneElectricStation()
-    this.getOnline();
+    // this.getOnline();
   }
 
   inicializaDatos() {
@@ -65,30 +64,28 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   }
 
   getOneElectricStation() {
-    this.electricStationsService.getOne(this.id).subscribe(
-      (resp: any) => {
-        this.electricStation = resp.data;
-        this.imagenQR = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
-      }
-    )
-    this.subscription = interval(3000)
-      .pipe(
-        switchMap(() => this.electricStationsService.getOne(this.id))
-      )
-      .subscribe(
-        (response: any) => {
-          this.electricStation = response.data;
-        },
-        error => {
-          console.error('Error al obtener datos:', error);
-        }
-      );
-  }
-
-  getOnline() {
-    this.socketService.listen('data').subscribe((data: any) => {
-      this.data = data;
-    });
+    // this.electricStationsService.getOne(this.id).subscribe(
+    //   (resp: any) => {
+    //     this.electricStation = resp.data;
+    //     this.imagenQR = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
+    //   }
+    // )
+    // this.subscription = interval(3000)
+    //   .pipe(
+    //     switchMap(() => this.electricStationsService.getOne(this.id))
+    //   )
+    //   .subscribe(
+    //     (response: any) => {
+    //       this.electricStation = response.data;
+    //     },
+    //     error => {
+    //       console.error('Error al obtener datos:', error);
+    //     }
+    //   );
+    this.electricStationsService.getOne(this.id).subscribe((resp: any) => {
+      this.electricStation = resp.data;
+          this.imagenQR = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
+        });
   }
 
 }

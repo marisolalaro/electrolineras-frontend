@@ -73,7 +73,7 @@
               <p-button *ngIf="item.statusName == 'BLOQUEADO'" label="Bloqueado" [raised]="true"
                 severity="danger"></p-button>
 
-              <td *ngIf="item.statusName == 'OCUPADO'">{{data?.value | numberDecimal}} kW</td>
+              <td *ngIf="item.statusName == 'OCUPADO'">00.00 kW</td>
               <td *ngIf="item.statusName == 'DISPONIBLE'">00.00 kW</td>
               <td *ngIf="item.statusName == 'BLOQUEADO'">00.00 kW</td>
             </tr>
