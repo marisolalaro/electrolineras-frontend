@@ -2,20 +2,18 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgFor, NgIf, NgStyle } from '@angular/common';
 import { Router } from '@angular/router';
 // librerias
-import { switchMap } from 'rxjs/operators';
-// import { Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 // cores
 import { DashboardModule } from './dashboard.module';
 import { rutas } from 'src/app/core/constants/rutas';
 import { mainTitles } from 'src/app/core/constants/labels';
+import { EndPoins } from 'src/app/core/constants/endPoints';
 // models
 import { ElectricStationModel } from 'src/app/core/model/electric-station';
 // services
 import { WebsocketService } from 'src/app/core/services/websocket.service';
 import { ElectricStationsService } from '../electric-stations/services/electric-stations.service';
-import { Subscription } from 'rxjs';
-
-import { Message } from '@stomp/stompjs';
+import { VerificaTiempoService } from 'src/app/core/services/verifica-tiempo.service';
 
 @Component({
   standalone: true,
@@ -37,10 +35,9 @@ export default class DashboardComponent implements OnInit, OnDestroy {
 
   // variables propias del componente
   public data: any;
-  // private subscription: Subscription;
   public electricStations: ElectricStationModel[] = [];
 
-  public statusMessage: string = '';
+  // variable del websocket
   public bootNotificationMessage = {
     "chargePointVendor": "",
     "chargePointModel": "",
@@ -52,13 +49,18 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     "meterSerialNumber": "",
     "meterType": ""
   };
-  
-  private websocketUrl = 'http://localhost:8051/websocket';
-  public messages: { [channel: string]: any[] } = {};
-  private subscriptions: Subscription[] = [];
-
   public heartbeat: any;
-  public bootNotification: any[];
+  public tiempo: number = 0; // Variable para el cronómetro
+  public bootNotification: any;
+  public statusMessage: string = '';
+  private subscription: Subscription; // Para el cronómetro
+  private maxHeartbeatTime = 100000; // 100 segundos en milisegundos
+  private reconnectionInterval = 10000; // 10 segundos en milisegundos
+  public estadoHeartbeat = 'Conectando...';
+  private subscriptions: Subscription[] = [];
+  private heartbeatTimerSubscription: Subscription; // Para manejar el temporizador del heartbeat
+  private reconnectionCheckSubscription: Subscription; // Temporizador para la verificación de reconexión
+  private websocketUrl = EndPoins.apiUrlOcpp + EndPoins.websocket;
 
   constructor(
     private router: Router,
@@ -67,42 +69,90 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnDestroy() {
-    // this.websocketService.closeAll();
-    this.websocketService.disconnect();
-    // if (this.subscription) {
-    //   this.subscription.unsubscribe();
-    // }
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    if (this.heartbeatTimerSubscription) {
+      this.heartbeatTimerSubscription.unsubscribe();
+    }
   }
-  
+
   ngOnInit() {
     this.getFourElectricStations();
-    this.websocketService.initializeWebSocketConnection(this.websocketUrl);
-    this.subscribeToChannel('/channel/authorize');
-    this.subscribeToChannel('/channel/bootNotification');
-    this.subscribeToChannel('/channel/heartbeat');
-    // console.log(JSON.stringify(this.websocketService.getMessages('/channel/heartbeat')));
-    
+    this.conectaWebSocket();
+    this.escucharHeartbeat();
   }
-  
-  private subscribeToChannel(channel: string): void {
-    const subscription = this.websocketService.getMessages(channel).subscribe(
-      (messages:any) => {
-        // this.messages[channel] = messages;
-        if(channel == '/channel/heartbeat' && messages) {
-          this.heartbeat = messages.map(item => JSON.parse(item))
-          this.heartbeat = this.heartbeat[this.heartbeat.length - 1];
-          console.log(this.heartbeat.sessionIndex);
-          console.log(JSON.stringify(this.heartbeat));
-          // aqui controlar si llega en ada 2 minutos
-        }
-        if(channel == '/channel/bootNotification') {
-          this.bootNotification = messages
-          console.log(this.bootNotification);
-        }
-        
+
+  // Escuchar cuando llega el primer heartbeat
+  escucharHeartbeat(): void {
+    const heartbeat$ = this.websocketService.heartbeatReceived$;
+    const heartbeatSubscription = heartbeat$.subscribe(() => {
+      this.cambiarEstadoHeartbeat('En línea');
+      this.reiniciarTemporizadorHeartbeat();
+    });
+    this.subscriptions.push(heartbeatSubscription);
+  }
+
+  // Cambiar el estado del heartbeat
+  cambiarEstadoHeartbeat(estado: string): void {
+    this.estadoHeartbeat = estado;
+    // Si el estado es "Offline", comenzar a verificar la reconexión cada 10 segundos
+    if (estado === 'Offline') {
+      this.verificarReconexión();
+    } else {
+      // Detener la verificación de reconexión si ya está en línea
+      this.detenerVerificacionReconexión();
+    }
+  }
+
+  // Reiniciar el temporizador de heartbeat
+  reiniciarTemporizadorHeartbeat(): void {
+    // Cancelar el temporizador previo si está activo
+    if (this.heartbeatTimerSubscription) {
+      this.heartbeatTimerSubscription.unsubscribe();
+    }
+    // Reiniciar el temporizador, si no se recibe heartbeat en 100 segundos, cambia a Offline
+    this.heartbeatTimerSubscription = interval(this.maxHeartbeatTime).subscribe(() => {
+      this.cambiarEstadoHeartbeat('Offline');
+    });
+    this.subscriptions.push(this.heartbeatTimerSubscription);
+  }
+
+  // Verificar la reconexión cada 10 segundos
+  verificarReconexión(): void {
+    // Si ya hay un temporizador de verificación de reconexión corriendo, no iniciar otro
+    if (this.reconnectionCheckSubscription) {
+      return;
+    }
+    // Comenzar a verificar la reconexión cada 10 segundos
+    this.reconnectionCheckSubscription = interval(this.reconnectionInterval).subscribe(() => {
+      if (this.websocketService.isConnected()) { // Supongamos que tienes una función para verificar el estado
+        this.cambiarEstadoHeartbeat('En línea');
       }
-    );
-    this.subscriptions.push(subscription);
+    });
+    this.subscriptions.push(this.reconnectionCheckSubscription);
+  }
+
+  // Detener la verificación de reconexión
+  detenerVerificacionReconexión(): void {
+    if (this.reconnectionCheckSubscription) {
+      this.reconnectionCheckSubscription.unsubscribe();
+      this.reconnectionCheckSubscription = null;
+    }
+  }
+
+  conectaWebSocket() {
+    this.websocketService.initializeWebSocketConnection(this.websocketUrl);
+  }
+
+  // Iniciar cronómetro
+  iniciarCronometro(): void {
+    this.subscription = interval(1000).subscribe(() => {
+      this.incrementarTiempo();
+    });
+  }
+
+  // Incrementar tiempo cada segundo
+  incrementarTiempo(): void {
+    this.tiempo++;
   }
 
   getFourElectricStations(): void {

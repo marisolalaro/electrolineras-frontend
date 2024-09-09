@@ -3,9 +3,13 @@ import { environment } from 'src/app/core/environments/environment';
 export class EndPoins {
 
     // api general
+    static apiUrlOcpp = environment.apiUrlOcpp;
     static apiUrl = environment.apiUrl;
     static api = '/api/v1';
 
+    // websocket
+    static websocket = "/websocket";
+    
     // clientes
     static customer = "/clientUser";
     static charges = "/clientListCharges";

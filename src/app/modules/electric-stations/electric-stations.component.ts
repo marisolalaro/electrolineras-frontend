@@ -170,9 +170,7 @@ export default class ElectricStationsComponent implements OnInit {
   getModels(): void {
     this.modelService.getAll().subscribe(
       (resp: any) => {
-        this.models = resp.data;
-        console.log(JSON.stringify(this.models) );
-        
+        this.models = resp.data;        
       }
     )
   }
@@ -251,7 +249,6 @@ export default class ElectricStationsComponent implements OnInit {
           this.getAllElectricStations();
           this.submitted = false;
       }, error => {
-        console.log(error);
       }
     )
   }
@@ -297,7 +294,6 @@ export default class ElectricStationsComponent implements OnInit {
           this.getAllElectricStations();
           this.submitted = false;
       }, error => {
-        console.log(error);
         
       }
     )
