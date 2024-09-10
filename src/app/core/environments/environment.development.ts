@@ -1,5 +1,5 @@
 export const environment = {
-    production: false,
+    production: true,
     apiUrl: 'http://10.241.74.31:8050/electrolinerasbackend', // server ende local
     // apiUrl: 'http://localhost:8050/electrolinerasbackend', // server localhost
     apiUrlOcpp: 'http://10.241.74.31:8051', // server localhost
