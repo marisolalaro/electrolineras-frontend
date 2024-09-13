@@ -25,7 +25,7 @@ import { PortConnectionService } from './services/port-connector.service';
 import { ElectricStationsService } from './services/electric-stations.service';
 import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
 import { Base64ToImageService } from '../../core/services/base-64-to-image.service';
-import { ModelService } from '../models/services/model.service';
+import { BrandService } from '../parametrics/brand/services/brand.service';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -112,7 +112,7 @@ export default class ElectricStationsComponent implements OnInit {
   constructor(
     public global: Global,
     public tasaCargaService: ParTasaCargaService,
-    public modelService: ModelService,
+    public brandService: BrandService,
     public base64ImageService: Base64ToImageService,
     private confirmationService: ConfirmationService,
     public portConnectorService: PortConnectionService,
@@ -168,7 +168,7 @@ export default class ElectricStationsComponent implements OnInit {
   }
 
   getModels(): void {
-    this.modelService.getAll().subscribe(
+    this.brandService.getAllActives().subscribe(
       (resp: any) => {
         this.models = resp.data;        
       }

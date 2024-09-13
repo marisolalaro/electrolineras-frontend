@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { mainTitles } from '../../constants/labels';
 import { rutas } from '../../constants/rutas';
+import { Global } from 'src/app/core/variables/globales';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,14 +11,23 @@ import { rutas } from '../../constants/rutas';
 })
 export class SidebarComponent implements OnInit {
 
+  // variables d econtrol
+  public esSuperAdmin: boolean = false;
+
   @Output() itemClick = new EventEmitter<void>();
   public items: MenuItem[];
+
+  constructor(
+    public global: Global
+  ) { }
 
   onItemClick() {
     this.itemClick.emit();
   }
 
+  // preguntar que rtol tiene
   ngOnInit() {
+    this.esSuperAdmin = this.global.getEsSuperAdmin();
     this.items = [
       {
         label: mainTitles['dashboard'].mainTitle,
@@ -48,7 +58,18 @@ export class SidebarComponent implements OnInit {
         label: mainTitles['reportes'].mainTitle,
         icon: 'pi pi-fw pi-file-excel',
         routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaReportes],
-      }
+      },
+      {
+        label: mainTitles['parametricas'].mainTitle,
+        separator: true,
+        disabled: true
+      },
+      {
+        label: mainTitles['modelos'].mainTitle,
+        icon: 'pi pi-fw pi-apple',
+        routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaParametricas + '/' + rutas.rutaModelo],
+      },
+
     ];
   }
 

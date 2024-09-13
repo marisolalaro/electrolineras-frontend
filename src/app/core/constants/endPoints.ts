@@ -58,4 +58,10 @@ export class EndPoins {
     static facturaDatos = "/invoicesByDates"
     static facturaClienteCompraVenta = "/invoicesClientCompraVenta"
     static facturaSuministro = "/invoicesPaymentsTransactionSuministro"
+
+    // paremetricas
+    // models
+    static listar = "/list"
+    static todos = "/all"
+    static reactivar = "/reactivar"
 };

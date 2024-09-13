@@ -47,6 +47,10 @@ const routes: Routes = [
         path: rutas.rutaReportes,
         loadComponent: () => import('./modules/reportes/reportes.component'),
       },
+      {
+        path: rutas.rutaParametricas + '/' + rutas.rutaModelo,
+        loadComponent: () => import('./modules/parametrics/brand/brand.component'),
+      },
     ]
   },
 ];

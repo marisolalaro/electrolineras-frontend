@@ -11,4 +11,6 @@ export const rutas: any =
     rutaDashboard: 'dashboard',
     rutaOnlineElectricStation: 'online-energy-charging',
     rutaReportes: 'reports',
+    rutaParametricas: 'parametrics',
+    rutaModelo: 'brand',
 }

@@ -40,6 +40,10 @@ export const labels: any = {
   maximoVoltaje: 'Máximo Voltaje',
   maximaPotencia: 'Máximo Potencia',
 
+  // Parametricas
+  // modelo
+  vendor: 'Modelo',
+  modelCode: 'Código de Modelo',
 }
 
 export const reports: any = {
@@ -164,5 +168,14 @@ export const mainTitles: IMainTitles = {
   reportes: {
     mainTitle: 'Reportes',
     secondaryTitle: 'Reportes'
-  }
+  },
+
+  parametricas: {
+    mainTitle: 'Administración Paramétricas',
+    secondaryTitle: 'Paramétricas'
+  },
+  modelos: {
+    mainTitle: 'Modelos de Electrolineras',
+    secondaryTitle: 'Modelo'
+  },
 }
