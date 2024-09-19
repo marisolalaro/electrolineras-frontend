@@ -26,9 +26,17 @@
           <tr>
             <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">#</th>
             <th style="width:15%; text-align:center; vertical-align:middle" pSortableColumn="vendor">
-              Vendor<p-sortIcon field="vendor"></p-sortIcon></th>
+              Marca<p-sortIcon field="vendor"></p-sortIcon></th>
             <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="modelCode">
-              Codigo modelo<p-sortIcon field="modelCode"></p-sortIcon></th>
+              Código modelo<p-sortIcon field="modelCode"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="boxSerialNumber">
+              Número de Serie Modelo<p-sortIcon field="boxSerialNumber"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="pointModel">
+              Tipo<p-sortIcon field="pointModel"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="pointSerialNumber">
+              Número de Serie Tipo<p-sortIcon field="pointSerialNumber"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="firmwareVersion">
+              Versión Firmware<p-sortIcon field="firmwareVersion"></p-sortIcon></th>
             <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="activo" rowspan="2">
               Estado<p-sortIcon field="activo"></p-sortIcon></th>
             <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
@@ -36,12 +44,29 @@
           <tr>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'vendor', 'contains')"
-                placeholder="Busca por vendor" class="w-full" [(ngModel)]="vendor">
+                placeholder="Busca Modelo" class="w-full" [(ngModel)]="vendor">
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'modelCode', 'contains')"
-                placeholder="Busca por model code" class="w-full" [(ngModel)]="modelCode">
+                placeholder="Busca Código Modelo" class="w-full" [(ngModel)]="modelCode">
             </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'boxSerialNumber', 'contains')"
+                placeholder="Busca Número Serie Modelo" class="w-full" [(ngModel)]="boxSerialNumber">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'pointModel', 'contains')"
+                placeholder="Busca Tipo" class="w-full" [(ngModel)]="pointModel">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'pointSerialNumber', 'contains')"
+                placeholder="Busca  Número Serie Tipo" class="w-full" [(ngModel)]="pointSerialNumber">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'firmwareVersion', 'contains')"
+                placeholder="Busca Version Firmware" class="w-full" [(ngModel)]="firmwareVersion">
+            </th>
+          
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
@@ -49,6 +74,10 @@
             <td style="text-align:center; vertical-align:middle">{{rowIndex + 1}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['vendor']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['modelCode']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['boxSerialNumber']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['pointModel']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['pointSerialNumber']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['firmwareVersion']}}</td>
 
             <td style="text-align:left; vertical-align:middle" class="uppercase">
               <p-confirmPopup></p-confirmPopup>
@@ -98,6 +127,58 @@
                 </small>
               </div>
             </div>
+
+
+
+            <div class="form-group field">
+              <label for="boxSerialNumber">{{labelsGlobales.boxSerialNumber}}</label>
+              <input type="text" pInputText required formControlName="boxSerialNumber"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['boxSerialNumber'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['boxSerialNumber'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('boxSerialNumber')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="pointModel">{{labelsGlobales.pointModel}}</label>
+              <input type="text" pInputText required formControlName="pointModel"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['pointModel'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['pointModel'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('pointModel')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="pointSerialNumber">{{labelsGlobales.pointSerialNumber}}</label>
+              <input type="text" pInputText required formControlName="pointSerialNumber"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['pointSerialNumber'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['pointSerialNumber'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('pointSerialNumber')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="firmwareVersion">{{labelsGlobales.firmwareVersion}}</label>
+              <input type="text" pInputText required formControlName="firmwareVersion"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['firmwareVersion'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['firmwareVersion'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('firmwareVersion')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+
           </form>
         </ng-template>
 
@@ -138,6 +219,54 @@
                 oninput="this.value = this.value.toUpperCase()" />
               <div *ngIf="submitted && formRegistro.controls['modelCode'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('modelCode')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="boxSerialNumber">{{labelsGlobales.boxSerialNumber}}</label>
+              <input type="text" pInputText required formControlName="boxSerialNumber"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['boxSerialNumber'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['boxSerialNumber'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('boxSerialNumber')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="pointModel">{{labelsGlobales.pointModel}}</label>
+              <input type="text" pInputText required formControlName="pointModel"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['pointModel'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['pointModel'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('pointModel')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="pointSerialNumber">{{labelsGlobales.pointSerialNumber}}</label>
+              <input type="text" pInputText required formControlName="pointSerialNumber"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['pointSerialNumber'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['pointSerialNumber'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('pointSerialNumber')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="firmwareVersion">{{labelsGlobales.firmwareVersion}}</label>
+              <input type="text" pInputText required formControlName="firmwareVersion"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['firmwareVersion'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['firmwareVersion'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('firmwareVersion')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>

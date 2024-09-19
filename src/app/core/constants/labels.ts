@@ -42,8 +42,12 @@ export const labels: any = {
 
   // Parametricas
   // modelo
-  vendor: 'Modelo',
+  vendor: 'Marca',
   modelCode: 'Código de Modelo',
+  boxSerialNumber: 'Número de Serie Modelo',
+  pointModel: 'Tipo',
+  pointSerialNumber: 'Número de Serie Tipo',
+  firmwareVersion: 'Versión Firmware',
 }
 
 export const reports: any = {

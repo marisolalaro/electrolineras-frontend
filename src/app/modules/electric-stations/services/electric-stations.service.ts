@@ -19,6 +19,10 @@ export class ElectricStationsService {
     return this.http.get(this.apiService);
   }
 
+  getAllnoCrud() {
+    return this.http.get(this.apiService + '/getAll');
+  }
+
   create(electricStation: ElectricStationModel) {
     return this.http.post(this.apiService,electricStation);
   }

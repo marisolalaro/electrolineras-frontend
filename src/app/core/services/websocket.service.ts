@@ -43,7 +43,8 @@ export class WebsocketService {
   private subscribeToChannel(channel: string): void {
     this.stompClient.subscribe(channel, (message: Message) => {
       if (channel === '/channel/heartbeat') {
-        this.heartbeatReceived$.next(true);
+        const heartbeatData = JSON.parse(message.body);
+        this.heartbeatReceived$.next(heartbeatData);
       }
     });
   }

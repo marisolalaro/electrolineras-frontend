@@ -52,6 +52,10 @@ export default class BrandComponent {
   public vendor: string = '';
   public estado: string = '';
   public modelCode: string = '';
+  public boxSerialNumber: string = '';
+  public pointModel: string = '';
+  public pointSerialNumber: string = '';
+  public firmwareVersion: string = '';
 
   // variables del paginador
   public page: number = 0;
@@ -161,6 +165,10 @@ export default class BrandComponent {
       id: new FormControl(null),
       vendor: new FormControl('', [Validators.required]),
       modelCode: new FormControl('', [Validators.required]),
+      boxSerialNumber: new FormControl('', [Validators.required]),
+      pointModel: new FormControl('', [Validators.required]),
+      pointSerialNumber: new FormControl('', [Validators.required]),
+      firmwareVersion: new FormControl('', [Validators.required]),
     });
   }
 
@@ -193,6 +201,10 @@ export default class BrandComponent {
   onUpdateRegistro() {
     this.model.vendor = this.formRegistro.get('vendor').value;
     this.model.modelCode = this.formRegistro.get('modelCode').value;
+    this.model.boxSerialNumber = this.formRegistro.get('boxSerialNumber').value;
+    this.model.pointModel = this.formRegistro.get('pointModel').value;
+    this.model.pointSerialNumber = this.formRegistro.get('pointSerialNumber').value;
+    this.model.firmwareVersion = this.formRegistro.get('firmwareVersion').value;
     this.brandservice.update(this.model).subscribe(
       (resp: any) => {
         this.getAllModels();

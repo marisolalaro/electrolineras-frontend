@@ -4,7 +4,7 @@ import { ChargingConnector } from './charging-connector';
 import { ModelElectricStation } from './model-electric-station';
 import { TasaCargaModel } from './tasa-carga';
 
-export class ElectricStationModel extends Base {
+export class ElectricStationModel {
   id: number;
   nameStation: string;
   descripcion: string;
@@ -42,5 +42,48 @@ export class ElectricStationModel extends Base {
   imageQr: string;
   chargingConnectors: ChargingConnector[];
   chargingConnectorStatus: string
+  sessionIndex: any;
+  idChargingStationOcpp: any;
+
+  constructor() {
+    this.id = 0;
+    this.nameStation = '';
+    this.descripcion = '';
+    this.direccion = '';
+    this.activo = false;
+    this.enabled = false;
+    this.latitude = '';
+    this.longitude = '';
+    this.codeStationQr = '';
+    this.codeStationQR = '';
+    // this.chargeRate = TasaCargaModel;
+    this.errorCode = null;
+    this.lastConnectedAt = null;
+    this.ocppPublicAccessAllowed = false;
+    this.ocppUrl = null;
+    this.ocppVersion = null;
+    this.stationConnectivityStatus = null;
+    this.visibility = null;
+    // this.address = Address;
+    // this.model = ModelElectricStation;
+    this.addressCity = '';
+    this.addressDistrict = '';
+    this.addressCountry = '';
+    this.modelActivo = false;
+    this.modelModelCode = '';
+    this.modelVendor = '';
+    this.chargingConnectorActivo = false;
+    this.chargingConnectorDescripcion = '';
+    this.chargingConnectorName = '';
+    this.chargingConnectorType = '';
+    this.chargeRateActivo = false;
+    this.chargeRateAmount = '';
+    this.chargingConnectorId = '';
+    this.imageQr = '';
+    this.chargingConnectorStatus = ''
+    this.sessionIndex = '';
+    this.idChargingStationOcpp = '';
+
+  }
 
 }

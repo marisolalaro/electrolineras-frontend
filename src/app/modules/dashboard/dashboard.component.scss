@@ -7,3 +7,21 @@ ul {
 li {
   padding: 8px 0;
 }
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Ajusta el espacio entre tarjetas */
+  gap: 16px; /* Espacio entre las tarjetas */
+}
+
+.p-card {
+  flex: 1 1 360px; /* Hace que cada tarjeta tenga un tamaño mínimo de 360px */
+  margin-bottom: 16px; /* Espacio en la parte inferior cuando las tarjetas se apilen en pantallas pequeñas */
+}
+
+@media (max-width: 768px) {
+  .p-card {
+    flex: 1 1 100%; /* Las tarjetas ocuparán todo el ancho en pantallas pequeñas */
+  }
+}
