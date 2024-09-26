@@ -65,7 +65,7 @@ export class ElectricStationModel {
     this.stationConnectivityStatus = null;
     this.visibility = null;
     // this.address = Address;
-    // this.model = ModelElectricStation;
+    this.model = new ModelElectricStation();
     this.addressCity = '';
     this.addressDistrict = '';
     this.addressCountry = '';

@@ -425,48 +425,12 @@
                     <b>Nombre Estación: </b>
                   </li>
                   <li>
-                    <i class="pi pi-map" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Dirección: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-map" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Marca: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-mobile" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Modelo Electrolinera:</b>
-                  </li>
-                  <li>
-                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Código Modelo Electrolinera: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Número de Serie de la electrolinera: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Número de Serie del medidor: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Version de Firmware: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>iccid: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>imsi: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Código QR: </b>
-                  </li>
-                  <li>
                     <i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp;
                     <b>Descripción:</b>
+                  </li>
+                  <li>
+                    <i class="pi pi-map" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Dirección: </b>
                   </li>
                   <li>
                     <i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp;
@@ -477,8 +441,46 @@
                     <b>longitude:</b>
                   </li>
                   <li>
+                    <i class="pi pi-bookmark" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Marca: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-mobile" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Código de Modelo:</b>
+                  </li>
+                  <li>
+                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Número de Serie Modelo: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-arrow-circle-right" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Tipo: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Número Serie Tipo: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Versión de Firmware: </b>
+                  </li>
+                  <!-- <li>
+                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>iccid: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>imsi: </b>
+                  </li> -->
+                  
+                  
+                  <li>
                     <i class="pi pi-sort-alt" style="color: var(--primary-color)"></i> &nbsp;
                     <b>Tasa de Carga: </b>
+                  </li>
+                  <li>
+                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
+                    <b>Código QR: </b>
                   </li>
                   <li>
                     <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
@@ -495,7 +497,7 @@
                   <br>
                   <br>
                   <br>
-                  <p-divider align="right">
+                  <!-- <p-divider align="right">
                     <div class="inline-flex align-items-center">
                       <i class="pi pi-user mr-2"></i>
                       <b>Datos en Linea</b>
@@ -512,7 +514,7 @@
                   <li>
                     <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
                     <b>Dato: </b>
-                  </li>
+                  </li> -->
                 </ul>
               </div>
               <div class="col-6" style="text-align: left;">
@@ -521,29 +523,29 @@
                     <p-divider></p-divider>
                   </li>
                   <li><label>{{electricStation.nameStation}}</label></li>
+                  <li><label>{{electricStation.descripcion}}</label></li>
                   <li><label>{{electricStation.direccion}}</label></li>
-                  <li><label>Marca de la Electrolinera</label></li>
-                  <li><label>{{electricStation.modelModelCode}}</label></li>
-                  <li><label>{{electricStation.modelVendor}}</label></li>
-                  <li><label>Numero de serie</label></li>
-                  <li><label>serie del medidor</label></li>
-                  <li><label>Version de Firmware</label></li>
-                  <li><label>iccid</label></li>
-                  <li><label>imsi</label></li>
-                  <li><label>{{electricStation.codeStationQR}}</label></li>
-                  <li><label>electricStation.descripcion</label></li>
-                  <li><label>electricStation.latitude</label></li>
-                  <li><label>electricStation.longitude</label></li>
-                  <li><label>electricStation.chargeRate.amount</label></li>
+                  <li><label>{{electricStation.latitude}}</label></li>
+                  <li><label>{{electricStation.longitude}}</label></li>
+                  <li><label>{{electricStation.model.vendor}}</label></li>
+                  <li><label>{{electricStation.model.modelCode}}</label></li>
+                  <li><label>{{electricStation.model.boxSerialNumber}}</label></li>
+                  <li><label>{{electricStation.model.pointModel}}</label></li>
+                  <li><label>{{electricStation.model.pointSerialNumber}}</label></li>
+                  <li><label>{{electricStation.model.firmwareVersion}}</label></li>
+                  <!-- <li><label>iccid</label></li>
+                  <li><label>imsi</label></li> -->
+                  <li><label>{{electricStation.chargeRate.amount}}</label></li>
+                  <li><label>{{electricStation.codeStationQr}}</label></li>
                   <li>
                     <img [src]="imagenQR" alt="Converted Image" />
                   </li>
-                  <li>
+                  <!-- <li>
                     <p-divider></p-divider>
                   </li>
                   <li><label>id de la marca</label></li>
                   <li><label>id mensaje</label></li>
-                  <li><label>dato</label></li>
+                  <li><label>dato</label></li> -->
                 </ul>
               </div>
             </div>
@@ -551,7 +553,7 @@
 
           <div class="row">
             <div class="card">
-              <p-table [value]="electricStation.chargingConnectors" [tableStyle]="{ 'min-width': '50rem' }"
+              <p-table [value]="electricStationConnectors.chargingConnectors" [tableStyle]="{ 'min-width': '50rem' }"
                 responsiveLayout="stack">
                 <ng-template pTemplate="header">
                   <tr>
@@ -572,12 +574,14 @@
                     <td>{{ item.maxVoltage }}</td>
                     <td>{{ item.maxPower }}</td>
                     <td>{{ item.maxAmperage }}</td>
-                    <p-button *ngIf="item.statusName == 'DISPONIBLE'" label="Disponible" [raised]="true"
-                      severity="success"></p-button>
-                    <p-button *ngIf="item.statusName == 'OCUPADO'" label="Ocupado" [raised]="true"
-                      severity="warning"></p-button>
-                    <p-button *ngIf="item.statusName == 'BLOQUEADO'" label="Bloqueado" [raised]="true"
-                      severity="danger"></p-button>
+                    <td>
+                      <button pButton *ngIf="item.lastState == 'Available'" label="Disponible" class="button-available" ></button>
+                      <button pButton *ngIf="item.lastState == 'Preparing'" label="Preparando" class="button-preparing"></button>
+                      <button pButton *ngIf="item.lastState == 'Charging'" label="Cargando" class="button-charging"></button>
+                      <button pButton *ngIf="item.lastState == 'Finishing'" label="Terminando" class="button-finishing"></button>
+                      <button pButton *ngIf="item.lastState == 'Unavailable'" label="No disponible" class="button-unavailable"></button>
+                      <button pButton *ngIf="!item.lastState" label="No disponible" class="button-unavailable"></button>
+                    </td>
                   </tr>
                 </ng-template>
               </p-table>

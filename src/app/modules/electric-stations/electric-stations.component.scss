@@ -7,3 +7,29 @@ ul {
   li {
     padding: 8px 0;
   }
+
+  .button-available {
+    background-color: var(--color-available);
+    border-color: var(--color-available);
+    color: white;
+  }
+  .button-preparing {
+    background-color: var(--color-preparing);
+    border-color: var(--color-preparing);
+    color: white;
+  }
+  .button-finishing {
+    background-color: var(--color-finishing);
+    border-color: var(--color-finishing);
+    color: white;
+  }
+  .button-charging {
+    background-color: var(--color-charging);
+    border-color: var(--color-charging);
+    color: white;
+  }
+  .button-unavailable {
+    background-color: var(--color-unavailable);
+    border-color: var(--color-unavailable);
+    color: white;
+  }

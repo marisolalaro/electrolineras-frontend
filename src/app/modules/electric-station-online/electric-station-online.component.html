@@ -65,14 +65,14 @@
               <td>{{ item.maxVoltage }}</td>
               <td>{{ item.maxPower }}</td>
               <td>{{ item.maxAmperage }}</td>
-
-              <p-button *ngIf="item.statusName == 'DISPONIBLE'" label="Disponible" [raised]="true"
-                severity="success"></p-button>
-              <p-button *ngIf="item.statusName == 'OCUPADO'" label="Ocupado" [raised]="true"
-                severity="warning"></p-button>
-              <p-button *ngIf="item.statusName == 'BLOQUEADO'" label="Bloqueado" [raised]="true"
-                severity="danger"></p-button>
-
+              <td>
+                <button pButton *ngIf="item.lastState == 'Available'" label="Disponible" class="button-available" ></button>
+                <button pButton *ngIf="item.lastState == 'Preparing'" label="Preparando" class="button-preparing"></button>
+                <button pButton *ngIf="item.lastState == 'Charging'" label="Cargando" class="button-charging"></button>
+                <button pButton *ngIf="item.lastState == 'Finishing'" label="Terminando" class="button-finishing"></button>
+                <button pButton *ngIf="item.lastState == 'Unavailable'" label="No disponible" class="button-unavailable"></button>
+                <button pButton *ngIf="!item.lastState" label="No disponible" class="button-unavailable"></button>
+              </td>
               <td *ngIf="item.statusName == 'OCUPADO'">00.00 kW</td>
               <td *ngIf="item.statusName == 'DISPONIBLE'">00.00 kW</td>
               <td *ngIf="item.statusName == 'BLOQUEADO'">00.00 kW</td>

@@ -90,13 +90,9 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   //   this.reconnectionCheckSubscription = interval(this.reconnectionInterval).subscribe(() => {
   //     if (this.websocketService.isConnected()) {
   //       this.cambiarEstadoHeartbeat('Conectando...');
-  //       console.log('aaaaa');
-
   //     } else {
   //       // this.cambiarEstadoHeartbeat('Offline');
   //       this.cambiarEstadoHeartbeat('Offline');
-  //       console.log('bbbbbb');
-        
   //       // this.conectaWebSocket();
   //       this.escucharHeartbeat()
   //     }

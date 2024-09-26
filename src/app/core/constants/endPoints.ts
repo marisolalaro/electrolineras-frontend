@@ -64,4 +64,8 @@ export class EndPoins {
     static listar = "/list"
     static todos = "/all"
     static reactivar = "/reactivar"
+
+    // connector status
+    static connectorStatus = "/connectorStatusOcpp"
+    static byIdChargingStation = "/byIdChargingStation"
 };

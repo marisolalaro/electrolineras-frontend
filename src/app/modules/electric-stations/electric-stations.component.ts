@@ -26,6 +26,9 @@ import { ElectricStationsService } from './services/electric-stations.service';
 import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
 import { Base64ToImageService } from '../../core/services/base-64-to-image.service';
 import { BrandService } from '../parametrics/brand/services/brand.service';
+import { ConnectorStatusModel } from 'src/app/core/model/charging-connector-status';
+import { ConnectorStatusService } from 'src/app/core/services/connector-status.service';
+import { ModelElectricStation } from 'src/app/core/model/model-electric-station';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -38,17 +41,17 @@ interface AutoCompleteCompleteEvent {
   templateUrl: './electric-stations.component.html',
   styleUrls: ['./electric-stations.component.scss'],
   providers: [
-    MessageService, 
+    MessageService,
     ConfirmationService
   ],
   imports: [
-    ElectricStationsModule, 
-    NgFor, 
-    NgIf, 
-    PipesModule, 
-    ReactiveFormsModule, 
-    NgClass, 
-    NgSwitch, 
+    ElectricStationsModule,
+    NgFor,
+    NgIf,
+    PipesModule,
+    ReactiveFormsModule,
+    NgClass,
+    NgSwitch,
     NgSwitchCase
   ],
 })
@@ -95,12 +98,13 @@ export default class ElectricStationsComponent implements OnInit {
   @ViewChild('dt1') dt!: Table;
   public imagenQR: string | null = null;
   public tasasCarga: TasaCargaModel[] = [];
+  public conectorStatus: ConnectorStatusModel[] = [];
   public electricStations: ElectricStationModel[] = [];
   public formRegistro: FormGroup = this.createFormGroup();
   public componentTitle: any = mainTitles['electrolineras'];
   public formRegistroConector: FormGroup = this.createFormConector();
   public electricStation: ElectricStationModel = new ElectricStationModel();
-  
+
   // variables para el filtro
   public nameStation: string = '';
   public direccion: string = '';
@@ -116,6 +120,7 @@ export default class ElectricStationsComponent implements OnInit {
     public base64ImageService: Base64ToImageService,
     private confirmationService: ConfirmationService,
     public portConnectorService: PortConnectionService,
+    private connectorStatusService: ConnectorStatusService,
     public electricStationsService: ElectricStationsService,
   ) { }
 
@@ -170,7 +175,7 @@ export default class ElectricStationsComponent implements OnInit {
   getModels(): void {
     this.brandService.getAllActives().subscribe(
       (resp: any) => {
-        this.models = resp.data;        
+        this.models = resp.data;
       }
     )
   }
@@ -238,16 +243,15 @@ export default class ElectricStationsComponent implements OnInit {
     registro.chargeRate = {
       id: this.selectedCountry.id
     };
-    registro.model = {
-      id: this.selectedModel.id
-    };
+    registro.model = new ModelElectricStation();
+    registro.model.id = this.selectedModel.id
     registro.activo = true;
     registro.enabled = true;
     this.electricStationsService.create(registro).subscribe(
       (resp: any) => {
         this.openDialog(false, false, 'crear');
-          this.getAllElectricStations();
-          this.submitted = false;
+        this.getAllElectricStations();
+        this.submitted = false;
       }, error => {
       }
     )
@@ -284,23 +288,76 @@ export default class ElectricStationsComponent implements OnInit {
     registro.chargeRate = {
       id: this.selectedCountry.id
     };
-    registro.model = {
-      id: this.selectedModel.id
-    };
+    registro.model = new ModelElectricStation();
+    registro.model.id = this.selectedModel.id
+    // registro.model = {
+    //   id: this.selectedModel.id
+    // };
     registro.activo = true;
     this.electricStationsService.update(registro).subscribe(
       (resp: any) => {
         this.openDialog(false, false, 'edit');
-          this.getAllElectricStations();
-          this.submitted = false;
+        this.getAllElectricStations();
+        this.submitted = false;
       }, error => {
-        
+
       }
     )
   }
 
-  onOpenDetail(electricStation) {
-    this.electricStation = electricStation;
+  onDialogDetalles(electrolinera) {
+    this.electricStation = new ElectricStationModel();
+    this.electricStation = electrolinera; // tiene los modelos
+    this.getOneElectricStation(electrolinera.id)
+      .then(datosElectrolinera => {
+        if (datosElectrolinera) {
+          this.selectedCountry = this.electricStation.chargeRate;
+          return this.getAllConnectorStatus();
+        }
+      }).then((datosConector) => {
+        if (datosConector) {
+          
+          return true;
+        }
+      }).then((datosMapeado) => {
+        if (datosMapeado) {
+          this.dialogDetalleRegistro = true;
+          return true;
+        }
+      })
+  }
+  public electricStationConnectors : ElectricStationModel = new ElectricStationModel()
+  getOneElectricStation(idElectricStation) {
+    return new Promise((resolve) => {
+      this.electricStationsService.getOne(idElectricStation).subscribe(
+        (resp: any) => {
+          this.electricStationConnectors = resp.data; // tiene los conectores
+          this.imagenQR = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
+        }
+      )
+      resolve(true);
+    });
+  }
+
+  getAllConnectorStatus() {
+    return new Promise((resolve) => {
+      this.connectorStatusService.getAllConnectorByIdElectricStation(this.electricStation.id).subscribe(
+        (resp: any) => {
+          this.conectorStatus = resp.data;
+          this.statusEnElectrolinera();
+        });
+      resolve(true);
+    });
+  }
+
+  statusEnElectrolinera() {
+    this.electricStationConnectors.chargingConnectors.forEach(connectorA => {
+      let connectorNumber = connectorA.name.match(/\d+/)[0];
+      let correspondingConnectorB = this.conectorStatus.find(connectorB => connectorB.connector === connectorNumber);
+      if (correspondingConnectorB) {
+        connectorA.lastState = correspondingConnectorB.lastState;
+      }
+    });
   }
 
   applyFilter($event: any, field: string, matchMode: string) {
@@ -387,28 +444,6 @@ export default class ElectricStationsComponent implements OnInit {
     });
   }
 
-  onDialogDetalles(electrolinera) {
-    this.getOneElectricStation(electrolinera.id)
-    .then( datosElectrolinera=>{
-      if (datosElectrolinera) {
-        this.selectedCountry = this.electricStation.chargeRate;
-        this.dialogDetalleRegistro = true;
-      }
-    })
-  }
-
-  getOneElectricStation(idElectricStation) {
-    return new Promise((resolve) => {
-    this.electricStationsService.getOne(idElectricStation).subscribe(
-      (resp: any) => {
-        this.electricStation = resp.data;
-        this.imagenQR = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
-      }
-    )
-    resolve(true);
-    });
-  }
-
   clearFilters(table: Table) {
     table.clear();
     table.clearFilterValues();
@@ -424,5 +459,5 @@ export default class ElectricStationsComponent implements OnInit {
     this.campoLatitude = '';
     this.campoLongitude = '';
   }
-  
+
 }
