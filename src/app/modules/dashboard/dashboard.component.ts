@@ -57,15 +57,15 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   public heartbeat: any;
   public tiempo: number = 0; // Variable para el cronómetro
   public bootNotification: any;
-  public statusElectrolinera0: string = '';
-  public statusElectrolinera1: string = '';
-  public statusElectrolinera2: string = '';
+  public statusElectrolinera0: string = 'Unavailable';
+  public statusElectrolinera1: string = 'Unavailable';
+  public statusElectrolinera2: string = 'Unavailable';
   private subscription: Subscription; // Para el cronómetro
   private maxHeartbeatTime = 100000; // 100 segundos en milisegundos
   private reconnectionInterval = 10000; // 10 segundos en milisegundos
   public estadoHeartbeat = 'Conectando...';
-  public estadoHeartbeat2 = 'Conectando...';
-  public estadoHeartbeat3 = 'Conectando...';
+  public estadoHeartbeat2 = 'Offline';
+  public estadoHeartbeat3 = 'Offline';
   private subscriptions: Subscription[] = [];
   private heartbeatTimerSubscription: Subscription; // Para manejar el temporizador del heartbeat
   private reconnectionCheckSubscription: Subscription; // Temporizador para la verificación de reconexión

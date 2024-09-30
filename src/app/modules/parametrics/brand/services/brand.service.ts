@@ -10,7 +10,9 @@ export class BrandService {
 
   private apiService: string;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient
+  ) {
     this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.models;
   }
 

@@ -54,7 +54,7 @@
               <th>Max Potencia (kW)</th>
               <th>Max Amperaje (A)</th>
               <th>Estado</th>
-              <th>Carga Energía (kW)</th>
+              <th>Carga Energía (Wh)</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-item>
@@ -73,9 +73,14 @@
                 <button pButton *ngIf="item.lastState == 'Unavailable'" label="No disponible" class="button-unavailable"></button>
                 <button pButton *ngIf="!item.lastState" label="No disponible" class="button-unavailable"></button>
               </td>
-              <td *ngIf="item.statusName == 'OCUPADO'">00.00 kW</td>
+
+
+              <td *ngIf="item.name == 'CONECTOR DE CARGA 1'">{{meterConector1}} Wh</td>
+              <td *ngIf="item.name == 'CONECTOR DE CARGA 2'">{{meterConector2}} Wh</td>
+              <!-- <td *ngIf="item.statusName == 'OCUPADO'">00.00 kW</td>
               <td *ngIf="item.statusName == 'DISPONIBLE'">00.00 kW</td>
-              <td *ngIf="item.statusName == 'BLOQUEADO'">00.00 kW</td>
+              <td *ngIf="item.statusName == 'BLOQUEADO'">00.00 kW</td> -->
+
             </tr>
           </ng-template>
         </p-table>
