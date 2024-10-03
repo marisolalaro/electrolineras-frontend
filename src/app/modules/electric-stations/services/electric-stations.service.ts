@@ -24,11 +24,11 @@ export class ElectricStationsService {
   }
 
   create(electricStation: ElectricStationModel) {
-    return this.http.post(this.apiService,electricStation);
+    return this.http.post(this.apiService, electricStation);
   }
 
   update(electricStation: ElectricStationModel) {
-    return this.http.put(this.apiService,electricStation)
+    return this.http.put(this.apiService, electricStation)
   }
 
   getForDashboard() {
@@ -45,5 +45,13 @@ export class ElectricStationsService {
 
   disabledCustomer(idStation: number) {
     return this.http.get(this.apiService + EndPoins.disableStation + '/' + idStation);
+  }
+
+  updateVisibiliry(nameStation, visibility) {
+    let body = {
+      "nameStation": nameStation,
+      "visibility": visibility
+    }
+    return this.http.put(this.apiService + EndPoins.updateVisibility, body);
   }
 }

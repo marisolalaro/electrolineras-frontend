@@ -53,7 +53,9 @@
               "xml-to-json-util",
               "pdfmake/build/vfs_fonts",
               "pdfmake/build/pdfmake",
-              "exceljs"
+              "exceljs",
+              "sockjs-client",
+              "rxjs"
             ]
           },
           "configurations": {

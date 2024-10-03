@@ -42,7 +42,7 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { DataViewModule } from 'primeng/dataview';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { BlockUIModule } from 'primeng/blockui';
-
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 @NgModule({
   exports: [
     CardModule,
@@ -87,7 +87,8 @@ import { BlockUIModule } from 'primeng/blockui';
     ScrollPanelModule,
     DataViewModule,
     ConfirmPopupModule,
-    BlockUIModule
+    BlockUIModule,
+    ProgressSpinnerModule
   ],
 })
 export class PrimeModule {}

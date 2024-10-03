@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NgFor, NgStyle } from '@angular/common';
+import { NgClass, NgFor, NgStyle } from '@angular/common';
+import { ConfirmationService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 // librerias
 import { Subscription } from 'rxjs';
@@ -7,9 +8,10 @@ import { Subscription } from 'rxjs';
 import { EndPoins } from 'src/app/core/constants/endPoints';
 // modules
 import { ElectricStationOnlineModule } from './electric-station-online.module';
-import { ConnectorStatusModel } from 'src/app/core/model/charging-connector-status';
 // models
+import { MeterValueModel } from 'src/app/core/model/meter-value-model';
 import { ElectricStationModel } from 'src/app/core/model/electric-station';
+import { ConnectorStatusModel } from 'src/app/core/model/charging-connector-status';
 // services
 import { Base64ToImageService } from '../../core/services/base-64-to-image.service';
 import { ConnectorStatusService } from 'src/app/core/services/connector-status.service';
@@ -24,11 +26,20 @@ import { ElectricStationsService } from '../electric-stations/services/electric-
   imports: [
     ElectricStationOnlineModule,
     NgStyle,
-    NgFor
-  ]
+    NgFor,
+    NgClass
+  ],
+  providers: [
+    ConfirmationService
+  ],
 })
 
 export default class ElectricStationOnlineComponent implements OnInit, OnDestroy {
+
+  // variables de control
+  public previousState: boolean;
+  public loading: boolean = true;
+  public componenteVisible: boolean = false;
 
   // variable para guardar respuesta del Socket
   public data: any;
@@ -46,13 +57,13 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   // websocket
   public messages: string[] = [];
   private meterValuesSubscription: Subscription;
-  private respMeter: any[] = [];
-  public meterConector1: number = 0;
-  public meterConector2: number = 0;
+  public conector1: MeterValueModel[] = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
+  public conector2: MeterValueModel[] = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
 
   constructor(
     private route: ActivatedRoute,
     public base64ImageService: Base64ToImageService,
+    private confirmationService: ConfirmationService,
     private websocketService: WebsocketMedidorService,
     private connectorStatusService: ConnectorStatusService,
     private electricStationsService: ElectricStationsService,
@@ -73,7 +84,9 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       .then((conexionSocket) => {
         if (conexionSocket) {
           return this.getOneElectricStation()
-        } else { return false }
+        } else {
+          return false
+        }
       })
       .then((datosInicializados) => {
         if (datosInicializados) {
@@ -81,7 +94,16 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
         } else {
           return false;
         }
-      });
+      })
+      .then((serviciosCargados) => {
+        if (serviciosCargados) {
+          this.loading = false;
+          this.componenteVisible = true;
+        } else {
+          this.loading = false;
+          this.componenteVisible = false;
+        }
+      })
   }
 
   inicializaDatos() {
@@ -96,27 +118,99 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       this.websocketService.initializeWebSocketConnection(this.websocketUrl);
       this.meterValuesSubscription = this.websocketService.getMeterValues()
         .subscribe(message => {
-          this.messages.push(JSON.stringify(message, null, 2));
-          if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 1) {
-            this.meterConector1 = message.sampleValues.filter(item => item.measurand == "Energy.Active.Import.Register")[0].value;
-          }
-          if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 2) {
-            this.meterConector2 = message.sampleValues.filter(item => item.measurand == "Energy.Active.Import.Register")[0].value;
-          }
-        });
-      resolve(true);
+            if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 1) {
+              this.conector1 = JSON.parse(JSON.stringify(message.sampleValues));
+              this.conector1.push(this.obtieneVelocidadCarga(this.conector1[0].value));
+              this.conector1.push(this.obtienePotenciaActual(this.conector1[1].value));
+            }
+            if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 2) {
+              this.conector2 = JSON.parse(JSON.stringify(message.sampleValues));
+              this.conector2.push(this.obtieneVelocidadCarga(this.conector2[0].value));
+              this.conector2.push(this.obtienePotenciaActual(this.conector2[1].value));
+            }
+          });
+          // devolvemos true, poque puede no llegar servicio del websocket, o este en estado disponible y no necesita valores de meter
+          resolve(true); 
     })
   }
 
   getOneElectricStation() {
     return new Promise((resolve) => {
       this.electricStationsService.getOne(this.id).subscribe((resp: any) => {
-        this.electricStation = resp.data;
-        this.getAllConnectorStatus()
-        this.imagenQR = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
-        resolve(true);
+        if (resp) {
+          this.electricStation = resp.data;
+          this.getAllConnectorStatus()
+          this.imagenQR = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
+          resolve(true);
+        } else {
+          resolve(false);
+        }
       });
     });
+  }
+
+  obtieneVelocidadCarga(currentOffered: number) {
+    let potencia = 230 * currentOffered;
+
+
+    let carga: number = potencia / 1000;
+    if (carga >= 0 && carga <= 2.3) {
+      return {
+        measurand: 'Carga Ultra Lenta',
+        value: 0,
+        unit: 'Kw',
+        phases: '#808080'
+      }
+    }
+    if (carga >= 3.7 && carga <= 7.4) {
+      return {
+        measurand: 'Carga Lenta',
+        value: 0,
+        unit: 'Kw',
+        phases: '#32CD32'
+      }
+    }
+    if (carga > 7.4 && carga <= 22) {
+      return {
+        measurand: 'Carga Semi Rápida',
+        value: 0,
+        unit: 'Kw',
+        phases: '#00FF00'
+      }
+    }
+    if (carga > 22 && carga <= 50) {
+      return {
+        measurand: 'Carga Rápida',
+        value: 0,
+        unit: 'Kw',
+        phases: '#FF8C00'
+      }
+    }
+    if (carga > 50 && carga <= 350) {
+      return {
+        measurand: 'Carga Ultra Rápida',
+        value: 0,
+        unit: 'Kw',
+        phases: '#B22222'
+      }
+    }
+    return {
+      measurand: 'Carga no definida',
+      value: 0,
+      unit: 'Kw',
+      phases: null
+    }
+  }
+
+  obtienePotenciaActual(currentImport: number) {
+    let potencia = 230 * currentImport;
+    let carga: number = potencia / 1000;
+    return {
+      measurand: 'Potencia Actual',
+      value: carga,
+      unit: 'Kw',
+      phases: null
+    }
   }
 
   getAllConnectorStatus() {
@@ -139,6 +233,35 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
 
   verificaSesionIndex() {
     this.electricStation.sessionIndex
+  }
+
+  confirmSwitchChange(event: any, item) {
+    var texto = item.visibility ? 'Habilitar' : 'Deshabilitar';
+    this.previousState = item.visibility;
+    this.confirmationService.confirm({
+      target: event.originalEvent.target,
+      message: `¿${texto} la visibilidad para los usuarios clientes ?`,
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        item.visibility = !this.previousState;
+        if (!item.visibility) {
+          this.electricStationsService.updateVisibiliry(item.nameStation, true).subscribe(
+            (resp: any) => {
+              this.getOneElectricStation();
+            }
+          )
+        } else {
+          this.electricStationsService.updateVisibiliry(item.nameStation, false).subscribe(
+            (resp: any) => {
+              this.getOneElectricStation();
+            }
+          )
+        }
+      },
+      reject: () => {
+        item.visibility = !this.previousState;
+      }
+    });
   }
 
 }

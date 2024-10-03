@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardRoutingModule } from './dashborad-routing.module';
 // services
 import { ElectricStationsService } from '../electric-stations/services/electric-stations.service';
+import { WebsocketService } from 'src/app/core/services/websocket.service';
+import { ConnectorStatusService } from 'src/app/core/services/connector-status.service';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { ElectricStationsService } from '../electric-stations/services/electric-
     CommonModule
   ],
   providers: [
-    ElectricStationsService
+    WebsocketService,
+    ConnectorStatusService,
+    ElectricStationsService,
   ]
 })
 export class DashboardModule { }

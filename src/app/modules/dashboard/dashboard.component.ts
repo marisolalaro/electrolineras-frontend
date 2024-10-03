@@ -9,13 +9,13 @@ import { rutas } from 'src/app/core/constants/rutas';
 import { mainTitles } from 'src/app/core/constants/labels';
 import { EndPoins } from 'src/app/core/constants/endPoints';
 // models
+import { Heartbeat } from 'src/app/core/model/heartbeat';
 import { ElectricStationModel } from 'src/app/core/model/electric-station';
+import { ConnectorStatusModel } from 'src/app/core/model/charging-connector-status';
 // services
 import { WebsocketService } from 'src/app/core/services/websocket.service';
-import { ElectricStationsService } from '../electric-stations/services/electric-stations.service';
-import { Heartbeat } from 'src/app/core/model/heartbeat';
 import { ConnectorStatusService } from 'src/app/core/services/connector-status.service';
-import { ConnectorStatusModel } from 'src/app/core/model/charging-connector-status';
+import { ElectricStationsService } from '../electric-stations/services/electric-stations.service';
 
 @Component({
   standalone: true,
@@ -27,7 +27,7 @@ import { ConnectorStatusModel } from 'src/app/core/model/charging-connector-stat
     NgStyle,
     NgFor,
     NgIf
-  ],
+  ]
 })
 
 export default class DashboardComponent implements OnInit, OnDestroy {

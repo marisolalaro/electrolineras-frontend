@@ -48,6 +48,13 @@
   --color-charging: #2196F3;  /* Azul */
   --color-finishing: #e67e22; /* Naranja */
   --color-unavailable: #e74c3c; /* Rojo */
+/* colores para la velocidad de carga */
+  --colore-velocidad1:#808080;
+  --colore-velocidad2:#32CD32;
+  --colore-velocidad3:#00FF00;
+  --colore-velocidad4:#FF8C00;
+  --colore-velocidad5:#B22222;
+
 
   --surface-0: var(--color-white);
   --surface-50: #FAFAFA;

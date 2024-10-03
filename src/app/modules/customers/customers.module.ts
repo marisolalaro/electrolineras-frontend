@@ -5,11 +5,13 @@ import { PrimeModule } from 'src/app/prime.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { CustomerService } from './services/customer.service';
+import { NotFoundComponent } from '../not-found/not-found.component';
 
 @NgModule({
   declarations: [
   ],
   imports: [
+    NotFoundComponent,
     CommonModule,
     CustomersRoutingModule,
     PrimeModule,
@@ -20,7 +22,8 @@ import { CustomerService } from './services/customer.service';
   ],
   exports:[
     PrimeModule,
-    CommonModule
+    CommonModule,
+    NotFoundComponent
   ],
   providers: [
     CustomerService,

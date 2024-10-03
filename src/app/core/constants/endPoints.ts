@@ -24,6 +24,7 @@ export class EndPoins {
     static cardElectricStationsId = "/cardChargingStationById";
     static enabledStation = "/enableStation";
     static disableStation = "/disableStation";
+    static updateVisibility = "/updateVisibility";
 
     // tasa de carga
     static chargeRate = "/chargeRate";

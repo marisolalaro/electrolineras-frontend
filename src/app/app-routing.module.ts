@@ -53,6 +53,15 @@ const routes: Routes = [
       },
     ]
   },
+
+  // {
+  //   path: '404', 
+  //   loadComponent: () => import('./modules/not-found/not-found.component'),
+  // },
+  // { 
+  //   path: '**', 
+  //   loadComponent: () => import('./modules/not-found/not-found.component')
+  // }
 ];
 
 @NgModule({

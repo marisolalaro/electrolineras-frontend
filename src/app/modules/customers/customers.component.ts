@@ -1,11 +1,12 @@
 import { FormsModule } from '@angular/forms';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef  } from '@angular/core';
 import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 // Primeng
 import { Table } from 'primeng/table';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 // cores
 import { Global } from 'src/app/core/variables/globales';
+import { messages } from 'src/app/core/constants/messages';
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
 import { mainTitles, titles } from 'src/app/core/constants/labels';
 import { DBAttributeName } from 'src/app/core/constants/dbAttributeName';
@@ -17,7 +18,12 @@ import { Customer } from 'src/app/core/model/customer';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 // services
 import { CustomerService } from './services/customer.service';
+import { responseMessages } from 'src/app/core/constants/responseMessages';
+import { Router } from '@angular/router';
+import { retryWhen, delay, take } from 'rxjs/operators';
 
+import { catchError, of, tap } from 'rxjs';
+import { throwError } from 'rxjs';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -42,7 +48,10 @@ export default class CustomersComponent {
   // variables de control
   public previousState: boolean;
   public orden: boolean = false;
+  public loading: boolean = true;
   public esSuperAdmin: boolean = false;
+  public serviceResponse: boolean = true;
+  public componenteVisible: boolean = false;
 
   // variables del paginador
   public page: number = 0;
@@ -52,6 +61,7 @@ export default class CustomersComponent {
   public totalCargas: number = 0;
 
   // variables propias del componente
+  public mensaje: string = 'No hay conexión';
   public customers: Customer[] = [];
   public customer: Customer = new Customer();
 
@@ -80,8 +90,11 @@ export default class CustomersComponent {
 
   constructor(
     public global: Global,
+    private router: Router,
+    private messageService: MessageService,
     public customerService: CustomerService,
     private confirmationService: ConfirmationService,
+    private cdr: ChangeDetectorRef 
   ) { }
 
   ngOnInit() {
@@ -90,10 +103,22 @@ export default class CustomersComponent {
   }
 
   getCustomers(): void {
+    this.loading = true;
     this.customerService.getAllFilter(this.bodyFilter).subscribe(
       (resp: any) => {
-        this.customers = resp.data.clientList;
-        this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0;
+        if (resp) {
+          this.customers = resp.data.clientList;
+          this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0;
+          this.loading = false;
+          this.componenteVisible = true;
+        } else {
+          this.loading = false
+          this.componenteVisible = false;
+        }
+        this.serviceResponse = true;
+      }, err => {
+        this.loading = false
+        this.serviceResponse = false;
       }
     )
   }
@@ -175,13 +200,13 @@ export default class CustomersComponent {
   }
 
   confirmSwitchChange(event: any, item) {
-    var texto = item.enabled ? 'Habilitar' : 'Deshabilitar';    
+    var texto = item.enabled ? 'Habilitar' : 'Deshabilitar';
     this.previousState = item.enabled;
     this.confirmationService.confirm({
       target: event.originalEvent.target,
       message: `¿${texto} a ${item.lastName} ${item.motherLastName} ${item.names} ?`,
       icon: 'pi pi-exclamation-triangle',
-      accept: () => {        
+      accept: () => {
         item.enabled = !this.previousState;
         if (!item.enabled) {
           this.customerService.enabledCustomer(item.id).subscribe(

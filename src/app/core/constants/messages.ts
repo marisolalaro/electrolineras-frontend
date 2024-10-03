@@ -22,4 +22,6 @@ export const messages: any =
     datosIncorrectos: 'Usuario o Contraseña Incorrectos',
     obligatorios: 'Campos obligatorios',
     camposRequeridos: 'Nombre de usuario y contraseña, son campos requeridos',
+    // genericos
+    noList: 'Error al recuperar datos del servidor'
 }

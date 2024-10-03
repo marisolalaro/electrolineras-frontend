@@ -3,12 +3,12 @@
 
     <div class="row">
       <h3><b>{{titleComponent.mainTitle}}</b></h3>
-      <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
+      <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;" *ngIf="serviceResponse">
         <p-button icon="pi pi-refresh" [rounded]="true" (click)="getCustomers()" pTooltip="Actualizar" tooltipPosition="left"></p-button>
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" *ngIf="serviceResponse">
       <p-table responsiveLayout="stack" #dt1 [value]="customers" dataKey="id" width="100%"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="false" [rows]="5"
         [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
@@ -117,6 +117,11 @@
         [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
         currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros">
       </p-paginator>
+    </div>
+
+    <div *ngIf="!serviceResponse">
+      <app-not-found [mensajeNotFound]="mensaje" (datosEnviados)="getCustomers()"></app-not-found>
+      <br> <br>
     </div>
 
     <!-- Dialog Detalle -->
@@ -271,3 +276,10 @@
     <!-- </section> -->
   </div>
 </div>
+<p-toast></p-toast>
+<p-blockUI [blocked]="loading">
+  <div class="loading-container">
+    <i class="pi pi-spin pi-spinner" style="font-size: 3em"></i>
+    <p>Cargando...</p>
+  </div>
+</p-blockUI>
