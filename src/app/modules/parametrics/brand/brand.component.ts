@@ -34,11 +34,14 @@ export default class BrandComponent {
   // variables de control
   public previousState: boolean;
   public submitted: boolean = false;
+  public loading: boolean = true;
+  public serviceResponse: boolean = true;
 
   // variables propias del componente
   public brands: Model[] = [];
   @ViewChild('dt1') dt!: Table;
   public model: Model = new Model();
+  public mensaje: string = messages.noConexion;
   public formRegistro: FormGroup = this.createFormGroup();
 
   // variables Globales del Core
@@ -90,10 +93,20 @@ export default class BrandComponent {
   }
 
   getAllModels() {
+    this.loading = true;
     this.brandservice.getAll().subscribe(
       (resp: any) => {
-        this.brands = resp.data;
-        this.totalRecords = resp.data.length;
+        if (resp) {
+          this.brands = resp.data;
+          this.totalRecords = resp.data.length;
+          this.loading = false
+        } else {
+          this.loading = false
+        }
+        this.serviceResponse = true;
+      }, err => {
+        this.loading = false
+        this.serviceResponse = false;
       }
     )
   }

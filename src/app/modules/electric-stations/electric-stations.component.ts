@@ -63,6 +63,8 @@ export default class ElectricStationsComponent implements OnInit {
   public submitted: boolean = false;
   public mapaVisible: boolean = false;
   public esSuperAdmin: boolean = false;
+  public loading: boolean = true;
+  public serviceResponse: boolean = true;
 
   // variables Globales del Core
   public labelsGlobales = labels;
@@ -88,7 +90,7 @@ export default class ElectricStationsComponent implements OnInit {
 
   // variables para el select
   public selectedModel: any;
-  public selectedCountry: any;
+  public selectedTasaCarga: any;
   public models: any[] | undefined;
   public countries: any[] | undefined;
   public filteredCountries: any[] | undefined;
@@ -98,6 +100,7 @@ export default class ElectricStationsComponent implements OnInit {
   @ViewChild('dt1') dt!: Table;
   public imagenQR: string | null = null;
   public tasasCarga: TasaCargaModel[] = [];
+  public mensaje: string = messages.noConexion;
   public conectorStatus: ConnectorStatusModel[] = [];
   public electricStations: ElectricStationModel[] = [];
   public formRegistro: FormGroup = this.createFormGroup();
@@ -127,23 +130,23 @@ export default class ElectricStationsComponent implements OnInit {
   ngOnInit(): void {
     this.esSuperAdmin = this.global.getEsSuperAdmin();
     this.getAllElectricStations();
-    this.getTasaDeCarga();
-    this.getModels();
+    
   }
 
-  filterCountry(event: AutoCompleteCompleteEvent) {
+  filterTasaCarga(event: AutoCompleteCompleteEvent) {
     let filtered: any[] = [];
     let query = event.query;
     for (let i = 0; i < (this.countries as any[]).length; i++) {
-      let country = (this.countries as any[])[i];
-      if (country.amount.indexOf(query.toLowerCase()) == 0) {
-        filtered.push(country);
+      let tasaCarga = (this.countries as any[])[i];
+      if (tasaCarga.amount.indexOf(query.toLowerCase()) == 0) {
+        filtered.push(tasaCarga);
       }
     }
     this.filteredCountries = filtered;
   }
 
   filterModel(event: AutoCompleteCompleteEvent) {
+    // aqui poner servicio no disponoble
     let filtered: any[] = [];
     let query = event.query;
     for (let i = 0; i < (this.models as any[]).length; i++) {
@@ -156,10 +159,20 @@ export default class ElectricStationsComponent implements OnInit {
   }
 
   getAllElectricStations(): void {
+    this.loading = true;
     this.electricStationsService.getAll().subscribe(
       (resp: any) => {
-        this.electricStations = resp.data;
-        this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : this.electricStations.length;
+        if (resp) {
+          this.loading = false
+          this.electricStations = resp.data;
+          this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : this.electricStations.length;
+        }else {
+          this.loading = false
+        }
+        this.serviceResponse = true;
+      }, err => {
+        this.loading = false
+        this.serviceResponse = false;
       }
     )
   }
@@ -183,9 +196,11 @@ export default class ElectricStationsComponent implements OnInit {
   onSelecetedEdit(item) {
     this.electricStation = item;
     this.formRegistro.patchValue(item);
-    this.selectedCountry = item.chargeRate;
+    this.selectedTasaCarga = item.chargeRate;
     this.selectedModel = item.model;
     this.dialogEdit = true;
+    this.getTasaDeCarga();
+    this.getModels();
   }
 
   onDialogConnector(item) {
@@ -241,7 +256,7 @@ export default class ElectricStationsComponent implements OnInit {
       ...this.formRegistro.value,
     };
     registro.chargeRate = {
-      id: this.selectedCountry.id
+      id: this.selectedTasaCarga.id
     };
     registro.model = new ModelElectricStation();
     registro.model.id = this.selectedModel.id
@@ -286,7 +301,7 @@ export default class ElectricStationsComponent implements OnInit {
       ...this.formRegistro.value,
     };
     registro.chargeRate = {
-      id: this.selectedCountry.id
+      id: this.selectedTasaCarga.id
     };
     registro.model = new ModelElectricStation();
     registro.model.id = this.selectedModel.id
@@ -311,7 +326,7 @@ export default class ElectricStationsComponent implements OnInit {
     this.getOneElectricStation(electrolinera.id)
       .then(datosElectrolinera => {
         if (datosElectrolinera) {
-          this.selectedCountry = this.electricStation.chargeRate;
+          this.selectedTasaCarga = this.electricStation.chargeRate;
           return this.getAllConnectorStatus();
         }
       }).then((datosConector) => {

@@ -5,6 +5,7 @@ import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { TransactionsRoutingModule } from './transactions-routing.module';
 // services
 import { TransactionsService } from './services/transactions.service';
+import { NotFoundComponent } from '../not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -14,9 +15,11 @@ import { TransactionsService } from './services/transactions.service';
     PrimeModule,
     PipesModule,
     TransactionsRoutingModule,
+    NotFoundComponent
   ],
   exports:[
-    PrimeModule
+    PrimeModule,
+    NotFoundComponent
   ],
   providers: [
     TransactionsService,

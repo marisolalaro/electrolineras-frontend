@@ -18,12 +18,8 @@ import { Customer } from 'src/app/core/model/customer';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 // services
 import { CustomerService } from './services/customer.service';
-import { responseMessages } from 'src/app/core/constants/responseMessages';
 import { Router } from '@angular/router';
-import { retryWhen, delay, take } from 'rxjs/operators';
 
-import { catchError, of, tap } from 'rxjs';
-import { throwError } from 'rxjs';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -51,7 +47,6 @@ export default class CustomersComponent {
   public loading: boolean = true;
   public esSuperAdmin: boolean = false;
   public serviceResponse: boolean = true;
-  public componenteVisible: boolean = false;
 
   // variables del paginador
   public page: number = 0;
@@ -61,7 +56,7 @@ export default class CustomersComponent {
   public totalCargas: number = 0;
 
   // variables propias del componente
-  public mensaje: string = 'No hay conexión';
+  public mensaje: string = messages.noConexion;
   public customers: Customer[] = [];
   public customer: Customer = new Customer();
 
@@ -90,11 +85,8 @@ export default class CustomersComponent {
 
   constructor(
     public global: Global,
-    private router: Router,
-    private messageService: MessageService,
     public customerService: CustomerService,
     private confirmationService: ConfirmationService,
-    private cdr: ChangeDetectorRef 
   ) { }
 
   ngOnInit() {
@@ -110,10 +102,8 @@ export default class CustomersComponent {
           this.customers = resp.data.clientList;
           this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0;
           this.loading = false;
-          this.componenteVisible = true;
         } else {
           this.loading = false
-          this.componenteVisible = false;
         }
         this.serviceResponse = true;
       }, err => {

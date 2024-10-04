@@ -2,7 +2,7 @@
   <div class="card">
     <div class="row">
       <h3><b>{{componentTitle.mainTitle}}</b></h3>
-      <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
+      <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;" *ngIf="serviceResponse">
         <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllAdministrations()" pTooltip="Actualizar"
           tooltipPosition="left"></p-button> &nbsp;
         <button  *ngIf="esSuperAdmin" pButton pRipple class="mat-raised-button" (click)="openDialog(true,false, 'crear')">Nuevo
@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" *ngIf="serviceResponse">
       <p-table responsiveLayout="stack" #dt1 [value]="administradors" dataKey="id"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
         [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES"
@@ -27,7 +27,7 @@
             <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">#</th>
             <th style="width:15%; text-align:center; vertical-align:middle" pSortableColumn="username">
               Usuario<p-sortIcon field="username"></p-sortIcon></th>
-            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="names">Nombres<p-sortIcon
+            <!-- <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="names">Nombres<p-sortIcon
                 field="names"></p-sortIcon></th>
             <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="lastName">Apellido
               Paterno<p-sortIcon field="lastName"></p-sortIcon></th>
@@ -36,7 +36,7 @@
             <th style="width:15%; text-align:center; vertical-align:middle" pSortableColumn="electronicMail">Correo
               Electrónico<p-sortIcon field="electronicMail"></p-sortIcon></th>
             <th style="width:8%; text-align:center; vertical-align:middle" pSortableColumn="cellPhoneNumber">
-              Celular<p-sortIcon field="cellPhoneNumber"></p-sortIcon></th>
+              Celular<p-sortIcon field="cellPhoneNumber"></p-sortIcon></th> -->
             <th style="width:13%; text-align:center; vertical-align:middle" rowspan="2" pSortableColumn="enabled">
               Estado<p-sortIcon field="enabled"></p-sortIcon></th>
             <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
@@ -46,7 +46,7 @@
               <input pInputText type="text" (input)="applyFilter($event, 'username', 'contains')"
                 placeholder="Busca por username" class="w-full" [(ngModel)]="username">
             </th>
-            <th>
+            <!-- <th>
               <input pInputText type="text" (input)="applyFilter($event, 'names', 'contains')"
                 placeholder="Busca por Nombres" class="w-full" [(ngModel)]="names">
             </th>
@@ -65,18 +65,18 @@
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'cellPhoneNumber', 'contains')"
                 placeholder="Busca por Nro Celular" class="w-full" [(ngModel)]="cellPhoneNumber">
-            </th>
+            </th> -->
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
           <tr>
             <td style="text-align:center; vertical-align:middle">{{rowIndex + 1}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['username']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['names']}}</td>
+            <!-- <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['names']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['lastName']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['motherLastName']}}</td>
             <td style="text-align:left; vertical-align:middle">{{rowData['electronicMail']}}</td>
-            <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['cellPhoneNumber']}}</td>
+            <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['cellPhoneNumber']}}</td> -->
             <td style="text-align:center; vertical-align:middle">
               <div *ngIf="esSuperAdmin">
                 <p-confirmPopup></p-confirmPopup>
@@ -104,6 +104,11 @@
       </p-table>
     </div>
 
+    <div *ngIf="!serviceResponse">
+      <app-not-found [mensajeNotFound]="mensaje" (datosEnviados)="getAllAdministrations()"></app-not-found>
+      <br> <br>
+    </div>
+
     <!-- modal Crear nuevo -->
     <section class="dialogCrear">
       <p-dialog header={{titlesGlobales.create}} [(visible)]="dialogRegistro" [style]="{width: '50vw'}" class="p-fluid"
@@ -112,7 +117,7 @@
         <ng-template pTemplate="content">
           <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
 
-            <p-divider align="left">
+            <!-- <p-divider align="left">
               <div class="inline-flex align-items-center">
                 <i class="pi pi-user mr-2"></i>
                 <b>Datos personales</b>
@@ -204,7 +209,7 @@
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>
-            </div>
+            </div> -->
 
             <p-divider align="left">
               <div class="inline-flex align-items-center">
@@ -256,14 +261,14 @@
         <ng-template pTemplate="content">
           <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
 
-            <p-divider align="left">
+           <!-- <p-divider align="left">
               <div class="inline-flex align-items-center">
                 <i class="pi pi-user mr-2"></i>
                 <b>Datos personales</b>
               </div>
             </p-divider>
 
-            <div class="form-group field">
+             <div class="form-group field">
               <label for="names">{{labelsGlobales.name}}</label>
               <input type="text" pInputText required formControlName="names"
                 [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['names'].invalid}"
@@ -347,7 +352,7 @@
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>
-            </div>
+            </div> -->
 
             <p-divider align="left">
               <div class="inline-flex align-items-center">
@@ -392,3 +397,11 @@
     <!-- modal Editar -->
   </div>
 </div>
+
+<p-toast></p-toast>
+<p-blockUI [blocked]="loading">
+  <div class="loading-container">
+    <i class="pi pi-spin pi-spinner" style="font-size: 3em"></i>
+    <p>Cargando...</p>
+  </div>
+</p-blockUI>

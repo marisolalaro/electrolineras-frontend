@@ -16,6 +16,7 @@ import { TransactionsModel } from 'src/app/core/model/transactions';
 // services
 import { TransactionsService } from './services/transactions.service';
 import { Base64ToImageService } from '../../core/services/base-64-to-image.service';
+import { messages } from 'src/app/core/constants/messages';
 
 @Component({
   selector: 'app-transactions',
@@ -37,11 +38,14 @@ export default class TransactionsComponent implements OnInit {
   // variables de control
   public orden: boolean = false;
   public visible: boolean = false;
+  public loading: boolean = true;
+  public serviceResponse: boolean = true;
 
   // variables propias del componente
   public es: any;
   public titulosGlobales = titles;
   public imageUrl: string | null = null;
+  public mensaje: string = messages.noConexion;
   public transactions: TransactionsModel[] = [];
   public transaction: TransactionsModel = new TransactionsModel();
 
@@ -113,11 +117,21 @@ export default class TransactionsComponent implements OnInit {
   }
 
   getTransactions(): void {
+    this.loading = true;
     this.date = null
     this.transactionService.getAllFilter(this.bodyFilter).subscribe(
       (resp: any) => {
-        this.transactions = resp.data.paymentTransactionElectrolinerasList;
-        this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0;
+        if (resp) {
+          this.transactions = resp.data.paymentTransactionElectrolinerasList;
+          this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0;
+          this.loading = false
+        } else {
+          this.loading = false
+        }
+        this.serviceResponse = true;
+      }, err => {
+        this.loading = false
+        this.serviceResponse = false;
       }
     )
   }

@@ -23,5 +23,6 @@ export const messages: any =
     obligatorios: 'Campos obligatorios',
     camposRequeridos: 'Nombre de usuario y contraseña, son campos requeridos',
     // genericos
-    noList: 'Error al recuperar datos del servidor'
+    noList: 'Error al recuperar datos del servidor',
+    noConexion : 'No hay conexión',
 }

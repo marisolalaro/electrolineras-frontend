@@ -23,6 +23,7 @@ import { InvoiceEnergyChargingModel } from 'src/app/core/model/invoice-energy-ch
 import { InvoiceTransaction } from './services/pdf-invoice-transaction';
 import { Base64ToPdfService } from '../../core/services/base-64-to-pdf.service';
 import { InvoiveEnergyChargingService } from './services/invoive-energy-charging.service';
+import { messages } from 'src/app/core/constants/messages';
 
 @Component({
   selector: 'app-invoice-energy-charging',
@@ -49,9 +50,12 @@ export default class InvoiceEnergyChargingComponent {
   public page: number = 0;
   public itemsPerPage: number = 5;
   public totalRecords: number = 0;
+  public loading: boolean = true;
+  public serviceResponse: boolean = true;
 
   // variables propias del componente
   public es: any;
+  public mensaje: string = messages.noConexion;
   public invoices: InvoiceEnergyChargingModel[] = [];
   public invoice: InvoiceEnergyChargingModel = new InvoiceEnergyChargingModel();
   
@@ -92,13 +96,13 @@ export default class InvoiceEnergyChargingComponent {
         return false;
       }
     })
-    .then( listado => {
-      if (listado) {
-        return this.getInvoicesCharging();
-      } else {
-        return false;
-      }
-    })
+    // .then( listado => {
+    //   if (listado) {
+    //     return this.getInvoicesCharging();
+    //   } else {
+    //     return false;
+    //   }
+    // })
   }
 
   inicializaDatos() {
@@ -118,13 +122,21 @@ export default class InvoiceEnergyChargingComponent {
   }
 
   getInvoicesCharging(): void {
+    this.loading = true;
     this.InvoiceService.getAllFilter(this.bodyFilter)
       .subscribe(
         (result: any) => {
-          this.invoices = result.data.invoceElectrolineraList;
-          this.totalRecords = result.data.totalRecords ? result.data.totalRecords : 0; 
-        },
-        (error: any) => {
+          if (result) {
+            this.invoices = result.data.invoceElectrolineraList;
+            this.totalRecords = result.data.totalRecords ? result.data.totalRecords : 0; 
+            this.loading = false;
+          } else {
+            this.loading = false;
+          }
+          this.serviceResponse = true;
+        }, err => {
+          this.loading = false
+          this.serviceResponse = false;
         })
   }
 

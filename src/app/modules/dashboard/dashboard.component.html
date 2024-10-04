@@ -6,7 +6,7 @@
     <div class="row">
       <h4><b>Electrolineras</b></h4><br>
       <div class="grid">
-        <div class="card-container">
+        <div class="card-container" *ngIf="serviceResponse">
 
           <p-card [header]="" subheader="" [style]="{ width: '360px' }">
             <span class="block align-center mb-4"><b>{{electricStations[0]?.nameStation}}</b></span>
@@ -223,6 +223,21 @@
 
         </div>
       </div>
+
+      <div *ngIf="!serviceResponse">
+        <app-not-found [mensajeNotFound]="mensaje" (datosEnviados)="getElectricStation()"></app-not-found>
+        <br> <br>
+      </div>
+
+      
     </div>
   </p-card>
 </div>
+
+<p-toast></p-toast>
+<p-blockUI [blocked]="loading">
+  <div class="loading-container">
+    <i class="pi pi-spin pi-spinner" style="font-size: 3em"></i>
+    <p>Cargando...</p>
+  </div>
+</p-blockUI>

@@ -11,6 +11,7 @@ import { TableReportSimpleComponent } from './components/table-report-simple/tab
 import { TableSuministroClienteComponent } from './components/table-suministro-cliente/table.component';
 import { TableFacturaRelacionadaComponent } from './components/table-factura-relacionada/table.component';
 import { TableTransaccionesClienteComponent } from './components/table-transacciones-cliente/table.component';
+import { NotFoundComponent } from '../not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { TableTransaccionesClienteComponent } from './components/table-transacci
     PipesModule,
     FormsModule,
     ReactiveFormsModule,
+    NotFoundComponent,
   ],
   exports: [
     CommonModule,
@@ -33,6 +35,7 @@ import { TableTransaccionesClienteComponent } from './components/table-transacci
     PipesModule,
     TableReportSimpleComponent,
     TableReportSimpleComponent,
+    NotFoundComponent,
     TableSuministroClienteComponent,
     TableFacturaRelacionadaComponent,
     TableTransaccionesClienteComponent,

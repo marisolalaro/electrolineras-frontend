@@ -37,7 +37,7 @@ const routes: Routes = [
       },
       {
         path: rutas.rutaFacturaTransferencias,
-        loadComponent: () => import('./modules/invoice-electric-stations/invoice-electric-stations.component'),
+        loadComponent: () => import('./modules/invoice-purchase-sales/invoice-purchase-sales.component'),
       },
       {
         path: rutas.rutaFacturasCargasEnergia,

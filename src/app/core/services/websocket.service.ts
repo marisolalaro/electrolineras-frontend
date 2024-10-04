@@ -20,6 +20,7 @@ export class WebsocketService {
     this.stompClient = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000, // Reconectar en 5 segundos si se pierde la conexión
+      
     });
     this.stompClient.onConnect = (frame) => {
       this.subscribeToChannel('/channel/authorize');
@@ -30,7 +31,9 @@ export class WebsocketService {
       this.subscribeToChannel('/channel/startTransaction');
       this.subscribeToChannel('/channel/statusNotification');
       this.subscribeToChannel('/channel/stopTransaction');
+      // console.log('Se conecto al websocket..');
       return of({ resp: 'conectado' });
+      
     };
     this.stompClient.onStompError = (frame) => {
       console.error('Broker reported error: ' + frame.headers['message']);

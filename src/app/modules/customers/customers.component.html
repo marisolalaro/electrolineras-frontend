@@ -25,7 +25,7 @@
             <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">
               #
             </th>
-            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="'names'">
+            <!-- <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="'names'">
               Nombres
               <p-sortIcon field="names" (click)="customSort('names', orden)"></p-sortIcon>
             </th>
@@ -36,17 +36,17 @@
             <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="'motherLastName'">
               Apellido Materno
               <p-sortIcon field="motherLastName" (click)="customSort('motherLastName', orden)"></p-sortIcon>
-            </th>
+            </th> -->
             <th style="width:16%; text-align:center; vertical-align:middle" pSortableColumn="'electronicMail'">
               Correo Electrónico
               <p-sortIcon field="electronicMail" (click)="customSort('electronicMail', orden)"></p-sortIcon>
             </th>
-            <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">
+            <!-- <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">
               Ultima Transacción Bs
             </th>
             <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">
               Ultima Carga kW
-            </th>
+            </th> -->
             <th style="width:15%; text-align:center; vertical-align:middle" rowspan="2" pSortableColumn="'enabled'">
               Estado
               <p-sortIcon field="enabled" (click)="customSort('enabled', orden)"></p-sortIcon>
@@ -57,7 +57,7 @@
           </tr>
 
           <tr>
-            <th>
+            <!-- <th>
               <input pInputText type="text" (input)="applyFilter($event, 'names', 'contains')"
                 placeholder="Busca por nombres" class="w-full" [(ngModel)]="names">
             </th>
@@ -68,7 +68,7 @@
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'motherLastName', 'contains')"
                 placeholder="Busca por apellido materno" class="w-full" [(ngModel)]="motherLastName">
-            </th>
+            </th> -->
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'electronicMail', 'contains')"
                 placeholder="Busca por Correo Electrónico" class="w-full" [(ngModel)]="electronicMail">
@@ -79,19 +79,19 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
           <tr>
             <td style="text-align:center; vertical-align:middle">{{rowIndex + 1}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['names']}}</td>
+            <!-- <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['names']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['lastName']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['motherLastName']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['motherLastName']}}</td> -->
             <td style="text-align:left; vertical-align:middle">{{rowData['electronicMail']}}</td>
 
-            <td *ngIf="rowData['paymentTransactionsElectrolineraList'][0]"
+            <!-- <td *ngIf="rowData['paymentTransactionsElectrolineraList'][0]"
               style="text-align:right; vertical-align:middle">
               {{rowData['paymentTransactionsElectrolineraList'][0].amount | numberDecimal:2}}</td>
             <td *ngIf="!rowData['paymentTransactionsElectrolineraList'][0]"></td>
 
             <td *ngIf="rowData['chargeClientList'][0]" style="text-align:right; vertical-align:middle">
               {{rowData['chargeClientList'][0].amount | numberDecimal:2}}</td>
-            <td *ngIf="!rowData['chargeClientList'][0]"></td>
+            <td *ngIf="!rowData['chargeClientList'][0]"></td> -->
 
             <td style="text-align:center; vertical-align:middle">
               <div *ngIf="esSuperAdmin">

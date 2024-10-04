@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PrimeModule } from 'src/app/prime.module';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
-import { InvoiceElectricStationsRoutingModule } from './invoice-electric-stations-routing.module';
+import { InvoiceElectricStationsRoutingModule } from './invoice-purchase-sales-routing.module';
 // services
 import { InvoiceTransaction } from './services/pdf-invoice-transaction';
-import { InvoiceElectricStationsService } from './services/invoice-electric-stations.service';
+import { InvoiceElectricStationsService } from './services/invoice-purchase-sales.service';
+import { NotFoundComponent } from '../not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -14,11 +15,13 @@ import { InvoiceElectricStationsService } from './services/invoice-electric-stat
     CommonModule,
     PrimeModule,
     PipesModule,
+    NotFoundComponent,
     InvoiceElectricStationsRoutingModule,
   ], 
   exports:[
     CommonModule,
-    PrimeModule
+    PrimeModule,
+    NotFoundComponent
   ],
   providers: [
     InvoiceElectricStationsService,

@@ -5,6 +5,7 @@ import { PrimeModule } from 'src/app/prime.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { BrandService } from './services/brand.service';
+import { NotFoundComponent } from '../../not-found/not-found.component';
 
 
 
@@ -18,10 +19,12 @@ import { BrandService } from './services/brand.service';
     PipesModule,
     BrandRoutingModule,
     ReactiveFormsModule,
+    NotFoundComponent,
   ],
   exports:[
     PrimeModule,
-    CommonModule
+    CommonModule,
+    NotFoundComponent,
   ],
   providers: [
     BrandService,

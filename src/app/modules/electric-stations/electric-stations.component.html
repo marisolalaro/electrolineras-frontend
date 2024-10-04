@@ -3,16 +3,16 @@
     <div class="row">
       <h3><b>{{componentTitle.mainTitle}}</b></h3>
     </div>
-    <div class="row">
+    <div class="row" *ngIf="serviceResponse">
       <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
         <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllElectricStations()" pTooltip="Actualizar"
           tooltipPosition="left"></p-button> &nbsp;
         <button *ngIf="esSuperAdmin" pButton pRipple class="mat-raised-button"
-          (click)="openDialog(true, false, 'crear')">Nuevo
+          (click)="getTasaDeCarga();getModels();openDialog(true, false, 'crear')">Nuevo
           Registro</button>
       </div>
     </div>
-    <div class="row">
+    <div class="row" *ngIf="serviceResponse">
       <p-table responsiveLayout="stack" #dt1 [value]="electricStations" dataKey="id"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
         [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES"
@@ -111,6 +111,11 @@
       </div>
     </div>
 
+    <div *ngIf="!serviceResponse">
+      <app-not-found [mensajeNotFound]="mensaje" (datosEnviados)="getAllElectricStations()"></app-not-found>
+      <br> <br>
+    </div>
+
     <!-- modal Crear nuevo -->
     <div class="row">
       <p-dialog header={{titlesGlobales.create}} [(visible)]="dialogRegistro" [style]="{width: '50vw'}" class="p-fluid"
@@ -176,8 +181,8 @@
 
             <div class="form-group field">
               <label for="descripcion">{{labelsGlobales.tasaCarga}}</label>
-              <p-autoComplete [(ngModel)]="selectedCountry" [dropdown]="true" [suggestions]="filteredCountries"
-                (completeMethod)="filterCountry($event)" field="amount" id="chargeRate" formControlName="chargeRate"
+              <p-autoComplete [(ngModel)]="selectedTasaCarga" [dropdown]="true" [suggestions]="filteredCountries"
+                (completeMethod)="filterTasaCarga($event)" field="amount" id="chargeRate" formControlName="chargeRate"
                 [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['chargeRate'].invalid}"></p-autoComplete>
               <div *ngIf="submitted && formRegistro.controls['chargeRate'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('chargeRate')?.hasError('required')">
@@ -285,8 +290,8 @@
 
             <div class="form-group field">
               <label for="descripcion">{{labelsGlobales.tasaCarga}}</label>
-              <p-autoComplete [(ngModel)]="selectedCountry" [dropdown]="true" [suggestions]="filteredCountries"
-                (completeMethod)="filterCountry($event)" field="amount" id="chargeRate" formControlName="chargeRate"
+              <p-autoComplete [(ngModel)]="selectedTasaCarga" [dropdown]="true" [suggestions]="filteredCountries"
+                (completeMethod)="filterTasaCarga($event)" field="amount" id="chargeRate" formControlName="chargeRate"
                 [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['chargeRate'].invalid}"></p-autoComplete>
               <div *ngIf="submitted && formRegistro.controls['chargeRate'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('chargeRate')?.hasError('required')">
@@ -598,3 +603,11 @@
 
   </div>
 </div>
+
+<p-toast></p-toast>
+<p-blockUI [blocked]="loading">
+  <div class="loading-container">
+    <i class="pi pi-spin pi-spinner" style="font-size: 3em"></i>
+    <p>Cargando...</p>
+  </div>
+</p-blockUI>

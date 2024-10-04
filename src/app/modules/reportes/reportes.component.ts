@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { NgFor, NgIf } from '@angular/common';
 import { ReportesModule } from './reportes.module';
 import { mainTitles, reports } from 'src/app/core/constants/labels';
+import { messages } from 'src/app/core/constants/messages';
 
 interface Tab {
   title: string;
@@ -21,6 +22,10 @@ interface Tab {
 })
 
 export default class ReportesComponent {
+
+  // variables de control
+  public loading: boolean = true;
+  public serviceResponse: boolean = true;
 
   // variables propias del componente  
   public tiposReportes: any[] = [];

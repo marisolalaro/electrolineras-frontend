@@ -16,6 +16,7 @@ import { ConnectorStatusModel } from 'src/app/core/model/charging-connector-stat
 import { WebsocketService } from 'src/app/core/services/websocket.service';
 import { ConnectorStatusService } from 'src/app/core/services/connector-status.service';
 import { ElectricStationsService } from '../electric-stations/services/electric-stations.service';
+import { messages } from 'src/app/core/constants/messages';
 
 @Component({
   standalone: true,
@@ -32,10 +33,15 @@ import { ElectricStationsService } from '../electric-stations/services/electric-
 
 export default class DashboardComponent implements OnInit, OnDestroy {
 
+  // variables de control
+  public loading: boolean = true;
+  public serviceResponse: boolean = true;
+
   // variables globales
   public titleComponent: any = mainTitles['dashboard'];
 
   // variables propias del componente
+  public mensaje: string = messages.noConexion;
   public conectorStatus0: ConnectorStatusModel = new ConnectorStatusModel();
   public conectorStatus1: ConnectorStatusModel = new ConnectorStatusModel();
   public conectorStatus2: ConnectorStatusModel = new ConnectorStatusModel();
@@ -84,6 +90,15 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     if (this.heartbeatTimerSubscription) {
       this.heartbeatTimerSubscription.unsubscribe();
     }
+    if (this.heartbeatSubscription) {
+      this.heartbeatSubscription.unsubscribe();
+    }
+    if (this.reconnectionCheckSubscription) {
+      this.reconnectionCheckSubscription.unsubscribe();
+    }
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   ngOnInit() {
@@ -118,10 +133,16 @@ export default class DashboardComponent implements OnInit, OnDestroy {
 
   escucharHeartbeat(): void {
     this.heartbeatSubscription = this.websocketService.heartbeatReceived$.subscribe((message: any) => {
+      // console.log('Escucha escucharHeartbeat');
+      // console.log(message);
       if (message) {
+        this.getElectricStation();
         this.escucho = true;
         this.heartbeatMessage = message.sessionIndex; // Almacenar el contenido del mensaje del heartbeat
+        // console.log('Existe heratbeat y sesion index');
+        // console.log(this.heartbeatMessage);
         if (this.heartbeatMessage == this.electricStations[0].sessionIndex) {
+          // console.log('El sesion index es igual a la electrolinera que con el heartbeat, Estado en linea');
           this.getElectricStation();
           this.cambiarEstadoHeartbeat('En línea'); // Cambiar el estado a 'En línea'
         }
@@ -193,7 +214,9 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     this.websocketService.initializeWebSocketConnection(this.websocketUrl);
 
     this.verificaConexionWebSocket = interval(this.maxHeartbeatTime).subscribe(() => {
-      this.websocketService.isConnected() ? this.cambiarEstadoHeartbeat('Offline') : this.cambiarEstadoHeartbeat('Offline')
+      // console.log('Verifica conexion  al web socket.. en 1:40 min');
+      
+      this.websocketService.isConnected() ? this.cambiarEstadoHeartbeat('Conectando...') : this.cambiarEstadoHeartbeat('Offline')
     });
 
 
@@ -212,11 +235,19 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getElectricStation(): void {
-    // this.electricStationsService.getForDashboard().subscribe(
+    this.loading = true;
     this.electricStationsService.getAllnoCrud().subscribe(
       (resp: any) => {
-        this.electricStations = resp.data;
-        // aqui llamaria el servicio
+        if (resp) {
+          this.electricStations = resp.data;
+          this.loading = false
+        } else {
+          this.loading = false
+        }
+        this.serviceResponse = true;
+      }, err => {
+        this.loading = false
+        this.serviceResponse = false;
       }
     )
   }

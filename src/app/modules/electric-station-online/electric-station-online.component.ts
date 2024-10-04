@@ -18,6 +18,9 @@ import { ConnectorStatusService } from 'src/app/core/services/connector-status.s
 import { WebsocketMedidorService } from 'src/app/core/services/websocket-medidor.service';
 import { ElectricStationsService } from '../electric-stations/services/electric-stations.service';
 
+import { interval } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
 @Component({
   standalone: true,
   selector: 'app-electric-station-online',
@@ -53,6 +56,10 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   public electricStation: ElectricStationModel = new ElectricStationModel();
   public conectorStatus: ConnectorStatusModel[] = [];
   private websocketUrl = EndPoins.apiUrl + EndPoins.websocket;
+  // private websocketUrl = 'https://test-dlpelectrolineras.et.bo/electrolinerasbackend' + EndPoins.websocket;
+
+  // para la ejeccion de los estados cada 5 segundos
+  private subscriptionEstados: Subscription;
 
   // websocket
   public messages: string[] = [];
@@ -77,6 +84,9 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       this.meterValuesSubscription.unsubscribe();
     }
     this.websocketService.disconnect();
+    if (this.subscriptionEstados) {
+      this.subscriptionEstados.unsubscribe();
+    }
   }
 
   ngOnInit(): void {
@@ -118,19 +128,19 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       this.websocketService.initializeWebSocketConnection(this.websocketUrl);
       this.meterValuesSubscription = this.websocketService.getMeterValues()
         .subscribe(message => {
-            if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 1) {
-              this.conector1 = JSON.parse(JSON.stringify(message.sampleValues));
-              this.conector1.push(this.obtieneVelocidadCarga(this.conector1[0].value));
-              this.conector1.push(this.obtienePotenciaActual(this.conector1[1].value));
-            }
-            if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 2) {
-              this.conector2 = JSON.parse(JSON.stringify(message.sampleValues));
-              this.conector2.push(this.obtieneVelocidadCarga(this.conector2[0].value));
-              this.conector2.push(this.obtienePotenciaActual(this.conector2[1].value));
-            }
-          });
-          // devolvemos true, poque puede no llegar servicio del websocket, o este en estado disponible y no necesita valores de meter
-          resolve(true); 
+          if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 1) {
+            this.conector1 = JSON.parse(JSON.stringify(message.sampleValues));
+            this.conector1.push(this.obtieneVelocidadCarga(this.conector1[0].value));
+            this.conector1.push(this.obtienePotenciaActual(this.conector1[1].value));
+          }
+          if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 2) {
+            this.conector2 = JSON.parse(JSON.stringify(message.sampleValues));
+            this.conector2.push(this.obtieneVelocidadCarga(this.conector2[0].value));
+            this.conector2.push(this.obtienePotenciaActual(this.conector2[1].value));
+          }
+        });
+      // devolvemos true, poque puede no llegar servicio del websocket, o este en estado disponible y no necesita valores de meter
+      resolve(true);
     })
   }
 
@@ -214,11 +224,22 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   }
 
   getAllConnectorStatus() {
-    this.connectorStatusService.getAllConnectorByIdElectricStation(this.electricStation.id).subscribe((resp: any) => {
-      this.conectorStatus = resp.data;
-      this.statusEnElectrolinera();
-      this.imagenQR = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
-    });
+    this.subscriptionEstados = interval(5000).pipe(
+      switchMap(() => this.connectorStatusService.getAllConnectorByIdElectricStation(this.electricStation.id)) // Llama al servicio
+    ).subscribe(
+      (data: any) => {
+        this.conectorStatus = data.data;
+        this.statusEnElectrolinera();
+      },
+      error => {
+        console.error('Error al obtener los datos de las estaciones', error);
+      }
+    );
+
+    // this.connectorStatusService.getAllConnectorByIdElectricStation(this.electricStation.id).subscribe((resp: any) => {
+    //   this.conectorStatus = resp.data;
+    //   this.statusEnElectrolinera();
+    // });
   }
 
   statusEnElectrolinera() {

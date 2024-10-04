@@ -7,7 +7,7 @@ import { decodeLocal } from 'src/app/core/utils/decodeToken';
 import { mainTitles, titles } from 'src/app/core/constants/labels';
 import { DBAttributeName } from 'src/app/core/constants/dbAttributeName';
 // modules
-import { InvoiceElectricStationsModule } from './invoice-electric-stations.module';
+import { InvoiceElectricStationsModule } from './invoice-purchase-sales.module';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
 // models
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
@@ -15,7 +15,7 @@ import { InvoiceElectricStationModel } from 'src/app/core/model/invoice-electric
 // services
 import { Base64ToPdfService } from '../../core/services/base-64-to-pdf.service';
 import { Base64ToImageService } from '../../core/services/base-64-to-image.service';
-import { InvoiceElectricStationsService } from './services/invoice-electric-stations.service';
+import { InvoiceElectricStationsService } from './services/invoice-purchase-sales.service';
 import { InvoiceTransaction } from './services/pdf-invoice-transaction';
 // librerias
 import * as moment from 'moment';
@@ -23,11 +23,12 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import { xmlToJsonUtil } from 'xml-to-json-util';
+import { messages } from 'src/app/core/constants/messages';
 
 @Component({
-  selector: 'app-invoice-electric-stations',
-  templateUrl: './invoice-electric-stations.component.html',
-  styleUrls: ['./invoice-electric-stations.component.scss'],
+  selector: 'app-invoice-purchase-sales',
+  templateUrl: './invoice-purchase-sales.component.html',
+  styleUrls: ['./invoice-purchase-sales.component.scss'],
   standalone: true,
   imports: [
     InvoiceElectricStationsModule, 
@@ -42,12 +43,15 @@ export default class InvoiceElectricStationsComponent {
 
   // variables de control
   public orden: boolean = false;
+  public loading: boolean = true;
+  public serviceResponse: boolean = true;
   
   // variables propias del componente
   public es: any;
   public titulosGlobales = titles;
   public visible: boolean = false;
   public imageUrl: string | null = null;
+  public mensaje: string = messages.noConexion;
   public invoices: InvoiceElectricStationModel[] = [];
   public invoice: InvoiceElectricStationModel = new InvoiceElectricStationModel();
 
@@ -96,10 +100,20 @@ export default class InvoiceElectricStationsComponent {
   }
 
   getInvoices(): void {
+    this.loading = true;
     this.invoiceService.getAllFilter(this.bodyFilter).subscribe(
       (resp: any) => {
-        this.invoices = resp.data.invoceElectrolineraList;
-        this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0; 
+        if(resp){
+          this.invoices = resp.data.invoceElectrolineraList;
+          this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : 0; 
+          this.loading = false;
+        } else {
+          this.loading = false;
+        }
+        this.serviceResponse = true;
+      }, err => {
+        this.loading = false
+        this.serviceResponse = false;
       }
     )
   }

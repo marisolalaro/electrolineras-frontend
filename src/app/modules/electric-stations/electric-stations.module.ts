@@ -10,6 +10,7 @@ import { ElectricStationsRoutingModule } from './electric-stations-routing.modul
 import { ElectricStationsService } from './services/electric-stations.service';
 // components
 import { MapaComponent } from './components/mapa/mapa.component';
+import { NotFoundComponent } from '../not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -22,12 +23,14 @@ import { MapaComponent } from './components/mapa/mapa.component';
     PipesModule,
     LeafletModule,
     CommonModule,
-    PrimeModule
+    PrimeModule,
+    NotFoundComponent
   ],
   exports: [
     PrimeModule,
     MapaComponent,
-    PipesModule
+    PipesModule,
+    NotFoundComponent
   ],
   providers: [
     ElectricStationsService,

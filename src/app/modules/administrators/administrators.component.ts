@@ -45,6 +45,8 @@ export default class AdministratorsComponent {
   public previousState: boolean;
   public submitted: boolean = false;
   public esSuperAdmin: boolean = false;
+  public loading: boolean = true;
+  public serviceResponse: boolean = true;
 
   // variables de dialog
   public dialogEdit: boolean = false;
@@ -73,6 +75,7 @@ export default class AdministratorsComponent {
   // variables propias del componente
   @ViewChild('dt1') dt!: Table;
   public userLogin: any;
+  public mensaje: string = messages.noConexion;
   public administradors: AdministratorModel[] = [];
   public formRegistro: FormGroup = this.createFormGroup();
   public administrador: AdministratorModel = new AdministratorModel();
@@ -96,12 +99,20 @@ export default class AdministratorsComponent {
   }
 
   getAllAdministrations() {
+    this.loading = true;
     this.administratorsService.getAll(this.bodyFilter).subscribe(
       (resp: any) => {
         if (resp) {
           this.administradors = resp.data;
           this.totalRecords = resp.data.length;
+          this.loading = false
+        } else {
+          this.loading = false
         }
+        this.serviceResponse = true;
+      }, err => {
+        this.loading = false
+        this.serviceResponse = false;
       }
     )
   }

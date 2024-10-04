@@ -8,6 +8,7 @@ import { DashboardRoutingModule } from './dashborad-routing.module';
 import { ElectricStationsService } from '../electric-stations/services/electric-stations.service';
 import { WebsocketService } from 'src/app/core/services/websocket.service';
 import { ConnectorStatusService } from 'src/app/core/services/connector-status.service';
+import { NotFoundComponent } from '../not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -19,11 +20,13 @@ import { ConnectorStatusService } from 'src/app/core/services/connector-status.s
     ReactiveFormsModule,
     PipesModule,
     CommonModule,
+    NotFoundComponent
   ],
   exports:[
     PrimeModule,
     PipesModule,
-    CommonModule
+    CommonModule,
+    NotFoundComponent
   ],
   providers: [
     WebsocketService,

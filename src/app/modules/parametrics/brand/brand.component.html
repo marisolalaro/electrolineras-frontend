@@ -2,7 +2,7 @@
   <div class="card">
     <div class="row">
       <h3><b>{{componentTitle.mainTitle}}</b></h3>
-      <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
+      <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;" *ngIf="serviceResponse">
         <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllModels()" pTooltip="Actualizar"
           tooltipPosition="left"></p-button> &nbsp;
         <button pButton pRipple class="mat-raised-button" (click)="actionDialog(true, 'create')">
@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" *ngIf="serviceResponse">
       <p-table responsiveLayout="stack" #dt1 [value]="brands" dataKey="id"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
         [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES"
@@ -94,6 +94,11 @@
           </tr>
         </ng-template>
       </p-table>
+    </div>
+
+    <div *ngIf="!serviceResponse">
+      <app-not-found [mensajeNotFound]="mensaje" (datosEnviados)="getAllModels()"></app-not-found>
+      <br> <br>
     </div>
 
     <!-- modal Crear nuevo -->
@@ -287,3 +292,11 @@
 
   </div>
 </div>
+
+<p-toast></p-toast>
+<p-blockUI [blocked]="loading">
+  <div class="loading-container">
+    <i class="pi pi-spin pi-spinner" style="font-size: 3em"></i>
+    <p>Cargando...</p>
+  </div>
+</p-blockUI>
