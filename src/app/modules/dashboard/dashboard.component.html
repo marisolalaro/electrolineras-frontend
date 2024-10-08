@@ -47,6 +47,7 @@
                         severity="success">{{estadoHeartbeat}}</p-button>
                       <p-button size="small" *ngIf="estadoHeartbeat === 'Offline'"
                         severity="danger">{{estadoHeartbeat}}</p-button>
+                        {{ tiempo }}
                     </li>
                     <li><label>{{electricStations[0]?.model.vendor}}<br></label></li>
                     <li><label [pTooltip]="electricStations[0]?.model.modelCode ">{{electricStations[0]?.model.modelCode | truncate:15}}<br></label></li>

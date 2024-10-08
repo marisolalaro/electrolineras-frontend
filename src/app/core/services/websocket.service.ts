@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Client, Message } from '@stomp/stompjs';
 const SockJS = require('sockjs-client');
-import { BehaviorSubject, of , Subject} from 'rxjs';
+import { BehaviorSubject, of , Subject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +12,8 @@ export class WebsocketService {
   private messagesSubject: { [channel: string]: BehaviorSubject<any[]> } = {};
   private timeTracker: { [channel: string]: number } = {};
   public heartbeatReceived$ = new Subject<boolean>(); 
+  private connectionStatusSubject = new BehaviorSubject<boolean>(false); // Estado de conexión (false por defecto)
+  public connectionStatus$: Observable<boolean> = this.connectionStatusSubject.asObservable();
 
   constructor() { }
 
@@ -20,7 +22,8 @@ export class WebsocketService {
     this.stompClient = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000, // Reconectar en 5 segundos si se pierde la conexión
-      
+      // TODO
+      // aqui debolver si se logro conectar el websocket enviar true o false
     });
     this.stompClient.onConnect = (frame) => {
       this.subscribeToChannel('/channel/authorize');
@@ -31,14 +34,13 @@ export class WebsocketService {
       this.subscribeToChannel('/channel/startTransaction');
       this.subscribeToChannel('/channel/statusNotification');
       this.subscribeToChannel('/channel/stopTransaction');
-      // console.log('Se conecto al websocket..');
-      return of({ resp: 'conectado' });
-      
+      this.connectionStatusSubject.next(true);
     };
+
     this.stompClient.onStompError = (frame) => {
       console.error('Broker reported error: ' + frame.headers['message']);
       console.error('Additional details: ' + frame.body);
-      return of({ resp: 'no-conectado' });
+      this.connectionStatusSubject.next(false); // Emitir false si hay error
     };
     this.stompClient.activate();
   }
@@ -62,6 +64,15 @@ export class WebsocketService {
       body: JSON.stringify({ /* Tu contenido */ }),
     });
   }
+
+  // private subscribeToChannel(channel: string): void {
+  //   this.stompClient.subscribe(channel, (message: Message) => {
+  //     if (channel === '/channel/heartbeat') {
+  //       const heartbeatData = JSON.parse(message.body);
+  //       this.heartbeatSubject.next(); // Emitir cuando se recibe un heartbeat
+  //     }
+  //   });
+  // }
 
   getMessages(channel: string): BehaviorSubject<any[]> {
     if (!this.messagesSubject[channel]) {

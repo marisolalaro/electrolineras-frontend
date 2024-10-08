@@ -18,6 +18,11 @@ import { ConnectorStatusService } from 'src/app/core/services/connector-status.s
 import { ElectricStationsService } from '../electric-stations/services/electric-stations.service';
 import { messages } from 'src/app/core/constants/messages';
 
+
+
+import { timer } from 'rxjs';
+import { switchMap, startWith } from 'rxjs/operators';
+
 @Component({
   standalone: true,
   selector: 'app-dashboard',
@@ -34,7 +39,7 @@ import { messages } from 'src/app/core/constants/messages';
 export default class DashboardComponent implements OnInit, OnDestroy {
 
   // variables de control
-  public loading: boolean = true;
+  public loading: boolean = false;
   public serviceResponse: boolean = true;
 
   // variables globales
@@ -86,6 +91,9 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnDestroy() {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
     this.subscriptions.forEach(sub => sub.unsubscribe());
     if (this.heartbeatTimerSubscription) {
       this.heartbeatTimerSubscription.unsubscribe();
@@ -99,16 +107,127 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    if (this.websocketStatusSubscription) {
+      this.websocketStatusSubscription.unsubscribe();
+    }
+
   }
 
   ngOnInit() {
-    this.getElectricStation();
-    this.conectaWebSocket();
-    this.escucharHeartbeat();
-    this.getAllConnectorStatus(1);
-    this.getAllConnectorStatus(2);
-    this.getAllConnectorStatus(3);
+    this.getElectricStation()
+    .then((servicioResponse) => {
+        if (servicioResponse) {
+          
+          return this.conectaWebSocket();
+        } else {
+          return false;
+        }
+      })
+      .then((servicioResponse) => {
+        if (servicioResponse) {
+          return this.getAllConnectorStatus(1);
+        } else {
+          return false;
+        }
+      })
+      .then((servicioResponse) => {
+        if (servicioResponse) {
+          return this.getAllConnectorStatus(2);
+        } else {
+          return false;
+        }
+      })
+      .then((servicioResponse) => {
+        if (servicioResponse) {
+          return this.getAllConnectorStatus(3);
+        } else {
+          return false;
+        }
+      })
+      
+      .then((servicioResponse) => {
+        if (servicioResponse) {
+          return this.escucharHeartbeat();
+        } else {
+          return false;
+        }
+      })
+      .then((conexionWs) => {
+        if (this.isConnected) {
+          this.cambiarEstadoHeartbeat('Conectando...');
+          return true;
+        } else {
+          this.cambiarEstadoHeartbeat('Offline');
+        }
+      })
   }
+
+  getElectricStation() {
+    return new Promise((resolve) => {
+      // this.loading = true;
+      this.electricStationsService.getAllnoCrud().subscribe(
+        (resp: any) => {
+          if (resp) {
+            this.electricStations = resp.data;
+            // this.loading = false
+          } else {
+            // this.loading = false
+          }
+          this.serviceResponse = true;
+          resolve(true);
+        }, err => {
+          // this.loading = false
+          this.serviceResponse = false;
+          resolve(false);
+        }
+      )
+    })
+  }
+
+  getAllConnectorStatus(id) {
+    return new Promise((resolve) => {
+      this.connectorStatusService.getAllConnectorByIdElectricStation(id).subscribe(
+        (resp: any) => {
+          if (resp) {
+            if (id == 1) {
+              this.conectorStatus0 = resp.data;
+              this.estadoElectrolinera(this.conectorStatus0, id)
+            }
+            if (id == 2) {
+              this.conectorStatus1 = resp.data;
+              this.estadoElectrolinera(this.conectorStatus1, id)
+            }
+            if (id == 3) {
+              this.conectorStatus2 = resp.data;
+              this.estadoElectrolinera(this.conectorStatus2, id)
+            }
+            resolve(true);
+            this.serviceResponse = true;
+          } else {
+            resolve(false);
+          }
+        }, err => {
+          this.loading = false
+          this.serviceResponse = false;
+          resolve(false);
+        });
+    })
+  }
+
+  conectaWebSocket() {
+    // TODO FALTA ENVIAR EL DATO CORRECTO
+    return new Promise((resolve) => {
+      // Suscribirse al estado de la conexión
+      this.websocketService.initializeWebSocketConnection(this.websocketUrl);
+      this.websocketStatusSubscription = this.websocketService.connectionStatus$.subscribe(
+        (status: boolean) => {
+          this.isConnected = status;
+        }
+      );
+      resolve(true)
+    })
+  }
+
 
   // metodo ejecutar cada 10 segundos para poner directo offline 
   // veriicaConexionwbCada10segundos(){
@@ -131,55 +250,106 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   public escucho: boolean = true;
   // Escuchar cuando llega el primer heartbeat
 
-  escucharHeartbeat(): void {
-    this.heartbeatSubscription = this.websocketService.heartbeatReceived$.subscribe((message: any) => {
-      // console.log('Escucha escucharHeartbeat');
-      // console.log(message);
-      if (message) {
-        this.getElectricStation();
-        this.escucho = true;
-        this.heartbeatMessage = message.sessionIndex; // Almacenar el contenido del mensaje del heartbeat
-        // console.log('Existe heratbeat y sesion index');
-        // console.log(this.heartbeatMessage);
-        if (this.heartbeatMessage == this.electricStations[0].sessionIndex) {
-          // console.log('El sesion index es igual a la electrolinera que con el heartbeat, Estado en linea');
+  escucharHeartbeat(){
+    return new Promise((resolve) => {
+      this.heartbeatSubscription = this.websocketService.heartbeatReceived$.subscribe((message: any) => {
+        if (message) {
           this.getElectricStation();
-          this.cambiarEstadoHeartbeat('En línea'); // Cambiar el estado a 'En línea'
+          this.escucho = true;
+          this.heartbeatMessage = message.sessionIndex; // Almacenar el contenido del mensaje del heartbeat
+          // aqui poner Conectando... // porque se esta crendo nuevo sesion index
+          this.cambiarEstadoHeartbeat('Conectando...');
+          if (this.heartbeatMessage == this.electricStations[0].sessionIndex) {
+            this.cambiarEstadoHeartbeat('En línea');
+            // this.reiniciarTemporizadorHeartbeat();
+          }
+          this.reiniciarTemporizadorHeartbeat();
         }
-        this.reiniciarTemporizadorHeartbeat();
-      }
-    });
-
-    this.subscriptions.push(this.heartbeatSubscription);
+      });
+      this.subscriptions.push(this.heartbeatSubscription);
+      resolve(true);
+    })
   }
-
-
 
   // Cambiar el estado del heartbeat
   cambiarEstadoHeartbeat(estado: string): void {
     this.estadoHeartbeat = estado;
     // Si el estado es "Offline", comenzar a verificar la reconexión cada 10 segundos
-    if (estado === 'Offline') {
+    if (estado === 'Offline' && this.isConnected) {
+      
+    } 
+    if (estado === 'Offline' && !this.isConnected) {
       this.escucho = false;
       this.verificarReconexión();
-    } else {
+    } 
+    // metodo se adiciono para ver si hay ws pero no hay hb
+    if (estado === 'Conectando...' && this.isConnected) {
+      this.reiniciarTemporizadorHeartbeat();
+      // this.heartbeatTimerSubscription = interval(this.maxHeartbeatTime).subscribe(() => {
+        
+        // this.cambiarEstadoHeartbeat('Offline');
+      // });
+    }
+    if (estado === 'En línea') {
       // Detener la verificación de reconexión si ya está en línea
       this.detenerVerificacionReconexión();
     }
   }
 
-  // Reiniciar el temporizador de heartbeat
-  reiniciarTemporizadorHeartbeat(): void {
-    // Cancelar el temporizador previo si está activo
-    if (this.heartbeatTimerSubscription) {
-      this.heartbeatTimerSubscription.unsubscribe();
+  interval: any;
+
+   // Iniciar cronómetro
+   reiniciarTemporizadorHeartbeat(): void {
+    if (this.interval) {
+      clearInterval(this.interval);
     }
-    // Reiniciar el temporizador, si no se recibe heartbeat en 100 segundos, cambia a Offline
-    this.heartbeatTimerSubscription = interval(this.maxHeartbeatTime).subscribe(() => {
+    this.tiempo = JSON.parse(JSON.stringify(0));
+    // Iniciar el cronómetro al cargar el componente
+    this.interval = setInterval(() => {
+      this.tiempo++;
+      if(this.tiempo >= 100) {
+        this.cambiarEstadoHeartbeat('Offline');
+      } else {
+
+      }
+    }, 1000); // Incrementar  cada 1 segundo
+  }
+
+  reiniciarTemporizadorHeartbeat0(): void {
+    if (this.heartbeatTimerSubscription) {
+       this.heartbeatTimerSubscription.unsubscribe();
+    }
+    this.heartbeatTimerSubscription = interval(this.maxHeartbeatTime).subscribe((time) => {
       this.cambiarEstadoHeartbeat('Offline');
     });
     this.subscriptions.push(this.heartbeatTimerSubscription);
   }
+
+  // public countdown: number = 100; // Contador de 100 segundos
+
+  // startHeartbeatCountdown() {
+  //   // Cada vez que se recibe un heartbeat, reinicia el contador
+  //   this.heartbeatSubscription = this.websocketService.heartbeat$
+  //     .pipe(
+  //       // Cada vez que se recibe un heartbeat, iniciamos un nuevo temporizador
+  //       switchMap(() => {
+  //         return timer(0, 1000).pipe(
+  //           startWith(0), // Empezar el temporizador inmediatamente
+  //           // Aquí devolvemos el tiempo restante, empezando por 100 y disminuyendo hasta 0
+  //           switchMap((secondsElapsed) => {
+  //             this.countdown = 100 - secondsElapsed; // Actualiza el contador
+  //             return this.countdown > 0 ? [this.countdown] : [];
+  //           })
+  //         );
+  //       })
+  //     )
+  //     .subscribe({
+  //       next: () => {},
+  //       complete: () => {
+  //         // Aquí puedes manejar qué hacer cuando el contador llega a 0 (sin recibir heartbeats)
+  //       }
+  //     });
+  // }
 
   // Verificar la reconexión cada 10 segundos
   verificarReconexión(): void {
@@ -190,13 +360,14 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     // Comenzar a verificar la reconexión cada 10 segundos
     this.reconnectionCheckSubscription = interval(this.reconnectionInterval).subscribe(() => {
       // TODO aqui solo verifica si manda heartberat
-      if (this.websocketService.isConnected() && this.escucho) { // Supongamos que tienes una función para verificar el estado
-        this.cambiarEstadoHeartbeat('En línea');
+      if (this.websocketService.isConnected()) { // Supongamos que tienes una función para verificar el estado
+        
+        this.cambiarEstadoHeartbeat('Conectando...');
       } else {
         // this.cambiarEstadoHeartbeat('Offline');
 
-        // this.conectaWebSocket();
-        this.escucharHeartbeat()
+        this.conectaWebSocket();
+        // this.escucharHeartbeat()
       }
     });
     this.subscriptions.push(this.reconnectionCheckSubscription);
@@ -210,64 +381,25 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  conectaWebSocket() {
-    this.websocketService.initializeWebSocketConnection(this.websocketUrl);
+  private websocketStatusSubscription: Subscription;
+  public isConnected: boolean = false;
 
-    this.verificaConexionWebSocket = interval(this.maxHeartbeatTime).subscribe(() => {
-      // console.log('Verifica conexion  al web socket.. en 1:40 min');
-      
-      this.websocketService.isConnected() ? this.cambiarEstadoHeartbeat('Conectando...') : this.cambiarEstadoHeartbeat('Offline')
-    });
+  // conectaWebSocket() {
+  //   // TODO aqui recibir y enviar al promise si se logro conectar
+  //   // lo mimo con el escuchar del heartbeat
+  //   this.websocketService.initializeWebSocketConnection(this.websocketUrl);
+  //   this.verificaConexionWebSocket = interval(this.maxHeartbeatTime).subscribe(() => {
+  //     this.websocketService.isConnected() ? this.cambiarEstadoHeartbeat('Conectando...') : this.cambiarEstadoHeartbeat('Offline')
+  //   });
+  // }
 
 
-  }
 
-  // Iniciar cronómetro
-  iniciarCronometro(): void {
-    this.subscription = interval(1000).subscribe(() => {
-      this.incrementarTiempo();
-    });
-  }
+ 
 
-  // Incrementar tiempo cada segundo
-  incrementarTiempo(): void {
-    this.tiempo++;
-  }
 
-  getElectricStation(): void {
-    this.loading = true;
-    this.electricStationsService.getAllnoCrud().subscribe(
-      (resp: any) => {
-        if (resp) {
-          this.electricStations = resp.data;
-          this.loading = false
-        } else {
-          this.loading = false
-        }
-        this.serviceResponse = true;
-      }, err => {
-        this.loading = false
-        this.serviceResponse = false;
-      }
-    )
-  }
 
-  getAllConnectorStatus(id) {
-    this.connectorStatusService.getAllConnectorByIdElectricStation(id).subscribe((resp: any) => {
-      if (id == 1) {
-        this.conectorStatus0 = resp.data;
-        this.estadoElectrolinera(this.conectorStatus0, id)
-      }
-      if (id == 2) {
-        this.conectorStatus1 = resp.data;
-        this.estadoElectrolinera(this.conectorStatus1, id)
-      }
-      if (id == 3) {
-        this.conectorStatus2 = resp.data;
-        this.estadoElectrolinera(this.conectorStatus2, id)
-      }
-    });
-  }
+
 
   estadoElectrolinera(estados, id) {
     if (estados.length > 0 && estados.length < 3) {
@@ -290,7 +422,7 @@ export default class DashboardComponent implements OnInit, OnDestroy {
 
   comparaEstados(estado1, estado2) {
     if (estado1 == "Available" && estado2 == "Available") {
-      return "Available" 
+      return "Available"
     }
     if (estado1 == "Available" && estado2 == "Preparing") {
       return "Available"

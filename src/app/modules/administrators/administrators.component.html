@@ -5,7 +5,8 @@
       <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;" *ngIf="serviceResponse">
         <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllAdministrations()" pTooltip="Actualizar"
           tooltipPosition="left"></p-button> &nbsp;
-        <button  *ngIf="esSuperAdmin" pButton pRipple class="mat-raised-button" (click)="openDialog(true,false, 'crear')">Nuevo
+        <button *ngIf="esSuperAdmin" pButton pRipple class="mat-raised-button"
+          (click)="openDialog(true,false, 'crear')">Nuevo
           Registro</button>
       </div>
     </div>
@@ -91,12 +92,12 @@
             </td>
             <td style="text-align:center; vertical-align:middle">
               <div class="div" *ngIf="userLogin.id == rowData['id'] && !esSuperAdmin">
-                <i class="pi pi-user-edit" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
-                  data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
+                <i class="pi pi-user-edit" style="font-size: 1.5rem; color: var(--primary-color);"
+                  data-bs-toggle="modal" data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
               </div>
               <div class="div" *ngIf="esSuperAdmin">
-                <i class="pi pi-user-edit" style="font-size: 1.5rem; color: var(--primary-color);" data-bs-toggle="modal"
-                  data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
+                <i class="pi pi-user-edit" style="font-size: 1.5rem; color: var(--primary-color);"
+                  data-bs-toggle="modal" data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
               </div>
             </td>
           </tr>
@@ -183,10 +184,7 @@
               </div>
             </div>
 
-            <div class="form-group field">
-              <label for="phoneNumber">{{labelsGlobales.telefono}}</label>
-              <input type="text" pInputText formControlName="phoneNumber" />
-            </div>
+            
 
             <div class="form-group field">
               <label for="birthdate">{{labelsGlobales.fechaNacimiento}}</label>
@@ -198,6 +196,26 @@
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>
+            </div>-->
+
+
+
+            <!-- <p-divider align="left">
+              <div class="inline-flex align-items-center">
+                <i class="pi pi-unlock mr-2"></i>
+                <b>Datos de usuario</b>
+              </div>
+            </p-divider> -->
+
+            <div class="form-group field">
+              <label for="username">{{labelsGlobales.username}}</label>
+              <input type="text" pInputText required formControlName="username" value="" autocomplete="off"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['username'].invalid}" />
+              <div *ngIf="submitted && formRegistro.controls['username'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('username')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
             </div>
 
             <div class="form-group field">
@@ -206,24 +224,6 @@
                 [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['electronicMail'].invalid}" />
               <div *ngIf="submitted && formRegistro.controls['electronicMail'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('electronicMail')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div> -->
-
-            <p-divider align="left">
-              <div class="inline-flex align-items-center">
-                <i class="pi pi-unlock mr-2"></i>
-                <b>Datos de usuario</b>
-              </div>
-            </p-divider>
-
-            <div class="form-group field">
-              <label for="username">{{labelsGlobales.username}}</label>
-              <input type="text" pInputText required formControlName="username" value="" autocomplete="off"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['username'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['username'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('username')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>
@@ -239,6 +239,12 @@
                 </small>
               </div>
             </div>
+
+            <div class="form-group field">
+              <label for="phoneNumber">{{labelsGlobales.telefono}}</label>
+              <input type="text" pInputText formControlName="phoneNumber" />
+            </div>
+
 
           </form>
         </ng-template>
@@ -261,7 +267,7 @@
         <ng-template pTemplate="content">
           <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
 
-           <!-- <p-divider align="left">
+            <!-- <p-divider align="left">
               <div class="inline-flex align-items-center">
                 <i class="pi pi-user mr-2"></i>
                 <b>Datos personales</b>
@@ -354,12 +360,12 @@
               </div>
             </div> -->
 
-            <p-divider align="left">
+            <!-- <p-divider align="left">
               <div class="inline-flex align-items-center">
                 <i class="pi pi-unlock mr-2"></i>
                 <b>Datos de usuario</b>
               </div>
-            </p-divider>
+            </p-divider> -->
 
             <div class="form-group field">
               <label for="username">{{labelsGlobales.username}}</label>
@@ -367,6 +373,17 @@
                 [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['username'].invalid}" />
               <div *ngIf="submitted && formRegistro.controls['username'].invalid">
                 <small class="p-error" *ngIf="formRegistro.get('username')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="electronicMail">{{labelsGlobales.email}}</label>
+              <input type="text" pInputText required formControlName="electronicMail"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['electronicMail'].invalid}" />
+              <div *ngIf="submitted && formRegistro.controls['electronicMail'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('electronicMail')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>
@@ -381,6 +398,11 @@
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="phoneNumber">{{labelsGlobales.telefono}}</label>
+              <input type="text" pInputText formControlName="phoneNumber" />
             </div>
 
           </form>

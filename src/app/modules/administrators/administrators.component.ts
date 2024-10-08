@@ -120,16 +120,16 @@ export default class AdministratorsComponent {
   createFormGroup() {
     return new FormGroup({
       id: new FormControl(null),
-      names: new FormControl('', [Validators.required]),
-      lastName: new FormControl('', [Validators.required]),
-      motherLastName: new FormControl('', [Validators.required]),
-      identificationNumber: new FormControl('', [Validators.required]),
-      cellPhoneNumber: new FormControl('', [Validators.required, Validators.maxLength(8), Validators.minLength(7), Validators.pattern(/^[0-9]\d*$/)]),
-      phoneNumber: new FormControl('', [Validators.maxLength(8), Validators.minLength(7), Validators.pattern(/^[0-9]\d*$/)]),
-      birthdate: new FormControl('', [Validators.required]),
-      electronicMail: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
+      // names: new FormControl('', [Validators.required]),
+      // lastName: new FormControl('', [Validators.required]),
+      // motherLastName: new FormControl('', [Validators.required]),
+      // identificationNumber: new FormControl('', [Validators.required]),
+      // cellPhoneNumber: new FormControl('', [Validators.required, Validators.maxLength(8), Validators.minLength(7), Validators.pattern(/^[0-9]\d*$/)]),
+      // birthdate: new FormControl('', [Validators.required]),
       username: new FormControl('', [Validators.required]),
+      electronicMail: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
       password: new FormControl('', [Validators.required]),
+      phoneNumber: new FormControl('', [Validators.maxLength(8), Validators.minLength(7), Validators.pattern(/^[0-9]\d*$/)]),
     });
   }
 
@@ -141,6 +141,8 @@ export default class AdministratorsComponent {
       } else {
         this.onCreateRegistro();
       }
+    } else {
+
     }
   }
 
@@ -151,12 +153,13 @@ export default class AdministratorsComponent {
     this.formRegistro = this.createFormGroup();
   }
 
-  onSelecetedEdit(item: AdministratorModel) {
+  onSelecetedEdit(item: AdministratorModel) {    
     this.administrador = new AdministratorModel();
     this.administrador = item;
     this.formRegistro.patchValue(JSON.parse(JSON.stringify(item)));
     this.formRegistro.controls['username'].setValue(item.username);
-    this.formRegistro.controls['birthdate'].setValue(new Date(moment(item.birthdate).toString()));
+    this.formRegistro.controls['phoneNumber'].setValue(item.phoneNumber);
+    // this.formRegistro.controls['birthdate'].setValue(new Date(moment(item.birthdate).toString()));
     this.dialogEdit = true;
   }
 
@@ -183,27 +186,32 @@ export default class AdministratorsComponent {
           this.messageService.add({ severity: 'success', detail: messages.successCreate });
           this.getAllAdministrations();
         })
-      ).subscribe()
+      ).subscribe(
+        (resp: any) => {
+        }, err => {
+          this.messageService.add({ severity: 'error', detail: err.error.message });
+        }
+      )
   }
 
   onUpdateRegistro() {
-    this.administrador.names = this.formRegistro.get('names').value;
-    this.administrador.lastName = this.formRegistro.get('lastName').value;
-    this.administrador.motherLastName = this.formRegistro.get('motherLastName').value;
-    this.administrador.identificationNumber = this.formRegistro.get('identificationNumber').value;
-    this.administrador.cellPhoneNumber = this.formRegistro.get('cellPhoneNumber').value;
+    // this.administrador.names = this.formRegistro.get('names').value;
+    // this.administrador.lastName = this.formRegistro.get('lastName').value;
+    // this.administrador.motherLastName = this.formRegistro.get('motherLastName').value;
+    // this.administrador.identificationNumber = this.formRegistro.get('identificationNumber').value;
+    // this.administrador.cellPhoneNumber = this.formRegistro.get('cellPhoneNumber').value;
     this.administrador.phoneNumber = this.formRegistro.get('phoneNumber').value;
     this.administrador.electronicMail = this.formRegistro.get('electronicMail').value;
     this.administrador.username = this.formRegistro.get('username').value;
-    this.administrador.birthdate = moment(this.formRegistro.get('birthdate').value).utc().format('YYYY-MM-DD');
-    this.administrador.activationCode = '';
-    this.administrador.idTypePhone = 1;
-    this.administrador.accountStatus = 1;
-    this.administrador.restoreCode = '';
-    this.administrador.activationMethod = 'email';
-    this.administrador.extension = '';
-    this.administrador.complement = '';
-    this.administrador.idTypeIdentification = 4;
+    // this.administrador.birthdate = moment(this.formRegistro.get('birthdate').value).utc().format('YYYY-MM-DD');
+    // this.administrador.activationCode = '';
+    // this.administrador.idTypePhone = 1;
+    // this.administrador.accountStatus = 1;
+    // this.administrador.restoreCode = '';
+    // this.administrador.activationMethod = 'email';
+    // this.administrador.extension = '';
+    // this.administrador.complement = '';
+    // this.administrador.idTypeIdentification = 4;
     this.administrador.password = this.formRegistro.get('password').value;
     this.administrador.roles = [2];
 
