@@ -41,12 +41,15 @@
               Correo Electrónico
               <p-sortIcon field="electronicMail" (click)="customSort('electronicMail', orden)"></p-sortIcon>
             </th>
-            <!-- <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">
+            <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">
               Ultima Transacción Bs
             </th>
             <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">
-              Ultima Carga kW
-            </th> -->
+              Saldo Actual
+            </th>
+            <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">
+              Ultima Estación de Carga
+            </th>
             <th style="width:15%; text-align:center; vertical-align:middle" rowspan="2" pSortableColumn="'enabled'">
               Estado
               <p-sortIcon field="enabled" (click)="customSort('enabled', orden)"></p-sortIcon>
@@ -84,6 +87,10 @@
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['motherLastName']}}</td> -->
             <td style="text-align:left; vertical-align:middle">{{rowData['electronicMail']}}</td>
 
+            <td style="text-align:right; vertical-align:middle">{{rowData['lastRechargeAmount'] | numberDecimal:2}}</td>
+            <td style="text-align:right; vertical-align:middle">{{rowData['remainingCredit'] | numberDecimal:2}}</td>
+            <td style="text-align:left; vertical-align:middle">{{rowData['lastChargingStation']}}</td>
+
             <!-- <td *ngIf="rowData['paymentTransactionsElectrolineraList'][0]"
               style="text-align:right; vertical-align:middle">
               {{rowData['paymentTransactionsElectrolineraList'][0].amount | numberDecimal:2}}</td>
@@ -109,7 +116,6 @@
             <td style="text-align:center; vertical-align:middle">
               <i class="pi pi-eye" style="font-size: 1.5rem; color: var(--primary-color)" (click)="onOpenDetail(rowData)"
                 tooltipPosition="top" pTooltip="Ver más"></i>
-              <i class="pi-book" style="font-size: 1.5rem; color: var(--primary-color)" tooltipPosition="top" pTooltip="Ver Hisorial"></i>
             </td>
           </tr>
         </ng-template>
@@ -135,18 +141,18 @@
           <div class="grid">
             <div class="col-3" style="text-align: left;">
               <ul>
-                <li><i class="pi pi-user" style="color: var(--primary-color)"></i> &nbsp; <b>Nombres: </b></li>
-                <li><i class="pi pi-user" style="color: var(--primary-color)"></i> &nbsp; <b>Apellido Paterno: </b></li>
-                <li><i class="pi pi-user" style="color: var(--primary-color)"></i> &nbsp; <b>Apellido Materno: </b></li>
-                <li><i class="pi pi-phone" style="color: var(--primary-color)"></i> &nbsp; <b>Número de Celular: </b></li>
+                <li><i class="pi pi-user" style="color: var(--primary-color)"></i> &nbsp; <b>Usuario: </b></li>
+                <li><i class="pi pi-credit-card" style="color: var(--primary-color)"></i> &nbsp; <b>Ultima Transacción Bs: </b></li>
+                <li><i class="pi pi-money-bill" style="color: var(--primary-color)"></i> &nbsp; <b>Saldo Actual: </b></li>
+                <li><i class="pi pi-car" style="color: var(--primary-color)"></i> &nbsp; <b>Ultima Estación de Carga: </b></li>
               </ul>
             </div>
             <div class="col-9" style="text-align: left;">
               <ul>
-                <li><label>{{customer.names}}</label></li>
-                <li><label>{{customer.lastName}}</label></li>
-                <li><label>{{customer.motherLastName}}</label></li>
-                <li><label>{{customer.phoneNumber}}</label></li>
+                <li><label>{{customer.electronicMail}}</label></li>
+                <li><label>{{customer.lastRechargeAmount}} <br></label></li>
+                <li><label>{{customer.remainingCredit}}</label></li>
+                <li><label>{{customer.lastChargingStation}}</label></li>
               </ul>
             </div>
           </div>
@@ -270,6 +276,65 @@
             </p-table>
           </div>
 
+        </p-tabPanel>
+
+        <p-tabPanel header="Historial">
+          <div style="padding-bottom: 3.250rem;">
+            <p-table [value]="customer.paymentTransactionsElectrolineraList" [paginator]="true" [rows]="5"
+              [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]" #tableref width="100%"
+              [globalFilterFields]="['nombreRazonSocial', 'numeroDocumento', 'complemento', 'gloss', 'amount']"
+              [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {{totalTransacciones}} registros">
+              <ng-template pTemplate="caption">
+                <div class="flex">
+                  <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input type="text" pInputText (input)="tableref.filterGlobal(
+                     $any($event.target).value, 'contains')" />
+                  </span>
+                </div>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width:5%"> Nro.</th>
+
+                  <th style="width:15%" pSortableColumn="nombreRazonSocial">Razón Social <p-sortIcon
+                      field="nombreRazonSocial"></p-sortIcon> </th>
+
+                  <th style="width:13%" pSortableColumn="numeroDocumento">N° Documento <p-sortIcon
+                      field="numeroDocumento"></p-sortIcon> </th>
+
+                  <th style="width:13%" pSortableColumn="complemento">Complemento <p-sortIcon
+                      field="complemento"></p-sortIcon> </th>
+
+                  <th style="width:15%" pSortableColumn="paymentDate">Fecha Transacción<p-sortIcon
+                      field="paymentDate"></p-sortIcon>
+                  </th>
+
+                  <th style="width:15%" pSortableColumn="gloss">Glosario <p-sortIcon field="gloss"></p-sortIcon> </th>
+
+                  <th style="width:12%" pSortableColumn="amount">Transacción Bs.<p-sortIcon field="amount"></p-sortIcon> </th>
+
+                  <th style="width:12%" pSortableColumn="processPayment">Estado Pago <p-sortIcon
+                      field="processPayment"></p-sortIcon></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
+                <tr>
+                  <td style="text-align:right; vertical-align:middle">{{rowIndex + 1}}</td>
+                  <td style="text-align:left; vertical-align:middle" class="uppercase">{{customer.nombreRazonSocial}}</td>
+                  <td style="text-align:right; vertical-align:middle" class="uppercase">{{customer.numeroDocumento}}</td>
+
+                  <td style="text-align:left; vertical-align:middle" class="uppercase" *ngIf="customer.complemento != 'null'">{{customer.complemento}}</td>
+                  <td style="text-align:left; vertical-align:middle" class="uppercase" *ngIf="customer.complemento == 'null'">s/c</td>
+
+                  <td style="text-align:left; vertical-align:middle" class="uppercase">{{customer.paymentDate | formatDiaMesAnio}}</td>
+                  <td style="text-align:left; vertical-align:middle" class="uppercase">{{customer.gloss}}</td>
+                  <td style="text-align:right; vertical-align:middle" class="uppercase">{{customer.amount | numberDecimal:2}}</td>
+                  <td style="text-align:right; vertical-align:middle" class="uppercase">{{customer.processPayment | formatPagadoNoPagado}}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
         </p-tabPanel>
       </p-tabView>
 
