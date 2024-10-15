@@ -47,6 +47,10 @@ export class EndPoins {
     static invoicePaymentTransaction = "/invoicesPaymentTransactions";
     static invoiceChargingStation = "/getAllInvoicesSuministroEnergia";
 
+    // estaciones de carga
+    static clientElectricStations = "/clientChargingStation";
+    static findByChargingStation = "/findByChargingStation";
+
     // Puerto connection
     static portConnector = "/chargingConnector"
     static portCreate = "/create"

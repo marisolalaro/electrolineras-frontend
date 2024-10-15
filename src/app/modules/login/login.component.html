@@ -34,10 +34,16 @@ https://github.com/mazipan/login-page-css/blob/master/src/15-netflix/index.html
 
 
         <div style="text-align: right; padding-top: 1rem; color: #ffffff;">
-          <label>v.1.0.7</label>
+          <label>v.1.0.8</label>
         </div>
 
       </form>
     </div>
   </div>
+  <p-blockUI [blocked]="loading">
+    <div class="loading-container">
+      <i class="pi pi-spin pi-spinner" style="font-size: 3em"></i>
+      <p>Cargando...</p>
+    </div>
+  </p-blockUI>
 </body>

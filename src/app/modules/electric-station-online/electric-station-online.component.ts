@@ -12,10 +12,12 @@ import { ElectricStationOnlineModule } from './electric-station-online.module';
 import { MeterValueModel } from 'src/app/core/model/meter-value-model';
 import { ElectricStationModel } from 'src/app/core/model/electric-station';
 import { ConnectorStatusModel } from 'src/app/core/model/charging-connector-status';
+import { ClientChargingStatusModel } from 'src/app/core/model/client-charging-station';
 // services
 import { Base64ToImageService } from '../../core/services/base-64-to-image.service';
 import { ConnectorStatusService } from 'src/app/core/services/connector-status.service';
 import { WebsocketMedidorService } from 'src/app/core/services/websocket-medidor.service';
+import { ClientElectricStationsService } from './services/client-electric-stations.service';
 import { ElectricStationsService } from '../electric-stations/services/electric-stations.service';
 
 import { interval } from 'rxjs';
@@ -43,6 +45,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   public previousState: boolean;
   public loading: boolean = true;
   public componenteVisible: boolean = false;
+  public detalle: boolean = false;
 
   // variable para guardar respuesta del Socket
   public data: any;
@@ -55,7 +58,10 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   public imagenQR: string | null = null;
   public electricStation: ElectricStationModel = new ElectricStationModel();
   public conectorStatus: ConnectorStatusModel[] = [];
+  public clientChargingStation: ClientChargingStatusModel[] = [];
   private websocketUrl = EndPoins.apiUrl + EndPoins.websocket;
+  public cliente1: string = '-';
+  public cliente2: string = '-';
   // private websocketUrl = 'https://test-dlpelectrolineras.et.bo/electrolinerasbackend' + EndPoins.websocket;
 
   // para la ejeccion de los estados cada 5 segundos
@@ -66,6 +72,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   private meterValuesSubscription: Subscription;
   public conector1: MeterValueModel[] = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
   public conector2: MeterValueModel[] = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
+  public iconClass: string = 'pi pi-eye-slash';
 
   constructor(
     private route: ActivatedRoute,
@@ -74,6 +81,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
     private websocketService: WebsocketMedidorService,
     private connectorStatusService: ConnectorStatusService,
     private electricStationsService: ElectricStationsService,
+    private clientElectricStationsService: ClientElectricStationsService,
   ) { }
 
   ngOnDestroy() {
@@ -101,6 +109,20 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       .then((datosInicializados) => {
         if (datosInicializados) {
           return this.getMeterValues();
+        } else {
+          return false;
+        }
+      })
+      .then((meterValues) => {
+        if (meterValues) {
+          return this.getClienteCharging();
+        } else {
+          return false;
+        }
+      })
+      .then((meterValues) => {
+        if (meterValues) {
+          return this.clienteCargando();
         } else {
           return false;
         }
@@ -156,6 +178,29 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
           resolve(false);
         }
       });
+    });
+  }
+
+  getClienteCharging() {
+    return new Promise((resolve) => {
+      this.clientElectricStationsService.getClientCharging(this.id).subscribe((resp: any) => {
+        if (resp) {
+          this.clientChargingStation = resp.data;
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  clienteCargando() {
+    return new Promise((resolve) => {
+      if (this.clientChargingStation.length != 0) {
+        this.clientChargingStation.filter(i => i.connetorOcpp == "1")[0] ? this.cliente1 = this.clientChargingStation.filter(i => i.connetorOcpp == "1")[0].userName : '-';
+        this.clientChargingStation.filter(i => i.connetorOcpp == "2")[0] ? this.cliente2 = this.clientChargingStation.filter(i => i.connetorOcpp == "2")[0].userName : '-';
+      }
+      resolve(true)
     });
   }
 
@@ -235,11 +280,6 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
         console.error('Error al obtener los datos de las estaciones', error);
       }
     );
-
-    // this.connectorStatusService.getAllConnectorByIdElectricStation(this.electricStation.id).subscribe((resp: any) => {
-    //   this.conectorStatus = resp.data;
-    //   this.statusEnElectrolinera();
-    // });
   }
 
   statusEnElectrolinera() {
@@ -285,4 +325,8 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
     });
   }
 
+  cambiaEstado() {
+    this.detalle = !this.detalle;
+    this.iconClass = this.iconClass === 'pi pi-eye-slash' ? 'pi pi-eye' : 'pi pi-eye-slash';
+  }
 }

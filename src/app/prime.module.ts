@@ -43,6 +43,7 @@ import { DataViewModule } from 'primeng/dataview';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { StyleClassModule } from 'primeng/styleclass';
 @NgModule({
   exports: [
     CardModule,
@@ -88,7 +89,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     DataViewModule,
     ConfirmPopupModule,
     BlockUIModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    StyleClassModule
   ],
 })
 export class PrimeModule {}

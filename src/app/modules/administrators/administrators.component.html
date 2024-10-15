@@ -33,11 +33,11 @@
             <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="lastName">Apellido
               Paterno<p-sortIcon field="lastName"></p-sortIcon></th>
             <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="motherLastName">Apellido
-              Materno<p-sortIcon field="motherLastName"></p-sortIcon></th>
+              Materno<p-sortIcon field="motherLastName"></p-sortIcon></th> -->
             <th style="width:15%; text-align:center; vertical-align:middle" pSortableColumn="electronicMail">Correo
               Electrónico<p-sortIcon field="electronicMail"></p-sortIcon></th>
             <th style="width:8%; text-align:center; vertical-align:middle" pSortableColumn="cellPhoneNumber">
-              Celular<p-sortIcon field="cellPhoneNumber"></p-sortIcon></th> -->
+              Celular<p-sortIcon field="cellPhoneNumber"></p-sortIcon></th>
             <th style="width:13%; text-align:center; vertical-align:middle" rowspan="2" pSortableColumn="enabled">
               Estado<p-sortIcon field="enabled"></p-sortIcon></th>
             <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
@@ -58,7 +58,7 @@
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'motherLastName', 'contains')"
                 placeholder="Busca por Apellido Materno" class="w-full" [(ngModel)]="motherLastName">
-            </th>
+            </th> -->
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'electronicMail', 'contains')"
                 placeholder="Busca por Correo Electrónico" class="w-full" [(ngModel)]="electronicMail">
@@ -66,7 +66,7 @@
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'cellPhoneNumber', 'contains')"
                 placeholder="Busca por Nro Celular" class="w-full" [(ngModel)]="cellPhoneNumber">
-            </th> -->
+            </th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
@@ -76,8 +76,10 @@
             <!-- <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['names']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['lastName']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['motherLastName']}}</td>
-            <td style="text-align:left; vertical-align:middle">{{rowData['electronicMail']}}</td>
-            <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['cellPhoneNumber']}}</td> -->
+             -->
+             <td style="text-align:left; vertical-align:middle">{{rowData['electronicMail']}}</td>
+             <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['cellPhoneNumber']}}</td>
+             
             <td style="text-align:center; vertical-align:middle">
               <div *ngIf="esSuperAdmin">
                 <p-confirmPopup></p-confirmPopup>

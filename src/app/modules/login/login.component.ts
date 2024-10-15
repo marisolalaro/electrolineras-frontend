@@ -29,6 +29,7 @@ import { ColorServiceService } from '../../core/services/color-service.service';
 export default class LoginComponent {
 
   // variables de control
+  public loading: boolean = false;
   public showPassword: boolean = false;
 
   // variables de validación
@@ -55,6 +56,7 @@ export default class LoginComponent {
   }
 
   onIniciaSesion(): void {
+    this.loading = true;
     this.validaCampos()
       .then(camposValidados => {
         if (camposValidados) {
@@ -105,10 +107,12 @@ export default class LoginComponent {
         .toPromise()
         .then((data) => {
           this.dataLogin = JSON.parse(JSON.stringify(data));
+          this.loading = false;
           resolve(true);
         })
         .catch((err) => {
           this.messageService.add({ severity: 'error', summary: messages.error, detail: messages.datosIncorrectos });
+          this.loading = false;
           resolve(false);
         });
     });
