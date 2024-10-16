@@ -253,7 +253,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       measurand: 'Carga no definida',
       value: 0,
       unit: 'Kw',
-      phases: null
+      phases: '#8e44ad'
     }
   }
 

@@ -16,9 +16,10 @@ import { PipesModule } from 'src/app/core/pipes/pipes.module';
 // models
 import { Customer } from 'src/app/core/model/customer';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
+import { ChargingHistoryModel } from 'src/app/core/model/charging-history';
 // services
 import { CustomerService } from './services/customer.service';
-import { Router } from '@angular/router';
+import { ChargingHistoryService } from 'src/app/core/services/charging-history.service';
 
 @Component({
   selector: 'app-customers',
@@ -50,23 +51,25 @@ export default class CustomersComponent {
 
   // variables del paginador
   public page: number = 0;
+  public totalCargas: number = 0;
   public itemsPerPage: number = 5;
   public totalRecords: number = 0;
+  public totalHistorial: number = 0;
   public totalTransacciones: number = 0;
-  public totalCargas: number = 0;
 
   // variables propias del componente
-  public mensaje: string = messages.noConexion;
   public customers: Customer[] = [];
   public customer: Customer = new Customer();
+  public mensaje: string = messages.noConexion;
+  public customerHistory: ChargingHistoryModel[] = [];
 
   // variables globales
   public titlesGlobales = titles;
   public titleComponent: any = mainTitles['clientes'];
 
   // Variables Dialog
-  public dialogDetalle: boolean = false;
   public selectedCustomers!: Customer;
+  public dialogDetalle: boolean = false;
 
   // variables de tabla
   @ViewChild('dt1') dt!: Table;
@@ -87,6 +90,7 @@ export default class CustomersComponent {
     public global: Global,
     public customerService: CustomerService,
     private confirmationService: ConfirmationService,
+    private chargingHistoryService: ChargingHistoryService,
   ) { }
 
   ngOnInit() {
@@ -125,7 +129,54 @@ export default class CustomersComponent {
     this.customer = customer;
     this.totalTransacciones = customer.paymentTransactionsElectrolineraList.length;
     this.totalCargas = customer.chargeClientList.length;
+    this.getHistorial();
+    // consumir servicio nuevo
     this.dialogDetalle = true;
+  }
+
+  getHistorial() {
+    this.chargingHistoryService.getAllHistoryByIdclient(this.customer.id).subscribe(
+      (resp: any) => {
+        if (resp) {
+          this.customerHistory = resp.data;
+          this.totalHistorial = this.customerHistory.length;
+          this.obtieneVelocidadCarga();
+        }
+      }, err => {
+        
+      }
+    )
+  }
+
+  obtieneVelocidadCarga() {
+    this.customerHistory = this.customerHistory.map(history => {
+      let tipo = '';
+      let color = '';
+      let potencia = 230 * history.currentOfferedMode;
+    let carga: number = potencia / 1000;
+      if (carga >= 0 && carga < 2.3) {
+        tipo = 'Carga Ultra Lenta';
+        color = '#808080';
+      } else if (carga >= 3.7 && carga < 7.4) {
+        tipo = 'Carga Lenta';
+        color = '#32CD32';
+      } else if (carga >= 7.4 && carga < 22) {
+        tipo = 'Carga Semi Rápida';
+        color = '#00FF00';
+      }
+      else if (carga >= 22 && carga < 50) {
+        tipo = 'Carga Rápida';
+        color = '#FF8C00';
+      }
+      else if (carga >= 50 && carga < 350) {
+        tipo = 'Carga Ultra Rápida';
+        color = '#B22222';
+      } else {
+        tipo = 'Carga no definida';
+        color = '#8e44ad';
+      }
+      return { ...history, tipocurrentOfferedMode: tipo , color: color};
+    });
   }
 
   applyFilter($event: any, field: string, matchMode: string) {

@@ -132,7 +132,7 @@
     </div>
 
     <!-- Dialog Detalle -->
-    <p-dialog header={{titlesGlobales.detail}} [(visible)]="dialogDetalle" [modal]="true"
+    <p-dialog header='{{titlesGlobales.detail}} {{customer.electronicMail}}' [(visible)]="dialogDetalle" [modal]="true"
       [breakpoints]="{ '3500px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw'}" [draggable]="false"
       [resizable]="false" [maximizable]="true">
 
@@ -280,10 +280,10 @@
 
         <p-tabPanel header="Historial">
           <div style="padding-bottom: 3.250rem;">
-            <p-table [value]="customer.paymentTransactionsElectrolineraList" [paginator]="true" [rows]="5"
+            <p-table [value]="customerHistory" [paginator]="true" [rows]="5"
               [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]" #tableref width="100%"
-              [globalFilterFields]="['nombreRazonSocial', 'numeroDocumento', 'complemento', 'gloss', 'amount']"
-              [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {{totalTransacciones}} registros">
+              [globalFilterFields]="['nameChargingStation', 'startedAt', 'finishedAt', 'energyConsumed', 'tipocurrentOfferedMode', 'currentOfferedMode']"
+              [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {{totalHistorial}} registros">
               <ng-template pTemplate="caption">
                 <div class="flex">
                   <span class="p-input-icon-left ml-auto">
@@ -296,41 +296,35 @@
               <ng-template pTemplate="header">
                 <tr>
                   <th style="width:5%"> Nro.</th>
-
-                  <th style="width:15%" pSortableColumn="nombreRazonSocial">Razón Social <p-sortIcon
-                      field="nombreRazonSocial"></p-sortIcon> </th>
-
-                  <th style="width:13%" pSortableColumn="numeroDocumento">N° Documento <p-sortIcon
-                      field="numeroDocumento"></p-sortIcon> </th>
-
-                  <th style="width:13%" pSortableColumn="complemento">Complemento <p-sortIcon
-                      field="complemento"></p-sortIcon> </th>
-
-                  <th style="width:15%" pSortableColumn="paymentDate">Fecha Transacción<p-sortIcon
-                      field="paymentDate"></p-sortIcon>
+                  <th style="width:15%" pSortableColumn="nameChargingStation">Electrolinera
+                    <p-sortIcon field="nameChargingStation"></p-sortIcon>
                   </th>
-
-                  <th style="width:15%" pSortableColumn="gloss">Glosario <p-sortIcon field="gloss"></p-sortIcon> </th>
-
-                  <th style="width:12%" pSortableColumn="amount">Transacción Bs.<p-sortIcon field="amount"></p-sortIcon> </th>
-
-                  <th style="width:12%" pSortableColumn="processPayment">Estado Pago <p-sortIcon
-                      field="processPayment"></p-sortIcon></th>
+                  <th style="width:13%" pSortableColumn="startedAt">Fecha Inicio
+                    <p-sortIcon field="startedAt"></p-sortIcon>
+                  </th>
+                  <th style="width:13%" pSortableColumn="finishedAt">Fecha Final
+                    <p-sortIcon field="finishedAt"></p-sortIcon>
+                  </th>
+                  <th style="width:15%" pSortableColumn="energyConsumed">Energia Consumida (Wh)
+                    <p-sortIcon field="energyConsumed"></p-sortIcon>
+                  </th>
+                  <th style="width:15%" pSortableColumn="tipocurrentOfferedMode">Velocidad de Carga
+                    <p-sortIcon field="tipocurrentOfferedMode"></p-sortIcon>
+                  </th>
+                  <th style="width:12%" pSortableColumn="currentOfferedMode">Corriente Suministrada (A)
+                    <p-sortIcon field="currentOfferedMode"></p-sortIcon>
+                  </th>
                 </tr>
               </ng-template>
-              <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
+              <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
                 <tr>
                   <td style="text-align:right; vertical-align:middle">{{rowIndex + 1}}</td>
-                  <td style="text-align:left; vertical-align:middle" class="uppercase">{{customer.nombreRazonSocial}}</td>
-                  <td style="text-align:right; vertical-align:middle" class="uppercase">{{customer.numeroDocumento}}</td>
-
-                  <td style="text-align:left; vertical-align:middle" class="uppercase" *ngIf="customer.complemento != 'null'">{{customer.complemento}}</td>
-                  <td style="text-align:left; vertical-align:middle" class="uppercase" *ngIf="customer.complemento == 'null'">s/c</td>
-
-                  <td style="text-align:left; vertical-align:middle" class="uppercase">{{customer.paymentDate | formatDiaMesAnio}}</td>
-                  <td style="text-align:left; vertical-align:middle" class="uppercase">{{customer.gloss}}</td>
-                  <td style="text-align:right; vertical-align:middle" class="uppercase">{{customer.amount | numberDecimal:2}}</td>
-                  <td style="text-align:right; vertical-align:middle" class="uppercase">{{customer.processPayment | formatPagadoNoPagado}}</td>
+                  <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['nameChargingStation']}}</td>
+                  <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['startedAt'] | formatDateAndTime}}</td>
+                  <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['finishedAt'] | formatDateAndTime}}</td>
+                  <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['energyConsumed']}}</td>
+                  <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['tipocurrentOfferedMode']}}</td>
+                  <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['currentOfferedMode'] | numberDecimal:2}}</td>
                 </tr>
               </ng-template>
             </p-table>

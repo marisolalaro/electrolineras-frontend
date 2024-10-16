@@ -55,6 +55,10 @@ export class EndPoins {
     static portConnector = "/chargingConnector"
     static portCreate = "/create"
 
+    // Charging History
+    static chargingHistory = "/chargingHistory"
+    static findByClientUser = "/findByClientUser"
+
     // Reportes
     static facturasRelacionadas = "/invoicesRelationByDates"
     static clientesCarga = "/chargeClient"
