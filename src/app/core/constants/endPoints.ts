@@ -50,6 +50,7 @@ export class EndPoins {
     // estaciones de carga
     static clientElectricStations = "/clientChargingStation";
     static findByChargingStation = "/findByChargingStation";
+    static removeClient = "/removeClient"
 
     // Puerto connection
     static portConnector = "/chargingConnector"

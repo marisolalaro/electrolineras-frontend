@@ -60,17 +60,17 @@ export default class ElectricStationsComponent implements OnInit {
 
   // variables de control
   public previousState: boolean;
+  public loading: boolean = true;
   public submitted: boolean = false;
   public mapaVisible: boolean = false;
   public esSuperAdmin: boolean = false;
-  public loading: boolean = true;
   public serviceResponse: boolean = true;
 
   // variables Globales del Core
+  public titlesGlobales = titles;
   public labelsGlobales = labels;
   public botonesGlobales = buttons;
   public messagesGlobales = messages;
-  public titlesGlobales = titles;
 
   // variables del paginador
   public page: number = 0;
@@ -92,9 +92,9 @@ export default class ElectricStationsComponent implements OnInit {
   public selectedModel: any;
   public selectedTasaCarga: any;
   public models: any[] | undefined;
-  public countries: any[] | undefined;
-  public filteredCountries: any[] | undefined;
+  public tasasCargaSelect: any[] | undefined;
   public filteredModels: any[] | undefined;
+  public filteredTasaCarga: any[] | undefined;
 
   // variables propias del componente
   @ViewChild('dt1') dt!: Table;
@@ -107,6 +107,7 @@ export default class ElectricStationsComponent implements OnInit {
   public componentTitle: any = mainTitles['electrolineras'];
   public formRegistroConector: FormGroup = this.createFormConector();
   public electricStation: ElectricStationModel = new ElectricStationModel();
+  public electricStationConnectors: ElectricStationModel = new ElectricStationModel();
 
   // variables para el filtro
   public nameStation: string = '';
@@ -118,8 +119,8 @@ export default class ElectricStationsComponent implements OnInit {
 
   constructor(
     public global: Global,
-    public tasaCargaService: ParTasaCargaService,
     public brandService: BrandService,
+    public tasaCargaService: ParTasaCargaService,
     public base64ImageService: Base64ToImageService,
     private confirmationService: ConfirmationService,
     public portConnectorService: PortConnectionService,
@@ -130,19 +131,37 @@ export default class ElectricStationsComponent implements OnInit {
   ngOnInit(): void {
     this.esSuperAdmin = this.global.getEsSuperAdmin();
     this.getAllElectricStations();
-    
+  }
+
+  getAllElectricStations(): void {
+    this.loading = true;
+    this.electricStationsService.getAll().subscribe(
+      (resp: any) => {
+        if (resp) {
+          this.loading = false
+          this.electricStations = resp.data;
+          this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : this.electricStations.length;
+        } else {
+          this.loading = false
+        }
+        this.serviceResponse = true;
+      }, err => {
+        this.loading = false
+        this.serviceResponse = false;
+      }
+    )
   }
 
   filterTasaCarga(event: AutoCompleteCompleteEvent) {
     let filtered: any[] = [];
     let query = event.query;
-    for (let i = 0; i < (this.countries as any[]).length; i++) {
-      let tasaCarga = (this.countries as any[])[i];
+    for (let i = 0; i < (this.tasasCargaSelect as any[]).length; i++) {
+      let tasaCarga = (this.tasasCargaSelect as any[])[i];
       if (tasaCarga.amount.indexOf(query.toLowerCase()) == 0) {
         filtered.push(tasaCarga);
       }
     }
-    this.filteredCountries = filtered;
+    this.filteredTasaCarga = filtered;
   }
 
   filterModel(event: AutoCompleteCompleteEvent) {
@@ -158,29 +177,20 @@ export default class ElectricStationsComponent implements OnInit {
     this.filteredModels = filtered;
   }
 
-  getAllElectricStations(): void {
-    this.loading = true;
-    this.electricStationsService.getAll().subscribe(
-      (resp: any) => {
-        if (resp) {
-          this.loading = false
-          this.electricStations = resp.data;
-          this.totalRecords = resp.data.totalRecords ? resp.data.totalRecords : this.electricStations.length;
-        }else {
-          this.loading = false
-        }
-        this.serviceResponse = true;
-      }, err => {
-        this.loading = false
-        this.serviceResponse = false;
-      }
-    )
+  onSelecetedEdit(item) {
+    this.electricStation = item;
+    this.formRegistro.patchValue(item);
+    this.selectedTasaCarga = item.chargeRate;
+    this.selectedModel = item.model;
+    this.dialogEdit = true;
+    this.getTasaDeCarga();
+    this.getModels();
   }
-
+  
   getTasaDeCarga(): void {
     this.tasaCargaService.getAll().subscribe(
       (resp: any) => {
-        this.countries = resp.data;
+        this.tasasCargaSelect = resp.data;
       }
     )
   }
@@ -191,16 +201,6 @@ export default class ElectricStationsComponent implements OnInit {
         this.models = resp.data;
       }
     )
-  }
-
-  onSelecetedEdit(item) {
-    this.electricStation = item;
-    this.formRegistro.patchValue(item);
-    this.selectedTasaCarga = item.chargeRate;
-    this.selectedModel = item.model;
-    this.dialogEdit = true;
-    this.getTasaDeCarga();
-    this.getModels();
   }
 
   onDialogConnector(item) {
@@ -305,9 +305,6 @@ export default class ElectricStationsComponent implements OnInit {
     };
     registro.model = new ModelElectricStation();
     registro.model.id = this.selectedModel.id
-    // registro.model = {
-    //   id: this.selectedModel.id
-    // };
     registro.activo = true;
     this.electricStationsService.update(registro).subscribe(
       (resp: any) => {
@@ -327,11 +324,11 @@ export default class ElectricStationsComponent implements OnInit {
       .then(datosElectrolinera => {
         if (datosElectrolinera) {
           this.selectedTasaCarga = this.electricStation.chargeRate;
-          return this.getAllConnectorStatus();
+          return true;
         }
       }).then((datosConector) => {
         if (datosConector) {
-          
+         
           return true;
         }
       }).then((datosMapeado) => {
@@ -341,16 +338,19 @@ export default class ElectricStationsComponent implements OnInit {
         }
       })
   }
-  public electricStationConnectors : ElectricStationModel = new ElectricStationModel()
+  
   getOneElectricStation(idElectricStation) {
     return new Promise((resolve) => {
       this.electricStationsService.getOne(idElectricStation).subscribe(
         (resp: any) => {
-          this.electricStationConnectors = resp.data; // tiene los conectores
+          this.electricStationConnectors = resp.data;
           this.imagenQR = this.base64ImageService.base64ToImageUrl(this.electricStation.imageQr);
+          this.getAllConnectorStatus();
+          resolve(true);
+        }, err => {
+          resolve(false);
         }
       )
-      resolve(true);
     });
   }
 
@@ -359,9 +359,9 @@ export default class ElectricStationsComponent implements OnInit {
       this.connectorStatusService.getAllConnectorByIdElectricStation(this.electricStation.id).subscribe(
         (resp: any) => {
           this.conectorStatus = resp.data;
-          this.statusEnElectrolinera();
+           this.statusEnElectrolinera();
+          resolve(true);
         });
-      resolve(true);
     });
   }
 

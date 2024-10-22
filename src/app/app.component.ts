@@ -18,6 +18,7 @@ export class AppComponent {
   ) { }
 
   ngOnInit() {
+    // inicia colocando el color del sistema
     this.changePrimaryColor(color.sistema);
   }
 

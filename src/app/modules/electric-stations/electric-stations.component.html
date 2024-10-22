@@ -181,7 +181,7 @@
 
             <div class="form-group field">
               <label for="descripcion">{{labelsGlobales.tasaCarga}}</label>
-              <p-autoComplete [(ngModel)]="selectedTasaCarga" [dropdown]="true" [suggestions]="filteredCountries"
+              <p-autoComplete [(ngModel)]="selectedTasaCarga" [dropdown]="true" [suggestions]="filteredTasaCarga"
                 (completeMethod)="filterTasaCarga($event)" field="amount" id="chargeRate" formControlName="chargeRate"
                 [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['chargeRate'].invalid}"></p-autoComplete>
               <div *ngIf="submitted && formRegistro.controls['chargeRate'].invalid">
@@ -290,7 +290,7 @@
 
             <div class="form-group field">
               <label for="descripcion">{{labelsGlobales.tasaCarga}}</label>
-              <p-autoComplete [(ngModel)]="selectedTasaCarga" [dropdown]="true" [suggestions]="filteredCountries"
+              <p-autoComplete [(ngModel)]="selectedTasaCarga" [dropdown]="true" [suggestions]="filteredTasaCarga"
                 (completeMethod)="filterTasaCarga($event)" field="amount" id="chargeRate" formControlName="chargeRate"
                 [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['chargeRate'].invalid}"></p-autoComplete>
               <div *ngIf="submitted && formRegistro.controls['chargeRate'].invalid">

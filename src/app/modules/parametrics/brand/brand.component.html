@@ -39,7 +39,7 @@
               Versión Firmware<p-sortIcon field="firmwareVersion"></p-sortIcon></th>
             <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="activo" rowspan="2">
               Estado<p-sortIcon field="activo"></p-sortIcon></th>
-            <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
+            <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
           </tr>
           <tr>
             <th>
@@ -89,7 +89,7 @@
             <td style="text-align:center; vertical-align:middle">
               <i class="pi pi-fw pi-pencil" style="font-size: 1.5rem; color: var(--primary-color);"
                 data-bs-toggle="modal" data-bs-target="#editModal" (click)="selectedEdit(rowData)" pTooltip="Editar"
-                tooltipPosition="top" *ngIf="rowData['activo']"></i>
+                 *ngIf="rowData['activo']"></i>
             </td>
           </tr>
         </ng-template>

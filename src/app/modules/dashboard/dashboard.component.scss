@@ -25,3 +25,16 @@ li {
     flex: 1 1 100%; /* Las tarjetas ocuparán todo el ancho en pantallas pequeñas */
   }
 }
+
+table {
+  width: 50%;
+  margin: 0 auto; /* Centra la tabla horizontalmente */
+  border-collapse: collapse;
+}
+th, td {
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: var(--color-white);
+}

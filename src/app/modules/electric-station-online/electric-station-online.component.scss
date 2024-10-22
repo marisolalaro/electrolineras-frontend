@@ -55,6 +55,18 @@ li {
 }
 
 
+.button-stop {
+background-color: var(--color-detener);
+border-color: var(--color-detener);
+color: white;
+}
+
+.button-interrumpir {
+  background-color: var(--color-detener);
+  border-color: var(--color-interrumpir);
+  color: white;
+  }
+
 .right-aligned-container {
   display: flex;
   flex-direction: column;

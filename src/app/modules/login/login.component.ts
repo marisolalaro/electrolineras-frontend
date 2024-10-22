@@ -53,6 +53,7 @@ export default class LoginComponent {
 
   ngOnInit() {
     this.changePrimaryColor(color.sistema);
+    localStorage.setItem('theme', 'light');
   }
 
   onIniciaSesion(): void {

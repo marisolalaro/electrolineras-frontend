@@ -48,6 +48,8 @@
   --color-charging: #2196F3;  /* Azul */
   --color-finishing: #e67e22; /* Naranja */
   --color-unavailable: #e74c3c; /* Rojo */
+  --color-detener:#B22222; /* Morado */
+  --color-interrumpir:#d63031; /* Morado */
 /* colores para la velocidad de carga */
   --colore-velocidad1:#808080;
   --colore-velocidad2:#32CD32;

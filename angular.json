@@ -55,7 +55,8 @@
               "pdfmake/build/pdfmake",
               "exceljs",
               "sockjs-client",
-              "rxjs"
+              "rxjs",
+              "src/app/core/services/websocket.service"
             ]
           },
           "configurations": {

@@ -19,6 +19,7 @@ import { ElectricStationsService } from '../electric-stations/services/electric-
 import { messages } from 'src/app/core/constants/messages';
 
 import { switchMap } from 'rxjs/operators';
+import { TableModule } from 'primeng/table';
 
 @Component({
   standalone: true,
@@ -26,6 +27,7 @@ import { switchMap } from 'rxjs/operators';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   imports: [
+    TableModule,
     DashboardModule,
     NgStyle,
     NgFor,

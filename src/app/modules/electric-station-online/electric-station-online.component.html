@@ -1,7 +1,7 @@
-<div *ngIf="componenteVisible">
+<div>
   <!-- Aquí va el contenido de tu página cuando el loading termine -->
   <div class="container">
-    <div class="card">
+    <div class="card" *ngIf="serviceResponse">
 
       <div class="row">
         <h3><b>ELECTROLINERA {{electricStation.nameStation}}</b></h3>
@@ -10,13 +10,17 @@
             tooltipPosition="left"></p-button>
         </div> -->
         <div class="c">
-        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getOneElectricStation()" pTooltip="Actualizar"
-          tooltipPosition="left"></p-button>
-        <p> Ver Detalles</p>
+          <p-button icon="pi pi-key" [rounded]="true" (click)="dialogPassword()" pTooltip="Botones de Emergencia"
+            tooltipPosition="left"></p-button>
+          <p>Botones de Emergencia</p>
+          <p-button icon="pi pi-refresh" [rounded]="true" (click)="getOneElectricStation()" pTooltip="Actualizar"
+            tooltipPosition="left"></p-button>
+          <p>Actualizar</p>
+        </div>
+        <!-- <p-button icon="pi pi-key" [rounded]="true" (click)="getOneElectricStation()" pTooltip="Actualizar"
+        tooltipPosition="left"></p-button>
+      <p> Ver Detalles</p> -->
       </div>
-      </div>
-      
-      
 
       <div class="claseDelDiv">
       </div>
@@ -28,14 +32,19 @@
             <ng-template pTemplate="header">
               <tr>
                 <th style="width:16%; text-align:center; vertical-align:middle">Nombre</th>
-                <th style="width:12%; text-align:center; vertical-align:middle">Max Voltaje (V)</th>
-                <th style="width:12%; text-align:center; vertical-align:middle">Max Amperaje (A)</th>
-                <th style="width:12%; text-align:center; vertical-align:middle">Velocidad de Carga (kW)</th>
-                <th style="width:12%; text-align:center; vertical-align:middle">Corriente Actual (A)</th>
-                <th style="width:12%; text-align:center; vertical-align:middle">Potencia Actual (kW)</th>
-                <th style="width:12%; text-align:center; vertical-align:middle">Carga Energía (Wh)</th>
-                <th style="width:12%; text-align:center; vertical-align:middle">Cliente en Carga</th>
-                <th style="width:12%; text-align:center; vertical-align:middle">Estado</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Max Voltaje (V)</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Max Amperaje (A)</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Velocidad de Carga (kW)</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Corriente Actual (A)</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Potencia Actual (kW)</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Carga Energía (Wh)</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Cliente en Carga</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Estado</th>
+                <th style="width:10%; text-align:center; vertical-align:middle">
+                  Opciones
+                  <i class="pi pi-times" *ngIf="habilitaMasOpciones" (click)="confirmarCerrarOpciones($event)"></i>
+                  <p-confirmPopup></p-confirmPopup>
+                </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-item>
@@ -44,13 +53,13 @@
                 <td style="text-align:center; vertical-align:middle">230</td>
                 <td style="text-align:right; vertical-align:middle">
                   <label
-                    *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'">{{conector1[0].value}}</label>
+                    *ngIf="item.name == 'CONECTOR DE CARGO 1' && item.lastState != 'Available'">{{conector1[0].value}}</label>
                   <label
                     *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{conector2[0].value}}</label>
                   <label *ngIf="item.lastState == 'Available'">0</label>
                 </td>
                 <td style="text-align:center; vertical-align:middle">
-                  <label *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'"
+                  <label *ngIf="item.name == 'CONECTOR DE CARGO 1' && item.lastState != 'Available'"
                     [ngStyle]="{'color': conector1[3]?.phases}">{{conector1[3].measurand}}</label>
                   <label *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'"
                     [ngStyle]="{'color': conector2[3]?.phases}">{{conector2[3].measurand}}</label>
@@ -58,7 +67,7 @@
                 </td>
                 <td style="text-align:center; vertical-align:middle">
                   <label
-                    *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'">{{conector1[1].value |
+                    *ngIf="item.name == 'CONECTOR DE CARGO 1' && item.lastState != 'Available'">{{conector1[1].value |
                     numberDecimal:2}}</label>
                   <label
                     *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{conector2[1].value |
@@ -67,7 +76,7 @@
                 </td>
                 <td style="text-align:center; vertical-align:middle">
                   <label
-                    *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'">{{conector1[4].value |
+                    *ngIf="item.name == 'CONECTOR DE CARGO 1' && item.lastState != 'Available'">{{conector1[4].value |
                     numberDecimal:3}}</label>
                   <label
                     *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{conector2[4].value |
@@ -76,14 +85,15 @@
                 </td>
                 <td style="text-align:center; vertical-align:middle">
                   <label
-                    *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'">{{conector1[2].value}}</label>
+                    *ngIf="item.name == 'CONECTOR DE CARGO 1' && item.lastState != 'Available'">{{conector1[2].value}}</label>
                   <label
                     *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{conector2[2].value}}</label>
                   <label *ngIf="item.lastState == 'Available'">0</label>
                 </td>
-                <td>
-                  <label *ngIf="item.name == 'CONECTOR DE CARGA 1'">{{cliente1}}</label>
-                  <label *ngIf="item.name == 'CONECTOR DE CARGA 2'">{{cliente2}}</label>
+                <td style="text-align:center; vertical-align:middle">
+                  <label *ngIf="cliente1 || cliente2">-</label>
+                  <label *ngIf="item.name == 'CONECTOR DE CARGO 1' && item.lastState != 'Available'" >{{cliente1.userName}}</label>
+                  <label *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'" >{{cliente2.userName}}</label>
                 </td>
                 <td style="text-align:center; vertical-align:middle">
                   <button pButton *ngIf="item.lastState == 'Available'" label="Disponible"
@@ -103,6 +113,25 @@
                     class="button-unavailable"></button>
                   <button pButton *ngIf="!item.lastState" label="No disponible" class="button-unavailable"></button>
                 </td>
+                <td style="text-align:center; vertical-align:middle">
+                  <!-- <button pButton label="Detener" class="button-stop"></button> <br>
+                  <button pButton label="Interrumpir" class="button-stop"></button> -->
+
+                  <i class="pi pi-stop-circle" style="color: var(--color-detener); font-size: 1.5rem"
+                    pTooltip="Detener la carga de Usuario" (click)="onDetieneCargaPorUsuario($event, item)"
+                    *ngIf="item.name == 'CONECTOR DE CARGO 1' && item.lastState != 'Available'">
+                  </i> &nbsp;
+                  <i class="pi pi-stop-circle" style="color: var(--color-detener); font-size: 1.5rem"
+                    pTooltip="Detener la carga de Usuario" (click)="onDetieneCargaPorUsuario($event, item)"
+                    *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">
+                  </i> &nbsp;
+                    <p-confirmPopup></p-confirmPopup>
+
+                  <i class="pi pi-times" *ngIf="habilitaMasOpciones" style="color: var(--color-interrumpir); font-size: 1.5rem"
+                    pTooltip="Detener la carga de Electrolinera" (click)="onDetieneCarga(item)"></i> &nbsp;
+                  <i class="pi pi-history" *ngIf="habilitaMasOpciones" style="color: var(--color-interrumpir); font-size: 1.5rem"
+                    pTooltip="Desconectar Usuario Electrolinera" (click)="onDetieneCarga(item)"></i>
+                </td>
               </tr>
             </ng-template>
           </p-table>
@@ -120,27 +149,33 @@
           <div class="grid transp">
             <div class="col-6" style="text-align: right;">
               <ul>
-                <li style="color: var(--color-white)"><i class="pi pi-align-justify"></i> &nbsp; <b>Nombre: </b></li>
-                <li style="color: var(--color-white)"><i class="pi pi-map-marker"></i> &nbsp; <b>Dirección: </b></li>
-                <li style="color: var(--color-white)"><i class="pi pi-qrcode"></i> &nbsp; <b>Código QR: </b></li>
-                <li style="color: var(--color-white)"><i class="pi pi-qrcode"></i> &nbsp; <b>Código OCPP: </b></li>
-                <li style="color: var(--color-white)"><i class="pi pi-file"></i> &nbsp; <b>Modelo Código: </b></li>
-                <li style="color: var(--color-white)"><i class="pi pi-flag"></i> &nbsp; <b>Modelo Vendor: </b></li>
-                <li style="color: var(--color-white)"><i class="pi pi-eye"></i> &nbsp; <b>Visibilidad de la
+                <li style="color: var(--primary-color-text)"><i class="pi pi-align-justify"></i> &nbsp; <b>Nombre: </b>
+                </li>
+                <li style="color: var(--primary-color-text)"><i class="pi pi-map-marker"></i> &nbsp; <b>Dirección: </b>
+                </li>
+                <li style="color: var(--primary-color-text)"><i class="pi pi-qrcode"></i> &nbsp; <b>Código QR: </b></li>
+                <li style="color: var(--primary-color-text)"><i class="pi pi-qrcode"></i> &nbsp; <b>Código OCPP: </b>
+                </li>
+                <li style="color: var(--primary-color-text)"><i class="pi pi-file"></i> &nbsp; <b>Modelo Código: </b>
+                </li>
+                <li style="color: var(--primary-color-text)"><i class="pi pi-flag"></i> &nbsp; <b>Modelo Vendor: </b>
+                </li>
+                <li style="color: var(--primary-color-text)"><i class="pi pi-eye"></i> &nbsp; <b>Visibilidad de la
                     Electrolinera: </b></li>
-                <li style="color: var(--color-white)"><i class="pi pi-image"></i> &nbsp; <b>Imagen QR: </b></li>
+                <li style="color: var(--primary-color-text)"><i class="pi pi-image"></i> &nbsp; <b>Imagen QR: </b></li>
               </ul>
             </div>
             <div class="col-6" style="text-align: left;">
               <ul>
-                <li style="color: var(--color-white)"><label>{{electricStation.nameStation}}</label></li>
-                <li style="color: var(--color-white)"><label>{{electricStation.direccion}}</label></li>
-                <li style="color: var(--color-white)"><label>{{electricStation.codeStationQR}}</label></li>
-                <li style="color: var(--color-white)"><label>{{electricStation.idChargingStationOcpp}}</label></li>
-                <li style="color: var(--color-white)"><label [pTooltip]="electricStation.modelModelCode"
+                <li style="color: var(--primary-color-text)"><label>{{electricStation.nameStation}}</label></li>
+                <li style="color: var(--primary-color-text)"><label>{{electricStation.direccion}}</label></li>
+                <li style="color: var(--primary-color-text)"><label>{{electricStation.codeStationQR}}</label></li>
+                <li style="color: var(--primary-color-text)"><label>{{electricStation.idChargingStationOcpp}}</label>
+                </li>
+                <li style="color: var(--primary-color-text)"><label [pTooltip]="electricStation.modelModelCode"
                     tooltipPosition="bottom">{{electricStation.modelModelCode | truncate:15}}</label></li>
-                <li style="color: var(--color-white)"><label>{{electricStation.modelVendor}}</label></li>
-                <li style="color: var(--color-white)">
+                <li style="color: var(--primary-color-text)"><label>{{electricStation.modelVendor}}</label></li>
+                <li style="color: var(--primary-color-text)">
                   <p-confirmPopup></p-confirmPopup>
                   <p-inputSwitch [(ngModel)]="electricStation.visibility"
                     (onChange)="confirmSwitchChange($event, electricStation)"></p-inputSwitch>
@@ -153,9 +188,34 @@
       </div>
 
     </div>
+
+    <p-dialog header="Confirmar Password" [(visible)]="visibleDialogPassword" [modal]="true" [style]="{ width: '50vw' }"
+      [draggable]="false" [resizable]="false">
+      <ng-template pTemplate="header">
+        <span class="text-xl font-bold">Confirmar Password</span>
+      </ng-template>
+
+      <div class="card flex justify-content-center">
+        <input type="password" pInputText id="inputPassword" name="password" placeholder="Contraseña"
+          [(ngModel)]="value" />
+      </div>
+
+      <ng-template pTemplate="footer">
+        <p>Para habilitar mas acciones a los conectores</p>
+        <p-button icon="pi pi-check" (click)="validaformulariodialog()" label="Ok" styleClass="p-button-text"></p-button>
+      </ng-template>
+
+    </p-dialog>
+
+    <div *ngIf="!serviceResponse">
+      <app-not-found [mensajeNotFound]="mensaje" (datosEnviados)="getOneElectricStation()"></app-not-found>
+      <br> <br>
+    </div>
+
   </div>
 </div>
 
+<p-toast></p-toast>
 <p-blockUI [blocked]="loading">
   <div class="loading-container">
     <i class="pi pi-spin pi-spinner" style="font-size: 3em"></i>

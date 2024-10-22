@@ -34,7 +34,8 @@
                     <li><i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp; <b>Dirección: </b>
                     </li>
                     <li><i class="pi pi-building" style="color: var(--primary-color)"></i> &nbsp; <b>Publico: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Estado: </b></li> <br> 
+                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Estado: </b>
+                    </li> <br>
                   </ul>
                 </div>
                 <div class="col-6" style="text-align: left;">
@@ -47,15 +48,18 @@
                         severity="success">{{estadoHeartbeat}}</p-button>
                       <p-button size="small" *ngIf="estadoHeartbeat === 'Offline'"
                         severity="danger">{{estadoHeartbeat}}</p-button>
-                        {{ tiempo }}
+                      {{ tiempo }}
                     </li>
                     <li><label>{{electricStations[0]?.model.vendor}}<br></label></li>
-                    <li><label [pTooltip]="electricStations[0]?.model.modelCode ">{{electricStations[0]?.model.modelCode | truncate:15}}<br></label></li>
+                    <li><label [pTooltip]="electricStations[0]?.model.modelCode ">{{electricStations[0]?.model.modelCode
+                        | truncate:15}}<br></label></li>
                     <li><label
-                        [pTooltip]="electricStations[0]?.model.boxSerialNumber">{{electricStations[0]?.model.boxSerialNumber | truncate:15}}<br></label></li><br>
+                        [pTooltip]="electricStations[0]?.model.boxSerialNumber">{{electricStations[0]?.model.boxSerialNumber
+                        | truncate:15}}<br></label></li><br>
                     <li><label>{{electricStations[0]?.model.pointModel}}<br></label></li>
                     <li><label
-                        [pTooltip]="electricStations[0]?.model.pointSerialNumber">{{electricStations[0]?.model.pointSerialNumber | truncate:15}}<br></label></li><br>
+                        [pTooltip]="electricStations[0]?.model.pointSerialNumber">{{electricStations[0]?.model.pointSerialNumber
+                        | truncate:15}}<br></label></li><br>
                     <li><label>{{electricStations[0]?.model.firmwareVersion}}<br></label></li>
 
                     <li><label>{{electricStations[0]?.chargeRate.amount}}</label></li>
@@ -64,16 +68,40 @@
                         tooltipPosition="bottom">{{electricStations[0]?.direccion | truncate:15}}</label></li>
                     <li><label>{{electricStations[0]?.ocppPublicAccessAllowed | formatSiNo}}</label></li>
                     <li>
-                      <p-button size="small" *ngIf="statusElectrolinera0 == 'Available'" label="Disponible" [raised]="true"
-                        severity="success" (click)="onVerTodasElectrolineras(electricStations[0].id)"></p-button>
-                      <p-button size="small" *ngIf="statusElectrolinera0 == 'Unavailable'" label="No Disponible" [raised]="true"
-                        severity="danger" (click)="onVerTodasElectrolineras(electricStations[0].id)"></p-button>
+                      <p-button size="small" *ngIf="statusElectrolinera0 == 'Available'" label="Disponible"
+                        [raised]="true" severity="success"
+                        (click)="onVerTodasElectrolineras(electricStations[0].id)"></p-button>
+                      <p-button size="small" *ngIf="statusElectrolinera0 == 'Unavailable'" label="No Disponible"
+                        [raised]="true" severity="danger"
+                        (click)="onVerTodasElectrolineras(electricStations[0].id)"></p-button>
                     </li>
-                    
+
                   </ul>
                 </div>
               </div>
+
             </div>
+            <div style="padding: 0px; align-items: center;">
+              <table al>
+                <thead>
+                  <tr>
+                    <th>Conector</th>
+                    <th>Usuario</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>username1ESYC.com.bo</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>username2ESYC.com.bo</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
             <ng-template pTemplate="footer">
               <p-button label="Mas Información" [text]="true" icon="pi pi-chevron-right"
                 (click)="onVerTodasElectrolineras(electricStations[0]?.id)"></p-button>
@@ -106,7 +134,8 @@
                     <li><i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp; <b>Dirección: </b>
                     </li>
                     <li><i class="pi pi-building" style="color: var(--primary-color)"></i> &nbsp; <b>Publico: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Estado: </b></li> <br> 
+                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Estado: </b>
+                    </li> <br>
                   </ul>
                 </div>
                 <div class="col-6" style="text-align: left;">
@@ -123,23 +152,28 @@
                       </div>
                     </li>
                     <li><label>{{electricStations[1]?.model.vendor}}<br></label></li>
-                    <li><label [pTooltip]="electricStations[1]?.model.modelCode ">{{electricStations[1]?.model.modelCode | truncate:15}}<br></label></li>
+                    <li><label [pTooltip]="electricStations[1]?.model.modelCode ">{{electricStations[1]?.model.modelCode
+                        | truncate:15}}<br></label></li>
                     <li><label
-                        [pTooltip]="electricStations[1]?.model.boxSerialNumber">{{electricStations[1]?.model.boxSerialNumber | truncate:15}}<br></label></li><br>
+                        [pTooltip]="electricStations[1]?.model.boxSerialNumber">{{electricStations[1]?.model.boxSerialNumber
+                        | truncate:15}}<br></label></li><br>
                     <li><label>{{electricStations[1]?.model.pointModel}}<br></label></li>
                     <li><label
-                        [pTooltip]="electricStations[1]?.model.pointSerialNumber">{{electricStations[1]?.model.pointSerialNumber | truncate:15}}<br></label></li><br>
+                        [pTooltip]="electricStations[1]?.model.pointSerialNumber">{{electricStations[1]?.model.pointSerialNumber
+                        | truncate:15}}<br></label></li><br>
                     <li><label>{{electricStations[1]?.model.firmwareVersion}}<br></label></li>
                     <li><label>{{electricStations[1]?.chargeRate.amount}}</label></li>
                     <li><label [pTooltip]="electricStations[1]?.direccion"
                         tooltipPosition="bottom">{{electricStations[1]?.direccion | truncate:15}}</label></li>
                     <li><label>{{electricStations[1]?.ocppPublicAccessAllowed | formatSiNo}}</label></li>
-                    
+
                     <li>
-                      <p-button size="small" *ngIf="statusElectrolinera1 == 'Available'" label="Disponible" [raised]="true"
-                        severity="success" (click)="onVerTodasElectrolineras(electricStations[1].id)"></p-button>
-                      <p-button size="small" *ngIf="statusElectrolinera1 == 'Unavailable'" label="No Disponible" [raised]="true"
-                        severity="danger" (click)="onVerTodasElectrolineras(electricStations[1].id)"></p-button>
+                      <p-button size="small" *ngIf="statusElectrolinera1 == 'Available'" label="Disponible"
+                        [raised]="true" severity="success"
+                        (click)="onVerTodasElectrolineras(electricStations[1].id)"></p-button>
+                      <p-button size="small" *ngIf="statusElectrolinera1 == 'Unavailable'" label="No Disponible"
+                        [raised]="true" severity="danger"
+                        (click)="onVerTodasElectrolineras(electricStations[1].id)"></p-button>
                     </li>
                   </ul>
                 </div>
@@ -177,7 +211,8 @@
                     <li><i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp; <b>Dirección: </b>
                     </li>
                     <li><i class="pi pi-building" style="color: var(--primary-color)"></i> &nbsp; <b>Publico: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Estado: </b></li> <br> 
+                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Estado: </b>
+                    </li> <br>
                   </ul>
                 </div>
                 <div class="col-6" style="text-align: left;">
@@ -194,22 +229,27 @@
                       </div>
                     </li>
                     <li><label>{{electricStations[2]?.model.vendor}}<br></label></li>
-                    <li><label [pTooltip]="electricStations[2]?.model.modelCode ">{{electricStations[2]?.model.modelCode | truncate:15}}<br></label></li>
+                    <li><label [pTooltip]="electricStations[2]?.model.modelCode ">{{electricStations[2]?.model.modelCode
+                        | truncate:15}}<br></label></li>
                     <li><label
-                        [pTooltip]="electricStations[2]?.model.boxSerialNumber">{{electricStations[2]?.model.boxSerialNumber | truncate:15}}<br></label></li><br>
+                        [pTooltip]="electricStations[2]?.model.boxSerialNumber">{{electricStations[2]?.model.boxSerialNumber
+                        | truncate:15}}<br></label></li><br>
                     <li><label>{{electricStations[2]?.model.pointModel}}<br></label></li>
                     <li><label
-                        [pTooltip]="electricStations[2]?.model.pointSerialNumber">{{electricStations[2]?.model.pointSerialNumber | truncate:15}}<br></label></li><br>
+                        [pTooltip]="electricStations[2]?.model.pointSerialNumber">{{electricStations[2]?.model.pointSerialNumber
+                        | truncate:15}}<br></label></li><br>
                     <li><label>{{electricStations[2]?.model.firmwareVersion}}<br></label></li>
                     <li><label>{{electricStations[2]?.chargeRate.amount}}</label></li>
                     <li><label [pTooltip]="electricStations[2]?.direccion"
                         tooltipPosition="bottom">{{electricStations[2]?.direccion | truncate:15}}</label></li>
                     <li><label>{{electricStations[2]?.ocppPublicAccessAllowed | formatSiNo}}</label></li>
                     <li>
-                      <p-button size="small" *ngIf="statusElectrolinera2 == 'Available'" label="Disponible" [raised]="true"
-                        severity="success" (click)="onVerTodasElectrolineras(electricStations[2].id)"></p-button>
-                      <p-button size="small" *ngIf="statusElectrolinera2 == 'Unavailable'" label="No Disponible" [raised]="true"
-                        severity="danger" (click)="onVerTodasElectrolineras(electricStations[2].id)"></p-button>
+                      <p-button size="small" *ngIf="statusElectrolinera2 == 'Available'" label="Disponible"
+                        [raised]="true" severity="success"
+                        (click)="onVerTodasElectrolineras(electricStations[2].id)"></p-button>
+                      <p-button size="small" *ngIf="statusElectrolinera2 == 'Unavailable'" label="No Disponible"
+                        [raised]="true" severity="danger"
+                        (click)="onVerTodasElectrolineras(electricStations[2].id)"></p-button>
                     </li>
                   </ul>
                 </div>
@@ -230,7 +270,7 @@
         <br> <br>
       </div>
 
-      
+
     </div>
   </p-card>
 </div>

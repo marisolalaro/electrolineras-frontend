@@ -25,4 +25,5 @@ export const messages: any =
     // genericos
     noList: 'Error al recuperar datos del servidor',
     noConexion : 'No hay conexión',
+    accionRealizada: 'Acción realizada con exito'
 }

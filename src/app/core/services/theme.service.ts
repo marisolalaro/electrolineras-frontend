@@ -14,6 +14,7 @@ export class ThemeService {
       if (savedTheme == 'dark') {
           this.enableDarkTheme();
         } else {
+          this.disableDarkTheme();
         }
     }
   }
@@ -24,6 +25,7 @@ export class ThemeService {
   }
 
   disableDarkTheme() {
+    document.head.appendChild(this.darkThemeLink);
     document.head.removeChild(this.darkThemeLink);
     localStorage.setItem('theme', 'light');
   }

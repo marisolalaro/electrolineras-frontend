@@ -98,8 +98,10 @@ export class HeaderComponent implements OnInit {
     if (localStorage.getItem('theme')) {
       if(localStorage.getItem('theme') == 'dark') {
         this.iconoActual = 'pi pi-fw pi-sun'
+        this.themeService.enableDarkTheme();
       } else {
         this.iconoActual = 'pi pi-fw pi-moon'
+        this.themeService.disableDarkTheme();
       }
     } else {
       this.iconoActual = 'pi pi-fw pi-moon';
@@ -110,12 +112,12 @@ export class HeaderComponent implements OnInit {
   }
 
   cambiarModo() {
-    if (localStorage.getItem('theme') == 'light') {
-      this.themeService.enableDarkTheme();
-      this.iconoActual = 'pi pi-fw pi-sun';
-    } else {
+    if (this.themeService.isDarkThemeEnabled()) {
       this.themeService.disableDarkTheme();
       this.iconoActual = 'pi pi-fw pi-moon';
+    } else{
+      this.themeService.enableDarkTheme();
+      this.iconoActual = 'pi pi-fw pi-sun';
     }
     this.inicializaDatos()
   }

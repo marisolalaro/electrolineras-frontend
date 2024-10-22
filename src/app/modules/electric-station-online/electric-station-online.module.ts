@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
 // service
 import { ElectricStationOnlineService } from './services/electric-station-online.service';
+import { WebsocketService } from 'src/app/core/services/websocket.service';
+import { NotFoundComponent } from '../not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -16,14 +18,17 @@ import { ElectricStationOnlineService } from './services/electric-station-online
     ReactiveFormsModule,
     PipesModule,
     PrimeModule,
+    NotFoundComponent
   ],
   exports: [
     PrimeModule,
     PipesModule,
     CommonModule,
+    NotFoundComponent
   ],
   providers: [
     ElectricStationOnlineService,
+    WebsocketService
   ]
 })
 export class ElectricStationOnlineModule { }

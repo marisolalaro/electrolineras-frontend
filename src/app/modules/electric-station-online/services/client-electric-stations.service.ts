@@ -11,11 +11,14 @@ export class ClientElectricStationsService {
   private apiService: string;
 
   constructor(private http: HttpClient) {
-    this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.clientElectricStations + EndPoins.findByChargingStation;
+    this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.clientElectricStations;
   }
 
   getClientCharging(idCharginStation) {
-    return this.http.get(this.apiService + '/' + idCharginStation);
+    return this.http.get(this.apiService + EndPoins.findByChargingStation + '/' + idCharginStation);
   }
 
+  detenerCargaClient(idClient: number) {
+    return this.http.get(this.apiService + EndPoins.removeClient +'/' + idClient);
+  }
 }

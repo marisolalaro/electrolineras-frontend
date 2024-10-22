@@ -2,10 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgClass, NgFor, NgStyle } from '@angular/common';
 import { ConfirmationService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
 // librerias
 import { Subscription } from 'rxjs';
 // cores
 import { EndPoins } from 'src/app/core/constants/endPoints';
+import { messages } from 'src/app/core/constants/messages';
 // modules
 import { ElectricStationOnlineModule } from './electric-station-online.module';
 // models
@@ -46,6 +48,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   public loading: boolean = true;
   public componenteVisible: boolean = false;
   public detalle: boolean = false;
+  public serviceResponse: boolean = true;
 
   // variable para guardar respuesta del Socket
   public data: any;
@@ -56,12 +59,13 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   // variables propias del componente
   public id: number;
   public imagenQR: string | null = null;
+  public mensaje: string = messages.noConexion;
   public electricStation: ElectricStationModel = new ElectricStationModel();
   public conectorStatus: ConnectorStatusModel[] = [];
   public clientChargingStation: ClientChargingStatusModel[] = [];
   private websocketUrl = EndPoins.apiUrl + EndPoins.websocket;
-  public cliente1: string = '-';
-  public cliente2: string = '-';
+  public cliente1: ClientChargingStatusModel = new ClientChargingStatusModel();
+  public cliente2: ClientChargingStatusModel = new ClientChargingStatusModel();
   // private websocketUrl = 'https://test-dlpelectrolineras.et.bo/electrolinerasbackend' + EndPoins.websocket;
 
   // para la ejeccion de los estados cada 5 segundos
@@ -76,6 +80,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
 
   constructor(
     private route: ActivatedRoute,
+    private messageService: MessageService,
     public base64ImageService: Base64ToImageService,
     private confirmationService: ConfirmationService,
     private websocketService: WebsocketMedidorService,
@@ -133,7 +138,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
           this.componenteVisible = true;
         } else {
           this.loading = false;
-          this.componenteVisible = false;
+          this.componenteVisible = true;
         }
       })
   }
@@ -177,6 +182,10 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
         } else {
           resolve(false);
         }
+        this.serviceResponse = true;
+      }, err => {
+        this.loading = false
+        this.serviceResponse = false;
       });
     });
   }
@@ -194,13 +203,23 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
     });
   }
 
+  usuariosConector1 = [];
+  usuariosConector2 = [];
   clienteCargando() {
     return new Promise((resolve) => {
-      if (this.clientChargingStation.length != 0) {
-        this.clientChargingStation.filter(i => i.connetorOcpp == "1")[0] ? this.cliente1 = this.clientChargingStation.filter(i => i.connetorOcpp == "1")[0].userName : '-';
-        this.clientChargingStation.filter(i => i.connetorOcpp == "2")[0] ? this.cliente2 = this.clientChargingStation.filter(i => i.connetorOcpp == "2")[0].userName : '-';
+      if (this.clientChargingStation.length > 0) {
+
+        // this.clientChargingStation.filter(i => i.connetorOcpp == "1")[0] ? this.cliente1 = this.clientChargingStation.filter(i => i.connetorOcpp == "1")[0].userName : '-';
+        // this.clientChargingStation.filter(i => i.connetorOcpp == "2")[0] ? this.cliente2 = this.clientChargingStation.filter(i => i.connetorOcpp == "2")[0].userName : '-';
+        var usuariosConector1 = JSON.parse(JSON.stringify(this.clientChargingStation.filter(i => i.connetorOcpp == "1")));
+        var usuariosConector2 = JSON.parse(JSON.stringify(this.clientChargingStation.filter(i => i.connetorOcpp == "2")));
+
+        this.cliente1 = usuariosConector1[usuariosConector1.length - 1];
+        this.cliente2 = usuariosConector2[usuariosConector2.length - 1];
+        resolve(true)
+      } else {
+        resolve(true)
       }
-      resolve(true)
     });
   }
 
@@ -328,5 +347,88 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   cambiaEstado() {
     this.detalle = !this.detalle;
     this.iconClass = this.iconClass === 'pi pi-eye-slash' ? 'pi pi-eye' : 'pi pi-eye-slash';
+  }
+
+  onDetieneCarga(item) {
+    this.clientElectricStationsService.detenerCargaClient(1)
+      .subscribe((resp: any) => {
+        if (resp) {
+          this.electricStation = resp.data;
+          this.messageService.add({ severity: 'success', detail: messages.accionRealizada });
+        }
+      }, err => {
+        this.loading = false
+      });
+  }
+
+  onDetieneCargaPorUsuario(event: Event, itemConector) {
+    var cliente = itemConector.id == 1? this.cliente1.userName : this.cliente2.userName;
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Detener la carga del usuario ' + cliente + '?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        if (itemConector.id == 1) {
+          this.clientElectricStationsService.detenerCargaClient(this.cliente1.idClientUser)
+            .subscribe((resp: any) => {
+              if (resp) {
+                this.electricStation = resp.data;
+                this.messageService.add({ severity: 'success', detail: messages.accionRealizada });
+              }
+            }, err => {
+              this.loading = false
+            });
+        } else {
+          this.clientElectricStationsService.detenerCargaClient(this.cliente1.idClientUser)
+            .subscribe((resp: any) => {
+              if (resp) {
+                this.electricStation = resp.data;
+                this.messageService.add({ severity: 'success', detail: messages.accionRealizada });
+              }
+            }, err => {
+              this.loading = false
+            });
+        }
+        this.messageService.add({ severity: 'success', summary: 'Confirmed', detail: 'Se detuvo la carga' });
+      },
+      reject: () => {
+      }
+    });
+
+  }
+
+  public value!: string;
+  public habilitaMasOpciones: boolean = false;
+  public visibleDialogPassword: boolean = false;
+  dialogPassword() {
+    this.visibleDialogPassword = true;
+  }
+
+  validaformulariodialog() {
+    this.verificaContrasenia()
+      .then(() => {
+        this.habilitaMasOpciones = true;
+        this.visibleDialogPassword = false;
+      })
+  }
+
+  verificaContrasenia() {
+    return new Promise((resolve) => {
+      resolve(true)
+    });
+  }
+
+  confirmarCerrarOpciones(event: Event) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Deshabilitar mas Opciones?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.habilitaMasOpciones = false;
+        this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Se ejecuto correctamente' });
+      },
+      reject: () => {
+      }
+    });
   }
 }
