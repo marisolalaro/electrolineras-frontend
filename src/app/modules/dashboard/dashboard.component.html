@@ -82,21 +82,19 @@
 
             </div>
             <div style="padding: 0px; align-items: center;">
-              <table al>
+              <table *ngIf="electricStations[0].clients">
                 <thead>
                   <tr>
                     <th>Conector</th>
                     <th>Usuario</th>
+                    <th>Estado</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody *ngFor="let item of conectorStatus0">
                   <tr>
-                    <td>1</td>
-                    <td>username1ESYC.com.bo</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>username2ESYC.com.bo</td>
+                    <td>{{item.connector}}</td>
+                    <td>-</td>
+                    <td>{{item.lastState}}</td>
                   </tr>
                 </tbody>
               </table>

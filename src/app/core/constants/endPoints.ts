@@ -59,7 +59,12 @@ export class EndPoins {
     // Charging History
     static chargingHistory = "/chargingHistory"
     static findByClientUser = "/findByClientUser"
-
+    // mobile
+    static mobile = "/mobile"
+    static chargingStations = "/chargingStations"
+    static stopTransaction = "/stopTransaction"
+    static stopTransactionCliente = "/stopTransactionReleaseConnectorAndClients"
+    
     // Reportes
     static facturasRelacionadas = "/invoicesRelationByDates"
     static clientesCarga = "/chargeClient"

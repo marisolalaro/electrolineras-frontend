@@ -46,9 +46,9 @@ export default class DashboardComponent implements OnInit, OnDestroy {
 
   // variables propias del componente
   public mensaje: string = messages.noConexion;
-  public conectorStatus0: ConnectorStatusModel = new ConnectorStatusModel();
-  public conectorStatus1: ConnectorStatusModel = new ConnectorStatusModel();
-  public conectorStatus2: ConnectorStatusModel = new ConnectorStatusModel();
+  public conectorStatus0: ConnectorStatusModel [] = [];
+  public conectorStatus1: ConnectorStatusModel [] = [];
+  public conectorStatus2: ConnectorStatusModel [] = [];
   public data: any;
   public electricStations: ElectricStationModel[] = [];
 

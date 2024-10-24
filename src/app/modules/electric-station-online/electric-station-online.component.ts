@@ -21,6 +21,7 @@ import { ConnectorStatusService } from 'src/app/core/services/connector-status.s
 import { WebsocketMedidorService } from 'src/app/core/services/websocket-medidor.service';
 import { ClientElectricStationsService } from './services/client-electric-stations.service';
 import { ElectricStationsService } from '../electric-stations/services/electric-stations.service';
+import { MobileService } from './services/mobile.service';
 
 import { interval } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -70,6 +71,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
 
   // para la ejeccion de los estados cada 5 segundos
   private subscriptionEstados: Subscription;
+  private subscriptionClientCharging: Subscription;
 
   // websocket
   public messages: string[] = [];
@@ -80,6 +82,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
 
   constructor(
     private route: ActivatedRoute,
+    private mobileService: MobileService,
     private messageService: MessageService,
     public base64ImageService: Base64ToImageService,
     private confirmationService: ConfirmationService,
@@ -97,8 +100,12 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       this.meterValuesSubscription.unsubscribe();
     }
     this.websocketService.disconnect();
+
     if (this.subscriptionEstados) {
       this.subscriptionEstados.unsubscribe();
+    }
+    if (this.subscriptionClientCharging) {
+      this.subscriptionClientCharging.unsubscribe();
     }
   }
 
@@ -125,13 +132,13 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
           return false;
         }
       })
-      .then((meterValues) => {
-        if (meterValues) {
-          return this.clienteCargando();
-        } else {
-          return false;
-        }
-      })
+      // .then((meterValues) => {
+      //   if (meterValues) {
+      //     return this.clienteCargando();
+      //   } else {
+      //     return false;
+      //   }
+      // })
       .then((serviciosCargados) => {
         if (serviciosCargados) {
           this.loading = false;
@@ -191,16 +198,17 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   }
 
   getClienteCharging() {
-    return new Promise((resolve) => {
-      this.clientElectricStationsService.getClientCharging(this.id).subscribe((resp: any) => {
-        if (resp) {
+    this.subscriptionClientCharging = interval(5000).pipe(
+      switchMap(() => this.clientElectricStationsService.getClientCharging(this.id)) // Llama al servicio
+      ).subscribe(
+        (resp: any) => {
           this.clientChargingStation = resp.data;
-          resolve(true);
-        } else {
-          resolve(false);
+          this.clienteCargando();
+        },
+        error => {
+          console.error('Error al obtener los datos de las estaciones', error);
         }
-      });
-    });
+      );
   }
 
   usuariosConector1 = [];
@@ -208,16 +216,18 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   clienteCargando() {
     return new Promise((resolve) => {
       if (this.clientChargingStation.length > 0) {
-
         // this.clientChargingStation.filter(i => i.connetorOcpp == "1")[0] ? this.cliente1 = this.clientChargingStation.filter(i => i.connetorOcpp == "1")[0].userName : '-';
         // this.clientChargingStation.filter(i => i.connetorOcpp == "2")[0] ? this.cliente2 = this.clientChargingStation.filter(i => i.connetorOcpp == "2")[0].userName : '-';
-        var usuariosConector1 = JSON.parse(JSON.stringify(this.clientChargingStation.filter(i => i.connetorOcpp == "1")));
-        var usuariosConector2 = JSON.parse(JSON.stringify(this.clientChargingStation.filter(i => i.connetorOcpp == "2")));
-
-        this.cliente1 = usuariosConector1[usuariosConector1.length - 1];
-        this.cliente2 = usuariosConector2[usuariosConector2.length - 1];
+        var usuariosConector1 = this.clientChargingStation.filter(i => i.connetorOcpp == "1").length > 0 ? this.clientChargingStation.filter(i => i.connetorOcpp == "1") : [];
+        var usuariosConector2 = this.clientChargingStation.filter(i => i.connetorOcpp == "2").length > 0 ? this.clientChargingStation.filter(i => i.connetorOcpp == "2") : [];
+        // var usuariosConector2 = JSON.parse(JSON.stringify(this.clientChargingStation.filter(i => i.connetorOcpp == "2")));
+        this.cliente1 = usuariosConector1.length > 0 ? usuariosConector1[usuariosConector1.length - 1] : new ClientChargingStatusModel();
+        this.cliente2 = usuariosConector2.length > 0 ? usuariosConector2[usuariosConector2.length - 1] : new ClientChargingStatusModel();
+        // this.cliente2 = usuariosConector2[usuariosConector2.length - 1];
         resolve(true)
       } else {
+        this.cliente1 = new ClientChargingStatusModel();
+        this.cliente2 = new ClientChargingStatusModel();
         resolve(true)
       }
     });
@@ -225,8 +235,6 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
 
   obtieneVelocidadCarga(currentOffered: number) {
     let potencia = 230 * currentOffered;
-
-
     let carga: number = potencia / 1000;
     if (carga >= 0 && carga <= 2.3) {
       return {
@@ -288,6 +296,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   }
 
   getAllConnectorStatus() {
+
     this.subscriptionEstados = interval(5000).pipe(
       switchMap(() => this.connectorStatusService.getAllConnectorByIdElectricStation(this.electricStation.id)) // Llama al servicio
     ).subscribe(
@@ -349,52 +358,85 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
     this.iconClass = this.iconClass === 'pi pi-eye-slash' ? 'pi pi-eye' : 'pi pi-eye-slash';
   }
 
-  onDetieneCarga(item) {
-    this.clientElectricStationsService.detenerCargaClient(1)
-      .subscribe((resp: any) => {
-        if (resp) {
-          this.electricStation = resp.data;
-          this.messageService.add({ severity: 'success', detail: messages.accionRealizada });
-        }
-      }, err => {
-        this.loading = false
-      });
-  }
-
-  onDetieneCargaPorUsuario(event: Event, itemConector) {
-    var cliente = itemConector.id == 1? this.cliente1.userName : this.cliente2.userName;
+  // CASO2
+  onDesvinculaUsuarioElectrolinera(itemConector) {
+    var datoselectrolinera = {
+      "sessionIndex": this.electricStation.sessionIndex,
+      "transactionId": itemConector.id
+    }
+    var cliente: ClientChargingStatusModel = itemConector.id == 1 ? this.cliente1 : this.cliente2;
     this.confirmationService.confirm({
       target: event.target as EventTarget,
-      message: 'Detener la carga del usuario ' + cliente + '?',
+      message: 'Liberar conector ' + itemConector.id + ' y liberar usuario ' + cliente.userName+'?',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        if (itemConector.id == 1) {
-          this.clientElectricStationsService.detenerCargaClient(this.cliente1.idClientUser)
-            .subscribe((resp: any) => {
-              if (resp) {
-                this.electricStation = resp.data;
-                this.messageService.add({ severity: 'success', detail: messages.accionRealizada });
-              }
-            }, err => {
-              this.loading = false
-            });
-        } else {
-          this.clientElectricStationsService.detenerCargaClient(this.cliente1.idClientUser)
-            .subscribe((resp: any) => {
-              if (resp) {
-                this.electricStation = resp.data;
-                this.messageService.add({ severity: 'success', detail: messages.accionRealizada });
-              }
-            }, err => {
-              this.loading = false
-            });
-        }
-        this.messageService.add({ severity: 'success', summary: 'Confirmed', detail: 'Se detuvo la carga' });
+        this.mobileService.liberarTransaccionUsuario(datoselectrolinera)
+          .subscribe((resp: any) => {
+            if (resp) {
+              this.messageService.add({ severity: 'info', detail: resp.message });
+            }
+          }, err => {
+            this.messageService.add({ severity: 'error', detail: messages.resp.message });
+          });
       },
       reject: () => {
       }
     });
+  }
 
+  // CASO3
+  onDetieneCargaElectrolinera(itemConector) {
+    // aqui el servicio de mobile
+    var datoselectrolinera = {
+      "sessionIndex": this.electricStation.sessionIndex,
+      "transactionId": itemConector.id
+    }
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Detener la transacción del conector ' + itemConector.id + '?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.mobileService.detenerCargaElectrolinera(datoselectrolinera)
+          .subscribe((resp: any) => {
+            if (resp) {
+              this.messageService.add({ severity: 'info', detail: resp.message });
+            }
+          }, err => {
+            this.messageService.add({ severity: 'error', detail: messages.resp.message });
+          });
+      },
+      reject: () => {
+      }
+    });
+  }
+
+  // CASO1
+  onDetieneCargaPorUsuario(event: Event, itemConector) {
+    var cliente: ClientChargingStatusModel = itemConector.id == 1 ? this.cliente1 : this.cliente2;
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Detener la carga del usuario ' + cliente.userName + '?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.clientElectricStationsService.detenerCargaClient(cliente.idClientUser)
+          .subscribe((resp: any) => {
+            if (resp) {
+              if (resp.message == "Recurso no encontrado") {
+                this.messageService.add({ severity: 'error', detail: messages.sinUsuario });
+              } else if (resp.message == "cliente en estacion de carga El registro fue actualizado") {
+                this.messageService.add({ severity: 'success', detail: messages.detenerCarga });
+              } else if (resp.message == "cliente en estacion de carga El registro fue actualizado Historial de carga  El registro fue actualizado") {
+                this.messageService.add({ severity: 'success', detail: messages.detenerCarga });
+              } else {
+                this.messageService.add({ severity: 'error', detail: messages.noList });
+              }
+            }
+          }, err => {
+          });
+      },
+      reject: () => {
+      }
+    });
   }
 
   public value!: string;

@@ -1,6 +1,7 @@
 import { Address } from './address';
 import { Base } from './base';
 import { ChargingConnector } from './charging-connector';
+import { ClientChargingStatusModel } from './client-charging-station';
 import { ModelElectricStation } from './model-electric-station';
 import { TasaCargaModel } from './tasa-carga';
 
@@ -44,6 +45,7 @@ export class ElectricStationModel {
   chargingConnectorStatus: string
   sessionIndex: any;
   idChargingStationOcpp: any;
+  clients: ClientChargingStatusModel[];
 
   constructor() {
     this.id = 0;
@@ -83,7 +85,7 @@ export class ElectricStationModel {
     this.chargingConnectorStatus = ''
     this.sessionIndex = '';
     this.idChargingStationOcpp = '';
-
+    this.clients = [];
   }
 
 }

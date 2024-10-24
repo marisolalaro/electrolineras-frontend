@@ -27,8 +27,8 @@
 
       <div class="row">
         <div class="card">
-          <p-table [value]="electricStation.chargingConnectors" [tableStyle]="{ 'min-width': '50rem' }"
-            responsiveLayout="stack">
+          <p-table *ngIf="componenteVisible" [value]="electricStation.chargingConnectors"
+            [tableStyle]="{ 'min-width': '50rem' }" responsiveLayout="stack">
             <ng-template pTemplate="header">
               <tr>
                 <th style="width:16%; text-align:center; vertical-align:middle">Nombre</th>
@@ -53,13 +53,13 @@
                 <td style="text-align:center; vertical-align:middle">230</td>
                 <td style="text-align:right; vertical-align:middle">
                   <label
-                    *ngIf="item.name == 'CONECTOR DE CARGO 1' && item.lastState != 'Available'">{{conector1[0].value}}</label>
+                    *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'">{{conector1[0].value}}</label>
                   <label
                     *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{conector2[0].value}}</label>
                   <label *ngIf="item.lastState == 'Available'">0</label>
                 </td>
                 <td style="text-align:center; vertical-align:middle">
-                  <label *ngIf="item.name == 'CONECTOR DE CARGO 1' && item.lastState != 'Available'"
+                  <label *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'"
                     [ngStyle]="{'color': conector1[3]?.phases}">{{conector1[3].measurand}}</label>
                   <label *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'"
                     [ngStyle]="{'color': conector2[3]?.phases}">{{conector2[3].measurand}}</label>
@@ -67,7 +67,7 @@
                 </td>
                 <td style="text-align:center; vertical-align:middle">
                   <label
-                    *ngIf="item.name == 'CONECTOR DE CARGO 1' && item.lastState != 'Available'">{{conector1[1].value |
+                    *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'">{{conector1[1].value |
                     numberDecimal:2}}</label>
                   <label
                     *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{conector2[1].value |
@@ -76,7 +76,7 @@
                 </td>
                 <td style="text-align:center; vertical-align:middle">
                   <label
-                    *ngIf="item.name == 'CONECTOR DE CARGO 1' && item.lastState != 'Available'">{{conector1[4].value |
+                    *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'">{{conector1[4].value |
                     numberDecimal:3}}</label>
                   <label
                     *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{conector2[4].value |
@@ -85,15 +85,17 @@
                 </td>
                 <td style="text-align:center; vertical-align:middle">
                   <label
-                    *ngIf="item.name == 'CONECTOR DE CARGO 1' && item.lastState != 'Available'">{{conector1[2].value}}</label>
+                    *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'">{{conector1[2].value}}</label>
                   <label
                     *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{conector2[2].value}}</label>
                   <label *ngIf="item.lastState == 'Available'">0</label>
                 </td>
                 <td style="text-align:center; vertical-align:middle">
-                  <label *ngIf="cliente1 || cliente2">-</label>
-                  <label *ngIf="item.name == 'CONECTOR DE CARGO 1' && item.lastState != 'Available'" >{{cliente1.userName}}</label>
-                  <label *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'" >{{cliente2.userName}}</label>
+                  <label *ngIf="cliente1.userName != '-' || cliente2.userName != '-'"></label>
+                  <label
+                    *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'">{{cliente1.userName}}</label>
+                  <label
+                    *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{cliente2.userName}}</label>
                 </td>
                 <td style="text-align:center; vertical-align:middle">
                   <button pButton *ngIf="item.lastState == 'Available'" label="Disponible"
@@ -115,22 +117,34 @@
                 </td>
                 <td style="text-align:center; vertical-align:middle">
                   <!-- <button pButton label="Detener" class="button-stop"></button> <br>
-                  <button pButton label="Interrumpir" class="button-stop"></button> -->
+                  <button Button label="Interrumpir" class="button-stop"></button> -->
+                  <div *ngIf="!item.lastState">
+                    <label>-</label>
+                  </div>
+                  <div *ngIf="item.lastState">
+                    <!-- CASO1 -->
+                    <i class="pi pi-stop-circle" style="color: var(--color-detener); font-size: 1.5rem"
+                      pTooltip="Detener la carga de Usuario" (click)="onDetieneCargaPorUsuario($event, item)"
+                      *ngIf="item.name == 'CONECTOR DE CARGA 1' && (item.lastState != 'Available' && item.lastState != 'Unavailable')">
+                    </i> &nbsp;
 
-                  <i class="pi pi-stop-circle" style="color: var(--color-detener); font-size: 1.5rem"
-                    pTooltip="Detener la carga de Usuario" (click)="onDetieneCargaPorUsuario($event, item)"
-                    *ngIf="item.name == 'CONECTOR DE CARGO 1' && item.lastState != 'Available'">
-                  </i> &nbsp;
-                  <i class="pi pi-stop-circle" style="color: var(--color-detener); font-size: 1.5rem"
-                    pTooltip="Detener la carga de Usuario" (click)="onDetieneCargaPorUsuario($event, item)"
-                    *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">
-                  </i> &nbsp;
-                    <p-confirmPopup></p-confirmPopup>
+                    <i class="pi pi-stop-circle" style="color: var(--color-detener); font-size: 1.5rem"
+                      pTooltip="Detener la carga de Usuario" (click)="onDetieneCargaPorUsuario($event, item)"
+                      *ngIf="item.name == 'CONECTOR DE CARGA 2' && (item.lastState != 'Available' && item.lastState != 'Unavailable')">
+                    </i> &nbsp;
+                  </div>
+                  <p-confirmPopup></p-confirmPopup>
 
-                  <i class="pi pi-times" *ngIf="habilitaMasOpciones" style="color: var(--color-interrumpir); font-size: 1.5rem"
-                    pTooltip="Detener la carga de Electrolinera" (click)="onDetieneCarga(item)"></i> &nbsp;
-                  <i class="pi pi-history" *ngIf="habilitaMasOpciones" style="color: var(--color-interrumpir); font-size: 1.5rem"
-                    pTooltip="Desconectar Usuario Electrolinera" (click)="onDetieneCarga(item)"></i>
+                  <!-- CASO3 -->
+                  <!-- <i class="pi pi-times" *ngIf="habilitaMasOpciones && item.lastState != 'Available'" -->
+                  <i class="pi pi-times" *ngIf="habilitaMasOpciones && item.lastState != 'Available'"
+                  style="color: var(--color-interrumpir); font-size: 1.5rem"
+                  pTooltip="Detener la carga de Electrolinera" (click)="onDetieneCargaElectrolinera(item)"></i> &nbsp;
+                  
+                  <!-- CASO3 -->
+                  <i class="pi pi-history" *ngIf="item.lastState != 'Available'"
+                    style="color: var(--color-interrumpir); font-size: 1.5rem"
+                    pTooltip="Desconectar Usuario Electrolinera" (click)="onDesvinculaUsuarioElectrolinera(item)"></i>
                 </td>
               </tr>
             </ng-template>
@@ -202,7 +216,8 @@
 
       <ng-template pTemplate="footer">
         <p>Para habilitar mas acciones a los conectores</p>
-        <p-button icon="pi pi-check" (click)="validaformulariodialog()" label="Ok" styleClass="p-button-text"></p-button>
+        <p-button icon="pi pi-check" (click)="validaformulariodialog()" label="Ok"
+          styleClass="p-button-text"></p-button>
       </ng-template>
 
     </p-dialog>
