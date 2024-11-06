@@ -1,3 +1,5 @@
+<p-confirmDialog
+  [style]="{width: '50vw'}"></p-confirmDialog><!-- <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog> -->
 <div>
   <!-- Aquí va el contenido de tu página cuando el loading termine -->
   <div class="container">
@@ -5,27 +7,24 @@
 
       <div class="row">
         <h3><b>ELECTROLINERA {{electricStation.nameStation}}</b></h3>
-        <!-- <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
-          <p-button icon="pi pi-refresh" [rounded]="true" (click)="getOneElectricStation()" pTooltip="Actualizar"
-            tooltipPosition="left"></p-button>
-        </div> -->
-        <div class="c">
-          <p-button icon="pi pi-key" [rounded]="true" (click)="dialogPassword()" pTooltip="Botones de Emergencia"
-            tooltipPosition="left"></p-button>
-          <p>Botones de Emergencia</p>
-          <p-button icon="pi pi-refresh" [rounded]="true" (click)="getOneElectricStation()" pTooltip="Actualizar"
-            tooltipPosition="left"></p-button>
-          <p>Actualizar</p>
+        <div class="alineacion">
+          <div class="button-container" *ngIf="esSuperAdmin">
+            <p-button icon="pi pi-key" [rounded]="true" (click)="dialogPassword()" pTooltip="Botones de Emergencia"
+              tooltipPosition="left"></p-button>
+            <p>Mas Opciones</p>
+          </div>
+          <div class="button-container">
+            <p-button icon="pi pi-refresh" [rounded]="true" (click)="getOneElectricStation()" pTooltip="Actualizar"
+              tooltipPosition="left"></p-button>
+            <p>Actualizar</p>
+          </div>
         </div>
-        <!-- <p-button icon="pi pi-key" [rounded]="true" (click)="getOneElectricStation()" pTooltip="Actualizar"
-        tooltipPosition="left"></p-button>
-      <p> Ver Detalles</p> -->
       </div>
 
       <div class="claseDelDiv">
       </div>
 
-      <div class="row">
+      <div class="row mb-3">
         <div class="card">
           <p-table *ngIf="componenteVisible" [value]="electricStation.chargingConnectors"
             [tableStyle]="{ 'min-width': '50rem' }" responsiveLayout="stack">
@@ -38,12 +37,12 @@
                 <th style="width:7%; text-align:center; vertical-align:middle">Corriente Actual (A)</th>
                 <th style="width:7%; text-align:center; vertical-align:middle">Potencia Actual (kW)</th>
                 <th style="width:7%; text-align:center; vertical-align:middle">Carga Energía (Wh)</th>
-                <th style="width:7%; text-align:center; vertical-align:middle">Cliente en Carga</th>
-                <th style="width:7%; text-align:center; vertical-align:middle">Estado</th>
-                <th style="width:10%; text-align:center; vertical-align:middle">
+                <th style="width:10%; text-align:center; vertical-align:middle">Cliente en Carga</th>
+                <th style="width:16%; text-align:center; vertical-align:middle">Estado</th>
+                <th style="width:16%; text-align:center; vertical-align:middle">
                   Opciones
-                  <i class="pi pi-times" *ngIf="habilitaMasOpciones" (click)="confirmarCerrarOpciones($event)"></i>
-                  <p-confirmPopup></p-confirmPopup>
+                  <i class="pi pi-times" *ngIf="habilitaMasOpciones" (click)="confirmarCerrarOpciones($event)"
+                    style="color: var(--color-detener); font-size: 1rem"></i>
                 </th>
               </tr>
             </ng-template>
@@ -114,10 +113,12 @@
                   <button pButton *ngIf="item.lastState == 'Unavailable'" label="No disponible"
                     class="button-unavailable"></button>
                   <button pButton *ngIf="!item.lastState" label="No disponible" class="button-unavailable"></button>
+                  <button pButton *ngIf="item.lastState == 'SuspendedEV'" label="Carga completa"
+                    class="button-unavailable"></button>
+                  <button pButton *ngIf="item.lastState == 'SuspendedEVSE'" label="Verificando"
+                    class="button-suspended"></button>
                 </td>
                 <td style="text-align:center; vertical-align:middle">
-                  <!-- <button pButton label="Detener" class="button-stop"></button> <br>
-                  <button Button label="Interrumpir" class="button-stop"></button> -->
                   <div *ngIf="!item.lastState">
                     <label>-</label>
                   </div>
@@ -125,26 +126,23 @@
                     <!-- CASO1 -->
                     <i class="pi pi-stop-circle" style="color: var(--color-detener); font-size: 1.5rem"
                       pTooltip="Detener la carga de Usuario" (click)="onDetieneCargaPorUsuario($event, item)"
-                      *ngIf="item.name == 'CONECTOR DE CARGA 1' && (item.lastState != 'Available' && item.lastState != 'Unavailable')">
-                    </i> &nbsp;
-
+                      *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Unavailable'">
+                    </i>
                     <i class="pi pi-stop-circle" style="color: var(--color-detener); font-size: 1.5rem"
                       pTooltip="Detener la carga de Usuario" (click)="onDetieneCargaPorUsuario($event, item)"
-                      *ngIf="item.name == 'CONECTOR DE CARGA 2' && (item.lastState != 'Available' && item.lastState != 'Unavailable')">
-                    </i> &nbsp;
+                      *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Unavailable'">
+                    </i>&nbsp;
+                    <!-- CASO2 -->
+                    <i class="pi pi-times" *ngIf="habilitaMasOpciones"
+                      style="color: var(--color-interrumpir); font-size: 1.5rem"
+                      pTooltip="Detener la carga de Electrolinera" (click)="onDetieneCargaElectrolinera(item)">
+                    </i>&nbsp;
+                    <!-- CASO3 -->
+                    <i class="pi pi-history" *ngIf="habilitaMasOpciones"
+                      style="color: var(--color-interrumpir); font-size: 1.5rem"
+                      pTooltip="Desconectar Usuario Electrolinera" (click)="onDesvinculaUsuarioElectrolinera(item)">
+                    </i>&nbsp;
                   </div>
-                  <p-confirmPopup></p-confirmPopup>
-
-                  <!-- CASO3 -->
-                  <!-- <i class="pi pi-times" *ngIf="habilitaMasOpciones && item.lastState != 'Available'" -->
-                  <i class="pi pi-times" *ngIf="habilitaMasOpciones && item.lastState != 'Available'"
-                  style="color: var(--color-interrumpir); font-size: 1.5rem"
-                  pTooltip="Detener la carga de Electrolinera" (click)="onDetieneCargaElectrolinera(item)"></i> &nbsp;
-                  
-                  <!-- CASO3 -->
-                  <i class="pi pi-history" *ngIf="item.lastState != 'Available'"
-                    style="color: var(--color-interrumpir); font-size: 1.5rem"
-                    pTooltip="Desconectar Usuario Electrolinera" (click)="onDesvinculaUsuarioElectrolinera(item)"></i>
                 </td>
               </tr>
             </ng-template>
@@ -152,52 +150,64 @@
         </div>
       </div>
 
-      <div class="c">
-        <p-button icon="pi pi-eye" [rounded]="true" (click)="cambiaEstado()" pTooltip="Ver Detalles"
-          tooltipPosition="left"></p-button>
-        <p> Ver Detalles</p>
+      <div class="alineacion">
+        <div class="button-container">
+          <p-button icon="pi pi-eye" [rounded]="true" (click)="cambiaEstado()" pTooltip="Ver Detalles"
+            tooltipPosition="left"></p-button>
+          <p> Ver Detalles</p>
+        </div>
       </div>
 
+
       <div class="card" *ngIf="detalle">
-        <div class="row claseDelDiv">
-          <div class="grid transp">
-            <div class="col-6" style="text-align: right;">
-              <ul>
-                <li style="color: var(--primary-color-text)"><i class="pi pi-align-justify"></i> &nbsp; <b>Nombre: </b>
-                </li>
-                <li style="color: var(--primary-color-text)"><i class="pi pi-map-marker"></i> &nbsp; <b>Dirección: </b>
-                </li>
-                <li style="color: var(--primary-color-text)"><i class="pi pi-qrcode"></i> &nbsp; <b>Código QR: </b></li>
-                <li style="color: var(--primary-color-text)"><i class="pi pi-qrcode"></i> &nbsp; <b>Código OCPP: </b>
-                </li>
-                <li style="color: var(--primary-color-text)"><i class="pi pi-file"></i> &nbsp; <b>Modelo Código: </b>
-                </li>
-                <li style="color: var(--primary-color-text)"><i class="pi pi-flag"></i> &nbsp; <b>Modelo Vendor: </b>
-                </li>
-                <li style="color: var(--primary-color-text)"><i class="pi pi-eye"></i> &nbsp; <b>Visibilidad de la
-                    Electrolinera: </b></li>
-                <li style="color: var(--primary-color-text)"><i class="pi pi-image"></i> &nbsp; <b>Imagen QR: </b></li>
-              </ul>
-            </div>
-            <div class="col-6" style="text-align: left;">
-              <ul>
-                <li style="color: var(--primary-color-text)"><label>{{electricStation.nameStation}}</label></li>
-                <li style="color: var(--primary-color-text)"><label>{{electricStation.direccion}}</label></li>
-                <li style="color: var(--primary-color-text)"><label>{{electricStation.codeStationQR}}</label></li>
-                <li style="color: var(--primary-color-text)"><label>{{electricStation.idChargingStationOcpp}}</label>
-                </li>
-                <li style="color: var(--primary-color-text)"><label [pTooltip]="electricStation.modelModelCode"
-                    tooltipPosition="bottom">{{electricStation.modelModelCode | truncate:15}}</label></li>
-                <li style="color: var(--primary-color-text)"><label>{{electricStation.modelVendor}}</label></li>
-                <li style="color: var(--primary-color-text)">
-                  <p-confirmPopup></p-confirmPopup>
-                  <p-inputSwitch [(ngModel)]="electricStation.visibility"
-                    (onChange)="confirmSwitchChange($event, electricStation)"></p-inputSwitch>
-                </li>
-                <li><img [src]="imagenQR" alt="Converted Image" /></li>
-              </ul>
-            </div>
-          </div>
+        <div class="surface-section">
+          <div class="font-medium text-3xl mb-3" style="color: var(--primary-color-text)">Mas Información</div>
+          <ul class="list-none p-0 m-0">
+            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+              <div class="text-500 w-6 md:w-2 font-medium">Nombre</div>
+              <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
+                {{electricStation.nameStation}}</div>
+            </li>
+            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+              <div class="text-500 w-6 md:w-2 font-medium">Dirección</div>
+              <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
+                {{electricStation.direccion}}</div>
+            </li>
+            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+              <div class="text-500 w-6 md:w-2 font-medium">Código QR</div>
+              <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
+                {{electricStation.codeStationQR}}</div>
+            </li>
+            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+              <div class="text-500 w-6 md:w-2 font-medium">Código OCPP</div>
+              <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
+                {{electricStation.idChargingStationOcpp}}</div>
+            </li>
+            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+              <div class="text-500 w-6 md:w-2 font-medium">Modelo Código</div>
+              <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
+                {{electricStation.modelModelCode}}</div>
+            </li>
+            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+              <div class="text-500 w-6 md:w-2 font-medium">Modelo Vendor</div>
+              <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
+                {{electricStation.modelVendor}}</div>
+            </li>
+            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+              <div class="text-500 w-6 md:w-2 font-medium">Visibilidad de la Electrolinera</div>
+              <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
+                {{electricStation.visibility | formatSiNo}}</div>
+              <div class="w-6 md:w-2 flex justify-content-end">
+                <p-inputSwitch [(ngModel)]="electricStation.visibility"
+                  (onChange)="confirmSwitchChange($event, electricStation)"></p-inputSwitch>
+              </div>
+            </li>
+            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+              <div class="text-500 w-6 md:w-2 font-medium">Imagen QR</div>
+              <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1"><img [src]="imagenQR"
+                  alt="Converted Image" /></div>
+            </li>
+          </ul>
         </div>
       </div>
 

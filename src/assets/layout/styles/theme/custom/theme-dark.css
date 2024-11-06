@@ -32,6 +32,7 @@
 
   --pdf: #B30C00;
 
+  --color-0: #1b2839;
   --color-1: #6c757d;
   --color-11: #6f6f69a4;
   --color-2: #c3ccc4;
@@ -50,6 +51,7 @@
   --color-unavailable: #e74c3c; /* Rojo */
   --color-detener:#B22222; /* Morado */
   --color-interrumpir:#d63031; /* Morado */
+  --color-suspendend:#7f8c8d; /* plomo */
 /* colores para la velocidad de carga */
   --colore-velocidad1:#808080;
   --colore-velocidad2:#32CD32;

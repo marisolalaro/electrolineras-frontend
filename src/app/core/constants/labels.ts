@@ -124,15 +124,33 @@ export const buttons: any = {
   expand: 'Mas información'
 }
 
-// export const tooltip: any = {
-//   create: 'Crear',
-//   edit: 'Editar',
-//   delete: 'Eliminar',
-//   info: 'Info',
-//   clear: 'Limpiar',
-//   export: 'Exportar',
-//   reload: 'Actualizar',
-// }
+export const estadosConectores: any = {
+  // estados conectores enviado de la electrolinera
+  available: 'Available',
+  preparing: 'Preparing',
+  charging: 'Charging',
+  finishing: 'Finishing',
+  unavailable: 'Unavailable',
+  suspendedEV: 'SuspendedEV',
+  suspendedEVSE: 'SuspendedEVSE',
+  // estados conectores en espaniol
+  disponible: 'Disponible',
+  preparando: 'Preparando',
+  cargando: 'Cargando',
+  terminando: 'Terminando',
+  noDisponible: 'No disponible',
+  cargaCompleta: 'Carga completa',
+  verificando: 'Verificando',
+  // Estado conexion internet
+  conectando: 'Conectando',
+  enLinea: 'En línea',
+  sinConexion: 'Sin Conexion',
+  // colores propiedad de boton
+  colorConectando: 'color: var(--color-suspendend)',
+  colorEnLinea: 'color: var(--color-available)',
+  colorSinConexion: 'color: var(--color-unavailable)',
+
+}
 
 export const mainTitles: IMainTitles = {
   // menu Horizontal

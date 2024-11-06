@@ -52,7 +52,7 @@ interface AutoCompleteCompleteEvent {
     ReactiveFormsModule,
     NgClass,
     NgSwitch,
-    NgSwitchCase
+    NgSwitchCase,
   ],
 })
 
@@ -91,10 +91,13 @@ export default class ElectricStationsComponent implements OnInit {
   // variables para el select
   public selectedModel: any;
   public selectedTasaCarga: any;
+  public selectedNombrePuerto: any;
   public models: any[] | undefined;
   public tasasCargaSelect: any[] | undefined;
+  public nombresPuertosSelect: any[] | undefined;
   public filteredModels: any[] | undefined;
   public filteredTasaCarga: any[] | undefined;
+  public filteredNombrePuerto: any[] | undefined;
 
   // variables propias del componente
   @ViewChild('dt1') dt!: Table;
@@ -130,6 +133,9 @@ export default class ElectricStationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.esSuperAdmin = this.global.getEsSuperAdmin();
+    this.nombresPuertosSelect = [
+      {nombre: "CONECTOR DE CARGA 1"},{nombre: "CONECTOR DE CARGA 2"},
+    ]
     this.getAllElectricStations();
   }
 
@@ -162,6 +168,18 @@ export default class ElectricStationsComponent implements OnInit {
       }
     }
     this.filteredTasaCarga = filtered;
+  }
+
+  filterNombrePuerto(event: AutoCompleteCompleteEvent) {
+    let filtered: any[] = [];
+    let query = event.query;
+    for (let i = 0; i < (this.nombresPuertosSelect as any[]).length; i++) {
+      let nombrePuerto = (this.nombresPuertosSelect as any[])[i];
+      if (nombrePuerto.nombre.indexOf(query.toLowerCase()) == 0) {
+        filtered.push(nombrePuerto);
+      }
+    }
+    this.filteredNombrePuerto = filtered;
   }
 
   filterModel(event: AutoCompleteCompleteEvent) {
@@ -276,6 +294,7 @@ export default class ElectricStationsComponent implements OnInit {
     var registro: PortConnectionModel = {
       ...this.formRegistroConector.value,
     };
+    registro.name = this.selectedNombrePuerto.nombre
     registro.status = 1;
     registro.type = 'ELECTRICO';
     registro.chargingStation = this.electricStation.id;
@@ -306,9 +325,10 @@ export default class ElectricStationsComponent implements OnInit {
     registro.model = new ModelElectricStation();
     registro.model.id = this.selectedModel.id
     registro.activo = true;
+    registro.enabled = true;
     this.electricStationsService.update(registro).subscribe(
       (resp: any) => {
-        this.openDialog(false, false, 'edit');
+        this.openDialog(false, false, 'editar');
         this.getAllElectricStations();
         this.submitted = false;
       }, error => {

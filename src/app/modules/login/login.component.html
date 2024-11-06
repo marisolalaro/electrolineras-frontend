@@ -14,7 +14,7 @@ https://github.com/mazipan/login-page-css/blob/master/src/15-netflix/index.html
         <div class="campo-texto">
           <span class="p-input-icon-right">
             <input type="text" pInputText id="inputEmail" name="email" placeholder="Usuario"
-              formControlName="username" />
+              formControlName="username" required (keydown.enter)="onIniciaSesion()"/>
             <i class="pi pi-user"></i>
           </span>
         </div>
@@ -22,7 +22,7 @@ https://github.com/mazipan/login-page-css/blob/master/src/15-netflix/index.html
         <div class="campo-texto">
           <span class="p-input-icon-right">
             <input [type]="showPassword ? 'text' : 'password'" pInputText id="inputPassword" name="password"
-              placeholder="contraseña" formControlName="password" />
+              placeholder="contraseña" formControlName="password" required (keydown.enter)="onIniciaSesion()"/>
             <i [class]="iconClass" (click)="togglePasswordVisibility()"></i>
           </span>
 

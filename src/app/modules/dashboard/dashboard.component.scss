@@ -38,3 +38,14 @@ th, td {
 th {
   background-color: var(--color-white);
 }
+
+hr.new {
+  border-top: 1px solid var(--highlight-bg);
+  // background-color: #afe;
+  // color: #afe;
+}
+
+div.level {
+  border-style: solid;
+  border-color: var(--color-0);
+}

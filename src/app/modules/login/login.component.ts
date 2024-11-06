@@ -57,7 +57,6 @@ export default class LoginComponent {
   }
 
   onIniciaSesion(): void {
-    this.loading = true;
     this.validaCampos()
       .then(camposValidados => {
         if (camposValidados) {
@@ -95,6 +94,7 @@ export default class LoginComponent {
       if (this.loginForm.valid) {
         resolve(true);
       } else {
+        this.loading = false;
         this.messageService.add({ severity: 'info', summary: messages.obligatorios, detail: messages.camposRequeridos });
         resolve(false);
       }
@@ -102,6 +102,7 @@ export default class LoginComponent {
   }
 
   login() {
+    this.loading = true;
     return new Promise((resolve) => {
       let form = this.loginForm.value
       this.loginService.iniciaSesion(form.username, form.password)

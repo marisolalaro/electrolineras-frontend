@@ -4,8 +4,7 @@ import { MessageService } from 'primeng/api';
 import { NgFor, NgIf } from '@angular/common';
 import { ReportesModule } from './reportes.module';
 import { mainTitles, reports } from 'src/app/core/constants/labels';
-import { messages } from 'src/app/core/constants/messages';
-
+import { PrimeNGConfig } from 'primeng/api';
 interface Tab {
   title: string;
   content: string;
@@ -30,29 +29,44 @@ export default class ReportesComponent {
   // variables propias del componente  
   public tiposReportes: any[] = [];
   public tituloComponente: any = mainTitles['reportes'];
-  
+
   // variables para mostrar el componente seleccionado
   public showReport = ''
   public numeroReport: number = 0;
   public activeIndex: number = 0;
-  
+
   // variables de filtros
   public rangoFechas;
   public reporteSeleccionado: any;
   public rangeDates: Date[] | undefined;
   public coincidenciasFiltro: string[] = [];
-  
+
   // variables pestañas temporales
   public tabs: Tab[] = [];
-  
+
   constructor(
-  ) { }
+    private primengConfig: PrimeNGConfig
+  ) {}
 
   ngOnInit() {
     this.inicializaDatos();
   }
 
   inicializaDatos() {
+    this.primengConfig.setTranslation({
+      firstDayOfWeek: 1,
+      dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+      dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+      dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+      monthNames: [
+        "enero", "febrero", "marzo", "abril", "mayo", "junio",
+        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+      ],
+      monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
+      today: 'Hoy',
+      clear: 'Limpiar'
+      //translations
+    });
     this.tiposReportes = [
       { nombre: reports.labelReporte1 },
       { nombre: reports.labelReporte2 },
@@ -80,7 +94,7 @@ export default class ReportesComponent {
       this.reporteSeleccionado.nombre == reports.labelReporte2 ||
       this.reporteSeleccionado.nombre == reports.labelReporte4 ||
       this.reporteSeleccionado.nombre == reports.labelReporte5
-      ) {
+    ) {
       var title = '';
       if (this.reporteSeleccionado.nombre.includes("1")) {
         title = reports.numeroReporte1;

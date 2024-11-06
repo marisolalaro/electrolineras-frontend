@@ -344,6 +344,30 @@
 
             <div class="form-group field">
               <label for="name">{{labelsGlobales.nombrePuerto}}</label>
+              <p-autoComplete [(ngModel)]="selectedNombrePuerto" [dropdown]="true" [suggestions]="filteredNombrePuerto"
+                (completeMethod)="filterNombrePuerto($event)" field="nombre" id="name" formControlName="name"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['name'].invalid}"></p-autoComplete>
+              <div *ngIf="submitted && formRegistro.controls['name'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('name')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <!-- <div class="form-group field">
+              <label for="descripcion">{{labelsGlobales.tasaCarga}}</label>
+              <p-autoComplete [(ngModel)]="selectedTasaCarga" [dropdown]="true" [suggestions]="filteredTasaCarga"
+                (completeMethod)="filterTasaCarga($event)" field="amount" id="chargeRate" formControlName="chargeRate"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['chargeRate'].invalid}"></p-autoComplete>
+              <div *ngIf="submitted && formRegistro.controls['chargeRate'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('chargeRate')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div> -->
+            
+            <!-- <div class="form-group field">
+              <label for="name">{{labelsGlobales.nombrePuerto}}</label>
               <input type="text" pInputText id="name" required formControlName="name"
                 [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistroConector.controls['name'].invalid}" />
               <div *ngIf="submitted && formRegistroConector.controls['name'].invalid">
@@ -351,7 +375,7 @@
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>
-            </div>
+            </div> -->
 
             <div class="form-group field">
               <label for="description">{{labelsGlobales.descripcionPuerto}}</label>
@@ -585,6 +609,8 @@
                       <button pButton *ngIf="item.lastState == 'Charging'" label="Cargando" class="button-charging"></button>
                       <button pButton *ngIf="item.lastState == 'Finishing'" label="Terminando" class="button-finishing"></button>
                       <button pButton *ngIf="item.lastState == 'Unavailable'" label="No disponible" class="button-unavailable"></button>
+                      <button pButton *ngIf="item.lastState == 'SuspendedEV'" label="Carga completa" class="button-unavailable"></button>
+                      <button pButton *ngIf="item.lastState == 'SuspendedEVSE'" label="Verificando" class="button-unavailable"></button>
                       <button pButton *ngIf="!item.lastState" label="No disponible" class="button-unavailable"></button>
                     </td>
                   </tr>

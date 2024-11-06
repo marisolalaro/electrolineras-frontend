@@ -33,39 +33,47 @@ li {
   border-color: var(--color-available);
   color: white;
 }
+
 .button-preparing {
   background-color: var(--color-preparing);
   border-color: var(--color-preparing);
   color: white;
 }
+
 .button-finishing {
   background-color: var(--color-finishing);
   border-color: var(--color-finishing);
   color: white;
 }
+
 .button-charging {
   background-color: var(--color-charging);
   border-color: var(--color-charging);
   color: white;
 }
+
 .button-unavailable {
   background-color: var(--color-unavailable);
   border-color: var(--color-unavailable);
   color: white;
 }
-
+.button-suspended {
+  background-color: var(--color-suspendend);
+  border-color: var(--color-suspendend);
+  color: rgb(201, 136, 136);
+}
 
 .button-stop {
-background-color: var(--color-detener);
-border-color: var(--color-detener);
-color: white;
+  background-color: var(--color-detener);
+  border-color: var(--color-detener);
+  color: white;
 }
 
 .button-interrumpir {
   background-color: var(--color-detener);
   border-color: var(--color-interrumpir);
   color: white;
-  }
+}
 
 .right-aligned-container {
   display: flex;
@@ -81,15 +89,18 @@ color: white;
   font-size: 0.875rem;
 }
 
-div.c {
-  text-align: right;
-  margin-top: 1rem;  
-  margin-bottom: 1rem; 
-  flex-direction: column; 
-  align-items: center; 
-  margin-left: auto;
+div.alineacion {
+  display: flex;
+  justify-content: flex-end;
+  /* Alinear los contenedores a la derecha */
+  gap: 16px;
+  /* Espacio entre los botones */
 }
 
- div.c p-button{
-  margin-right: 1.5rem;
- }
+.button-container {
+  display: flex;
+  flex-direction: column;
+  /* Coloca el botón encima del texto */
+  align-items: center;
+  /* Centrar el texto debajo del botón */
+}

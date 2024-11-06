@@ -66,7 +66,7 @@ export class SidebarComponent implements OnInit {
       },
       {
         label: mainTitles['modelos'].mainTitle,
-        icon: 'pi pi-fw pi-apple',
+        icon: 'pi pi-fw pi-verified',
         routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaParametricas + '/' + rutas.rutaModelo],
       },
 

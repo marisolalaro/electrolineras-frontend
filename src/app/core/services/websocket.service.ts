@@ -22,8 +22,6 @@ export class WebsocketService {
     this.stompClient = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000, // Reconectar en 5 segundos si se pierde la conexión
-      // TODO
-      // aqui debolver si se logro conectar el websocket enviar true o false
     });
     this.stompClient.onConnect = (frame) => {
       this.subscribeToChannel('/channel/authorize');

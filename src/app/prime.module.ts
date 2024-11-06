@@ -45,6 +45,7 @@ import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { StyleClassModule } from 'primeng/styleclass';
 import { PasswordModule } from 'primeng/password';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 @NgModule({
   exports: [
     CardModule,
@@ -92,7 +93,8 @@ import { PasswordModule } from 'primeng/password';
     BlockUIModule,
     ProgressSpinnerModule,
     StyleClassModule,
-    PasswordModule
+    PasswordModule,
+    ConfirmDialogModule
   ],
 })
 export class PrimeModule {}

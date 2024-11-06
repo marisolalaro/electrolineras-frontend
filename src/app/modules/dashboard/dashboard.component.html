@@ -1,274 +1,360 @@
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.2/dist/sockjs.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
 <div class="container">
   <p-card header="">
     <div class="row">
-      <h3><b>Electrolineras</b></h3><br>
-      <div class="grid">
-        <div class="card-container" *ngIf="serviceResponse">
+      <!-- <div class="surface-ground px-4 py-8 md:px-6 lg:px-8"> -->
+      <div class=" px-4 py-5 md:px-6 lg:px-8">
+        <div class="text-900 font-bold text-5xl mb-4 text-center">
+          <h3>Electrolineras</h3>
+        </div>
+        <div class="grid" *ngIf="serviceResponse">
 
-          <p-card [header]="" subheader="" [style]="{ width: '360px' }">
-            <span class="block align-center mb-4"><b>{{electricStations[0]?.nameStation}}</b></span>
-            <div class="row">
-              <div class="grid">
-                <div class="col-6" style="text-align: right;">
-                  <ul>
-                    <li><i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp; <b>Código QR: </b></li>
-                    <li><i class="pi pi-wifi" style="color: var(--primary-color)"></i> &nbsp; <b>Estado conexión: </b>
-                    </li><br>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Marca: </b>
-                    </li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Código de
-                        Modelo: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Número de Serie
-                        Modelo: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Modelo Tipo:
-                      </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Número Serial
-                        Tipo: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Versión
-                        Firmware: </b></li>
-                    <li><i class="pi pi-sort-alt" style="color: var(--primary-color)"></i> &nbsp; <b>Tasa de Carga: </b>
-                    </li>
-                    <li><i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp; <b>Dirección: </b>
-                    </li>
-                    <li><i class="pi pi-building" style="color: var(--primary-color)"></i> &nbsp; <b>Publico: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Estado: </b>
-                    </li> <br>
-                  </ul>
+          <!-- OTRA ELECTROLINERA -->
+          <div class="col-12 lg:col-4 md:col-6 sm:col-12">
+            <div class="p-3 h-full">
+              <div class="level shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px">
+                <div class="font-medium text-xl mb-2" style="color: var(--primary-color-text)">
+                  {{electricStations[0]?.nameStation}}</div>
+                <div class="text-600">{{electricStations[0]?.descripcion}}</div>
+                <hr class="new new my-3 mx-0 border-top-1 border-none"/>
+                <div class="text-center justify-content-between lg:justify-content-center align-items-center flex-wrap">
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-qrcode mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Código QR:</span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.codeStationQR}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-wifi mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Estado conexión: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;
+                      <i class="pi pi-circle-fill" [style]="estadoHeartbeat.severity"></i>
+                      <span style="color: var(--primary-color-text)"> {{estadoHeartbeat.estado}} {{ tiempo }}</span>
+                    </span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Marca:</span>
+                    <span style="color: var(--primary-color-text)">&nbsp; {{electricStations[0]?.model.vendor}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Código de Modelo: </span>
+                    <span style="color: var(--primary-color-text)"
+                      [pTooltip]="electricStations[0]?.model.modelCode">&nbsp;{{electricStations[0]?.model.modelCode
+                      | truncate:15}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Número de Serie Modelo:</span>
+                    <span style="color: var(--primary-color-text)"
+                      [pTooltip]="electricStations[0]?.model.boxSerialNumber">&nbsp;{{electricStations[0]?.model.boxSerialNumber
+                      | truncate:15}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Modelo Tipo:</span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.model.pointModel}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Número Serial Tipo: </span>
+                    <span style="color: var(--primary-color-text)"
+                      [pTooltip]="electricStations[0]?.model.pointSerialNumber">&nbsp;{{electricStations[0]?.model.pointSerialNumber
+                      | truncate:15}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Versión Firmware: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.model.firmwareVersion}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-sort-alt mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Tasa de Carga: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.chargeRate.amount}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-map-marker mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Dirección: </span>
+                    <span style="color: var(--primary-color-text)" [pTooltip]="electricStations[0]?.direccion"
+                      tooltipPosition="bottom">&nbsp;{{electricStations[0]?.direccion | truncate:15}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-building mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Publico: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.ocppPublicAccessAllowed |
+                      formatSiNo}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Estado Puertos: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;
+                      <i class="pi pi-circle-fill" [style]="statusElectrolinera0.severity"></i>
+                      <span style="color: var(--primary-color-text)"> {{statusElectrolinera0.estado}}</span>
+                    </span>
+                  </li>
+                  <hr class="new mb-3 mx-0 border-top-1 border-none mt-auto" />
+                  <li class="flex align-items-center mb-1">
+                    <table>
+                      <thead>
+                        <tr style="color: var(--primary-color)">
+                          <th>Conector</th>
+                          <th>Usuario</th>
+                          <th>Estado</th>
+                        </tr>
+                      </thead>
+                      <tbody *ngFor="let item of conectorStatus0">
+                        <tr>
+                          <td>{{item.connector}}</td>
+                          <td [pTooltip]="item.userName">
+                            {{item.userName | truncate:15}}
+                          </td>
+                          <td>{{item.lastState}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </li>
                 </div>
-                <div class="col-6" style="text-align: left;">
-                  <ul>
-                    <li><label>{{electricStations[0]?.codeStationQR}}</label></li>
-                    <li>
-                      <p-button size="small" *ngIf="estadoHeartbeat == 'Conectando...'"
-                        severity="warning">{{estadoHeartbeat}}</p-button>
-                      <p-button size="small" *ngIf="estadoHeartbeat == 'En línea'"
-                        severity="success">{{estadoHeartbeat}}</p-button>
-                      <p-button size="small" *ngIf="estadoHeartbeat === 'Offline'"
-                        severity="danger">{{estadoHeartbeat}}</p-button>
-                      {{ tiempo }}
-                    </li>
-                    <li><label>{{electricStations[0]?.model.vendor}}<br></label></li>
-                    <li><label [pTooltip]="electricStations[0]?.model.modelCode ">{{electricStations[0]?.model.modelCode
-                        | truncate:15}}<br></label></li>
-                    <li><label
-                        [pTooltip]="electricStations[0]?.model.boxSerialNumber">{{electricStations[0]?.model.boxSerialNumber
-                        | truncate:15}}<br></label></li><br>
-                    <li><label>{{electricStations[0]?.model.pointModel}}<br></label></li>
-                    <li><label
-                        [pTooltip]="electricStations[0]?.model.pointSerialNumber">{{electricStations[0]?.model.pointSerialNumber
-                        | truncate:15}}<br></label></li><br>
-                    <li><label>{{electricStations[0]?.model.firmwareVersion}}<br></label></li>
-
-                    <li><label>{{electricStations[0]?.chargeRate.amount}}</label></li>
-
-                    <li><label [pTooltip]="electricStations[0]?.direccion"
-                        tooltipPosition="bottom">{{electricStations[0]?.direccion | truncate:15}}</label></li>
-                    <li><label>{{electricStations[0]?.ocppPublicAccessAllowed | formatSiNo}}</label></li>
-                    <li>
-                      <p-button size="small" *ngIf="statusElectrolinera0 == 'Available'" label="Disponible"
-                        [raised]="true" severity="success"
-                        (click)="onVerTodasElectrolineras(electricStations[0].id)"></p-button>
-                      <p-button size="small" *ngIf="statusElectrolinera0 == 'Unavailable'" label="No Disponible"
-                        [raised]="true" severity="danger"
-                        (click)="onVerTodasElectrolineras(electricStations[0].id)"></p-button>
-                    </li>
-
-                  </ul>
-                </div>
-              </div>
-
-            </div>
-            <div style="padding: 0px; align-items: center;">
-              <table *ngIf="electricStations[0].clients">
-                <thead>
-                  <tr>
-                    <th>Conector</th>
-                    <th>Usuario</th>
-                    <th>Estado</th>
-                  </tr>
-                </thead>
-                <tbody *ngFor="let item of conectorStatus0">
-                  <tr>
-                    <td>{{item.connector}}</td>
-                    <td>-</td>
-                    <td>{{item.lastState}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <ng-template pTemplate="footer">
-              <p-button label="Mas Información" [text]="true" icon="pi pi-chevron-right"
-                (click)="onVerTodasElectrolineras(electricStations[0]?.id)"></p-button>
-            </ng-template>
-          </p-card>
-
-          <p-card [header]="" subheader="" [style]="{ width: '360px' }">
-            <span class="block align-center mb-4"><b>{{electricStations[1]?.nameStation}}</b></span>
-            <div class="row">
-              <div class="grid">
-                <div class="col-6" style="text-align: right;">
-                  <ul>
-                    <li><i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp; <b>Código QR: </b></li>
-                    <li><i class="pi pi-wifi" style="color: var(--primary-color)"></i> &nbsp; <b>Estado conexión: </b>
-                    </li><br>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Marca: </b>
-                    </li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Código de
-                        Modelo: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Número de Serie
-                        Modelo: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Modelo Tipo:
-                      </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Número Serial
-                        Tipo: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Versión
-                        Firmware: </b></li>
-                    <li><i class="pi pi-sort-alt" style="color: var(--primary-color)"></i> &nbsp; <b>Tasa de Carga: </b>
-                    </li>
-                    <li><i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp; <b>Dirección: </b>
-                    </li>
-                    <li><i class="pi pi-building" style="color: var(--primary-color)"></i> &nbsp; <b>Publico: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Estado: </b>
-                    </li> <br>
-                  </ul>
-                </div>
-                <div class="col-6" style="text-align: left;">
-                  <ul>
-                    <li><label>{{electricStations[1]?.codeStationQR}}</label></li>
-                    <li>
-                      <div>
-                        <p-button size="small" *ngIf="estadoHeartbeat2 == 'Conectando...'"
-                          severity="warning">{{estadoHeartbeat2}}</p-button>
-                        <p-button size="small" *ngIf="estadoHeartbeat2 == 'En línea'"
-                          severity="success">{{estadoHeartbeat2}}</p-button>
-                        <p-button size="small" *ngIf="estadoHeartbeat2 == 'Offline'"
-                          severity="danger">{{estadoHeartbeat2}}</p-button>
-                      </div>
-                    </li>
-                    <li><label>{{electricStations[1]?.model.vendor}}<br></label></li>
-                    <li><label [pTooltip]="electricStations[1]?.model.modelCode ">{{electricStations[1]?.model.modelCode
-                        | truncate:15}}<br></label></li>
-                    <li><label
-                        [pTooltip]="electricStations[1]?.model.boxSerialNumber">{{electricStations[1]?.model.boxSerialNumber
-                        | truncate:15}}<br></label></li><br>
-                    <li><label>{{electricStations[1]?.model.pointModel}}<br></label></li>
-                    <li><label
-                        [pTooltip]="electricStations[1]?.model.pointSerialNumber">{{electricStations[1]?.model.pointSerialNumber
-                        | truncate:15}}<br></label></li><br>
-                    <li><label>{{electricStations[1]?.model.firmwareVersion}}<br></label></li>
-                    <li><label>{{electricStations[1]?.chargeRate.amount}}</label></li>
-                    <li><label [pTooltip]="electricStations[1]?.direccion"
-                        tooltipPosition="bottom">{{electricStations[1]?.direccion | truncate:15}}</label></li>
-                    <li><label>{{electricStations[1]?.ocppPublicAccessAllowed | formatSiNo}}</label></li>
-
-                    <li>
-                      <p-button size="small" *ngIf="statusElectrolinera1 == 'Available'" label="Disponible"
-                        [raised]="true" severity="success"
-                        (click)="onVerTodasElectrolineras(electricStations[1].id)"></p-button>
-                      <p-button size="small" *ngIf="statusElectrolinera1 == 'Unavailable'" label="No Disponible"
-                        [raised]="true" severity="danger"
-                        (click)="onVerTodasElectrolineras(electricStations[1].id)"></p-button>
-                    </li>
-                  </ul>
-                </div>
+                <hr class="new mb-3 mx-0 border-top-1 border-none mt-auto" />
+                <button pButton pRipple label="Ver Puertos" class="p-3 w-full mt-auto" *ngIf="electricStations[0]"
+                  (click)="onVerTodasElectrolineras(electricStations[0]?.id)"></button>
               </div>
             </div>
-            <ng-template pTemplate="footer">
-              <p-button label="Mas Información" [text]="true" icon="pi pi-chevron-right"
-                (click)="onVerTodasElectrolineras(electricStations[1]?.id)"></p-button>
-            </ng-template>
-          </p-card>
+          </div>
 
-          <p-card [header]="" subheader="" [style]="{ width: '360px' }">
-            <span class="block align-center mb-4"><b>{{electricStations[2]?.nameStation}}</b></span>
-            <div class="row">
-              <div class="grid">
-                <div class="col-6" style="text-align: right;">
-                  <ul>
-                    <li><i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp; <b>Código QR: </b></li>
-                    <li><i class="pi pi-wifi" style="color: var(--primary-color)"></i> &nbsp; <b>Estado conexión: </b>
-                    </li><br>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Marca: </b>
-                    </li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Código de
-                        Modelo: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Número de Serie
-                        Modelo: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Modelo Tipo:
-                      </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Número Serial
-                        Tipo: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Versión
-                        Firmware: </b></li>
-                    <li><i class="pi pi-sort-alt" style="color: var(--primary-color)"></i> &nbsp; <b>Tasa de Carga: </b>
-                    </li>
-                    <li><i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp; <b>Dirección: </b>
-                    </li>
-                    <li><i class="pi pi-building" style="color: var(--primary-color)"></i> &nbsp; <b>Publico: </b></li>
-                    <li><i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp; <b>Estado: </b>
-                    </li> <br>
-                  </ul>
+          <!-- OTRA ELECTROLINERA -->
+          <div class="col-12 lg:col-4 md:col-6 sm:col-12">
+            <div class="p-3 h-full">
+              <div class="level shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px">
+                <div class="font-medium text-xl mb-2" style="color: var(--primary-color-text)">
+                  {{electricStations[1]?.nameStation}}</div>
+                <div class="text-600">{{electricStations[1]?.descripcion}}</div>
+                <hr class="new my-3 mx-0 border-top-1 border-none" />
+                <div class="text-center justify-content-between lg:justify-content-center align-items-center flex-wrap">
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-qrcode mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Código QR:</span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.codeStationQR}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-wifi mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Estado conexión: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;
+                      <i class="pi pi-circle-fill" [style]="estadoHeartbeat2.severity"></i>
+                      <span style="color: var(--primary-color-text)"> {{estadoHeartbeat2.estado}}</span>
+                    </span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Marca:</span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.model.vendor}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Código de Modelo: </span>
+                    <span style="color: var(--primary-color-text)"
+                      [pTooltip]="electricStations[1]?.model.modelCode">&nbsp;{{electricStations[1]?.model.modelCode
+                      | truncate:15}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Número de Serie Modelo:</span>
+                    <span style="color: var(--primary-color-text)"
+                      [pTooltip]="electricStations[1]?.model.boxSerialNumber">&nbsp;{{electricStations[1]?.model.boxSerialNumber
+                      | truncate:15}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Modelo Tipo:</span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.model.pointModel}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Número Serial Tipo: </span>
+                    <span style="color: var(--primary-color-text)"
+                      [pTooltip]="electricStations[1]?.model.pointSerialNumber">&nbsp;{{electricStations[1]?.model.pointSerialNumber
+                      | truncate:15}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Versión Firmware: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.model.firmwareVersion}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-sort-alt mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Tasa de Carga: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.chargeRate.amount}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-map-marker mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Dirección: </span>
+                    <span style="color: var(--primary-color-text)" [pTooltip]="electricStations[1]?.direccion"
+                      tooltipPosition="bottom">&nbsp;{{electricStations[1]?.direccion | truncate:15}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-building mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Publico: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.ocppPublicAccessAllowed |
+                      formatSiNo}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Estado Puertos: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;
+                      <i class="pi pi-circle-fill" [style]="statusElectrolinera1.severity"></i>
+                      <span style="color: var(--primary-color-text)"> {{statusElectrolinera1.estado}}</span>
+                    </span>
+                  </li>
+                  <hr class="new mb-3 mx-0 border-top-1 border-none mt-auto" />
+                  <li class="flex align-items-center mb-1">
+                    <table>
+                      <thead>
+                        <tr style="color: var(--primary-color)">
+                          <th>Conector</th>
+                          <th>Usuario</th>
+                          <th>Estado</th>
+                        </tr>
+                      </thead>
+                      <tbody *ngFor="let item of conectorStatus1">
+                        <tr>
+                          <td>{{item.connector}}</td>
+                          <td [pTooltip]="item.userName">
+                            {{item.userName | truncate:15}}
+                          </td>
+                          <td>{{item.lastState}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </li>
                 </div>
-                <div class="col-6" style="text-align: left;">
-                  <ul>
-                    <li><label>{{electricStations[2]?.codeStationQR}}</label></li>
-                    <li>
-                      <div>
-                        <p-button size="small" *ngIf="estadoHeartbeat3 == 'Conectando...'"
-                          severity="warning">{{estadoHeartbeat3}}</p-button>
-                        <p-button size="small" *ngIf="estadoHeartbeat3 == 'En línea'"
-                          severity="success">{{estadoHeartbeat3}}</p-button>
-                        <p-button size="small" *ngIf="estadoHeartbeat3 == 'Offline'"
-                          severity="danger">{{estadoHeartbeat3}}</p-button>
-                      </div>
-                    </li>
-                    <li><label>{{electricStations[2]?.model.vendor}}<br></label></li>
-                    <li><label [pTooltip]="electricStations[2]?.model.modelCode ">{{electricStations[2]?.model.modelCode
-                        | truncate:15}}<br></label></li>
-                    <li><label
-                        [pTooltip]="electricStations[2]?.model.boxSerialNumber">{{electricStations[2]?.model.boxSerialNumber
-                        | truncate:15}}<br></label></li><br>
-                    <li><label>{{electricStations[2]?.model.pointModel}}<br></label></li>
-                    <li><label
-                        [pTooltip]="electricStations[2]?.model.pointSerialNumber">{{electricStations[2]?.model.pointSerialNumber
-                        | truncate:15}}<br></label></li><br>
-                    <li><label>{{electricStations[2]?.model.firmwareVersion}}<br></label></li>
-                    <li><label>{{electricStations[2]?.chargeRate.amount}}</label></li>
-                    <li><label [pTooltip]="electricStations[2]?.direccion"
-                        tooltipPosition="bottom">{{electricStations[2]?.direccion | truncate:15}}</label></li>
-                    <li><label>{{electricStations[2]?.ocppPublicAccessAllowed | formatSiNo}}</label></li>
-                    <li>
-                      <p-button size="small" *ngIf="statusElectrolinera2 == 'Available'" label="Disponible"
-                        [raised]="true" severity="success"
-                        (click)="onVerTodasElectrolineras(electricStations[2].id)"></p-button>
-                      <p-button size="small" *ngIf="statusElectrolinera2 == 'Unavailable'" label="No Disponible"
-                        [raised]="true" severity="danger"
-                        (click)="onVerTodasElectrolineras(electricStations[2].id)"></p-button>
-                    </li>
-                  </ul>
-                </div>
+                <hr class="new mb-3 mx-0 border-top-1 border-none mt-auto" />
+                <button pButton pRipple label="Ver Puertos" class="p-3 w-full mt-auto" *ngIf="electricStations[1]"
+                  (click)="onVerTodasElectrolineras(electricStations[1]?.id)"></button>
               </div>
             </div>
-            <ng-template pTemplate="footer">
-              <p-button label="Mas Información" [text]="true" icon="pi pi-chevron-right"
-                (click)="onVerTodasElectrolineras(electricStations[2]?.id)"></p-button>
-            </ng-template>
-          </p-card>
+          </div>
 
+          <!-- OTRA ELECTROLINERA -->
+          <div class="col-12 lg:col-4 md:col-6 sm:col-12">
+            <div class="p-3 h-full">
+              <div class="level shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px">
+                <div class="font-medium text-xl mb-2" style="color: var(--primary-color-text)">
+                  {{electricStations[2]?.nameStation}}</div>
+                <div class="text-600">{{electricStations[2]?.descripcion}}</div>
+                <hr class="new my-3 mx-0 border-top-1 border-none" />
+                <div class="text-center justify-content-between lg:justify-content-center align-items-center flex-wrap">
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-qrcode mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Código QR:</span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.codeStationQR}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-wifi mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Estado conexión: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;
+                      <i class="pi pi-circle-fill" [style]="estadoHeartbeat3.severity"></i>
+                      <span style="color: var(--primary-color-text)"> {{estadoHeartbeat3.estado}}</span>
+                    </span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Marca:</span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.model.vendor}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Código de Modelo: </span>
+                    <span style="color: var(--primary-color-text)"
+                      [pTooltip]="electricStations[2]?.model.modelCode">&nbsp;{{electricStations[2]?.model.modelCode
+                      | truncate:15}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Número de Serie Modelo:</span>
+                    <span style="color: var(--primary-color-text)"
+                      [pTooltip]="electricStations[2]?.model.boxSerialNumber">&nbsp;{{electricStations[2]?.model.boxSerialNumber
+                      | truncate:15}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Modelo Tipo:</span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.model.pointModel}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Número Serial Tipo: </span>
+                    <span style="color: var(--primary-color-text)"
+                      [pTooltip]="electricStations[2]?.model.pointSerialNumber">&nbsp;{{electricStations[2]?.model.pointSerialNumber
+                      | truncate:15}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Versión Firmware: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.model.firmwareVersion}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-sort-alt mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Tasa de Carga: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.chargeRate.amount}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-map-marker mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Dirección: </span>
+                    <span style="color: var(--primary-color-text)" [pTooltip]="electricStations[2]?.direccion"
+                      tooltipPosition="bottom">&nbsp;{{electricStations[2]?.direccion | truncate:15}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-building mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Publico: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.ocppPublicAccessAllowed |
+                      formatSiNo}}</span>
+                  </li>
+                  <li class="flex align-items-center mb-1">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    <span class="font-medium" style="color: var(--primary-color)">Estado Puertos: </span>
+                    <span style="color: var(--primary-color-text)">&nbsp;
+                      <i class="pi pi-circle-fill" [style]="statusElectrolinera2.severity"></i>
+                      <span style="color: var(--primary-color-text)"> {{statusElectrolinera2.estado}}</span>
+                    </span>
+                  </li>
+                  <hr class="new mb-3 mx-0 border-top-1 border-none mt-auto" />
+                  <li class="flex align-items-center mb-1">
+                    <table>
+                      <thead>
+                        <tr style="color: var(--primary-color)">
+                          <th>Conector</th>
+                          <th>Usuario</th>
+                          <th>Estado</th>
+                        </tr>
+                      </thead>
+                      <tbody *ngFor="let item of conectorStatus2">
+                        <tr>
+                          <td>{{item.connector}}</td>
+                          <td [pTooltip]="item.userName">
+                            {{item.userName | truncate:15}}
+                          </td>
+                          <td>{{item.lastState}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </li>
+                </div>
+                <hr class="new mb-3 mx-0 border-top-1 border-none mt-auto" />
+                <button pButton pRipple label="Ver Puertos" class="p-3 w-full mt-auto" *ngIf="electricStations[2]"
+                  (click)="onVerTodasElectrolineras(electricStations[2]?.id)"></button>
+              </div>
+            </div>
+          </div>
 
         </div>
       </div>
-
+      <!--  -->
       <div *ngIf="!serviceResponse">
         <app-not-found [mensajeNotFound]="mensaje" (datosEnviados)="getElectricStation()"></app-not-found>
         <br> <br>
       </div>
-
-
     </div>
   </p-card>
 </div>
