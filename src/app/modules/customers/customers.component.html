@@ -1,3 +1,6 @@
+<p-confirmDialog
+  [style]="{width: '50vw'}"></p-confirmDialog>
+
 <div class="container">
   <div class="card">
 
@@ -82,29 +85,16 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
           <tr>
             <td style="text-align:center; vertical-align:middle">{{rowIndex + 1}}</td>
-            <!-- <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['names']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['lastName']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['motherLastName']}}</td> -->
             <td style="text-align:left; vertical-align:middle">{{rowData['electronicMail']}}</td>
-
             <td style="text-align:right; vertical-align:middle">{{rowData['lastRechargeAmount'] | numberDecimal:2}}</td>
             <td style="text-align:right; vertical-align:middle">{{rowData['remainingCredit'] | numberDecimal:2}}</td>
             <td style="text-align:left; vertical-align:middle">{{rowData['lastChargingStation']}}</td>
 
-            <!-- <td *ngIf="rowData['paymentTransactionsElectrolineraList'][0]"
-              style="text-align:right; vertical-align:middle">
-              {{rowData['paymentTransactionsElectrolineraList'][0].amount | numberDecimal:2}}</td>
-            <td *ngIf="!rowData['paymentTransactionsElectrolineraList'][0]"></td>
-
-            <td *ngIf="rowData['chargeClientList'][0]" style="text-align:right; vertical-align:middle">
-              {{rowData['chargeClientList'][0].amount | numberDecimal:2}}</td>
-            <td *ngIf="!rowData['chargeClientList'][0]"></td> -->
-
             <td style="text-align:center; vertical-align:middle">
               <div *ngIf="esSuperAdmin">
-                <p-confirmPopup></p-confirmPopup>
-                <p-inputSwitch [(ngModel)]="rowData['enabled']" (onChange)="confirmSwitchChange($event, rowData)">
-                </p-inputSwitch><br>
+                <p-inputSwitch [(ngModel)]="rowData['enabled']"
+                  (onChange)="confirmSwitchChange($event, rowData)"></p-inputSwitch>
+                <br>
                 <label *ngIf="rowData['enabled']">Habilitado</label>
                 <label *ngIf="!rowData['enabled']">Deshabilitado</label>
               </div>

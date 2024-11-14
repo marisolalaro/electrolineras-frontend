@@ -245,7 +245,8 @@ export default class CustomersComponent {
     this.previousState = item.enabled;
     this.confirmationService.confirm({
       target: event.originalEvent.target,
-      message: `¿${texto} a ${item.lastName} ${item.motherLastName} ${item.names} ?`,
+      header: 'Confirmación',
+      message: `¿${texto} a ${item.electronicMail} ?`,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         item.enabled = !this.previousState;

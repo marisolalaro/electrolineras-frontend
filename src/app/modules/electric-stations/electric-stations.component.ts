@@ -480,6 +480,7 @@ export default class ElectricStationsComponent implements OnInit {
       target: event.originalEvent.target,
       message: `¿${texto} la electrolinera ${item.nameStation}?`,
       icon: 'pi pi-exclamation-triangle',
+      header: 'Confirmación',
       acceptLabel: 'Si',
       rejectLabel: 'No',
       accept: () => {

@@ -161,6 +161,7 @@ export default class PasswordComponent {
     this.previousState = item.activo;
     this.confirmationService.confirm({
       target: event.originalEvent.target,
+      header: 'Confirmación',
       message: `¿${texto} contraseña de fecha ${item.fechaRegistro} ?`,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

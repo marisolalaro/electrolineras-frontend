@@ -158,6 +158,7 @@ export default class BrandComponent {
     this.confirmationService.confirm({
       target: event.originalEvent.target,
       message: `¿${texto} modelo ${item.modelCode} ?`,
+      header: 'Confirmación',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         item.activo = !this.previousState;

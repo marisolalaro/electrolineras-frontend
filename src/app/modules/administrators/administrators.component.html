@@ -1,4 +1,7 @@
-<div class="container">
+
+<p-confirmDialog
+  [style]="{width: '50vw'}"></p-confirmDialog>
+  <div class="container">
   <div class="card">
     <div class="row">
       <h3><b>{{componentTitle.mainTitle}}</b></h3>
@@ -82,7 +85,7 @@
              
             <td style="text-align:center; vertical-align:middle">
               <div *ngIf="esSuperAdmin">
-                <p-confirmPopup></p-confirmPopup>
+                <!-- <p-confirmPopup></p-confirmPopup> -->
                 <p-inputSwitch [(ngModel)]="rowData['enabled']" (onChange)="confirmSwitchChange($event, rowData)">
                 </p-inputSwitch><br>
                 <label *ngIf="rowData['enabled']">Habilitado</label>
