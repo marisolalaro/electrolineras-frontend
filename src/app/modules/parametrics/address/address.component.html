@@ -1,0 +1,159 @@
+<div class="container">
+    <div class="card">
+        <div class="row">
+            <h3><b>{{componentTitle.mainTitle}}</b></h3>
+            <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;" *ngIf="serviceResponse">
+                <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllAddress()" pTooltip="Actualizar"
+                    tooltipPosition="left"></p-button> &nbsp;
+                <button pButton pRipple class="mat-raised-button" (click)="actionDialog(true, 'create')">
+                    Crear Nuevo Registro</button>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="serviceResponse">
+            <p-table responsiveLayout="stack" #dt1 [value]="addresses" dataKey="id"
+                styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
+                [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES"
+                currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros"
+                (sortFunction)="customSort($event)" [customSort]="true" width="100%">
+                <ng-template pTemplate="caption">
+                    <div class="flex">
+                        <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
+                            (click)="clearFilters(dt1) ; getAllAddress()"></button>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">#</th>
+                        <th style="width:15%; text-align:center; vertical-align:middle" pSortableColumn="city">
+                            Ciudad<p-sortIcon field="city"></p-sortIcon></th>
+                        <th style="width:15%; text-align:center; vertical-align:middle" pSortableColumn="district">
+                            Distrito<p-sortIcon field="district"></p-sortIcon></th>
+
+                        <th style="width:10%; text-align:center; vertical-align:middle">Opciones</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="text-align:center; vertical-align:middle">{{rowIndex + 1}}</td>
+                        <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['city']}}</td>
+                        <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['district']}}
+                        </td>
+                        <td style="text-align:center; vertical-align:middle">
+                            <i class="pi pi-fw pi-pencil" style="font-size: 1.5rem; color: var(--primary-color);"
+                                data-bs-toggle="modal" data-bs-target="#editModal" (click)="selectedEdit(rowData)"
+                                pTooltip="Editar"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <div *ngIf="!serviceResponse">
+            <app-not-found [mensajeNotFound]="mensaje" (datosEnviados)="getAllAddress()"></app-not-found>
+            <br> <br>
+        </div>
+
+        <!-- modal Crear nuevo -->
+        <section class="dialogCrear">
+            <p-dialog header={{titlesGlobales.create}} [(visible)]="dialogRegistro" [style]="{width: '50vw'}"
+                class="p-fluid" [dismissableMask]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+                [draggable]="false" [resizable]="false">
+                <ng-template pTemplate="content">
+                    <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
+
+                        <div class="form-group field">
+                            <label for="city">{{labelsGlobales.ciudad}}</label>
+                            <input type="text" pInputText required formControlName="city"
+                                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['city'].invalid}"
+                                oninput="this.value = this.value.toUpperCase()" />
+                            <div *ngIf="submitted && formRegistro.controls['city'].invalid">
+                                <small class="p-error" *ngIf="formRegistro.get('city')?.hasError('required')">
+                                    {{messagesGlobales.requiredField}}
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group field">
+                            <label for="district">{{labelsGlobales.distrito}}</label>
+                            <input type="text" pInputText required formControlName="district"
+                                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['district'].invalid}"
+                                oninput="this.value = this.value.toUpperCase()" />
+                            <div *ngIf="submitted && formRegistro.controls['district'].invalid">
+                                <small class="p-error"
+                                    *ngIf="formRegistro.get('district')?.hasError('required')">
+                                    {{messagesGlobales.requiredField}}
+                                </small>
+                            </div>
+                        </div>
+
+                    </form>
+                </ng-template>
+
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
+                        class="p-button-secondary p-button-rounded mr-2"
+                        (click)="actionDialog(false, 'create')"></button>
+                    <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check"
+                        class="p-button-rounded mr-2" (click)="onValidaFormulario()"></button>
+                </ng-template>
+            </p-dialog>
+        </section>
+        <!-- modal Crear nuevo -->
+
+        <!-- modal Editar -->
+        <section class="dialogEdit">
+            <p-dialog header={{titlesGlobales.edit}} [(visible)]="dialogEdit" [style]="{width: '50vw'}" class="p-fluid"
+                [dismissableMask]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [draggable]="false"
+                [resizable]="false">
+                <ng-template pTemplate="content">
+                    <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
+
+                        <div class="form-group field">
+                            <label for="city">{{labelsGlobales.ciudad}}</label>
+                            <input type="text" pInputText required formControlName="city"
+                                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['city'].invalid}"
+                                oninput="this.value = this.value.toUpperCase()" />
+                            <div *ngIf="submitted && formRegistro.controls['city'].invalid">
+                                <small class="p-error" *ngIf="formRegistro.get('city')?.hasError('required')">
+                                    {{messagesGlobales.requiredField}}
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group field">
+                            <label for="district">{{labelsGlobales.distrito}}</label>
+                            <input type="text" pInputText required formControlName="district"
+                                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['district'].invalid}"
+                                oninput="this.value = this.value.toUpperCase()" />
+                            <div *ngIf="submitted && formRegistro.controls['district'].invalid">
+                                <small class="p-error"
+                                    *ngIf="formRegistro.get('district')?.hasError('required')">
+                                    {{messagesGlobales.requiredField}}
+                                </small>
+                            </div>
+                        </div>
+
+                    </form>
+                </ng-template>
+
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
+                        class="p-button-secondary p-button-rounded mr-2" (click)="actionDialog(false, 'edit')"></button>
+                    <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check"
+                        class="p-button-rounded mr-2" (click)="onValidaFormulario()"></button>
+                </ng-template>
+            </p-dialog>
+        </section>
+        <!-- modal Editar -->
+
+    </div>
+</div>
+
+<p-toast></p-toast>
+<p-blockUI [blocked]="loading">
+    <div class="loading-container">
+        <i class="pi pi-spin pi-spinner" style="font-size: 3em"></i>
+        <p>Cargando...</p>
+    </div>
+</p-blockUI>

@@ -8,7 +8,7 @@
         <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllElectricStations()" pTooltip="Actualizar"
           tooltipPosition="left"></p-button> &nbsp;
         <button *ngIf="esSuperAdmin" pButton pRipple class="mat-raised-button"
-          (click)="getTasaDeCarga();getModels();openDialog(true, false, 'crear')">Nuevo
+          (click)="getTasaDeCarga(); getModels(); getAddress(); openDialog(true, false, 'crear')">Nuevo
           Registro</button>
       </div>
     </div>
@@ -68,7 +68,7 @@
           <tr>
             <td style="text-align:center; vertical-align:middle">{{rowIndex + 1}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['nameStation']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['direccion']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['address.district']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['descripcion']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['latitude']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['longitude']}}</td>
@@ -123,6 +123,7 @@
         [resizable]="false">
         <ng-template pTemplate="content">
           <form class="row g-2" [formGroup]="formRegistro">
+
             <div class="form-group field">
               <label for="name">{{labelsGlobales.nameStation}}</label>
               <input type="text" pInputText id="nameStation" required formControlName="nameStation"
@@ -135,6 +136,18 @@
             </div>
 
             <div class="form-group field">
+              <label>{{labelsGlobales.address}}</label>
+              <p-autoComplete [(ngModel)]="selectedAddress" [dropdown]="true" [suggestions]="filteredAddresses"
+                (completeMethod)="filterAddress($event)" field="district" id="address" formControlName="address"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['address'].invalid}"></p-autoComplete>
+              <div *ngIf="submitted && formRegistro.controls['address'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('address')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <!-- <div class="form-group field">
               <label for="direccion">{{labelsGlobales.address}}</label>
               <input type="text" pInputText id="direccion" required formControlName="direccion"
                 [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['direccion'].invalid}" />
@@ -143,7 +156,7 @@
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>
-            </div>
+            </div> -->
 
             <div class="form-group field">
               <label for="descripcion">{{labelsGlobales.description}}</label>
@@ -244,6 +257,18 @@
             </div>
 
             <div class="form-group field">
+              <label>{{labelsGlobales.address}}</label>
+              <p-autoComplete [(ngModel)]="selectedAddress" [dropdown]="true" [suggestions]="filteredAddresses"
+                (completeMethod)="filterAddress($event)" field="district" id="address" formControlName="address"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['address'].invalid}"></p-autoComplete>
+              <div *ngIf="submitted && formRegistro.controls['address'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('address')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+            
+            <!-- <div class="form-group field">
               <label for="direccion">{{labelsGlobales.address}}</label>
               <input type="text" pInputText id="direccion" required formControlName="direccion"
                 [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['direccion'].invalid}" />
@@ -252,7 +277,7 @@
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>
-            </div>
+            </div> -->
 
             <div class="form-group field">
               <label for="descripcion">{{labelsGlobales.description}}</label>
@@ -553,7 +578,7 @@
                   </li>
                   <li><label>{{electricStation.nameStation}}</label></li>
                   <li><label>{{electricStation.descripcion}}</label></li>
-                  <li><label>{{electricStation.direccion}}</label></li>
+                  <li><label>{{electricStation.address.district}}</label></li>
                   <li><label>{{electricStation.latitude}}</label></li>
                   <li><label>{{electricStation.longitude}}</label></li>
                   <li><label>{{electricStation.model.vendor}}</label></li>

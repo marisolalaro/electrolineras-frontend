@@ -22,13 +22,15 @@ import { PortConnectionModel } from 'src/app/core/model/port-connection';
 import { ElectricStationModel } from 'src/app/core/model/electric-station';
 // services
 import { PortConnectionService } from './services/port-connector.service';
+import { BrandService } from '../parametrics/brand/services/brand.service';
 import { ElectricStationsService } from './services/electric-stations.service';
+import { AddressService } from '../parametrics/address/services/address.service';
 import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
 import { Base64ToImageService } from '../../core/services/base-64-to-image.service';
-import { BrandService } from '../parametrics/brand/services/brand.service';
 import { ConnectorStatusModel } from 'src/app/core/model/charging-connector-status';
 import { ConnectorStatusService } from 'src/app/core/services/connector-status.service';
 import { ModelElectricStation } from 'src/app/core/model/model-electric-station';
+import { Address } from 'src/app/core/model/address';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -90,12 +92,14 @@ export default class ElectricStationsComponent implements OnInit {
 
   // variables para el select
   public selectedModel: any;
+  public selectedAddress: any;
   public selectedTasaCarga: any;
   public selectedNombrePuerto: any;
   public models: any[] | undefined;
   public tasasCargaSelect: any[] | undefined;
   public nombresPuertosSelect: any[] | undefined;
   public filteredModels: any[] | undefined;
+  public filteredAddresses: any[] | undefined;
   public filteredTasaCarga: any[] | undefined;
   public filteredNombrePuerto: any[] | undefined;
 
@@ -106,6 +110,7 @@ export default class ElectricStationsComponent implements OnInit {
   public mensaje: string = messages.noConexion;
   public conectorStatus: ConnectorStatusModel[] = [];
   public electricStations: ElectricStationModel[] = [];
+  public addresses: Address[] = [];
   public formRegistro: FormGroup = this.createFormGroup();
   public componentTitle: any = mainTitles['electrolineras'];
   public formRegistroConector: FormGroup = this.createFormConector();
@@ -123,6 +128,7 @@ export default class ElectricStationsComponent implements OnInit {
   constructor(
     public global: Global,
     public brandService: BrandService,
+    public addressService: AddressService,
     public tasaCargaService: ParTasaCargaService,
     public base64ImageService: Base64ToImageService,
     private confirmationService: ConfirmationService,
@@ -195,14 +201,29 @@ export default class ElectricStationsComponent implements OnInit {
     this.filteredModels = filtered;
   }
 
+  filterAddress(event: AutoCompleteCompleteEvent) {
+    // aqui poner servicio no disponoble
+    let filtered: any[] = [];
+    let query = event.query;
+    for (let i = 0; i < (this.addresses as any[]).length; i++) {
+      let addres = (this.addresses as any[])[i];
+      if (addres.district.indexOf(query.toLowerCase()) == 0) {
+        filtered.push(addres);
+      }
+    }
+    this.filteredAddresses = filtered;
+  }
+
   onSelecetedEdit(item) {
     this.electricStation = item;
     this.formRegistro.patchValue(item);
     this.selectedTasaCarga = item.chargeRate;
     this.selectedModel = item.model;
+    this.selectedAddress = item.address;
     this.dialogEdit = true;
     this.getTasaDeCarga();
     this.getModels();
+    this.getAddress();
   }
   
   getTasaDeCarga(): void {
@@ -217,6 +238,14 @@ export default class ElectricStationsComponent implements OnInit {
     this.brandService.getAllActives().subscribe(
       (resp: any) => {
         this.models = resp.data;
+      }
+    )
+  }
+
+  getAddress(): void {
+    this.addressService.getAll().subscribe(
+      (resp: any) => {
+        this.addresses = resp.data;
       }
     )
   }
@@ -249,7 +278,7 @@ export default class ElectricStationsComponent implements OnInit {
       id: new FormControl(''),
       nameStation: new FormControl('', [Validators.required]),
       descripcion: new FormControl('', [Validators.required]),
-      direccion: new FormControl('', [Validators.required]),
+      address: new FormControl('', [Validators.required]),
       latitude: new FormControl('', [Validators.required]),
       longitude: new FormControl('', [Validators.required]),
       chargeRate: new FormControl('', [Validators.required]),
@@ -273,13 +302,9 @@ export default class ElectricStationsComponent implements OnInit {
     var registro: ElectricStationModel = {
       ...this.formRegistro.value,
     };
-    registro.chargeRate = {
-      id: this.selectedTasaCarga.id
-    };
-    registro.model = new ModelElectricStation();
-    registro.model.id = this.selectedModel.id
-    registro.activo = true;
-    registro.enabled = true;
+    registro.chargeRate = this.selectedTasaCarga.id;
+    registro.model= this.selectedModel.id;
+    registro.address = this.selectedAddress.id;
     this.electricStationsService.create(registro).subscribe(
       (resp: any) => {
         this.openDialog(false, false, 'crear');
@@ -319,11 +344,10 @@ export default class ElectricStationsComponent implements OnInit {
     var registro: ElectricStationModel = {
       ...this.formRegistro.value,
     };
-    registro.chargeRate = {
-      id: this.selectedTasaCarga.id
-    };
-    registro.model = new ModelElectricStation();
-    registro.model.id = this.selectedModel.id
+    registro.chargeRate = this.selectedTasaCarga.id;
+    registro.model = this.selectedModel.id
+    registro.direccion = this.selectedAddress.district
+    registro.address = this.selectedAddress.id;
     registro.activo = true;
     registro.enabled = true;
     this.electricStationsService.update(registro).subscribe(

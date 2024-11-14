@@ -152,6 +152,17 @@ export const estadosConectores: any = {
 
 }
 
+export const parametricaAddress: any = {
+  // estados conectores enviado de la electrolinera
+  ciudad: 'Ciudad',
+  distrito: 'Distrito',
+  pais: 'País',
+}
+export const accessCode: any = {
+  // estados conectores enviado de la electrolinera
+  accessCode: 'Código de acceso'
+}
+
 export const mainTitles: IMainTitles = {
   // menu Horizontal
   clientes: {
@@ -199,5 +210,13 @@ export const mainTitles: IMainTitles = {
   modelos: {
     mainTitle: 'Modelos de Electrolineras',
     secondaryTitle: 'Modelo'
+  },
+  direcciones: {
+    mainTitle: 'Direcciones',
+    secondaryTitle: 'Dirección'
+  },
+  contrasenias: {
+    mainTitle: 'Constraseñas',
+    secondaryTitle: 'Contraseña'
   },
 }

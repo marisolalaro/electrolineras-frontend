@@ -104,3 +104,41 @@ div.alineacion {
   align-items: center;
   /* Centrar el texto debajo del botón */
 }
+
+.button-especial {
+  background-color: var(--color-especial);
+  border-color: var(--color-especial);
+  color: var(--color-white);
+  border-radius: 55px;
+}
+
+/* Estilo global o específico del componente */
+:host ::ng-deep .p-splitbutton {
+  background-color: var(--color-especial); /* o cualquier color que desees */
+  color: white; /* color del texto */
+  border: none; /* sin borde si prefieres */
+  border-color: var(--color-especial);
+}
+
+:host ::ng-deep .p-splitbutton .p-splitbutton-menubutton {
+  background-color: var(--color-especial); /* color secundario para el botón de menú */
+  color: white;
+  border-color: var(--color-especial);
+}
+
+:host ::ng-deep .p-splitbutton .p-splitbutton-defaultbutton, .p-splitbutton.p-button-rounded>.p-splitbutton-defaultbutton.p-button, .p-splitbutton.p-button-outlined>.p-splitbutton-defaultbutton.p-button {
+  flex: 1 1 auto;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 0 none;
+  background-color: var(--color-especial);
+  border-color: var(--color-especial);
+}
+
+// .estilo-1 {
+//   z-index: 10;
+// }
+// para que muestre dentro de una tabla sin mostrar el scroll
+:host ::ng-deep .p-splitbutton-menu {
+  z-index: 1000; /* Ajusta según sea necesario */
+}

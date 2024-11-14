@@ -25,12 +25,10 @@ export class EndPoins {
     static enabledStation = "/enableStation";
     static disableStation = "/disableStation";
     static updateVisibility = "/updateVisibility";
+    static registerChargingStation = "/registerChargingStation";
 
     // tasa de carga
     static chargeRate = "/chargeRate";
-
-    // modelo de la electrolinera
-    static models = "/models";
     
     // administradores
     static administration = "/adminList";
@@ -76,11 +74,20 @@ export class EndPoins {
 
     // paremetricas
     // models
+    static models = "/models";
     static listar = "/list"
     static todos = "/all"
     static reactivar = "/reactivar"
+    
+    // address
+    static address = "/address";
 
     // connector status
     static connectorStatus = "/connectorStatusOcpp"
     static byIdChargingStation = "/byIdChargingStation"
+
+    // confirmacion de contraseña
+    static accessCode = "/accessCode"
+    static validate = "/validate"
+    static restoreById = "/restoreById"
 };

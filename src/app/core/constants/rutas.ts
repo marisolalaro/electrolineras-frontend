@@ -13,4 +13,6 @@ export const rutas: any =
     rutaReportes: 'reports',
     rutaParametricas: 'parametrics',
     rutaModelo: 'brand',
+    rutaAddress: 'address',
+    rutaPassword: 'password',
 }

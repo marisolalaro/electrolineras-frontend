@@ -8,10 +8,10 @@
       <div class="row">
         <h3><b>ELECTROLINERA {{electricStation.nameStation}}</b></h3>
         <div class="alineacion">
-          <div class="button-container" *ngIf="esSuperAdmin">
-            <p-button icon="pi pi-key" [rounded]="true" (click)="dialogPassword()" pTooltip="Botones de Emergencia"
-              tooltipPosition="left"></p-button>
-            <p>Mas Opciones</p>
+          <div class="button-container" *ngIf="!esSuperAdmin">
+            <button pButton icon="pi pi-exclamation-triangle" (click)="dialogPassword()"
+              pTooltip="Botones de Emergencia" tooltipPosition="left" class="button-especial"></button>
+            <p>Detención de Emergencia</p>
           </div>
           <div class="button-container">
             <p-button icon="pi pi-refresh" [rounded]="true" (click)="getOneElectricStation()" pTooltip="Actualizar"
@@ -30,7 +30,7 @@
             [tableStyle]="{ 'min-width': '50rem' }" responsiveLayout="stack">
             <ng-template pTemplate="header">
               <tr>
-                <th style="width:16%; text-align:center; vertical-align:middle">Nombre</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Nombre</th>
                 <th style="width:7%; text-align:center; vertical-align:middle">Max Voltaje (V)</th>
                 <th style="width:7%; text-align:center; vertical-align:middle">Max Amperaje (A)</th>
                 <th style="width:7%; text-align:center; vertical-align:middle">Velocidad de Carga (kW)</th>
@@ -98,7 +98,7 @@
                 </td>
                 <td style="text-align:center; vertical-align:middle">
                   <button pButton *ngIf="item.lastState == 'Available'" label="Disponible"
-                    class="button-available"></button>
+                    class="button-available" size="small"></button>
                   <button pButton *ngIf="item.lastState == 'Preparing'" label="Preparando"
                     class="button-preparing"></button>
 
@@ -124,24 +124,38 @@
                   </div>
                   <div *ngIf="item.lastState">
                     <!-- CASO1 -->
-                    <i class="pi pi-stop-circle" style="color: var(--color-detener); font-size: 1.5rem"
-                      pTooltip="Detener la carga de Usuario" (click)="onDetieneCargaPorUsuario($event, item)"
+                    <p-button label="Detener carga Usuario" size="small" styleClass="color: var(--color-detener); font-size: 1.5rem" (click)="onDetieneCargaPorUsuario($event, item)" *ngIf="item.lastState != 'Unavailable'"></p-button>
+                    <!-- Detener Carga Usuario
+                    <i class="pi pi-stop-circle" 
+                      pTooltip="Detener la carga de Usuario" 
                       *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Unavailable'">
                     </i>
                     <i class="pi pi-stop-circle" style="color: var(--color-detener); font-size: 1.5rem"
                       pTooltip="Detener la carga de Usuario" (click)="onDetieneCargaPorUsuario($event, item)"
                       *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Unavailable'">
-                    </i>&nbsp;
+                    </i>&nbsp; -->
+
+                    <!-- botones de emergencia -->
+                    <!-- <div class="card flex">
+                      <p-menu #menu [model]="items" [popup]="true"></p-menu>
+                      <button pButton type="button" (click)="menu.toggle($event)" icon="pi pi-bars" label="Show"></button>
+                    </div> -->
+
+                    <div class="card flex justify-content-center" *ngIf="habilitaMasOpciones || esSuperAdmin">
+                      <p-toast></p-toast>
+                      <p-splitButton label="Mas Opciones" (onDropdownClick)="itemSeleccionado(item)" [model]="items" appendTo="body" styleClass="p-button-sm mr-2 mb-2 button-especial"></p-splitButton>
+                    </div>
+
                     <!-- CASO2 -->
-                    <i class="pi pi-times" *ngIf="habilitaMasOpciones"
+                    <!-- <i class="pi pi-times" *ngIf="habilitaMasOpciones || esSuperAdmin"
                       style="color: var(--color-interrumpir); font-size: 1.5rem"
                       pTooltip="Detener la carga de Electrolinera" (click)="onDetieneCargaElectrolinera(item)">
-                    </i>&nbsp;
+                    </i>&nbsp; -->
                     <!-- CASO3 -->
-                    <i class="pi pi-history" *ngIf="habilitaMasOpciones"
+                    <!-- <i class="pi pi-history" *ngIf="habilitaMasOpciones || esSuperAdmin"
                       style="color: var(--color-interrumpir); font-size: 1.5rem"
                       pTooltip="Desconectar Usuario Electrolinera" (click)="onDesvinculaUsuarioElectrolinera(item)">
-                    </i>&nbsp;
+                    </i>&nbsp; -->
                   </div>
                 </td>
               </tr>
@@ -225,7 +239,7 @@
       </div>
 
       <ng-template pTemplate="footer">
-        <p>Para habilitar mas acciones a los conectores</p>
+        <p>Solicitar contraseña al administrador</p>
         <p-button icon="pi pi-check" (click)="validaformulariodialog()" label="Ok"
           styleClass="p-button-text"></p-button>
       </ng-template>

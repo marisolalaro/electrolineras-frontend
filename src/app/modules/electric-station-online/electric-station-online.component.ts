@@ -4,6 +4,7 @@ import { ConfirmationService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ConfirmEventType } from 'primeng/api';
+import { MenuItem } from 'primeng/api';
 // librerias
 import { Subscription } from 'rxjs';
 // cores
@@ -26,6 +27,8 @@ import { MobileService } from './services/mobile.service';
 import { Global } from 'src/app/core/variables/globales';
 import { interval } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { ValidatePasswordService } from './services/validate-password.service';
+import { ChargingConnector } from 'src/app/core/model/charging-connector';
 
 @Component({
   standalone: true,
@@ -49,7 +52,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   // variables de control
   public previousState: boolean;
   public loading: boolean = true;
-  public detalle: boolean = false;
+  public detalle: boolean = true;
   public esSuperAdmin: boolean = false;
   public serviceResponse: boolean = true;
   public componenteVisible: boolean = false;
@@ -66,6 +69,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   public imagenQR: string | null = null;
   // usuariosConector1 = [];
   // usuariosConector2 = [];
+  public conector: ChargingConnector = new ChargingConnector()
   public habilitaMasOpciones: boolean = false;
   public visibleDialogPassword: boolean = false;
   public mensaje: string = messages.noConexion;
@@ -86,6 +90,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   public conector1: MeterValueModel[] = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
   public conector2: MeterValueModel[] = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
   public iconClass: string = 'pi pi-eye-slash';
+  items: MenuItem[];
 
   constructor(
     public global: Global,
@@ -96,6 +101,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
     private confirmationService: ConfirmationService,
     private websocketService: WebsocketMedidorService,
     private connectorStatusService: ConnectorStatusService,
+    private validatePasswordService: ValidatePasswordService,
     private electricStationsService: ElectricStationsService,
     private clientElectricStationsService: ClientElectricStationsService,
   ) { }
@@ -154,10 +160,29 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
     return new Promise((resolve) => {
       this.id = +this.route.snapshot.paramMap.get('id');
       this.esSuperAdmin = this.global.getEsSuperAdmin();
+      this.items = [
+        {
+            label: 'Desvincular Usuario',
+            command: () => {
+                this.onDesvinculaUsuarioElectrolinera(this.conector);
+            }
+        },
+        {
+            label: 'Detener Carga',
+            command: () => {
+                this.onDetieneCargaElectrolinera(this.conector);
+            }
+        },
+        { separator: true },
+    ];
+
       resolve(true);
     })
   }
 
+  itemSeleccionado(item) {
+    this.conector = JSON.parse(JSON.stringify(item))
+  }
   getMeterValues() {
     // console.log(1);
     return new Promise((resolve) => {
@@ -224,7 +249,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       }
     );
   }
- // TODO
+  // TODO
   clienteCargando() {
     return new Promise((resolve) => {
       if (this.clientChargingStation.length > 0) {
@@ -335,9 +360,9 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       message: `¿${texto} la visibilidad para los usuarios clientes ?`,
       header: 'Confirmación',
       icon: 'pi pi-exclamation-triangle',
-      acceptIcon:"none",
-      rejectIcon:"none",
-      rejectButtonStyleClass:"p-button-text",
+      acceptIcon: "none",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-text",
       accept: () => {
         item.visibility = !this.previousState;
         if (!item.visibility) {
@@ -377,9 +402,9 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       message: 'Liberar conector ' + itemConector.id + ' y liberar usuario ' + cliente.userName + '?',
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación',
-      acceptIcon:"none",
-      rejectIcon:"none",
-      rejectButtonStyleClass:"p-button-text",
+      acceptIcon: "none",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-text",
       accept: () => {
         this.mobileService.liberarTransaccionUsuario(datoselectrolinera)
           .subscribe((resp: any) => {
@@ -406,9 +431,9 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       message: 'Detener la transacción del conector ' + itemConector.id + '?',
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación',
-      acceptIcon:"none",
-      rejectIcon:"none",
-      rejectButtonStyleClass:"p-button-text",
+      acceptIcon: "none",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-text",
       accept: () => {
         this.mobileService.detenerCargaElectrolinera(datoselectrolinera)
           .subscribe((resp: any) => {
@@ -432,9 +457,9 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       message: 'Detener la carga del usuario ' + cliente.userName + '?',
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación',
-      acceptIcon:"none",
-      rejectIcon:"none",
-      rejectButtonStyleClass:"p-button-text",
+      acceptIcon: "none",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-text",
       accept: () => {
         this.clientElectricStationsService.detenerCargaClient(cliente.idClientUser)
           .subscribe((resp: any) => {
@@ -463,15 +488,48 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
 
   validaformulariodialog() {
     this.verificaContrasenia()
-      .then(() => {
-        this.habilitaMasOpciones = true;
-        this.visibleDialogPassword = false;
+      .then((verificado) => {
+        if (verificado) {
+          return this.onValidaPassword();
+        } else {
+          return false;
+        }
       })
+      .then((verificado) => {
+        if (verificado) {
+          this.habilitaMasOpciones = true;
+          this.visibleDialogPassword = false;
+        }
+      })
+  }
+
+  onValidaPassword() {
+    return new Promise((resolve) => {
+      this.validatePasswordService.validate(this.value)
+        .subscribe((resp: any) => {
+          if (resp) {
+            if (resp.message == 'Acceso concedido') {
+              resolve(true);
+            } else {
+              this.messageService.add({ severity: 'info', detail: 'Acceso Denegado' });
+              resolve(false);
+            }
+          } else {
+            resolve(false);
+          }
+        }, err => {
+          resolve(false);
+        });
+    });
   }
 
   verificaContrasenia() {
     return new Promise((resolve) => {
-      resolve(true)
+      if (this.value.trim() != '') {
+        resolve(true)
+      } else {
+        resolve(false)
+      }
     });
   }
 
@@ -481,9 +539,9 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       message: 'Deshabilitar mas Opciones?',
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación',
-      acceptIcon:"none",
-      rejectIcon:"none",
-      rejectButtonStyleClass:"p-button-text",
+      acceptIcon: "none",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-text",
       accept: () => {
         this.habilitaMasOpciones = false;
       },

@@ -24,7 +24,7 @@ export class ElectricStationsService {
   }
 
   create(electricStation: ElectricStationModel) {
-    return this.http.post(this.apiService, electricStation);
+    return this.http.post(this.apiService + EndPoins.registerChargingStation, electricStation);
   }
 
   update(electricStation: ElectricStationModel) {

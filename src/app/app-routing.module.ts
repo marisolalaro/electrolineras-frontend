@@ -47,9 +47,18 @@ const routes: Routes = [
         path: rutas.rutaReportes,
         loadComponent: () => import('./modules/reportes/reportes.component'),
       },
+      // parametricas
       {
         path: rutas.rutaParametricas + '/' + rutas.rutaModelo,
         loadComponent: () => import('./modules/parametrics/brand/brand.component'),
+      },
+      {
+        path: rutas.rutaParametricas + '/' + rutas.rutaAddress,
+        loadComponent: () => import('./modules/parametrics/address/address.component'),
+      },
+      {
+        path: rutas.rutaParametricas + '/' + rutas.rutaPassword,
+        loadComponent: () => import('./modules/parametrics/password/password.component'),
       },
     ]
   },
