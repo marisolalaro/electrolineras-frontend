@@ -28,7 +28,7 @@ export class ElectricStationsService {
   }
 
   update(electricStation: ElectricStationModel) {
-    return this.http.put(this.apiService, electricStation)
+    return this.http.put(this.apiService + EndPoins.updateChargingStation, electricStation)
   }
 
   getForDashboard() {

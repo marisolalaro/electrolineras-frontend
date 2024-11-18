@@ -26,6 +26,8 @@ export class EndPoins {
     static disableStation = "/disableStation";
     static updateVisibility = "/updateVisibility";
     static registerChargingStation = "/registerChargingStation";
+    static updateChargingStation = "/updateChargingStation";
+
 
     // tasa de carga
     static chargeRate = "/chargeRate";

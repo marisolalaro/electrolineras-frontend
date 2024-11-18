@@ -87,8 +87,8 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   // websocket
   public messages: string[] = [];
   private meterValuesSubscription: Subscription;
-  public conector1: MeterValueModel[] = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
-  public conector2: MeterValueModel[] = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
+  public conector1: MeterValueModel[] = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(),new MeterValueModel() ];
+  public conector2: MeterValueModel[] = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(),new MeterValueModel() ];
   public iconClass: string = 'pi pi-eye-slash';
   items: MenuItem[];
 
@@ -183,34 +183,26 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   itemSeleccionado(item) {
     this.conector = JSON.parse(JSON.stringify(item))
   }
+
   getMeterValues() {
-    // console.log(1);
     return new Promise((resolve) => {
-      // console.log(2);
       this.websocketService.initializeWebSocketConnection(this.websocketUrl);
       this.meterValuesSubscription = this.websocketService.getMeterValues()
-        .subscribe(messages => {
-          var message = JSON.parse(messages);
-          // var message = messages;
-          // console.log(JSON.stringify(message) );
-          // console.log('ES sesion index ', this.electricStation.sessionIndex);
-          // console.log('Meter value sesion index ', message.sessionIndex);
-          this.conector1 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
-          this.conector2 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
+      .subscribe(messages => {
+        // var message = JSON.parse(messages);
+        var message = messages;
+        // var message = messages;
           if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 1) {
-            // console.log('ingreso a valores del conector 1');
             this.conector1 = JSON.parse(JSON.stringify(message.sampleValues));
             this.conector1.push(this.obtieneVelocidadCarga(this.conector1[0].value));
             this.conector1.push(this.obtienePotenciaActual(this.conector1[1].value));
           }
           if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 2) {
-            // console.log('ingreso a valores del conector 2');
             this.conector2 = JSON.parse(JSON.stringify(message.sampleValues));
             this.conector2.push(this.obtieneVelocidadCarga(this.conector2[0].value));
             this.conector2.push(this.obtienePotenciaActual(this.conector2[1].value));
           }
         }, err => {
-          // console.log(err);
         });
       // devolvemos true, poque puede no llegar servicio del websocket, o este en estado disponible y no necesita valores de meter
       resolve(true);
@@ -348,6 +340,11 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       let correspondingConnectorB = this.conectorStatus.find(connectorB => connectorB.connector === connectorNumber);
       if (correspondingConnectorB) {
         connectorA.lastState = correspondingConnectorB.lastState;
+      }
+      // aqui validar si lleg en el offline, y no sean chargin
+      if (connectorA.lastState == "Preparing") {
+        this.conector1 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(),new MeterValueModel() ];
+        this.conector2 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(),new MeterValueModel() ];
       }
     });
   }

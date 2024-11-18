@@ -60,7 +60,7 @@ li {
 .button-suspended {
   background-color: var(--color-suspendend);
   border-color: var(--color-suspendend);
-  color: rgb(201, 136, 136);
+  color: white;
 }
 
 .button-stop {
@@ -72,6 +72,12 @@ li {
 .button-interrumpir {
   background-color: var(--color-detener);
   border-color: var(--color-interrumpir);
+  color: white;
+}
+
+.button-reservado {
+  background-color: var(--color-reserved);
+  border-color: var(--color-reserved);
   color: white;
 }
 

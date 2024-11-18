@@ -33,7 +33,7 @@
                 <th style="width:7%; text-align:center; vertical-align:middle">Nombre</th>
                 <th style="width:7%; text-align:center; vertical-align:middle">Max Voltaje (V)</th>
                 <th style="width:7%; text-align:center; vertical-align:middle">Max Amperaje (A)</th>
-                <th style="width:7%; text-align:center; vertical-align:middle">Velocidad de Carga (kW)</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Velocidad de Carga</th>
                 <th style="width:7%; text-align:center; vertical-align:middle">Corriente Actual (A)</th>
                 <th style="width:7%; text-align:center; vertical-align:middle">Potencia Actual (kW)</th>
                 <th style="width:7%; text-align:center; vertical-align:middle">Carga Energía (Wh)</th>
@@ -60,9 +60,9 @@
                 </td>
                 <td style="text-align:center; vertical-align:middle">
                   <label *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'"
-                    [ngStyle]="{'color': conector1[3]?.phases}">{{conector1[3].measurand}}</label>
+                    [ngStyle]="{'color': conector1[4]?.phases}">{{conector1[4].measurand}}</label>
                   <label *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'"
-                    [ngStyle]="{'color': conector2[3]?.phases}">{{conector2[3].measurand}}</label>
+                    [ngStyle]="{'color': conector2[4]?.phases}">{{conector2[4].measurand}}</label>
                   <label *ngIf="item.lastState == 'Available'">-</label>
                 </td>
                 <td style="text-align:center; vertical-align:middle">
@@ -76,10 +76,10 @@
                 </td>
                 <td style="text-align:center; vertical-align:middle">
                   <label
-                    *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'">{{conector1[4].value |
+                    *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'">{{conector1[5].value |
                     numberDecimal:3}}</label>
                   <label
-                    *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{conector2[4].value |
+                    *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{conector2[5].value |
                     numberDecimal:3}}</label>
                   <label *ngIf="item.lastState == 'Available'">0.000</label>
                 </td>
@@ -98,17 +98,14 @@
                     *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{cliente2.userName}}</label>
                 </td>
                 <td style="text-align:center; vertical-align:middle">
-                  <button pButton *ngIf="item.lastState == 'Available'" label="Disponible" class="button-available"
-                    size="small"></button>
-                  <button pButton *ngIf="item.lastState == 'Preparing'" label="Preparando"
-                    class="button-preparing"></button>
 
+                  <button pButton *ngIf="item.lastState == 'Available'" label="Disponible" class="button-available" size="small"></button>
+                  <button pButton *ngIf="item.lastState == 'Preparing'" label="Preparando" class="button-preparing"></button>
                   <div class="div" *ngIf="item.lastState == 'Charging'">
                     <button pButton *ngIf="item.lastState == 'Charging'" label="Cargando" class="button-charging">
                     </button>
                     <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
                   </div>
-
                   <button pButton *ngIf="item.lastState == 'Finishing'" label="Terminando"
                     class="button-finishing"></button>
                   <button pButton *ngIf="item.lastState == 'Unavailable'" label="No disponible"
@@ -118,6 +115,12 @@
                     class="button-unavailable"></button>
                   <button pButton *ngIf="item.lastState == 'SuspendedEVSE'" label="Verificando"
                     class="button-suspended"></button>
+                  <button pButton *ngIf="item.lastState == 'Reserved'" label="Reservado"
+                    class="button-reservado"></button>
+                  <button pButton *ngIf="item.lastState == 'Faulted'" label="Con Error"
+                    class="button-unavailable"></button>
+                  <button pButton *ngIf="item.lastState == 'Offline'" label="Desconectado"
+                    class="button-unavailable"></button>
                 </td>
                 <td style="text-align:center; vertical-align:middle">
                   <div *ngIf="!item.lastState">
