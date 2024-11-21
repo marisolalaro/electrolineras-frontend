@@ -24,7 +24,7 @@
       <div class="claseDelDiv">
       </div>
 
-      <div class="row mb-3">
+      <div class="row mb-3" *ngIf="true">
         <div class="card">
           <p-table *ngIf="componenteVisible" [value]="electricStation.chargingConnectors"
             [tableStyle]="{ 'min-width': '50rem' }" responsiveLayout="stack">
@@ -38,10 +38,10 @@
                 <th style="width:7%; text-align:center; vertical-align:middle">Potencia Actual (kW)</th>
                 <th style="width:7%; text-align:center; vertical-align:middle">Carga Energía (Wh)</th>
                 <th style="width:10%; text-align:center; vertical-align:middle">Cliente en Carga</th>
+                <th style="width:10%; text-align:center; vertical-align:middle">Monto Acumulado (Bs)</th>
                 <th style="width:16%; text-align:center; vertical-align:middle">Estado</th>
                 <th style="width:16%; text-align:center; vertical-align:middle">
                   Opciones &nbsp;
-                  <!-- <p-button icon="pi pi-times" [rounded]="true" [text]="true" severity="danger"></p-button> -->
                   <i class="pi pi-times" *ngIf="habilitaMasOpciones" (click)="confirmarCerrarOpciones($event)"
                     style="color: var(--color-especial); font-size: 1rem"></i>
                 </th>
@@ -90,6 +90,7 @@
                     *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{conector2[2].value}}</label>
                   <label *ngIf="item.lastState == 'Available'">0</label>
                 </td>
+                <!-- nombre cliente conectado -->
                 <td style="text-align:center; vertical-align:middle">
                   <label *ngIf="cliente1.userName != '-' || cliente2.userName != '-'"></label>
                   <label
@@ -97,8 +98,123 @@
                   <label
                     *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{cliente2.userName}}</label>
                 </td>
+                <!-- monto acumulado -->
                 <td style="text-align:center; vertical-align:middle">
+                  <label *ngIf="cliente1.userName != '-' || cliente2.userName != '-'"></label>
+                  <label
+                    *ngIf="item.name == 'CONECTOR DE CARGA 1' && item.lastState != 'Available'">{{conector1[3].value | numberDecimal:3}}</label>
+                  <label
+                    *ngIf="item.name == 'CONECTOR DE CARGA 2' && item.lastState != 'Available'">{{conector2[3].value | numberDecimal:3}}</label>
+                </td>
+                <!-- estados -->
+                <td style="text-align:center; vertical-align:middle">
+                  <button pButton *ngIf="item.lastState == 'Available'" label="Disponible" class="button-available" size="small"></button>
 
+                  <button pButton *ngIf="item.lastState == 'Preparing'" label="Preparando" class="button-preparing"></button>
+
+                  <div class="div" *ngIf="item.lastState == 'Charging'">
+                    <button pButton *ngIf="item.lastState == 'Charging'" label="Cargando" class="button-charging">
+                    </button>
+                    <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+                  </div>
+
+                  <button pButton *ngIf="item.lastState == 'Finishing'" label="Terminando"
+                    class="button-finishing"></button>
+                  <button pButton *ngIf="item.lastState == 'Unavailable'" label="No disponible"
+                    class="button-unavailable"></button>
+                  <button pButton *ngIf="!item.lastState" label="No disponible" class="button-unavailable"></button>
+                  <button pButton *ngIf="item.lastState == 'SuspendedEV'" label="Carga completa"
+                    class="button-unavailable"></button>
+                  <button pButton *ngIf="item.lastState == 'SuspendedEVSE'" label="Verificando"
+                    class="button-suspended"></button>
+                  <button pButton *ngIf="item.lastState == 'Reserved'" label="Reservado"
+                    class="button-reservado"></button>
+                  <button pButton *ngIf="item.lastState == 'Faulted'" label="Con Error"
+                    class="button-unavailable"></button>
+                  <button pButton *ngIf="item.lastState == 'Offline'" label="Desconectado"
+                    class="button-unavailable"></button>
+                </td>
+                <td style="text-align:center; vertical-align:middle">
+                  <div *ngIf="!item.lastState">
+                    <label>-</label>
+                  </div>
+                  <div *ngIf="item.lastState">
+                    <!-- CASO1 -->
+                    <div class="mb-2">
+                      <p-button label="Detener la carga del usuario" size="small"
+                        styleClass="color: var(--color-detener); font-size: 1.5rem"
+                        (click)="onDetieneCargaPorUsuario($event, item)"
+                        *ngIf="item.lastState != 'Unavailable'"></p-button>
+                    </div>
+                    <!-- CASO2 --><!-- CASO3 -->
+                    <div class="flex justify-content-center" *ngIf="habilitaMasOpciones || esSuperAdmin">
+                      <p-toast></p-toast>
+                      <p-splitButton label="Mas Opciones" (onDropdownClick)="itemSeleccionado(item)" [model]="items"
+                        appendTo="body" styleClass="p-button-sm mr-2 mb-2 button-especial"></p-splitButton>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+
+      <!-- Tabla con filtros de measurand -->
+      <div class="row mb-3"  *ngIf="false">
+        <div class="card">
+          <p-table *ngIf="componenteVisible" [value]="conectores"
+            [tableStyle]="{ 'min-width': '50rem' }" responsiveLayout="stack">
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width:7%; text-align:center; vertical-align:middle">Nombre</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Max Voltaje (V)</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Max Amperaje (A)</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Velocidad de Carga</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Corriente Actual (A)</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Potencia Actual (kW)</th>
+                <th style="width:7%; text-align:center; vertical-align:middle">Carga Energía (Wh)</th>
+                <th style="width:10%; text-align:center; vertical-align:middle">Cliente en Carga</th>
+                <th style="width:10%; text-align:center; vertical-align:middle">Monto Acumulado</th>
+                <th style="width:16%; text-align:center; vertical-align:middle">Estado</th>
+                <th style="width:16%; text-align:center; vertical-align:middle">
+                  Opciones &nbsp;
+                  <!-- <p-button icon="pi pi-times" [rounded]="true" [text]="true" severity="danger"></p-button> -->
+                  <i class="pi pi-times" *ngIf="habilitaMasOpciones" (click)="confirmarCerrarOpciones($event)"
+                    style="color: var(--color-especial); font-size: 1rem"></i>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+              <tr>
+                <td style="text-align:right; vertical-align:middle">
+                  {{item.nombre}}
+                </td>
+                <td style="text-align:center; vertical-align:middle">
+                  {{item.maxVoltaje}}
+                </td>
+                <td style="text-align:center; vertical-align:middle">
+                  {{item.maxAmperaje}}
+                </td>
+                <td style="text-align:center; vertical-align:middle">
+                  {{item.velocidadCarga}}
+                </td>
+                <td style="text-align:center; vertical-align:middle">
+                  {{item.corrienteActual | numberDecimal:2}}
+                </td>
+                <td style="text-align:center; vertical-align:middle">
+                  {{item.potenciaActual | numberDecimal:3}}
+                </td>
+                <td style="text-align:center; vertical-align:middle">
+                  {{item.cargaEnergia}}
+                </td>
+                <td style="text-align:center; vertical-align:middle">
+                  {{item.clienteCarga}}
+                </td>
+                <td style="text-align:center; vertical-align:middle">
+                  {{item.montoConsumido | numberDecimal:3}}
+                </td>
+                <td style="text-align:center; vertical-align:middle">
                   <button pButton *ngIf="item.lastState == 'Available'" label="Disponible" class="button-available" size="small"></button>
                   <button pButton *ngIf="item.lastState == 'Preparing'" label="Preparando" class="button-preparing"></button>
                   <div class="div" *ngIf="item.lastState == 'Charging'">
@@ -147,6 +263,7 @@
           </p-table>
         </div>
       </div>
+      <!-- Tabla con filtros de measurand -->
 
       <div class="alineacion">
         <div class="button-container">

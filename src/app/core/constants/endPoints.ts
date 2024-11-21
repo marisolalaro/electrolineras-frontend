@@ -62,6 +62,7 @@ export class EndPoins {
     // mobile
     static mobile = "/mobile"
     static chargingStations = "/chargingStations"
+    static stopTransactionCredit = "/stopTransactionCredit"
     static stopTransaction = "/stopTransaction"
     static stopTransactionCliente = "/stopTransactionReleaseConnectorAndClients"
     

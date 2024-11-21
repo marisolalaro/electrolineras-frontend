@@ -115,6 +115,7 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     if (this.subscriptionEstados3) {
       this.subscriptionEstados3.unsubscribe();
     }
+    this.websocketService.disconnect();
   }
 
   ngOnInit() {

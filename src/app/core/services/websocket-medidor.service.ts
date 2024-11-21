@@ -39,6 +39,10 @@ export class WebsocketMedidorService {
     return this.meterValuesSubject.asObservable();
   }
 
+  isConnected(): boolean {
+    return this.stompClient && this.stompClient.connected;
+  }
+  
   // Método para desconectar el WebSocket
   disconnect() {
     if (this.stompClient) {

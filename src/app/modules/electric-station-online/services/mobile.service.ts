@@ -15,10 +15,19 @@ export class MobileService {
   }
 
   detenerCargaElectrolinera(electrolinera) {
-    return this.http.get(this.apiService + EndPoins.chargingStations + EndPoins.stopTransaction + '?' +  'sessionIndex=' + electrolinera.sessionIndex + '&transactionId=' + electrolinera.transactionId);
+    return this.http.get(this.apiService + EndPoins.chargingStations + EndPoins.stopTransactionCliente + '?' +  'sessionIndex=' + electrolinera.sessionIndex + '&transactionId=' + electrolinera.transactionId);
   }
   
   liberarTransaccionUsuario(electrolinera) {
-    return this.http.get(this.apiService + EndPoins.chargingStations + EndPoins.stopTransactionCliente + '?' +  'sessionIndex=' + electrolinera.sessionIndex + '&transactionId=' + electrolinera.transactionId);
+    return this.http.get(this.apiService + EndPoins.chargingStations + EndPoins.stopTransaction + '?' +  'sessionIndex=' + electrolinera.sessionIndex + '&transactionId=' + electrolinera.transactionId);
+  }
+
+  detieneTransacionCredit(sesionIndex, transactionId, idCliente) {
+    var cuerpo = {
+        "sessionIndex": sesionIndex,
+        "transactionId": transactionId,
+        "idCliente": idCliente
+      }
+    return this.http.post(this.apiService + EndPoins.chargingStations + EndPoins.stopTransactionCredit, cuerpo);
   }
 }
