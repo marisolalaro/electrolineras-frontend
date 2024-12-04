@@ -60,6 +60,10 @@ const routes: Routes = [
         path: rutas.rutaParametricas + '/' + rutas.rutaPassword,
         loadComponent: () => import('./modules/parametrics/password/password.component'),
       },
+      {
+        path: rutas.rutaParametricas + '/' + rutas.rutaTasaCarga,
+        loadComponent: () => import('./modules/parametrics/tasa-carga/tasa-carga.component'),
+      },
     ]
   },
 

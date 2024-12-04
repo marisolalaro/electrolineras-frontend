@@ -29,7 +29,6 @@ import { ElectricStationsService } from '../electric-stations/services/electric-
   imports: [
     TableModule,
     DashboardModule,
-    NgStyle,
     NgFor,
     NgIf
   ]
@@ -51,25 +50,39 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   public conectorStatus2: ConnectorStatusModel[] = [];
   public data: any;
   public electricStations: ElectricStationModel[] = [];
+  private websocketStatusSubscription: Subscription;
+  public isConnected: boolean = false;
 
   public heartbeat: any;
   public tiempo: number = 0; // Variable para el cronómetro
+  public tiempo2: number = 0; // Variable para el cronómetro
+  public tiempo3: number = 0; // Variable para el cronómetro
   public bootNotification: any;
-  public statusElectrolinera0: any = {estado:estadosConectores.noDisponible, severity: estadosConectores.colorSinConexion};
-  public statusElectrolinera1: any = {estado:estadosConectores.noDisponible, severity: estadosConectores.colorSinConexion};
-  public statusElectrolinera2: any = {estado:estadosConectores.noDisponible, severity: estadosConectores.colorSinConexion};
+  public statusElectrolinera0: any = { estado: estadosConectores.noDisponible, severity: estadosConectores.colorSinConexion };
+  public statusElectrolinera1: any = { estado: estadosConectores.noDisponible, severity: estadosConectores.colorSinConexion };
+  public statusElectrolinera2: any = { estado: estadosConectores.noDisponible, severity: estadosConectores.colorSinConexion };
   private subscription: Subscription; // Para el cronómetro
   private maxHeartbeatTime = 100000; // 100 segundos en milisegundos
   private reconnectionInterval = 10000; // 10 segundos en milisegundos
-  public estadoHeartbeat = {estado:estadosConectores.conectando, severity: estadosConectores.colorConectando}
-  public estadoHeartbeat2 = {estado:estadosConectores.sinConexion, severity: estadosConectores.colorSinConexion};
-  public estadoHeartbeat3 = {estado:estadosConectores.sinConexion, severity: estadosConectores.colorSinConexion};
+  public estadoHeartbeat = { estado: estadosConectores.conectando, severity: estadosConectores.colorConectando }
+  public estadoHeartbeat2 = { estado: estadosConectores.conectando, severity: estadosConectores.colorConectando };
+  public estadoHeartbeat3 = { estado: estadosConectores.conectando, severity: estadosConectores.colorConectando };
   private subscriptions: Subscription[] = [];
   private heartbeatTimerSubscription: Subscription; // Para manejar el temporizador del heartbeat
   private reconnectionCheckSubscription: Subscription; // Temporizador para la verificación de reconexión
   private websocketUrl = EndPoins.apiUrlOcpp + EndPoins.websocket;
 
+  public heartbeatMessage: Heartbeat = new Heartbeat();
+  public heartbeatMessage2: Heartbeat = new Heartbeat();
+  public heartbeatMessage3: Heartbeat = new Heartbeat();
+  private heartbeatSubscription: Subscription;
+  public escucho: boolean = true;
+
   public puertoCargando1: boolean = false;
+  public puertoCargando2: boolean = false;
+
+  public puertoCargando3: boolean = false;
+  public puertoCargando4: boolean = false;
 
   private subscriptionEstados1: Subscription;
   private subscriptionEstados2: Subscription;
@@ -121,7 +134,7 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getElectricStation();
 
-      this.conectaWebSocket()
+    this.conectaWebSocket()
       .then((servicioResponse) => {
         if (servicioResponse) {
           return this.getStatusConnectorES1();
@@ -159,11 +172,27 @@ export default class DashboardComponent implements OnInit, OnDestroy {
           } else {
             this.cambiarEstadoHeartbeat(estadosConectores.conectando, estadosConectores.colorConectando);
           }
+          if (this.puertoCargando2) {
+            this.cambiarEstadoHeartbeat2(estadosConectores.enLinea, estadosConectores.colorEnLinea);
+          } else {
+            this.cambiarEstadoHeartbeat2(estadosConectores.conectando, estadosConectores.colorConectando);
+          }
+          if (this.puertoCargando3) {
+            this.cambiarEstadoHeartbeat3(estadosConectores.enLinea, estadosConectores.colorEnLinea);
+          } else {
+            this.cambiarEstadoHeartbeat3(estadosConectores.conectando, estadosConectores.colorConectando);
+          }
           return true;
         } else {
           this.cambiarEstadoHeartbeat(estadosConectores.sinConexion, estadosConectores.colorSinConexion);
+          this.cambiarEstadoHeartbeat2(estadosConectores.sinConexion, estadosConectores.colorSinConexion);
+          this.cambiarEstadoHeartbeat3(estadosConectores.sinConexion, estadosConectores.colorSinConexion);
         }
       })
+  }
+
+  ngAfterViewInit() {
+    this.conectaWebSocket()
   }
 
   getElectricStation() {
@@ -173,13 +202,14 @@ export default class DashboardComponent implements OnInit, OnDestroy {
       (resp: any) => {
         if (resp) {
           this.electricStations = resp.data;
+          // this.mapUsuarioEnConectores();
         }
         this.serviceResponse = true;
       },
       error => {
         this.serviceResponse = false;
       }
-    ); 
+    );
   }
 
   getStatusConnectorES1() {
@@ -197,7 +227,7 @@ export default class DashboardComponent implements OnInit, OnDestroy {
               lastState: TraducirEstado(item.lastState)
             }));
             this.estadoElectrolinera(this.conectorStatus0, 1)
-            this.mapUsuarioEnConectores();
+            this.mapUsuarioEnConectores(0);
             resolve(true);
             this.serviceResponse = true;
           } else {
@@ -228,6 +258,7 @@ export default class DashboardComponent implements OnInit, OnDestroy {
               lastState: TraducirEstado(item.lastState)
             }));
             this.estadoElectrolinera(this.conectorStatus1, 2)
+            this.mapUsuarioEnConectores(1);
             resolve(true);
             this.serviceResponse = true;
           } else {
@@ -258,6 +289,7 @@ export default class DashboardComponent implements OnInit, OnDestroy {
               lastState: TraducirEstado(item.lastState)
             }));
             this.estadoElectrolinera(this.conectorStatus2, 3)
+            this.mapUsuarioEnConectores(2);
             resolve(true);
             this.serviceResponse = true;
           } else {
@@ -286,78 +318,165 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     })
   }
 
-  public heartbeatMessage: Heartbeat = new Heartbeat();
-  public heartbeatMessage2: Heartbeat = new Heartbeat();
-  public heartbeatMessage3: Heartbeat = new Heartbeat();
-  private heartbeatSubscription: Subscription;
-  public escucho: boolean = true;
+
   // Escuchar cuando llega el primer heartbeat
 
   escucharHeartbeat() {
-      this.heartbeatSubscription = this.websocketService.heartbeatReceived$.subscribe((message: any) => {
-        if (message) {
-          // this.getElectricStationInicial(1);
-          this.escucho = true;
-          this.heartbeatMessage = message.sessionIndex; // Almacenar el contenido del mensaje del heartbeat
-          // aqui poner Conectando... // porque se esta crendo nuevo sesion index
-          this.cambiarEstadoHeartbeat(estadosConectores.conectando, estadosConectores.colorConectando);
-          if (this.heartbeatMessage == this.electricStations[0].sessionIndex) {
-            this.cambiarEstadoHeartbeat(estadosConectores.enLinea, estadosConectores.colorEnLinea);
-          }
+    this.heartbeatSubscription = this.websocketService.heartbeatReceived$.subscribe((message: any) => {
+
+      if (message) {
+        this.escucho = true;
+        this.heartbeatMessage = message.sessionIndex;
+
+        // this.cambiarEstadoHeartbeat(estadosConectores.conectando, estadosConectores.colorConectando);
+
+        if (this.heartbeatMessage == this.electricStations[0].sessionIndex) {
+          this.cambiarEstadoHeartbeat(estadosConectores.enLinea, estadosConectores.colorEnLinea);
           this.reiniciarTemporizadorHeartbeat();
         }
-      });
-      if (this.puertoCargando1) {
-        this.cambiarEstadoHeartbeat(estadosConectores.enLinea, estadosConectores.colorEnLinea);
+        if (this.heartbeatMessage == this.electricStations[1].sessionIndex) {
+          this.cambiarEstadoHeartbeat2(estadosConectores.enLinea, estadosConectores.colorEnLinea);
+          this.reiniciarTemporizadorHeartbeat1();
+        }
+        if (this.heartbeatMessage == this.electricStations[2].sessionIndex) {
+          this.cambiarEstadoHeartbeat3(estadosConectores.enLinea, estadosConectores.colorEnLinea);
+          this.reiniciarTemporizadorHeartbeat2();
+        }
       }
-      this.subscriptions.push(this.heartbeatSubscription);
+    });
+    if (this.puertoCargando1) {
+      this.cambiarEstadoHeartbeat(estadosConectores.enLinea, estadosConectores.colorEnLinea);
+    }
+    if (this.puertoCargando2) {
+      this.cambiarEstadoHeartbeat2(estadosConectores.enLinea, estadosConectores.colorEnLinea);
+    }
+    if (this.puertoCargando3) {
+      this.cambiarEstadoHeartbeat3(estadosConectores.enLinea, estadosConectores.colorEnLinea);
+    }
+    this.subscriptions.push(this.heartbeatSubscription);
   }
 
   // Cambiar el estado del heartbeat
   cambiarEstadoHeartbeat(estado: string, severety: string): void {
+    if (estado === estadosConectores.sinConexion && this.isConnected) {
+      this.estadoHeartbeat = { estado: estado, severity: severety };
+    }
     if (estado === estadosConectores.sinConexion && !this.isConnected) {
-      this.estadoHeartbeat = {estado:estado, severity: severety};
+      this.estadoHeartbeat = { estado: estado, severity: severety };
       this.escucho = false;
       this.verificarReconexión();
     }
     if (estado === estadosConectores.conectando && this.isConnected) {
-      this.estadoHeartbeat = {estado:estado, severity: severety};
+      this.estadoHeartbeat = { estado: estado, severity: severety };
       this.reiniciarTemporizadorHeartbeat();
     }
     if (estado === estadosConectores.enLinea) {
-      this.estadoHeartbeat = {estado:estado, severity: severety};
+      this.estadoHeartbeat = { estado: estado, severity: severety };
+      // Detener la verificación de reconexión si ya está en línea
+      this.detenerVerificacionReconexión();
+    }
+  }
+
+  cambiarEstadoHeartbeat2(estado: string, severety: string): void {
+    if (estado === estadosConectores.sinConexion && this.isConnected) {
+      this.estadoHeartbeat2 = { estado: estado, severity: severety };
+    }
+    if (estado === estadosConectores.sinConexion && !this.isConnected) {
+      this.estadoHeartbeat2 = { estado: estado, severity: severety };
+      this.escucho = false;
+      this.verificarReconexión();
+    }
+    if (estado === estadosConectores.conectando && this.isConnected) {
+      this.estadoHeartbeat2 = { estado: estado, severity: severety };
+      this.reiniciarTemporizadorHeartbeat1();
+    }
+    if (estado === estadosConectores.enLinea) {
+      this.estadoHeartbeat2 = { estado: estado, severity: severety };
+      // Detener la verificación de reconexión si ya está en línea
+      this.detenerVerificacionReconexión();
+    }
+  }
+
+  cambiarEstadoHeartbeat3(estado: string, severety: string): void {
+    if (estado === estadosConectores.sinConexion && this.isConnected) {
+      this.estadoHeartbeat3 = { estado: estado, severity: severety };
+    }
+    if (estado === estadosConectores.sinConexion && !this.isConnected) {
+      this.estadoHeartbeat3 = { estado: estado, severity: severety };
+      this.escucho = false;
+      this.verificarReconexión();
+    }
+    if (estado === estadosConectores.conectando && this.isConnected) {
+      this.estadoHeartbeat3 = { estado: estado, severity: severety };
+      this.reiniciarTemporizadorHeartbeat2();
+    }
+    if (estado === estadosConectores.enLinea) {
+      this.estadoHeartbeat3 = { estado: estado, severity: severety };
       // Detener la verificación de reconexión si ya está en línea
       this.detenerVerificacionReconexión();
     }
   }
 
   interval: any;
-
-  // Iniciar cronómetro
   reiniciarTemporizadorHeartbeat(): void {
     if (this.interval) {
       clearInterval(this.interval);
     }
     this.tiempo = JSON.parse(JSON.stringify(0));
-    // Iniciar el cronómetro al cargar el componente
     this.interval = setInterval(() => {
       this.tiempo++;
       if (this.tiempo >= 130) {
-        this.cambiarEstadoHeartbeat(estadosConectores.sinConexion, estadosConectores.colorSinConexion);
-      } else {
-
+        this.tiempo = JSON.parse(JSON.stringify(0));
+        if (this.websocketService.isConnected()) {
+          this.cambiarEstadoHeartbeat(estadosConectores.conectando, estadosConectores.colorConectando);
+        } else {
+          this.conectaWebSocket();
+          this.cambiarEstadoHeartbeat(estadosConectores.sinConexion, estadosConectores.colorSinConexion);
+        }
       }
     }, 1000); // Incrementar  cada 1 segundo
   }
 
-  reiniciarTemporizadorHeartbeat0(): void {
-    if (this.heartbeatTimerSubscription) {
-      this.heartbeatTimerSubscription.unsubscribe();
+  interval2: any;
+  reiniciarTemporizadorHeartbeat1(): void {
+    if (this.interval2) {
+      clearInterval(this.interval2);
     }
-    this.heartbeatTimerSubscription = interval(this.maxHeartbeatTime).subscribe((time) => {
-      this.cambiarEstadoHeartbeat(estadosConectores.sinConexion, estadosConectores.colorSinConexion);
-    });
-    this.subscriptions.push(this.heartbeatTimerSubscription);
+    this.tiempo2 = JSON.parse(JSON.stringify(0));
+    // Iniciar el cronómetro al cargar el componente
+    this.interval2 = setInterval(() => {
+      this.tiempo2++;
+      if (this.tiempo2 >= 130) {
+        this.tiempo2 = JSON.parse(JSON.stringify(0));
+        if (this.websocketService.isConnected()) {
+          this.cambiarEstadoHeartbeat2(estadosConectores.conectando, estadosConectores.colorConectando);
+        } else {
+          this.conectaWebSocket();
+          this.cambiarEstadoHeartbeat2(estadosConectores.sinConexion, estadosConectores.colorSinConexion);
+        }
+      }
+    }, 1000);
+  }
+
+  interval3: any;
+  reiniciarTemporizadorHeartbeat2(): void {
+    if (this.interval3) {
+      clearInterval(this.interval3);
+    }
+    this.tiempo3 = JSON.parse(JSON.stringify(0));
+    // Iniciar el cronómetro al cargar el componente
+    this.interval3 = setInterval(() => {
+      this.tiempo3++;
+      if (this.tiempo3 >= 130) {
+        this.tiempo3 = JSON.parse(JSON.stringify(0));
+        if (this.websocketService.isConnected()) {
+          this.cambiarEstadoHeartbeat3(estadosConectores.conectando, estadosConectores.colorConectando);
+        } else {
+          this.conectaWebSocket();
+          this.cambiarEstadoHeartbeat3(estadosConectores.sinConexion, estadosConectores.colorSinConexion);
+        }
+      }
+    }, 1000);
   }
 
   // Verificar la reconexión cada 10 segundos
@@ -368,8 +487,9 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     // Comenzar a verificar la reconexión cada 10 segundos
     this.reconnectionCheckSubscription = interval(this.reconnectionInterval).subscribe(() => {
       if (this.websocketService.isConnected()) {
-
         this.cambiarEstadoHeartbeat(estadosConectores.sinConexion, estadosConectores.colorSinConexion);
+        this.cambiarEstadoHeartbeat2(estadosConectores.sinConexion, estadosConectores.colorSinConexion);
+        this.cambiarEstadoHeartbeat3(estadosConectores.sinConexion, estadosConectores.colorSinConexion);
       } else {
         this.conectaWebSocket();
       }
@@ -385,40 +505,77 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private websocketStatusSubscription: Subscription;
-  public isConnected: boolean = false;
 
-  estadoElectrolinera(estados, id) {    
+  estadoElectrolinera(estados, id) {
     if (estados.length > 0 && estados.length < 3) {
       if (id == 1) {
         this.statusElectrolinera0 = this.comparaEstados(estados[0].lastState, estados[1].lastState);
         if (estados[0].lastState == estadosConectores.charging || estados[1].lastState == estadosConectores.charging) {
           this.puertoCargando1 = true;
-          this.estadoHeartbeat = {estado:estadosConectores.enLinea, severity: estadosConectores.colorEnLinea}
+          this.estadoHeartbeat = { estado: estadosConectores.enLinea, severity: estadosConectores.colorEnLinea }
         } else {
           this.puertoCargando1 = false;
         }
+        this.comparaEstados(estados[0], estados[1]);
       }
       if (id == 2) {
         this.statusElectrolinera1 = this.comparaEstados(estados[0].lastState, estados[1].lastState);
+        if (estados[0].lastState == estadosConectores.charging || estados[1].lastState == estadosConectores.charging) {
+          this.puertoCargando2 = true;
+          this.estadoHeartbeat2 = { estado: estadosConectores.enLinea, severity: estadosConectores.colorEnLinea }
+        } else {
+          this.puertoCargando2 = false;
+        }
       }
       if (id == 3) {
         this.statusElectrolinera2 = this.comparaEstados(estados[0].lastState, estados[1].lastState);
+        if (estados[0].lastState == estadosConectores.charging || estados[1].lastState == estadosConectores.charging) {
+          this.puertoCargando3 = true;
+          this.estadoHeartbeat3 = { estado: estadosConectores.enLinea, severity: estadosConectores.colorEnLinea }
+        } else {
+          this.puertoCargando3 = false;
+        }
       }
-      this.comparaEstados(estados[0], estados[1]);
     }
   }
 
-  mapUsuarioEnConectores() {
-    this.conectorStatus0 = this.conectorStatus0.map(conector => {
-      var usuario = '';
-      if (this.electricStations[0].clients.length > 0) {
-        if (this.electricStations[0].clients.filter(cliente => cliente.connetorOcpp === conector.connector)[0]) {
-          usuario = this.electricStations[0].clients.filter(cliente => cliente.connetorOcpp == conector.connector)[0].userName
+  mapUsuarioEnConectores(posicion) {
+    if (posicion == 0) {
+      this.conectorStatus0 = this.conectorStatus0.map(conector => {
+        var usuario = '';
+        if (this.electricStations[posicion].clients.length > 0) {
+          if (this.electricStations[posicion].clients.filter(cliente => cliente.connetorOcpp === conector.connector)[0]) {
+            usuario = this.electricStations[posicion].clients.filter(cliente => cliente.connetorOcpp == conector.connector)[0].userName
+          }
         }
-      }
-      return { ...conector, userName: usuario };
-    });
+        return { ...conector, userName: usuario };
+      });
+    }
+
+    if (posicion == 1) {
+      this.conectorStatus1 = this.conectorStatus1.map(conector => {
+        var usuario = '';
+        if (this.electricStations[posicion].clients.length > 0) {
+          if (this.electricStations[posicion].clients.filter(cliente => cliente.connetorOcpp === conector.connector)[0]) {
+            usuario = this.electricStations[posicion].clients.filter(cliente => cliente.connetorOcpp == conector.connector)[0].userName
+          }
+        }
+        return { ...conector, userName: usuario };
+      });
+    }
+
+
+    if (posicion == 2) {
+      this.conectorStatus2 = this.conectorStatus2.map(conector => {
+        var usuario = '';
+        if (this.electricStations[posicion].clients.length > 0) {
+          if (this.electricStations[posicion].clients.filter(cliente => cliente.connetorOcpp === conector.connector)[0]) {
+            usuario = this.electricStations[posicion].clients.filter(cliente => cliente.connetorOcpp == conector.connector)[0].userName
+          }
+        }
+        return { ...conector, userName: usuario };
+      });
+    }
   }
 
   onVerTodasElectrolineras(id) {
@@ -427,9 +584,9 @@ export default class DashboardComponent implements OnInit, OnDestroy {
 
   comparaEstados(estado1, estado2) {
     if (estado1 == estadosConectores.disponible || estado2 == estadosConectores.disponible) {
-      return {estado:estadosConectores.disponible, severity: estadosConectores.colorEnLinea}
+      return { estado: estadosConectores.disponible, severity: estadosConectores.colorEnLinea }
     } else {
-      return {estado:estadosConectores.noDisponible, severity: estadosConectores.colorSinConexion}
+      return { estado: estadosConectores.noDisponible, severity: estadosConectores.colorSinConexion }
     }
   }
 }

@@ -24,7 +24,7 @@
       <div class="claseDelDiv">
       </div>
 
-      <div class="row mb-3" *ngIf="true">
+      <div class="row mb-3" *ngIf="false">
         <div class="card">
           <p-table *ngIf="componenteVisible" [value]="electricStation.chargingConnectors"
             [tableStyle]="{ 'min-width': '50rem' }" responsiveLayout="stack">
@@ -161,7 +161,7 @@
       </div>
 
       <!-- Tabla con filtros de measurand -->
-      <div class="row mb-3"  *ngIf="false">
+      <div class="row mb-3"  *ngIf="true">
         <div class="card">
           <p-table *ngIf="componenteVisible" [value]="conectores"
             [tableStyle]="{ 'min-width': '50rem' }" responsiveLayout="stack">
@@ -178,7 +178,7 @@
                 <th style="width:10%; text-align:center; vertical-align:middle">Monto Acumulado</th>
                 <th style="width:16%; text-align:center; vertical-align:middle">Estado</th>
                 <th style="width:16%; text-align:center; vertical-align:middle">
-                  Opciones &nbsp;
+                  Opciones
                   <!-- <p-button icon="pi pi-times" [rounded]="true" [text]="true" severity="danger"></p-button> -->
                   <i class="pi pi-times" *ngIf="habilitaMasOpciones" (click)="confirmarCerrarOpciones($event)"
                     style="color: var(--color-especial); font-size: 1rem"></i>
@@ -267,7 +267,7 @@
 
       <div class="alineacion">
         <div class="button-container">
-          <p-button icon="pi pi-eye" [rounded]="true" (click)="cambiaEstado()" pTooltip="Ver Detalles"
+          <p-button icon="pi pi-eye" [rounded]="true" (click)="cambiaEstadoVer()" pTooltip="Ver Detalles"
             tooltipPosition="left"></p-button>
           <p> Ver Detalles</p>
         </div>
@@ -336,7 +336,7 @@
 
       <div class="card flex justify-content-center">
         <input type="password" pInputText id="inputPassword" name="password" placeholder="Contraseña"
-          [(ngModel)]="value" />
+          [(ngModel)]="passwordAdminGral" />
       </div>
 
       <ng-template pTemplate="footer">

@@ -71,6 +71,11 @@ export class SidebarComponent implements OnInit {
           routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaParametricas + '/' + rutas.rutaModelo],
         },
         {
+          label: mainTitles['tasaCarga'].mainTitle,
+          icon: 'pi pi-fw pi-verified',
+          routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaParametricas + '/' + rutas.rutaTasaCarga],
+        },
+        {
           label: mainTitles['direcciones'].mainTitle,
           icon: 'pi pi-fw pi-map',
           routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaParametricas + '/' + rutas.rutaAddress],

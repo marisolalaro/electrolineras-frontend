@@ -211,6 +211,10 @@ export const mainTitles: IMainTitles = {
     mainTitle: 'Modelos de Electrolineras',
     secondaryTitle: 'Modelo'
   },
+  tasaCarga: {
+    mainTitle: 'Tasas de carga',
+    secondaryTitle: 'Tasas de carga'
+  },
   direcciones: {
     mainTitle: 'Direcciones',
     secondaryTitle: 'Dirección'
