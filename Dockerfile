@@ -11,11 +11,13 @@ COPY package*.json ./
 # Instalar las dependencias de la aplicación
 RUN npm install --force
 
-# Copiar el resto del código de la aplicación
+# Copiar el resto del código de la aplicació
 COPY . /app
 
 # Construir la aplicación Angular
 RUN npm run build --prod
+# RUN npm run build --configuration production
+# RUN npm run build -c production  --base-href=/ --output-path=dist
 
 # Etapa 2: Servir la aplicación usando un servidor web ligero
 FROM nginx:alpine

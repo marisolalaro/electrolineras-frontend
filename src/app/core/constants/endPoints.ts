@@ -1,4 +1,4 @@
-import { environment } from 'src/app/core/environments/environment';
+import { environment } from 'src/app/core/environments/environment.prod';
 
 export class EndPoins {
 
