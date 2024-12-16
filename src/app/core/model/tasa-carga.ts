@@ -4,4 +4,10 @@ export class TasaCargaModel {
     registratioDate?: string;
     registrationDate?: string;
     activo?: boolean;
+    startTime: string;
+    endTime: string;
+    enabled: boolean;
+    minimumCurrent: number;
+    maximumCurrent: number;
+    description: string;
 }

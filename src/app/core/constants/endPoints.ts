@@ -28,10 +28,6 @@ export class EndPoins {
     static registerChargingStation = "/registerChargingStation";
     static updateChargingStation = "/updateChargingStation";
 
-
-    // tasa de carga
-    static chargeRate = "/chargeRate";
-    
     // administradores
     static administration = "/adminList";
 
@@ -93,4 +89,11 @@ export class EndPoins {
     static accessCode = "/accessCode"
     static validate = "/validate"
     static restoreById = "/restoreById"
+
+    
+    // tasa de carga
+    static chargeRate = "/chargeRate"
+    static enable = "/enable"
+    static disable = "/disable"
+    
 };

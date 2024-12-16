@@ -1,3 +1,5 @@
+// dasbboar despues de las pruebas en la electrolinera 12/12/2024
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgFor, NgIf, NgStyle } from '@angular/common';
 import { Router } from '@angular/router';
@@ -103,6 +105,12 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     if (this.interval) {
       clearInterval(this.interval);
     }
+    if (this.interval2) {
+      clearInterval(this.interval2);
+    }
+    if (this.interval3) {
+      clearInterval(this.interval3);
+    }
     this.subscriptions.forEach(sub => sub.unsubscribe());
     if (this.heartbeatTimerSubscription) {
       this.heartbeatTimerSubscription.unsubscribe();
@@ -202,7 +210,6 @@ export default class DashboardComponent implements OnInit, OnDestroy {
       (resp: any) => {
         if (resp) {
           this.electricStations = resp.data;
-          // this.mapUsuarioEnConectores();
         }
         this.serviceResponse = true;
       },
@@ -330,6 +337,8 @@ export default class DashboardComponent implements OnInit, OnDestroy {
 
         // this.cambiarEstadoHeartbeat(estadosConectores.conectando, estadosConectores.colorConectando);
 
+        console.log(JSON.stringify('escucha hearbeat'));
+        console.log(JSON.stringify(message));
         if (this.heartbeatMessage == this.electricStations[0].sessionIndex) {
           this.cambiarEstadoHeartbeat(estadosConectores.enLinea, estadosConectores.colorEnLinea);
           this.reiniciarTemporizadorHeartbeat();
@@ -425,6 +434,8 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     this.tiempo = JSON.parse(JSON.stringify(0));
     this.interval = setInterval(() => {
       this.tiempo++;
+      console.log('CAPITAN RAVELO ' + this.tiempo);
+      
       if (this.tiempo >= 130) {
         this.tiempo = JSON.parse(JSON.stringify(0));
         if (this.websocketService.isConnected()) {
@@ -446,6 +457,7 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     // Iniciar el cronómetro al cargar el componente
     this.interval2 = setInterval(() => {
       this.tiempo2++;
+      console.log('EL ALTO ' + this.tiempo2);
       if (this.tiempo2 >= 130) {
         this.tiempo2 = JSON.parse(JSON.stringify(0));
         if (this.websocketService.isConnected()) {
@@ -467,6 +479,7 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     // Iniciar el cronómetro al cargar el componente
     this.interval3 = setInterval(() => {
       this.tiempo3++;
+      console.log('MIRAFLORES ' + this.tiempo3);
       if (this.tiempo3 >= 130) {
         this.tiempo3 = JSON.parse(JSON.stringify(0));
         if (this.websocketService.isConnected()) {
@@ -509,18 +522,24 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   estadoElectrolinera(estados, id) {
     if (estados.length > 0 && estados.length < 3) {
       if (id == 1) {
+        console.log(1111);
+        console.log(JSON.stringify(estados));
+        
+        // this.estadoHeartbeat = this.comparaEstados(estados[0].lastState, estados[1].lastState);
         this.statusElectrolinera0 = this.comparaEstados(estados[0].lastState, estados[1].lastState);
-        if (estados[0].lastState == estadosConectores.charging || estados[1].lastState == estadosConectores.charging) {
+        if (estados[0].lastState == estadosConectores.cargando || estados[1].lastState == estadosConectores.cargando) {
+          console.log(2222);
           this.puertoCargando1 = true;
           this.estadoHeartbeat = { estado: estadosConectores.enLinea, severity: estadosConectores.colorEnLinea }
         } else {
+          console.log(3333);
           this.puertoCargando1 = false;
         }
         this.comparaEstados(estados[0], estados[1]);
       }
       if (id == 2) {
         this.statusElectrolinera1 = this.comparaEstados(estados[0].lastState, estados[1].lastState);
-        if (estados[0].lastState == estadosConectores.charging || estados[1].lastState == estadosConectores.charging) {
+        if (estados[0].lastState == estadosConectores.cargando || estados[1].lastState == estadosConectores.cargando) {
           this.puertoCargando2 = true;
           this.estadoHeartbeat2 = { estado: estadosConectores.enLinea, severity: estadosConectores.colorEnLinea }
         } else {
@@ -529,7 +548,7 @@ export default class DashboardComponent implements OnInit, OnDestroy {
       }
       if (id == 3) {
         this.statusElectrolinera2 = this.comparaEstados(estados[0].lastState, estados[1].lastState);
-        if (estados[0].lastState == estadosConectores.charging || estados[1].lastState == estadosConectores.charging) {
+        if (estados[0].lastState == estadosConectores.cargando || estados[1].lastState == estadosConectores.cargando) {
           this.puertoCargando3 = true;
           this.estadoHeartbeat3 = { estado: estadosConectores.enLinea, severity: estadosConectores.colorEnLinea }
         } else {
@@ -563,7 +582,6 @@ export default class DashboardComponent implements OnInit, OnDestroy {
         return { ...conector, userName: usuario };
       });
     }
-
 
     if (posicion == 2) {
       this.conectorStatus2 = this.conectorStatus2.map(conector => {

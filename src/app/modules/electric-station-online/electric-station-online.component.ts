@@ -119,29 +119,35 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
 
     this.subscriptionConectorStatus = this.websocketService.getConnectorStatus()
       .subscribe((data) => {
+        console.log('websocketService.getConnectorStatus ngOnInit');
+        
+        console.log(JSON.stringify(data));
+
         if (data[0].connector = '1') {
+          console.log(10);
           this.conectores[0].lastState = data[0].lastState;
           this.conectores[0].id = data[0].connector;
         }
         if (data[1].connector = '2') {
+          console.log(20);
           this.conectores[1].lastState = data[1].lastState
           this.conectores[1].id = data[1].connector;
         }
+        this.reiniciarDatosCero(data);
+        // this.armaTablaConector()
       });
     // TODO debo revisar esta parte
     this.subscriptionClientCharging = this.websocketService.getClientCharging()
       .subscribe((data) => {
         this.clientChargingStation = data;
+        console.log(JSON.stringify(this.clientChargingStation));
         this.clienteCargando();
         this.armaTablaConector();
       });
 
     this.subscriptionMeterValues = this.websocketService.getMeterValues()
       .subscribe((messages) => {
-
-        // var message = JSON.parse(messages);
         var message = messages;
-        // var message = messages;
         if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 1) {
           this.transaccionid1 = message.connectorId = 1 ? message.transactionId : 0
           this.conector1 = JSON.parse(JSON.stringify(message.sampleValues));
@@ -156,6 +162,9 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
         }
         this.armaTablaConector();
       });
+
+
+
 
     try {
       await this.inicializaDatos();
@@ -215,11 +224,32 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
         this.armaTablaConector();
       },
       error => {
-        console.error('Error al obtener los datos de las estaciones', error);
+        // console.error('Error al obtener los datos de las estaciones', error);
       }
     );
   }
 
+  getEstadosConectores() {
+    this.websocketService.initializeWebSocketConnection(this.websocketUrl);
+    this.subscriptionConectorStatus = this.websocketService.getConnectorStatus()
+      .subscribe((data) => {
+        console.log(JSON.stringify(data));
+
+        if (data[0].connector = '1') {
+          console.log(10);
+
+          this.conectores[0].lastState = data[0].lastState;
+          this.conectores[0].id = data[0].connector;
+        }
+        if (data[1].connector = '2') {
+          console.log(20);
+          this.conectores[1].lastState = data[1].lastState
+          this.conectores[1].id = data[1].connector;
+        }
+        this.reiniciarDatosCero(data)
+        // this.armaTablaConector()
+      });
+  }
   itemSeleccionado(item) {
     this.conector = JSON.parse(JSON.stringify(item))
   }
@@ -234,15 +264,35 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
           var message = messages;
           // var message = messages;
           if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 1) {
+            console.log('valores de web socket 2 ws, conector 1');
+
             this.conector1 = JSON.parse(JSON.stringify(message.sampleValues));
             this.conector1.push(this.obtieneVelocidadCarga(this.conector1[0].value));
             this.conector1.push(this.obtienePotenciaActual(this.conector1[1].value));
           }
           if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 2) {
+            console.log('valores de web socket 2 ws, conector 2');
+
             this.conector2 = JSON.parse(JSON.stringify(message.sampleValues));
             this.conector2.push(this.obtieneVelocidadCarga(this.conector2[0].value));
             this.conector2.push(this.obtienePotenciaActual(this.conector2[1].value));
           }
+          this.armaTablaConector();
+        }, err => {
+        });
+      resolve(true);
+    })
+  }
+
+  getClientes() {
+    return new Promise((resolve) => {
+      this.websocketService.initializeWebSocketConnection(this.websocketUrl);
+      this.subscriptionClientCharging = this.websocketService.getClientCharging()
+        .subscribe((data) => {
+          this.clientChargingStation = data;
+          console.log(1);
+          console.log(JSON.stringify(this.clientChargingStation));
+          this.clienteCargando();
           this.armaTablaConector();
         }, err => {
         });
@@ -272,6 +322,8 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
         potenciaActual: this.conector1.filter(item => item.measurand == 'Potencia Actual')[0] ? this.conector1.filter(item => item.measurand == 'Potencia Actual')[0].value : 0,
         cargaEnergia: this.conector1.filter(item => item.measurand == 'Energy.Active.Import.Register')[0] ? this.conector1.filter(item => item.measurand == 'Energy.Active.Import.Register')[0].value : 0,
         clienteCarga: this.cliente1.userName || '-',
+        // clienteCarga: this.clientChargingStation.length > 0 ? (this.clientChargingStation.filter(i => i.connetorOcpp == "1")[0].userName || '-') : '-',
+
         montoConsumido: this.conector1.filter(item => item.measurand == 'Amount.Consumed')[0] ? this.conector1.filter(item => item.measurand == 'Amount.Consumed')[0].value : 0,
         lastState: this.conectorStatus.filter(item => item.connector == "1")[0] ? this.conectorStatus.filter(item => item.connector == "1")[0].lastState : 'Unavailable'
       }, {
@@ -282,7 +334,13 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
         corrienteActual: this.conector2.filter(item => item.measurand == 'Current.Import')[0] ? this.conector2.filter(item => item.measurand == 'Current.Import')[0].value : 0,
         potenciaActual: this.conector2.filter(item => item.measurand == 'Potencia Actual')[0] ? this.conector2.filter(item => item.measurand == 'Potencia Actual')[0].value : 0,
         cargaEnergia: this.conector2.filter(item => item.measurand == 'Energy.Active.Import.Register')[0] ? this.conector2.filter(item => item.measurand == 'Energy.Active.Import.Register')[0].value : 0,
+        
         clienteCarga: this.cliente2.userName || '-',
+
+        // clienteCarga: this.clientChargingStation.length > 0 ? (this.clientChargingStation.filter(i => i.connetorOcpp == "2")[0].userName || '-') : '-',
+        // var usuariosConector1 = this.clientChargingStation.filter(i => i.connetorOcpp == "1").length > 0 ? this.clientChargingStation.filter(i => i.connetorOcpp == "1") : [];
+
+
         montoConsumido: this.conector2.filter(item => item.measurand == 'Amount.Consumed')[0] ? this.conector2.filter(item => item.measurand == 'Amount.Consumed')[0].value : 0,
         lastState: this.conectorStatus.filter(item => item.connector == "2")[0] ? this.conectorStatus.filter(item => item.connector == "2")[0].lastState : 'Unavailable'
       }]
@@ -322,6 +380,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       } else {
         this.cliente1 = new ClientChargingStatusModel();
         this.cliente2 = new ClientChargingStatusModel();
+        this.armaTablaConector();
         resolve(true)
       }
     });
@@ -621,4 +680,25 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
     this.iconClass = this.iconClass === 'pi pi-eye-slash' ? 'pi pi-eye' : 'pi pi-eye-slash';
   }
 
+  reiniciarDatosCero(data) {
+    // if (connectorA.lastState != "Charging") {
+    //   this.conectores = [];
+    // }
+    console.log('ingresa a verificar estado para ver si se reinicia ');
+    console.log(JSON.stringify(data));
+    
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i];
+      if(item.lastState !== 'Charging'){
+        console.log('reicinia datos');
+        if (item.connector == 1) {
+          // afecta al conector 1
+          this.conector1 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
+        } else {
+          //afecta al conector 2
+          this.conector2 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
+        }
+      }
+    }
+  }
 }

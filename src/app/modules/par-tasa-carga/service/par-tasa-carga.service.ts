@@ -17,4 +17,20 @@ export class ParTasaCargaService {
   getAll() {
     return this.http.get(this.apiService);
   }
+
+  cambiarEstado(id, estado) {
+    if (estado) {
+      return this.http.put(this.apiService + EndPoins.disable + '/' + id, {});
+    } else {
+      return this.http.put(this.apiService + EndPoins.enable + '/' + id, {});
+    }
+  }
+
+  create(tasaCarga) {
+    return this.http.post(this.apiService, tasaCarga);
+  }
+  
+  update(tasaCarga) {
+    return this.http.post(this.apiService, tasaCarga);
+  }
 }

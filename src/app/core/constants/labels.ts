@@ -9,10 +9,6 @@ export const labels: any = {
   longitude: 'Longitud',
   codeStationQr: 'Codigo QR',
 
-  // Tasa de carga
-  tasaCarga: 'Tasa de Carga',
-  modelo: 'Modelo',
-
   // Administradores
   email: 'Correo Electrónico',
   username: 'Nombre de Usuario',
@@ -48,6 +44,16 @@ export const labels: any = {
   pointModel: 'Tipo',
   pointSerialNumber: 'Número de Serie Tipo',
   firmwareVersion: 'Versión Firmware',
+
+  // Tasa de carga
+  tasaCarga: 'Tasa de Carga',
+  modelo: 'Modelo',
+  horaInicio: 'Hora Inicio',
+  horaFin: 'Hora Fin',
+  corrienteMinima: 'Corriente Mínima',
+  corrienteMaxima: 'Corriente Máxima',
+  descripcion: 'Descripción',
+
 }
 
 export const reports: any = {

@@ -12,9 +12,12 @@ import { ConfirmationService } from 'primeng/api';
 // moduls
 import { TasaCargaModule } from './tasa-carga.module';
 // modeles
-import { Model } from 'src/app/core/model/model';
+import { TasaCargaModel } from 'src/app/core/model/tasa-carga';
 // services
 import { TasaCargaService } from './services/tasa-carga.service';
+import { ParTasaCargaService } from '../../par-tasa-carga/service/par-tasa-carga.service';
+
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-tasa-carga',
@@ -22,6 +25,7 @@ import { TasaCargaService } from './services/tasa-carga.service';
   styleUrls: ['./tasa-carga.component.scss'],
   standalone: true,
   imports: [
+    DatePipe,
     TasaCargaModule,
     ReactiveFormsModule
   ],
@@ -38,9 +42,9 @@ export default class TasaCargaComponent {
   public serviceResponse: boolean = true;
 
   // variables propias del componente
-  public brands: Model[] = [];
+  public brands: TasaCargaModel[] = [];
   @ViewChild('dt1') dt!: Table;
-  public model: Model = new Model();
+  public tasaCarga: TasaCargaModel = new TasaCargaModel();
   public mensaje: string = messages.noConexion;
   public formRegistro: FormGroup = this.createFormGroup();
 
@@ -71,9 +75,10 @@ export default class TasaCargaComponent {
   public dialogRegistro: boolean = false;
 
   constructor(
-    public tasaCargaService: TasaCargaService,
+    private datePipe: DatePipe,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
+    private parTasaCargaService: ParTasaCargaService
   ) { }
 
   ngOnInit(): void {
@@ -94,7 +99,7 @@ export default class TasaCargaComponent {
 
   getAllModels() {
     this.loading = true;
-    this.tasaCargaService.getAll().subscribe(
+    this.parTasaCargaService.getAll().subscribe(
       (resp: any) => {
         if (resp) {
           this.brands = resp.data;
@@ -145,31 +150,39 @@ export default class TasaCargaComponent {
     this.dt.filter(value, field, matchMode);
   }
 
-  selectedEdit(item: Model) {
-    this.model = new Model();
-    this.model = item;
+  selectedEdit(item: TasaCargaModel) {
+    this.tasaCarga = new TasaCargaModel();
+    this.tasaCarga = item;
+    this.tasaCarga.startTime =  this.datePipe.transform(this.tasaCarga.startTime, 'HH:mm:ss') || '';
+    this.tasaCarga.endTime =  this.datePipe.transform(this.tasaCarga.endTime, 'HH:mm:ss') || '';
+    this.tasaCarga.amount = this.extractNumeric(this.tasaCarga.amount);
     this.formRegistro.patchValue(JSON.parse(JSON.stringify(item)));
     this.actionDialog(true, 'edit')
   }
 
+  extractNumeric(value: string): string {
+    const match = value.match(/[\d,]+/); // Busca solo números y comas
+    return match ? match[0] : ''; // Devuelve el número encontrado o una cadena vacía
+  }
+
   confirmSwitchChange(event: any, item) {
-    var texto = item.activo ? 'Habilitar' : 'Deshabilitar';
-    this.previousState = item.activo;
+    var texto = item.enabled ? 'Habilitar' : 'Deshabilitar';
+    this.previousState = item.enabled;
     this.confirmationService.confirm({
       target: event.originalEvent.target,
-      message: `¿${texto} modelo ${item.modelCode} ?`,
+      message: `¿${texto} tasa de carga ${item.amount} Bs/Kw?`,
       header: 'Confirmación',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        item.activo = !this.previousState;
-        this.tasaCargaService.updateActivo(item.id, !item.activo).subscribe(
+        item.enabled = !this.previousState;
+        this.parTasaCargaService.cambiarEstado(item.id, item.enabled).subscribe(
           (resp: any) => {
             this.getAllModels();
           }
         )
       },
       reject: () => {
-        item.activo = !this.previousState;
+        item.enabled = !this.previousState;
       }
     });
   }
@@ -177,12 +190,12 @@ export default class TasaCargaComponent {
   createFormGroup() {
     return new FormGroup({
       id: new FormControl(null),
-      vendor: new FormControl('', [Validators.required]),
-      modelCode: new FormControl('', [Validators.required]),
-      boxSerialNumber: new FormControl('', [Validators.required]),
-      pointModel: new FormControl('', [Validators.required]),
-      pointSerialNumber: new FormControl('', [Validators.required]),
-      firmwareVersion: new FormControl('', [Validators.required]),
+      amount: new FormControl('', [Validators.pattern(/^\d+(\.\d{1,2})?$/)]),
+      description: new FormControl('', [Validators.required]),
+      minimumCurrent: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]\d*$/)]),
+      maximumCurrent: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]\d*$/)]),
+      startTime: new FormControl('', [Validators.required]),
+      endTime: new FormControl('', [Validators.required]),
     });
   }
 
@@ -198,10 +211,12 @@ export default class TasaCargaComponent {
   }
 
   onCreateRegistro() {
-    var registro: Model = {
+    var registro: TasaCargaModel = {
       ...this.formRegistro.value,
     };
-    this.tasaCargaService.create(registro).subscribe(
+    registro.activo = true
+    registro.amount = registro.amount +' Bs/Kw.'    
+    this.parTasaCargaService.create(registro).subscribe(
       (resp: any) => {
         if (resp) {
           this.actionDialog(false, 'create');
@@ -213,19 +228,40 @@ export default class TasaCargaComponent {
   }
 
   onUpdateRegistro() {
-    this.model.vendor = this.formRegistro.get('vendor').value;
-    this.model.modelCode = this.formRegistro.get('modelCode').value;
-    this.model.boxSerialNumber = this.formRegistro.get('boxSerialNumber').value;
-    this.model.pointModel = this.formRegistro.get('pointModel').value;
-    this.model.pointSerialNumber = this.formRegistro.get('pointSerialNumber').value;
-    this.model.firmwareVersion = this.formRegistro.get('firmwareVersion').value;
-    this.tasaCargaService.update(this.model).subscribe(
+    this.tasaCarga.amount = this.formRegistro.get('amount').value;
+    this.tasaCarga.startTime = (this.formRegistro.get('startTime').value).length == 8 ? this.convertToISO(this.formRegistro.get('startTime').value): this.formRegistro.get('startTime').value;;
+    this.tasaCarga.endTime = (this.formRegistro.get('endTime').value).length == 8 ? this.convertToISO(this.formRegistro.get('endTime').value): this.formRegistro.get('endTime').value;;
+    this.tasaCarga.minimumCurrent = this.formRegistro.get('minimumCurrent').value;
+    this.tasaCarga.maximumCurrent = this.formRegistro.get('maximumCurrent').value;
+    this.tasaCarga.description = this.formRegistro.get('description').value;
+    this.tasaCarga.activo = true;
+
+    this.tasaCarga.amount = this.tasaCarga.amount +' Bs/Kw.'
+    this.parTasaCargaService.update(this.tasaCarga).subscribe(
       (resp: any) => {
         this.getAllModels();
         this.actionDialog(false, 'edit');
         this.messageService.add({ severity: 'success', detail: messages.successUpdate });
       }
     )
+  }
+
+  convertToISO(hora: string): string {
+    const currentDate = new Date(); // Usa la fecha actual
+    const year = 2024; // Puedes especificar el año si es fijo
+    const month = 11; // Diciembre (recuerda que los meses son base 0 en JS)
+    const day = 12; // Día del mes
+
+    // Combina la fecha fija con la hora proporcionada
+    const [hours, minutes, seconds] = hora.split(':').map(Number);
+    const fecha = new Date(year, month, day, hours, minutes, seconds);
+
+    // Formato completo con zona horaria y milisegundos
+    return fecha.toISOString(); // Esto genera '2024-12-12T11:50:51.000Z'
+
+    // Ajuste de zona horaria manual (-4:00)
+    const timezoneOffsetMs = 4 * 60 * 60 * 1000; // -4 horas
+    return new Date(fecha.getTime() - timezoneOffsetMs).toISOString();
   }
 
   actionDialog(status, tipo) {

@@ -7,7 +7,9 @@ export const environment = {
 
     // apiUrlOcpp: 'http://localhost:8051', // server localhost
     // apiUrlOcpp: 'http://10.241.74.31:8051', // server ende ip
+    //apiUrlOcpp: 'https://testocpp.et.bo',
     apiUrlOcpp: 'https://dlpocpp.et.bo', // server test
+    
     apiEnv: 'production',
     formatDate: 'DD/MM/YYYY',
     formatDateDB: 'YYYY-MM-DD',
