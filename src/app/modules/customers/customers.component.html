@@ -86,9 +86,14 @@
           <tr>
             <td style="text-align:center; vertical-align:middle">{{rowIndex + 1}}</td>
             <td style="text-align:left; vertical-align:middle">{{rowData['electronicMail']}}</td>
-            <td style="text-align:right; vertical-align:middle">{{rowData['lastRechargeAmount'] | numberDecimal:2}}</td>
+
+            <td style="text-align:right; vertical-align:middle" *ngIf="rowData['lastRechargeAmount']">{{rowData['lastRechargeAmount'] | numberDecimal:2}}</td>
+            <td style="text-align:right; vertical-align:middle" *ngIf="!rowData['lastRechargeAmount']">0.00</td>
+
             <td style="text-align:right; vertical-align:middle">{{rowData['remainingCredit'] | numberDecimal:2}}</td>
-            <td style="text-align:left; vertical-align:middle">{{rowData['lastChargingStation']}}</td>
+
+            <td style="text-align:center; vertical-align:middle" *ngIf="rowData['lastChargingStation']">{{rowData['lastChargingStation']}}</td>
+            <td style="text-align:center; vertical-align:middle" *ngIf="!rowData['lastChargingStation']">Sin Carga</td>
 
             <td style="text-align:center; vertical-align:middle">
               <div *ngIf="esSuperAdmin">

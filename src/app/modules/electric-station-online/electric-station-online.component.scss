@@ -148,3 +148,10 @@ div.alineacion {
 :host ::ng-deep .p-splitbutton-menu {
   z-index: 1000; /* Ajusta según sea necesario */
 }
+
+.custom-menu-item {
+  font-weight: bold;
+  color: #FF6F61;
+  background-color: #0D9488; /* Fondo al pasar el mouse */
+    color: #F0F0F0;          
+}

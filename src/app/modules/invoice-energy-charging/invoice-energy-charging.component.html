@@ -15,9 +15,11 @@
         currentPageReportTemplate="Showing {first} to {last} of {{totalRecords}} entries"
         [rowsPerPageOptions]="[5,10,20]" [totalRecords]="100" paginatorLocale="es-ES">
         <ng-template pTemplate="caption">
-          <div class="flex">
+          <div class="flex justify-content-between align-items-center">
             <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
-              (click)="clearFilters(dt1) ; getInvoicesCharging()"></button>
+            (click)="clearFilters(dt1) ; getInvoicesCharging()"></button>
+            <h3 lass="text-center flex-grow-1">Datos de Facturación</h3>
+            <div></div>
           </div>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
@@ -33,13 +35,13 @@
               Razón Social
             </th>
             <th style="width:15%; text-align:center; vertical-align:middle" rowspan="2">
-              Nombre Cliente
+              Cliente
             </th>
             <th style="width:10%; text-align:center; vertical-align:middle" pSortableColumn="'amount'">
-              Monto
+              Monto Bs.
               <p-sortIcon field="amount" (click)="customSort('amount', orden)"></p-sortIcon>
             </th>
-            <th style="width:10%; text-align:center; vertical-align:middle" pSortableColumn="'fechaHoraEmision'">
+            <th style="width:5%; text-align:center; vertical-align:middle" pSortableColumn="'fechaHoraEmision'">
               Fecha de Emisión
               <p-sortIcon field="fechaHoraEmision" (click)="customSort('fechaHoraEmision', orden)"></p-sortIcon>
             </th>
@@ -87,7 +89,7 @@
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['nombreCliente']}}</td>
             <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['amount'] | numberDecimal:2}}</td>
 
-            <td style="text-align:right; vertical-align:middle" *ngIf="rowData['fechaHoraEmision']">{{rowData['fechaHoraEmision'] | formatDiaMesAnio}} </td>
+            <td style="text-align:right; vertical-align:middle" *ngIf="rowData['fechaHoraEmision']">{{rowData['fechaHoraEmision'] | formatDateAndTime}} </td>
             <td style="text-align:right; vertical-align:middle" *ngIf="!rowData['fechaHoraEmision']"></td>
 
             <td>

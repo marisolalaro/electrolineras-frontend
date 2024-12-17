@@ -6,6 +6,7 @@ export class EndPoins {
     static apiUrlOcpp = environment.apiUrlOcpp;
     static apiUrl = environment.apiUrl;
     static api = '/api/v1';
+    static apisv = '/api';
 
     // websocket
     static websocket = "/websocket";
@@ -70,6 +71,11 @@ export class EndPoins {
     static facturaDatos = "/invoicesByDates"
     static facturaClienteCompraVenta = "/invoicesClientCompraVenta"
     static facturaSuministro = "/invoicesPaymentsTransactionSuministro"
+
+    // ocpp
+    static chargePoint = "/chargePoint"
+    static stopTransactionOcppForce = "/stopTransaction"
+
 
     // paremetricas
     // models
