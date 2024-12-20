@@ -164,6 +164,8 @@ export default class PasswordComponent {
       header: 'Confirmación',
       message: `¿${texto} contraseña de fecha ${item.fechaRegistro} ?`,
       icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
       accept: () => {
         item.activo = !this.previousState;
         if (item.activo) {

@@ -160,6 +160,8 @@ export default class BrandComponent {
       message: `¿${texto} modelo ${item.modelCode} ?`,
       header: 'Confirmación',
       icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
       accept: () => {
         item.activo = !this.previousState;
         this.brandservice.updateActivo(item.id, !item.activo).subscribe(

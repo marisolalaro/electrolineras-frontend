@@ -63,6 +63,8 @@ export default class TasaCargaComponent {
   public pointModel: string = '';
   public pointSerialNumber: string = '';
   public firmwareVersion: string = '';
+  public startTime: string = '';
+  public endTime: string = '';
 
   // variables del paginador
   public page: number = 0;
@@ -153,9 +155,17 @@ export default class TasaCargaComponent {
   selectedEdit(item: TasaCargaModel) {
     this.tasaCarga = new TasaCargaModel();
     this.tasaCarga = item;
-    this.tasaCarga.startTime =  this.datePipe.transform(this.tasaCarga.startTime, 'HH:mm:ss') || '';
-    this.tasaCarga.endTime =  this.datePipe.transform(this.tasaCarga.endTime, 'HH:mm:ss') || '';
     this.tasaCarga.amount = this.extractNumeric(this.tasaCarga.amount);
+    this.tasaCarga.startTime = this.datePipe.transform(this.tasaCarga.startTime, 'HH:mm:ss') || '';
+    this.tasaCarga.endTime =  this.datePipe.transform(this.tasaCarga.endTime, 'HH:mm:ss') || '';
+    console.log(this.tasaCarga.startTime);
+    
+    // this.tasaCarga.startTime = this.tasaCarga.startTime.length == 8? this.datePipe.transform(this.tasaCarga.startTime, 'HH:mm:ss') || '';
+    // this.tasaCarga.endTime =  this.datePipe.transform(this.tasaCarga.endTime, 'HH:mm:ss') || '';
+
+    // this.tasaCarga.startTime = (this.formRegistro.get('startTime').value).length == 8 ? this.convertToISO(this.formRegistro.get('startTime').value): this.formRegistro.get('startTime').value;
+    // this.tasaCarga.endTime = (this.formRegistro.get('endTime').value).length == 8 ? this.convertToISO(this.formRegistro.get('endTime').value): this.formRegistro.get('endTime').value;
+
     this.formRegistro.patchValue(JSON.parse(JSON.stringify(item)));
     this.actionDialog(true, 'edit')
   }
@@ -173,6 +183,8 @@ export default class TasaCargaComponent {
       message: `¿${texto} tasa de carga ${item.amount} Bs/Kw?`,
       header: 'Confirmación',
       icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
       accept: () => {
         item.enabled = !this.previousState;
         this.parTasaCargaService.cambiarEstado(item.id, item.enabled).subscribe(
@@ -229,8 +241,8 @@ export default class TasaCargaComponent {
 
   onUpdateRegistro() {
     this.tasaCarga.amount = this.formRegistro.get('amount').value;
-    this.tasaCarga.startTime = (this.formRegistro.get('startTime').value).length == 8 ? this.convertToISO(this.formRegistro.get('startTime').value): this.formRegistro.get('startTime').value;;
-    this.tasaCarga.endTime = (this.formRegistro.get('endTime').value).length == 8 ? this.convertToISO(this.formRegistro.get('endTime').value): this.formRegistro.get('endTime').value;;
+    this.tasaCarga.startTime = (this.formRegistro.get('startTime').value).length == 8 ? this.convertToISO(this.formRegistro.get('startTime').value): this.formRegistro.get('startTime').value;
+    this.tasaCarga.endTime = (this.formRegistro.get('endTime').value).length == 8 ? this.convertToISO(this.formRegistro.get('endTime').value): this.formRegistro.get('endTime').value;
     this.tasaCarga.minimumCurrent = this.formRegistro.get('minimumCurrent').value;
     this.tasaCarga.maximumCurrent = this.formRegistro.get('maximumCurrent').value;
     this.tasaCarga.description = this.formRegistro.get('description').value;

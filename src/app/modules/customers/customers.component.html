@@ -153,7 +153,7 @@
           </div>
         </p-tabPanel>
 
-        <p-tabPanel header="Transacciones">
+        <p-tabPanel header="Compras de Crédito /Gifcard">
           <div style="padding-bottom: 3.250rem;">
             <p-table [value]="customer.paymentTransactionsElectrolineraList" [paginator]="true" [rows]="5"
               [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]" #tableref width="100%"
@@ -212,7 +212,7 @@
           </div>
         </p-tabPanel>
 
-        <p-tabPanel header="Cargas">
+        <!-- <p-tabPanel header="Cargas">
           <div style="padding-bottom: 3.250rem;">
             <p-table [value]="customer.chargeClientList" [paginator]="true" [rows]="5"
               [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]" #tableCargas
@@ -271,9 +271,9 @@
             </p-table>
           </div>
 
-        </p-tabPanel>
+        </p-tabPanel> -->
 
-        <p-tabPanel header="Historial">
+        <p-tabPanel header="Historial de Cargas">
           <div style="padding-bottom: 3.250rem;">
             <p-table [value]="customerHistory" [paginator]="true" [rows]="5"
               [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]" #tableref width="100%"

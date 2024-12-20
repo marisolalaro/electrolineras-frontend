@@ -156,6 +156,8 @@ export default class AddressComponent {
       target: event.originalEvent.target,
       message: `¿${texto} modelo ${item.modelCode} ?`,
       icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
       accept: () => {
         item.activo = !this.previousState;
         // this.addressService.updateActivo(item.id, !item.activo).subscribe(

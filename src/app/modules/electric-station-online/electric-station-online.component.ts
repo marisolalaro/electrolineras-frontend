@@ -601,6 +601,8 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       header: 'Confirmación',
       acceptIcon: "none",
       rejectIcon: "none",
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
       rejectButtonStyleClass: "p-button-text",
       accept: () => {
         this.mobileService.liberarTransaccionUsuario(datoselectrolinera)
@@ -632,6 +634,8 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       header: 'Confirmación',
       acceptIcon: "none",
       rejectIcon: "none",
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
       rejectButtonStyleClass: "p-button-text",
       accept: () => {
         this.clientElectricStationsService.detenerCargaClient(cliente.idClientUser)
@@ -669,6 +673,8 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       header: 'Confirmación',
       acceptIcon: "none",
       rejectIcon: "none",
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
       rejectButtonStyleClass: "p-button-text",
       accept: () => {
         this.mobileService.detieneTransacionCredit(this.electricStation.sessionIndex, transaccionid, cliente.idClientUser)
@@ -753,6 +759,8 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       header: 'Confirmación',
       acceptIcon: "none",
       rejectIcon: "none",
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
       rejectButtonStyleClass: "p-button-text",
       accept: () => {
         this.habilitaMasOpciones = false;
@@ -791,6 +799,8 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       icon: 'pi pi-exclamation-triangle',
       acceptIcon: "none",
       rejectIcon: "none",
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
       rejectButtonStyleClass: "p-button-text",
       accept: () => {
         item.visibility = !this.previousState;

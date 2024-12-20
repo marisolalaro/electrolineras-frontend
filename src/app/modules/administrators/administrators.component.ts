@@ -253,6 +253,8 @@ export default class AdministratorsComponent {
       header: 'Confirmación',
       message: `¿${texto} a ${item.electronicMail} ?`,
       icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
       accept: () => {        
         item.enabled = !this.previousState;
         if (!item.enabled) {

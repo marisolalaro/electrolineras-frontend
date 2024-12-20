@@ -62,6 +62,7 @@ export default class CustomersComponent {
   public customer: Customer = new Customer();
   public mensaje: string = messages.noConexion;
   public customerHistory: ChargingHistoryModel[] = [];
+  public filaSeleccionada: any;
 
   // variables globales
   public titlesGlobales = titles;
@@ -241,6 +242,7 @@ export default class CustomersComponent {
   }
 
   confirmSwitchChange(event: any, item) {
+    this.filaSeleccionada = item;
     var texto = item.enabled ? 'Habilitar' : 'Deshabilitar';
     this.previousState = item.enabled;
     this.confirmationService.confirm({
@@ -248,7 +250,10 @@ export default class CustomersComponent {
       header: 'Confirmación',
       message: `¿${texto} a ${item.electronicMail} ?`,
       icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
       accept: () => {
+        console.log('paso por acept');
         item.enabled = !this.previousState;
         if (!item.enabled) {
           this.customerService.enabledCustomer(item.id).subscribe(
@@ -266,6 +271,8 @@ export default class CustomersComponent {
       },
       reject: () => {
         item.enabled = !this.previousState;
+
+        console.log('paso por REJEJCT');
       }
     });
   }

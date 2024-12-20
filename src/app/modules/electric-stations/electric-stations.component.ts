@@ -481,7 +481,7 @@ export default class ElectricStationsComponent implements OnInit {
       message: `¿${texto} la electrolinera ${item.nameStation}?`,
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación',
-      acceptLabel: 'Si',
+      acceptLabel: 'Sí',
       rejectLabel: 'No',
       accept: () => {
         if (item.enabled) {

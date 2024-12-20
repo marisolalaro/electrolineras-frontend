@@ -24,6 +24,7 @@ import { NotFoundComponent } from '../../not-found/not-found.component';
   exports:[
     PrimeModule,
     CommonModule,
+    PipesModule,
     NotFoundComponent,
   ],
   providers: [

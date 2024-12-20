@@ -35,6 +35,12 @@
               Corriente Mínima<p-sortIcon field="modelCode"></p-sortIcon></th>
             <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="boxSerialNumber">
               Corriente Máxima<p-sortIcon field="boxSerialNumber"></p-sortIcon></th>
+
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="boxSerialNumber">
+              Hora Inicio<p-sortIcon field="startTime"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="boxSerialNumber">
+              Hora final<p-sortIcon field="endTime"></p-sortIcon></th>
+
             <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="enabled" rowspan="2">
               Estado<p-sortIcon field="enabled"></p-sortIcon></th>
             <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
@@ -53,6 +59,14 @@
                 placeholder="Busca Número Serie Modelo" class="w-full" [(ngModel)]="boxSerialNumber">
             </th>
             <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'startTime', 'contains')"
+                placeholder="Busca Hora Inicial" class="w-full" [(ngModel)]="startTime">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'endTime', 'contains')"
+                placeholder="Busca Hora Final" class="w-full" [(ngModel)]="endTime">
+            </th>
+            <th>
               <input pInputText type="text" (input)="applyFilter($event, 'pointModel', 'contains')"
                 placeholder="Busca Tipo" class="w-full" [(ngModel)]="pointModel">
             </th>
@@ -65,6 +79,8 @@
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['description']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['minimumCurrent']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['maximumCurrent']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['startTime'] | formatHoraMinutoSegundo}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['endTime'] | formatHoraMinutoSegundo}}</td>
 
             <td style="text-align:left; vertical-align:middle" class="uppercase">
               <p-inputSwitch [(ngModel)]="rowData['enabled']" (onChange)="confirmSwitchChange($event, rowData)">
