@@ -9,6 +9,7 @@ export class BodyFilterModel {
   sort: SortFilterModel;
   search: SearchFilterModel;
   filtro?: SortFilterModel;
+  paid?: boolean;
 
   constructor(page, size, idRol?, idUsuario?) {
     this.page = page;

@@ -40,6 +40,7 @@ export default class TransactionsComponent implements OnInit {
   public visible: boolean = false;
   public loading: boolean = true;
   public serviceResponse: boolean = true;
+  public filtroPagadas: boolean = true;
 
   // variables propias del componente
   public es: any;
@@ -99,7 +100,7 @@ export default class TransactionsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getTransactions();
+    this.getTransactions(true);
     this.inicializaDatos();
   }
 
@@ -116,9 +117,15 @@ export default class TransactionsComponent implements OnInit {
     };
   }
 
-  getTransactions(): void {
+  confirmSwitchChange(event) {
+    console.log(event.checked);
+      this.getTransactions(event.checked)
+  }
+
+  getTransactions(filtro): void {
     this.loading = true;
     this.date = null
+    this.bodyFilter.paid = filtro;
     this.transactionService.getAllFilter(this.bodyFilter).subscribe(
       (resp: any) => {
         if (resp) {
@@ -174,7 +181,7 @@ export default class TransactionsComponent implements OnInit {
       this.bodyFilter.search.column = DBAttributeName.tabPaymentTransactions_AttribDocReciveid;
     }
     this.bodyFilter.search.value = value;
-    this.getTransactions();
+    this.getTransactions(true);
   }
 
   customSort(field, orden) {
@@ -217,13 +224,13 @@ export default class TransactionsComponent implements OnInit {
       this.bodyFilter.sort.direction = "asc"
     }
     this.bodyFilter.page = 0;
-    this.getTransactions();
+    this.getTransactions(true);
   }
 
   onPageChange(event: any) {
     this.bodyFilter.page = event.page;
     this.bodyFilter.size = event.rows;
-    this.getTransactions();
+    this.getTransactions(true);
   }
 
   onOpenImagenQR(item) {
