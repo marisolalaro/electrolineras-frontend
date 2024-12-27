@@ -28,18 +28,6 @@
             <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">
               #
             </th>
-            <!-- <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="'names'">
-              Nombres
-              <p-sortIcon field="names" (click)="customSort('names', orden)"></p-sortIcon>
-            </th>
-            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="'lastName'">
-              Apellido Paterno
-              <p-sortIcon field="lastName" (click)="customSort('lastName', orden)"></p-sortIcon>
-            </th>
-            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="'motherLastName'">
-              Apellido Materno
-              <p-sortIcon field="motherLastName" (click)="customSort('motherLastName', orden)"></p-sortIcon>
-            </th> -->
             <th style="width:16%; text-align:center; vertical-align:middle" pSortableColumn="'electronicMail'">
               Correo Electrónico
               <p-sortIcon field="electronicMail" (click)="customSort('electronicMail', orden)"></p-sortIcon>
@@ -63,18 +51,6 @@
           </tr>
 
           <tr>
-            <!-- <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'names', 'contains')"
-                placeholder="Busca por nombres" class="w-full" [(ngModel)]="names">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'lastName', 'contains')"
-                placeholder="Busca por nombres" class="w-full" [(ngModel)]="lastName">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'motherLastName', 'contains')"
-                placeholder="Busca por apellido materno" class="w-full" [(ngModel)]="motherLastName">
-            </th> -->
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'electronicMail', 'contains')"
                 placeholder="Busca por Correo Electrónico" class="w-full" [(ngModel)]="electronicMail">
@@ -133,13 +109,40 @@
 
       <p-tabView>
         <p-tabPanel header="Cliente">
-          <div class="grid">
+          <div class="card">
+            <div class="surface-section">
+              <div class="font-medium text-3xl mb-3" style="color: var(--primary-color-text)">Mas Información</div>
+              <ul class="list-none p-0 m-0">
+                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                  <div class="text-500 w-6 md:w-2 font-medium"><b>Usuario:</b></div>
+                  <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
+                    {{customer.electronicMail}}</div>
+                </li>
+                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                  <div class="text-500 w-6 md:w-2 font-medium"><b>Última Transacción Bs: </b></div>
+                  <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
+                    {{customer.lastRechargeAmount}}</div>
+                </li>
+                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                  <div class="text-500 w-6 md:w-2 font-medium"><b>Saldo Actual: </b></div>
+                  <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
+                    {{customer.remainingCredit}}</div>
+                </li>
+                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                  <div class="text-500 w-6 md:w-2 font-medium"><b>Última Estación de Carga: </b></div>
+                  <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
+                    {{customer.lastChargingStation}}</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- <div class="grid">
             <div class="col-3" style="text-align: left;">
               <ul>
                 <li><i class="pi pi-user" style="color: var(--primary-color)"></i> &nbsp; <b>Usuario: </b></li>
-                <li><i class="pi pi-credit-card" style="color: var(--primary-color)"></i> &nbsp; <b>Ultima Transacción Bs: </b></li>
+                <li><i class="pi pi-credit-card" style="color: var(--primary-color)"></i> &nbsp; <b>Última Transacción Bs: </b></li>
                 <li><i class="pi pi-money-bill" style="color: var(--primary-color)"></i> &nbsp; <b>Saldo Actual: </b></li>
-                <li><i class="pi pi-car" style="color: var(--primary-color)"></i> &nbsp; <b>Ultima Estación de Carga: </b></li>
+                <li><i class="pi pi-car" style="color: var(--primary-color)"></i> &nbsp; <b>Última Estación de Carga: </b></li>
               </ul>
             </div>
             <div class="col-9" style="text-align: left;">
@@ -150,9 +153,9 @@
                 <li><label>{{customer.lastChargingStation}}</label></li>
               </ul>
             </div>
-          </div>
+          </div> -->
         </p-tabPanel>
-
+        <!-- aqui se muestra a todos los danis -->
         <p-tabPanel header="Compras de Crédito /Gifcard">
           <div style="padding-bottom: 3.250rem;">
             <p-table [value]="customer.paymentTransactionsElectrolineraList" [paginator]="true" [rows]="5"
@@ -303,6 +306,9 @@
                   <th style="width:15%" pSortableColumn="energyConsumed">Energia Consumida (Wh)
                     <p-sortIcon field="energyConsumed"></p-sortIcon>
                   </th>
+                  <th style="width:15%" pSortableColumn="energyConsumed">Monto Carga (Bs)
+                    <p-sortIcon field="energyConsumed"></p-sortIcon>
+                  </th>
                   <th style="width:15%" pSortableColumn="tipocurrentOfferedMode">Velocidad de Carga
                     <p-sortIcon field="tipocurrentOfferedMode"></p-sortIcon>
                   </th>
@@ -318,6 +324,7 @@
                   <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['startedAt'] | formatDateAndTime}}</td>
                   <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['finishedAt'] | formatDateAndTime}}</td>
                   <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['energyConsumed']}}</td>
+                  <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['totalMoneyConsumed'] | numberDecimal:2}}</td>
                   <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['tipocurrentOfferedMode']}}</td>
                   <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['currentOfferedMode'] | numberDecimal:2}}</td>
                 </tr>

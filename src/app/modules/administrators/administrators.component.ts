@@ -153,7 +153,7 @@ export default class AdministratorsComponent {
     this.formRegistro = this.createFormGroup();
   }
 
-  onSelecetedEdit(item: AdministratorModel) {    
+  onSelecetedEdit(item: AdministratorModel) {
     this.administrador = new AdministratorModel();
     this.administrador = item;
     this.formRegistro.patchValue(JSON.parse(JSON.stringify(item)));

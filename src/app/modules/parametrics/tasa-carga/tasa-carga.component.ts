@@ -280,4 +280,9 @@ export default class TasaCargaComponent {
     tipo == 'create' ? this.dialogRegistro = status : this.dialogEdit = status;
   }
 
+  openDialogCreate() {
+    this.formRegistro.reset();
+    this.formRegistro = this.createFormGroup();
+    this.actionDialog(true, 'create')
+  }
 }

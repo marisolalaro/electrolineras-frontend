@@ -233,6 +233,12 @@ export default class PasswordComponent {
     )
   }
 
+  openDialogCreate() {
+    this.formRegistro.reset();
+    this.formRegistro = this.createFormGroup();
+    this.actionDialog(true, 'create')
+  }
+  
   actionDialog(status, tipo) {
     tipo == 'create' ? this.dialogRegistro = status : this.dialogEdit = status;
   }

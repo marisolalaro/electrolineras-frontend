@@ -7,7 +7,7 @@
       <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;" *ngIf="serviceResponse">
         <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllModels()" pTooltip="Actualizar"
           tooltipPosition="left"></p-button> &nbsp;
-        <button pButton pRipple class="mat-raised-button" (click)="actionDialog(true, 'create')">
+        <button pButton pRipple class="mat-raised-button" (click)="openDialogCreate()">
           Crear Nuevo Registro</button>
       </div>
     </div>

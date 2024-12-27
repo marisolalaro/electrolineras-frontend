@@ -694,27 +694,66 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
     });
   }
 
+  // CASO4 forzar
   onForzarDetencion(itemConector) {
-    console.log(JSON.stringify(itemConector));
+    console.log();
+    
+    var cliente: ClientChargingStatusModel = itemConector.nombre == 'CONECTOR DE CARGA 1' ? this.cliente1 : this.cliente2;
+    // var transaccionid = itemConector.nombre == 'CONECTOR DE CARGA 1' ? this.transaccionid1 : this.transaccionid2;
+
     var metervalues = itemConector.nombre == 'CONECTOR DE CARGA 1' ? this.meterValues1 : this.meterValues2;
-    var conector: any  = {
-      "sessionIndex": metervalues.sessionIndex || '',
-      "transactionId": metervalues.transactionId || ''
+    let conector = {
+      sessionIndex: this.electricStation.sessionIndex || '',
+      transactionId: metervalues.transactionId || ''
     }
-    this.forzarDetencionService.onForzarDetencion(conector).subscribe((resp: any) => {
-      if (resp) {
-        this.messageService.add({ severity: 'info', detail: resp.message });
-      }
-    }, err => {
-      if (err.status == 200) {
-        this.messageService.add({ severity: 'info', detail: 'Se detuvo forzosamente la conexion' });
-      } else {
-        console.log('error...');
-        
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Forzar la Detención de carga del usuario ' + cliente.userName + '?',
+      icon: 'pi pi-exclamation-triangle',
+      header: 'Confirmación',
+      acceptIcon: "none",
+      rejectIcon: "none",
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+        this.forzarDetencionService.onForzarDetencion(conector).subscribe((resp: any) => {
+          if (resp) {
+            this.messageService.add({ severity: 'info', detail: resp.message });
+          }
+        }, err => {
+          if (err.status == 200) {
+            this.messageService.add({ severity: 'info', detail: 'Se detuvo forzosamente la conexión' });
+          } else {
+            console.log('error...');
+            
+          }
+        });
+      },
+      reject: () => {
       }
     });
 
-    this.meterValues1
+
+    // console.log(JSON.stringify(itemConector));
+    // var metervalues = itemConector.nombre == 'CONECTOR DE CARGA 1' ? this.meterValues1 : this.meterValues2;
+    // let conector: any  = {
+    //   "sessionIndex": metervalues.sessionIndex || '',
+    //   "transactionId": metervalues.transactionId || ''
+    // }
+    // this.forzarDetencionService.onForzarDetencion(conector).subscribe((resp: any) => {
+    //   if (resp) {
+    //     this.messageService.add({ severity: 'info', detail: resp.message });
+    //   }
+    // }, err => {
+    //   if (err.status == 200) {
+    //     this.messageService.add({ severity: 'info', detail: 'Se detuvo forzosamente la conexion' });
+    //   } else {
+    //     console.log('error...');
+        
+    //   }
+    // });
+    // this.meterValues1
   }
 
   dialogPassword() {

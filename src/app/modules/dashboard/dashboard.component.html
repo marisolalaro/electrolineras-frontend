@@ -19,7 +19,7 @@
                 <div class="font-medium text-xl mb-2" style="color: var(--primary-color-text)">
                   {{electricStations[0]?.nameStation}}</div>
                 <div class="text-600">{{electricStations[0]?.descripcion}}</div>
-                <hr class="new new my-3 mx-0 border-top-1 border-none"/>
+                <hr class="new new my-3 mx-0 border-top-1 border-none" />
                 <div class="text-center justify-content-between lg:justify-content-center align-items-center flex-wrap">
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-qrcode mr-2"></i>
@@ -32,6 +32,7 @@
                     <span style="color: var(--primary-color-text)">&nbsp;
                       <i class="pi pi-circle-fill" [style]="estadoHeartbeat.severity"></i>
                       <span style="color: var(--primary-color-text)"> {{estadoHeartbeat.estado}}</span>
+                      <p-progressBar [value]="tiempo" *ngIf="estadoHeartbeat.estado != 'En línea'" [showValue]="false"  [style]="{'height': '6px'}"></p-progressBar>
                     </span>
                   </li>
                   <li class="flex align-items-center mb-1">
@@ -56,7 +57,8 @@
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-info-circle mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Modelo Tipo:</span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.model.pointModel}}</span>
+                    <span
+                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.model.pointModel}}</span>
                   </li>
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-info-circle mr-2"></i>
@@ -68,12 +70,14 @@
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-info-circle mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Versión Firmware: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.model.firmwareVersion}}</span>
+                    <span
+                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.model.firmwareVersion}}</span>
                   </li>
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-sort-alt mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Tasa de Carga: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.chargeRate.amount}}</span>
+                    <span
+                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.chargeRate.amount}}</span>
                   </li>
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-map-marker mr-2"></i>
@@ -84,7 +88,8 @@
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-building mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Publico: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.ocppPublicAccessAllowed |
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.ocppPublicAccessAllowed
+                      |
                       formatSiNo}}</span>
                   </li>
                   <li class="flex align-items-center mb-1">
@@ -144,6 +149,7 @@
                     <span style="color: var(--primary-color-text)">&nbsp;
                       <i class="pi pi-circle-fill" [style]="estadoHeartbeat2.severity"></i>
                       <span style="color: var(--primary-color-text)"> {{estadoHeartbeat2.estado}}</span>
+                      <p-progressBar [value]="tiempo2" *ngIf="estadoHeartbeat2.estado != 'En línea'" [showValue]="false"  [style]="{'height': '6px'}"></p-progressBar>
                     </span>
                   </li>
                   <li class="flex align-items-center mb-1">
@@ -168,7 +174,8 @@
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-info-circle mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Modelo Tipo:</span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.model.pointModel}}</span>
+                    <span
+                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.model.pointModel}}</span>
                   </li>
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-info-circle mr-2"></i>
@@ -180,12 +187,14 @@
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-info-circle mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Versión Firmware: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.model.firmwareVersion}}</span>
+                    <span
+                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.model.firmwareVersion}}</span>
                   </li>
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-sort-alt mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Tasa de Carga: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.chargeRate.amount}}</span>
+                    <span
+                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.chargeRate.amount}}</span>
                   </li>
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-map-marker mr-2"></i>
@@ -196,7 +205,8 @@
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-building mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Publico: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.ocppPublicAccessAllowed |
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.ocppPublicAccessAllowed
+                      |
                       formatSiNo}}</span>
                   </li>
                   <li class="flex align-items-center mb-1">
@@ -256,6 +266,7 @@
                     <span style="color: var(--primary-color-text)">&nbsp;
                       <i class="pi pi-circle-fill" [style]="estadoHeartbeat3.severity"></i>
                       <span style="color: var(--primary-color-text)"> {{estadoHeartbeat3.estado}}</span>
+                      <p-progressBar [value]="tiempo3" *ngIf="estadoHeartbeat3.estado != 'En línea'" [showValue]="false"  [style]="{'height': '6px'}"></p-progressBar>
                     </span>
                   </li>
                   <li class="flex align-items-center mb-1">
@@ -280,7 +291,8 @@
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-info-circle mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Modelo Tipo:</span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.model.pointModel}}</span>
+                    <span
+                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.model.pointModel}}</span>
                   </li>
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-info-circle mr-2"></i>
@@ -292,12 +304,14 @@
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-info-circle mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Versión Firmware: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.model.firmwareVersion}}</span>
+                    <span
+                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.model.firmwareVersion}}</span>
                   </li>
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-sort-alt mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Tasa de Carga: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.chargeRate.amount}}</span>
+                    <span
+                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.chargeRate.amount}}</span>
                   </li>
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-map-marker mr-2"></i>
@@ -308,7 +322,8 @@
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-building mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Publico: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.ocppPublicAccessAllowed |
+                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.ocppPublicAccessAllowed
+                      |
                       formatSiNo}}</span>
                   </li>
                   <li class="flex align-items-center mb-1">
