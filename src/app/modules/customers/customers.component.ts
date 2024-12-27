@@ -20,6 +20,7 @@ import { ChargingHistoryModel } from 'src/app/core/model/charging-history';
 // services
 import { CustomerService } from './services/customer.service';
 import { ChargingHistoryService } from 'src/app/core/services/charging-history.service';
+import { ProcessService } from './services/process.service';
 
 @Component({
   selector: 'app-customers',
@@ -63,6 +64,7 @@ export default class CustomersComponent {
   public mensaje: string = messages.noConexion;
   public customerHistory: ChargingHistoryModel[] = [];
   public filaSeleccionada: any;
+  public datosFactSaldo: any;
 
   // variables globales
   public titlesGlobales = titles;
@@ -90,6 +92,7 @@ export default class CustomersComponent {
   constructor(
     public global: Global,
     public customerService: CustomerService,
+    public processService: ProcessService,
     private confirmationService: ConfirmationService,
     private chargingHistoryService: ChargingHistoryService,
   ) { }
@@ -131,10 +134,22 @@ export default class CustomersComponent {
     this.totalTransacciones = customer.paymentTransactionsElectrolineraList.length;
     this.totalCargas = customer.chargeClientList.length;
     this.getHistorial();
-    // consumir servicio nuevo
+    this.getFacturacionSaldo(this.customer.id);
     this.dialogDetalle = true;
   }
 
+  getFacturacionSaldo(id) {
+    this.processService.getInquiryElectrolinera(id).subscribe(
+      (resp: any) => {
+        if (resp) {
+          this.datosFactSaldo = resp.data;
+        }
+      }, err => {
+        console.log(err);
+        
+      }
+    )
+  }
   getHistorial() {
     this.chargingHistoryService.getAllHistoryByIdclient(this.customer.id).subscribe(
       (resp: any) => {

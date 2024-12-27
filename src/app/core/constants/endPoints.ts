@@ -75,7 +75,10 @@ export class EndPoins {
     // ocpp
     static chargePoint = "/chargePoint"
     static stopTransactionOcppForce = "/stopTransaction"
-
+    
+    // process-electrolinera
+    static processelectrolinera = "/process-electrolinera"
+    static inquiryElectrolinera = "/inquiry-electrolinera"
 
     // paremetricas
     // models

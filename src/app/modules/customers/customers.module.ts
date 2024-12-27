@@ -7,6 +7,7 @@ import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { CustomerService } from './services/customer.service';
 import { NotFoundComponent } from '../not-found/not-found.component';
 import { ChargingHistoryService } from 'src/app/core/services/charging-history.service';
+import { ProcessService } from './services/process.service';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ChargingHistoryService } from 'src/app/core/services/charging-history.s
   ],
   providers: [
     CustomerService,
+    ProcessService,
     ChargingHistoryService
   ]
 })
