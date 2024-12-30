@@ -229,7 +229,8 @@ export default class TransactionsComponent implements OnInit {
   onPageChange(event: any) {
     this.bodyFilter.page = event.page;
     this.bodyFilter.size = event.rows;
-    this.getTransactions(true);
+    this.bodyFilter.paid = this.filtroPagadas;
+    this.getTransactions(this.bodyFilter.paid);
   }
 
   onOpenImagenQR(item) {
