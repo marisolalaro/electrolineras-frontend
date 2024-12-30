@@ -10,4 +10,6 @@ export class TasaCargaModel {
     minimumCurrent: number;
     maximumCurrent: number;
     description: string;
+    tiempoInicial: string;
+    tiempoFinal: string;
 }

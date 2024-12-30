@@ -118,7 +118,6 @@ export default class TransactionsComponent implements OnInit {
   }
 
   confirmSwitchChange(event) {
-    console.log(event.checked);
       this.getTransactions(event.checked)
   }
 

@@ -152,20 +152,15 @@ export default class TasaCargaComponent {
     this.dt.filter(value, field, matchMode);
   }
 
+  public tiempoFinal = '';
+  public tiempoInicial = '';
+
   selectedEdit(item: TasaCargaModel) {
     this.tasaCarga = new TasaCargaModel();
     this.tasaCarga = item;
     this.tasaCarga.amount = this.extractNumeric(this.tasaCarga.amount);
-    this.tasaCarga.startTime = this.datePipe.transform(this.tasaCarga.startTime, 'HH:mm:ss') || '';
-    this.tasaCarga.endTime =  this.datePipe.transform(this.tasaCarga.endTime, 'HH:mm:ss') || '';
-    console.log(this.tasaCarga.startTime);
-    
-    // this.tasaCarga.startTime = this.tasaCarga.startTime.length == 8? this.datePipe.transform(this.tasaCarga.startTime, 'HH:mm:ss') || '';
-    // this.tasaCarga.endTime =  this.datePipe.transform(this.tasaCarga.endTime, 'HH:mm:ss') || '';
-
-    // this.tasaCarga.startTime = (this.formRegistro.get('startTime').value).length == 8 ? this.convertToISO(this.formRegistro.get('startTime').value): this.formRegistro.get('startTime').value;
-    // this.tasaCarga.endTime = (this.formRegistro.get('endTime').value).length == 8 ? this.convertToISO(this.formRegistro.get('endTime').value): this.formRegistro.get('endTime').value;
-
+    this.tasaCarga.tiempoInicial = this.datePipe.transform(this.tasaCarga.startTime, 'HH:mm:ss');
+    this.tasaCarga.tiempoFinal = this.datePipe.transform(this.tasaCarga.endTime, 'HH:mm:ss');
     this.formRegistro.patchValue(JSON.parse(JSON.stringify(item)));
     this.actionDialog(true, 'edit')
   }
@@ -208,6 +203,8 @@ export default class TasaCargaComponent {
       maximumCurrent: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]\d*$/)]),
       startTime: new FormControl('', [Validators.required]),
       endTime: new FormControl('', [Validators.required]),
+      tiempoInicial: new FormControl(null),
+      tiempoFinal: new FormControl(null),
     });
   }
 
@@ -241,8 +238,8 @@ export default class TasaCargaComponent {
 
   onUpdateRegistro() {
     this.tasaCarga.amount = this.formRegistro.get('amount').value;
-    this.tasaCarga.startTime = (this.formRegistro.get('startTime').value).length == 8 ? this.convertToISO(this.formRegistro.get('startTime').value): this.formRegistro.get('startTime').value;
-    this.tasaCarga.endTime = (this.formRegistro.get('endTime').value).length == 8 ? this.convertToISO(this.formRegistro.get('endTime').value): this.formRegistro.get('endTime').value;
+    this.tasaCarga.startTime = (this.formRegistro.get('tiempoInicial').value).length == 8 ? this.convertToISO(this.formRegistro.get('tiempoInicial').value): this.formRegistro.get('tiempoInicial').value;
+    this.tasaCarga.endTime = (this.formRegistro.get('tiempoFinal').value).length == 8 ? this.convertToISO(this.formRegistro.get('tiempoFinal').value): this.formRegistro.get('tiempoFinal').value;
     this.tasaCarga.minimumCurrent = this.formRegistro.get('minimumCurrent').value;
     this.tasaCarga.maximumCurrent = this.formRegistro.get('maximumCurrent').value;
     this.tasaCarga.description = this.formRegistro.get('description').value;

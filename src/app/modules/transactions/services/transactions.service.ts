@@ -15,9 +15,7 @@ export class TransactionsService {
     this.apiService = EndPoins.apiUrl + EndPoins.api + EndPoins.transaction;
    }
 
-  getAllFilter(bodyFilter: BodyFilterModel) {
-    console.log(JSON.stringify(bodyFilter) );
-    
+  getAllFilter(bodyFilter: BodyFilterModel) {    
     return this.http.post(this.apiService + EndPoins.transactionCharges, bodyFilter);
   }
 }

@@ -334,11 +334,6 @@ export default class DashboardComponent implements OnInit, OnDestroy {
       if (message) {
         this.escucho = true;
         this.heartbeatMessage = message.sessionIndex;
-
-        // this.cambiarEstadoHeartbeat(estadosConectores.conectando, estadosConectores.colorConectando);
-
-        console.log(JSON.stringify('escucha hearbeat'));
-        console.log(JSON.stringify(message));
         if (this.heartbeatMessage == this.electricStations[0].sessionIndex) {
           this.cambiarEstadoHeartbeat(estadosConectores.enLinea, estadosConectores.colorEnLinea);
           this.reiniciarTemporizadorHeartbeat();
@@ -433,9 +428,7 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     }
     this.tiempo = JSON.parse(JSON.stringify(0));
     this.interval = setInterval(() => {
-      this.tiempo++;
-      console.log('CAPITAN RAVELO ' + this.tiempo);
-      
+      this.tiempo++;      
       if (this.tiempo >= 130) {
         this.tiempo = JSON.parse(JSON.stringify(0));
         if (this.websocketService.isConnected()) {
@@ -457,7 +450,6 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     // Iniciar el cronómetro al cargar el componente
     this.interval2 = setInterval(() => {
       this.tiempo2++;
-      console.log('EL ALTO ' + this.tiempo2);
       if (this.tiempo2 >= 130) {
         this.tiempo2 = JSON.parse(JSON.stringify(0));
         if (this.websocketService.isConnected()) {
@@ -479,7 +471,6 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     // Iniciar el cronómetro al cargar el componente
     this.interval3 = setInterval(() => {
       this.tiempo3++;
-      console.log('MIRAFLORES ' + this.tiempo3);
       if (this.tiempo3 >= 130) {
         this.tiempo3 = JSON.parse(JSON.stringify(0));
         if (this.websocketService.isConnected()) {
@@ -521,18 +512,12 @@ export default class DashboardComponent implements OnInit, OnDestroy {
 
   estadoElectrolinera(estados, id) {
     if (estados.length > 0 && estados.length < 3) {
-      if (id == 1) {
-        console.log(1111);
-        console.log(JSON.stringify(estados));
-        
-        // this.estadoHeartbeat = this.comparaEstados(estados[0].lastState, estados[1].lastState);
+      if (id == 1) {        
         this.statusElectrolinera0 = this.comparaEstados(estados[0].lastState, estados[1].lastState);
         if (estados[0].lastState == estadosConectores.cargando || estados[1].lastState == estadosConectores.cargando) {
-          console.log(2222);
           this.puertoCargando1 = true;
           this.estadoHeartbeat = { estado: estadosConectores.enLinea, severity: estadosConectores.colorEnLinea }
         } else {
-          console.log(3333);
           this.puertoCargando1 = false;
         }
         this.comparaEstados(estados[0], estados[1]);

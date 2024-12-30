@@ -11,7 +11,7 @@
           Crear Nuevo Registro</button>
       </div>
     </div>
-
+ 
     <div class="row" *ngIf="serviceResponse">
       <p-table responsiveLayout="stack" #dt1 [value]="brands" dataKey="id"
         styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
@@ -79,8 +79,12 @@
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['description']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['minimumCurrent']}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['maximumCurrent']}}</td>
+
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['startTime'] | formatHoraMinutoSegundo}}</td>
             <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['endTime'] | formatHoraMinutoSegundo}}</td>
+
+            <!-- <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['startTime'] | formatHoraMinutoSegundo}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['endTime'] | formatHoraMinutoSegundo}}</td> -->
 
             <td style="text-align:left; vertical-align:middle" class="uppercase">
               <p-inputSwitch [(ngModel)]="rowData['enabled']" (onChange)="confirmSwitchChange($event, rowData)">
@@ -245,29 +249,22 @@
             </div>
 
             <div class="form-group field">
-              <label for="startTime">{{labelsGlobales.horaInicio}}</label>
-              <!-- <input type="text" pInputText required formControlName="startTime"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['startTime'].invalid}"
-                oninput="this.value = this.value.toUpperCase()" /> -->
-              <p-calendar formControlName="startTime" [showTime]="true" [showSeconds]="true"
+              <label for="tiempoInicial">{{labelsGlobales.horaInicio}}</label>
+              <p-calendar formControlName="tiempoInicial" [showTime]="true" [showSeconds]="true"
                 [timeOnly]="true"></p-calendar>
-
-              <div *ngIf="submitted && formRegistro.controls['startTime'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('startTime')?.hasError('required')">
+              <div *ngIf="submitted && formRegistro.controls['tiempoInicial'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('tiempoInicial')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>
             </div>
 
             <div class="form-group field">
-              <label for="endTime">{{labelsGlobales.horaFin}}</label>
-              <!-- <input type="text" pInputText required formControlName="endTime"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['endTime'].invalid}"
-                oninput="this.value = this.value.toUpperCase()" /> -->
-              <p-calendar formControlName="endTime" [showTime]="true" [showSeconds]="true"
+              <label for="tiempoFinal">{{labelsGlobales.horaFin}}</label>
+              <p-calendar formControlName="tiempoFinal" [showTime]="true" [showSeconds]="true"
                 [timeOnly]="true"></p-calendar>
-              <div *ngIf="submitted && formRegistro.controls['endTime'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('endTime')?.hasError('required')">
+              <div *ngIf="submitted && formRegistro.controls['tiempoFinal'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('tiempoFinal')?.hasError('required')">
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>

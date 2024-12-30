@@ -145,8 +145,6 @@ export default class CustomersComponent {
           this.datosFactSaldo = resp.data;
         }
       }, err => {
-        console.log(err);
-        
       }
     )
   }
@@ -268,7 +266,6 @@ export default class CustomersComponent {
       acceptLabel: 'Sí',
       rejectLabel: 'No',
       accept: () => {
-        console.log('paso por acept');
         item.enabled = !this.previousState;
         if (!item.enabled) {
           this.customerService.enabledCustomer(item.id).subscribe(
@@ -286,8 +283,6 @@ export default class CustomersComponent {
       },
       reject: () => {
         item.enabled = !this.previousState;
-
-        console.log('paso por REJEJCT');
       }
     });
   }
