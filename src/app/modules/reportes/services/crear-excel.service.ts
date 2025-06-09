@@ -5,6 +5,7 @@ import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { reports } from 'src/app/core/constants/labels';
 import { SegundosEnHoras } from 'src/app/core/utils/convertSegundosHoras';
+import { WattsEnKilovatios } from 'src/app/core/utils/convertWattsToKilovatios';
 
 @Injectable({
   providedIn: 'root'
@@ -648,7 +649,7 @@ export class CrearExcelService {
         data.chargingStation,
         moment(data.staredChargingAt).format('DD/MM/YYYY, HH:mm:ss'),
         moment(data.finisheAt).format('DD/MM/YYYY, HH:mm:ss'),
-        data.energyComsumed,
+        WattsEnKilovatios(data.energyComsumed),
         data.amount]);
     });
 

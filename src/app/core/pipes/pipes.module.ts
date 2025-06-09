@@ -14,6 +14,7 @@ import { FormatPagadoNoPagadoPipe } from './numbers/format-pagado-no-pagado.pipe
 // booleans
 import { FormatSiNoPipe } from './booleans/format-si-no.pipe';
 import { FormatHabilitadoDeshabilitadoPipe } from './booleans/format-habilitado-deshabilitado.pipe';
+import { FormatFieldWattsToKilovatiosPipe } from './numbers/format-field-watts-to-kilovatios';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { FormatHabilitadoDeshabilitadoPipe } from './booleans/format-habilitado-
     // numbers
     FormatFieldDecimalesPipe,
     FormatPagadoNoPagadoPipe,
+    FormatFieldWattsToKilovatiosPipe,
     // booleans
     FormatSiNoPipe,
     FormatHabilitadoDeshabilitadoPipe,
@@ -44,6 +46,7 @@ import { FormatHabilitadoDeshabilitadoPipe } from './booleans/format-habilitado-
     // numbers
     FormatFieldDecimalesPipe,
     FormatPagadoNoPagadoPipe,
+    FormatFieldWattsToKilovatiosPipe,
     // booleans
     FormatSiNoPipe,
     FormatHabilitadoDeshabilitadoPipe,

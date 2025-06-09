@@ -544,7 +544,8 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   }
 
   mapUsuarioEnConectores(posicion) {
-    if (posicion == 0) {
+    if (this.electricStations[posicion]){
+      if (posicion == 0) {
       this.conectorStatus0 = this.conectorStatus0.map(conector => {
         var usuario = '';
         if (this.electricStations[posicion].clients.length > 0) {
@@ -579,6 +580,8 @@ export default class DashboardComponent implements OnInit, OnDestroy {
         return { ...conector, userName: usuario };
       });
     }
+    }
+    
   }
 
   onVerTodasElectrolineras(id) {
