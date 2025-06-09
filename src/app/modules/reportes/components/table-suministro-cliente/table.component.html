@@ -23,6 +23,7 @@
         <p-table [value]="rowData.clientInvoiceList">
           <ng-template pTemplate="header" let-columns>
     <tr>
+      <th>Factura Número</th>
       <th>Cuf</th>
       <th>Código Descripción</th>
       <th>Código Recepción</th>
@@ -32,6 +33,7 @@
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-columns="columns">
     <tr>
+      <td style="text-align:left; vertical-align:middle"> {{rowData.id}}</td>
       <td style="text-align:left; vertical-align:middle"> {{rowData.cuf }}</td>
       <td style="text-align:left; vertical-align:middle"> {{rowData.codigoDescripcion }}</td>
       <td style="text-align:left; vertical-align:middle"> {{rowData.codigoRecepcion }}</td>

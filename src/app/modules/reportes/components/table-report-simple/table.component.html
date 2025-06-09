@@ -22,6 +22,10 @@ class="custom-p-table">
         {{rowData[col.field]}}
       </div>
 
+      <div *ngIf="col.field === 'id'">
+        {{ rowData[col.field]}}
+      </div>
+
       <div *ngIf="col.field == 'amount' || col.field == 'monto'" style="text-align:right; vertical-align:middle">
         {{ rowData[col.field] | numberDecimal:2}}
       </div>
@@ -33,6 +37,7 @@ class="custom-p-table">
       <div *ngIf="col.field === 'energyComsumed'">
         {{ rowData[col.field] | wattsToKilovatios}}
       </div>
+
       <div *ngIf="col.field === 'duration'">
         {{ rowData[col.field] | formatSegundosEnHoraMinutoSegundo}}
       </div>
