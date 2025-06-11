@@ -18,7 +18,7 @@ class="custom-p-table">
   <tr>
     <td *ngFor="let col of columns" [class]="[col.field == 'amount' || col.field == 'monto'?'numero' : 'normal']">
 
-      <div *ngIf="col.field != 'amount' && col.field != 'monto' && col.field != 'finisheAt' && col.field != 'staredChargingAt' && col.field != 'energyComsumed' && col.field != 'duration'">
+      <div *ngIf="col.field != 'amount' && col.field != 'monto' && col.field != 'finisheAt' && col.field != 'staredChargingAt' && col.field != 'energyComsumed' && col.field != 'duration' && col.field != 'fechaEmision' && col.field != 'fechaCarga'  && col.field != 'fechaRegistro'">
         {{rowData[col.field]}}
       </div>
 
@@ -32,6 +32,18 @@ class="custom-p-table">
 
       <div *ngIf="col.field === 'finisheAt' || col.field === 'staredChargingAt'">
         {{ rowData[col.field] | formatDateAndTime}}
+      </div>
+
+      <div *ngIf="col.field === 'fechaEmision'">
+        {{ rowData[col.field] | formatDateAndTime}}
+      </div>
+
+      <div *ngIf="col.field === 'fechaRegistro'">
+        {{ rowData[col.field] | formatDateAndTime}}
+      </div>
+
+      <div *ngIf="col.field === 'fechaCarga'">
+        {{ rowData[col.field] | formatDiaMesAnio}}
       </div>
 
       <div *ngIf="col.field === 'energyComsumed'">

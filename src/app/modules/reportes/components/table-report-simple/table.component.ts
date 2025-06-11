@@ -91,7 +91,7 @@ export class TableReportSimpleComponent {
     return new Promise((resolve) => {
       if (this.reporteX == 1) {
         this.cols = [
-          { field: 'id', header: 'Factura Número', pipe: '' },
+          { field: 'numeroFactura', header: 'Factura Número', pipe: '' },
           { field: 'razonSocial', header: 'Nombre/Razón Social', pipe: '' },
           { field: 'nitCi', header: 'Nit/Ci', pipe: '' },
           { field: 'cuf', header: 'Cuf', pipe: '' },
@@ -104,20 +104,20 @@ export class TableReportSimpleComponent {
       }
       if (this.reporteX == 2) {
         this.cols = [
-          { field: 'id', header: 'Factura Número' },
+          { field: 'numeroFactura', header: 'Factura Número' },
           { field: 'razonSocial', header: 'Nombre/Razón Social' },
           { field: 'numeroDocumento', header: 'Número de Documento' },
           { field: 'bank', header: 'Banco' },
           { field: 'monto', header: 'Monto Bs' },
           { field: 'fechaCarga', header: 'Fecha de Carga' },
           { field: 'horaCarga', header: 'Hora de Carga' },
-          { field: 'cuf', header: 'Cuf' },
+          { field: 'cuf', header: 'Cuf' }, 
         ];
         return resolve(true);
       }
       if (this.reporteX == 4) {
         this.cols = [
-          { field: 'id', header: 'Factura Número'},
+          { field: 'numeroFactura', header: 'Factura Número'},
           { field: 'codigoDescripcion', header: 'Código' },
           { field: 'fechaRegistro', header: 'Fecha de Registro' },
           { field: 'codigoRecepcion', header: 'Recepción' },

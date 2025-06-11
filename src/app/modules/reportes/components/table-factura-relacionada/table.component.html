@@ -16,7 +16,7 @@
 	<ng-template pTemplate="body" let-rowData let-columns="columns" let-rowgroup="rowgroup" let-rowspan="rowspan">
 		<tr>
 			<td style="text-align:left; vertical-align:top"> {{rowData.codigoDescripcion}}</td>
-			<td style="text-align:left; vertical-align:top"> {{rowData.fechaRegistro}}</td>
+			<td style="text-align:left; vertical-align:top"> {{rowData.fechaRegistro | formatDateAndTime}}</td>
 			<td style="text-align:left; vertical-align:top"> {{rowData.cuf}}</td>
 			<td style="text-align:left; vertical-align:top"> {{rowData.paymentTransactionType}}</td>
 			<td *ngIf="rowData.invoicesPaymentTrasantionsResponseDtoList.length > 0">
@@ -33,11 +33,11 @@
 	</ng-template>
 	<ng-template pTemplate="body" let-rowData let-columns="columns">
 		<tr>
-			<td style="text-align:left; vertical-align:middle"> {{rowData.id}}</td>
+			<td style="text-align:left; vertical-align:middle"> {{rowData.numeroFactura}}</td>
 			<td style="text-align:left; vertical-align:middle"> {{rowData.codigoDescripcion }}</td>
 			<td style="text-align:left; vertical-align:middle"> {{rowData.cuf }}</td>
 			<td style="text-align:left; vertical-align:middle"> {{rowData.paymentTransactionType }}</td>
-			<td style="text-align:left; vertical-align:middle"> {{rowData.fechaRegistro }}</td>
+			<td style="text-align:left; vertical-align:middle"> {{rowData.fechaRegistro | formatDateAndTime }}</td>
 			<td style="text-align:left; vertical-align:middle"> {{rowData.urlFacturaSiat }}</td>
 		</tr>
 	</ng-template>

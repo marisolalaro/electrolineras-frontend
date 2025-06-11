@@ -95,7 +95,7 @@ export class TableSuministroClienteComponent {
   }
 
   descargaArchivo() {
-    this.excelService.excelFacturasSuministroEnergia(this.reporte, reports.archivoReporte7, reports.hojaReporte7, this.tab);
+    this.excelService.excelFacturasSuministroEnergia(this.reporte, reports.archivoReporte7, reports.hojaReporte7, this.tab.content);
   }
 
   enviarDatos() {

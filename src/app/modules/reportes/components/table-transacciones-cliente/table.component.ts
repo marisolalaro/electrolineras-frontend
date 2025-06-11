@@ -95,6 +95,6 @@ export class TableTransaccionesClienteComponent {
   }
 
   descargaArchivo() {
-    this.excelService.excelFacturasSuministroEnergia(this.reporte, reports.archivoReporte6, reports.hojaReporte6, this.tab.content);
+    this.excelService.excelFacturasCompraVenta(this.reporte, reports.archivoReporte6, reports.hojaReporte6, this.tab.content);
   }
 }
