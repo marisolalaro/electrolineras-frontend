@@ -30,7 +30,7 @@ export class CrearExcelService {
 
     // Agregar encabezados de las filas
     const rowValues = [];
-    rowValues[1] = 'Factura Número';
+    rowValues[1] = 'Nº Factura';
     rowValues[2] = 'Nombre/Razón Social';
     rowValues[3] = 'Nit/Ci';
     rowValues[4] = 'Cuf';
@@ -162,7 +162,7 @@ export class CrearExcelService {
 
     // Agregar encabezados de las filas
     const rowValues = [];
-    rowValues[1] = 'Factura Número';
+    rowValues[1] = 'Nº Factura';
     rowValues[2] = 'Nombre/Razón Social';
     rowValues[3] = 'Número de Documento';
     rowValues[4] = 'Banco';
@@ -300,7 +300,7 @@ export class CrearExcelService {
     rowValues[3] = 'Cuf';
     rowValues[4] = 'Tipo de Pago';
 
-    rowValues[5] = 'Factura Número';
+    rowValues[5] = 'Nº Factura';
     rowValues[6] = 'Código Recepción';
     rowValues[7] = 'Cuf';
     rowValues[8] = 'Tipo de Pago';
@@ -514,7 +514,7 @@ export class CrearExcelService {
 
     // Agregar encabezados de las filas
     const rowValues = [];
-    rowValues[1] = 'Factura Número';
+    rowValues[1] = 'Nº Factura';
     rowValues[2] = 'Código';
     rowValues[3] = 'Fecha de Registro';
     rowValues[4] = 'Recepción';
@@ -805,7 +805,7 @@ export class CrearExcelService {
     rowValues[4] = 'Apellido Materno';
     rowValues[5] = 'Número de Identificación';
 
-    rowValues[6] = 'Factura Número';
+    rowValues[6] = 'Nº Factura';
     rowValues[7] = 'Cuf';
     rowValues[8] = 'Código Descripción';
     rowValues[9] = 'Código Recepción';
@@ -1041,7 +1041,7 @@ export class CrearExcelService {
     rowValues[4] = 'Apellido Materno';
     rowValues[5] = 'Número de Identificación';
 
-    rowValues[6] = 'Factura Número';
+    rowValues[6] = 'Nº Factura';
     rowValues[7] = 'Cuf';
     rowValues[8] = 'Código Descripción';
     rowValues[9] = 'Código Recepción';
