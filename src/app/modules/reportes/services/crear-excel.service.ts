@@ -53,14 +53,14 @@ export class CrearExcelService {
     // Agregar datos del json
     jsonData.forEach((data: any) => {
       worksheet.addRow([
-        data.numeroFactura,
-        data.razonSocial,
-        data.nitCi,
-        data.cuf,
-        data.amount,
+        data.numeroFactura? data.numeroFactura : '',
+        data.razonSocial? data.razonSocial : '',
+        data.nitCi? data.nitCi : '',
+        data.cuf? data.cuf : '',
+        data.amount? data.amount : '',
         data.fechaEmision ? moment(data.fechaEmision).format('DD/MM/YYYY, HH:mm:ss') : '',
-        data.tipoFactura,
-        data.urlFacturaSiat,
+        data.tipoFactura? data.tipoFactura : '',
+        data.urlFacturaSiat? data.urlFacturaSiat : '',
       ]);
     });
 
@@ -185,14 +185,14 @@ export class CrearExcelService {
     // Agregar datos del json
     jsonData.forEach((data: any) => {
       worksheet.addRow([
-        data.numeroFactura,
-        data.razonSocial,
-        data.numeroDocumento,
-        data.bank,
-        data.monto,
-        data.fechaCarga,
-        data.horaCarga,
-        data.cuf
+        data.numeroFactura? data.numeroFactura : '',
+        data.razonSocial? data.razonSocial : '',
+        data.numeroDocumento? data.numeroDocumento : '',
+        data.bank? data.bank : '',
+        data.monto? data.monto : '',
+        data.fechaCarga? moment(data.fechaCarga).format('DD/MM/YYYY') : '',
+        data.horaCarga? data.horaCarga : '',
+        data.cuf? data.cuf : '',
       ]);
     });
 
@@ -362,12 +362,12 @@ export class CrearExcelService {
               '',
               '',
               '',
-              key1.numeroFactura,
-              key1.codigoDescripcion,
-              key1.cuf,
-              key1.paymentTransactionType,
-              moment(key1.fechaRegistro).format('DD/MM/YYYY, HH:mm:ss'),
-              key1.urlFacturaSiat
+              key1.numeroFactura? key1.numeroFactura : '',
+              key1.codigoDescripcion? key1.codigoDescripcion : '',
+              key1.cuf? key1.cuf : '',
+              key1.paymentTransactionType? key1.paymentTransactionType : '',
+              key1.fechaRegistro ? moment(key1.fechaRegistro).format('DD/MM/YYYY, HH:mm:ss') : '',
+              key1.urlFacturaSiat? key1.urlFacturaSiat : '',
             ]);
             row.eachCell((cell) => {
               cell.border = {
@@ -535,13 +535,13 @@ export class CrearExcelService {
     // Agregar datos del json
     jsonData.forEach((data: any) => {
       worksheet.addRow([
-        data.numeroFactura,
-        data.codigoDescripcion,
-        moment(data.fechaRegistro).format('DD/MM/YYYY, HH:mm:ss'),
-        data.codigoRecepcion,
-        data.cuf,
-        data.paymentTransactionType,
-        data.urlFacturaSiat
+        data.numeroFactura? data.numeroFactura : '',
+        data.codigoDescripcion? data.codigoDescripcion : '',
+        data.fechaRegistro? moment(data.fechaRegistro).format('DD/MM/YYYY, HH:mm:ss') : '',
+        data.codigoRecepcion? data.codigoRecepcion : '',
+        data.cuf? data.cuf : '',
+        data.paymentTransactionType? data.paymentTransactionType : '',
+        data.urlFacturaSiat? data.urlFacturaSiat : '',
       ]);
     });
 
@@ -667,16 +667,16 @@ export class CrearExcelService {
     // Agregar datos del json
     jsonData.forEach((data: any) => {
       const row = worksheet.addRow([
-        data.username,
-        data.changeFee,
+        data.username? data.username : '',
+        data.changeFee? data.changeFee : '',
         data.status == 'charged' ? 'Cargado' : 'Finalizado',
-        // this.pipeTimeSegundos.segundosHoras(data.duration),
-        SegundosEnHoras(data.duration),
-        data.chargingStation,
-        moment(data.staredChargingAt).format('DD/MM/YYYY, HH:mm:ss'),
-        moment(data.finisheAt).format('DD/MM/YYYY, HH:mm:ss'),
-        WattsEnKilovatios(data.energyComsumed),
-        data.amount]);
+        data.duration? SegundosEnHoras(data.duration) : '',
+        data.chargingStation? data.chargingStation : '',
+        data.staredChargingAt? moment(data.staredChargingAt).format('DD/MM/YYYY, HH:mm:ss') : '',
+        data.finisheAt? moment(data.finisheAt).format('DD/MM/YYYY, HH:mm:ss') : '',
+        data.energyComsumed? WattsEnKilovatios(data.energyComsumed): '',
+        data.amount? data.amount : '',
+      ]);
     });
 
     // Ajustar el ancho de las columnas según el contenido
@@ -871,12 +871,12 @@ export class CrearExcelService {
               '',
               '',
               '',
-              key1.numeroFactura,
-              key1.cuf,
-              key1.codigoDescripcion,
-              key1.codigoRecepcion,
-              moment(key1.fechaRegistro).format('DD/MM/YYYY, HH:mm:ss'),
-              key1.urlFacturaSiat,
+              key1.numeroFactura? key1.numeroFactura : '',
+              key1.cuf? key1.cuf : '',
+              key1.codigoDescripcion? key1.codigoDescripcion : '',
+              key1.codigoRecepcion? key1.codigoRecepcion : '',
+              key1.fechaRegistro? moment(key1.fechaRegistro).format('DD/MM/YYYY, HH:mm:ss') : '',
+              key1.urlFacturaSiat? key1.urlFacturaSiat : '',
             ]);
             row.eachCell((cell) => {
               cell.border = {
@@ -1082,11 +1082,11 @@ export class CrearExcelService {
       });
       if (data.clientInvoiceList.length > 0) {
         const key = data.clientInvoiceList[0];
-        row.getCell(row.actualCellCount + 1).value = key.id || ''
+        row.getCell(row.actualCellCount + 1).value = key.numeroFactura || ''
         row.getCell(row.actualCellCount + 1).value = key.cuf || ''
         row.getCell(row.actualCellCount + 1).value = key.codigoDescripcion || ''
         row.getCell(row.actualCellCount + 1).value = key.codigoRecepcion || ''
-        row.getCell(row.actualCellCount + 1).value = key.fechaRegistro || ''
+        row.getCell(row.actualCellCount + 1).value = key.fechaRegistro ? moment(key.fechaRegistro).format('DD/MM/YYYY, HH:mm:ss') : '',
         row.getCell(row.actualCellCount + 1).value = key.urlFacturaSiat || ''
 
         row.eachCell((cell) => {
@@ -1106,12 +1106,12 @@ export class CrearExcelService {
               '',
               '',
               '',
-              key1.id,
-              key1.cuf,
-              key1.codigoDescripcion,
-              key1.codigoRecepcion,
-              key1.fechaRegistro ? key.fechaRegistro : '',
-              key1.urlFacturaSiat
+              key1.numeroFactura ? key1.numeroFactura : '',
+              key1.cuf ? key1.cuf : '',
+              key1.codigoDescripcion ? key1.codigoDescripcion : '',
+              key1.codigoRecepcion ? key1.codigoRecepcion : '',
+              key1.fechaRegistro ? moment(key1.fechaRegistro).format('DD/MM/YYYY, HH:mm:ss') : '',
+              key1.urlFacturaSiat ? key1.urlFacturaSiat : '',
             ]);
             row.eachCell((cell) => {
               cell.border = {
