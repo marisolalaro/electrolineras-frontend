@@ -71,7 +71,7 @@ export default class InvoiceElectricStationsComponent {
   public campoUrlFacturaSiat: string = '';
   public campoFechaHoraEmision: string = '';
   public campoCodigoDescripcion: string = '';
-  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
+  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, 0, 0);
 
   // variables de tabla
   @ViewChild('dt1') dt!: Table;
@@ -94,6 +94,7 @@ export default class InvoiceElectricStationsComponent {
   }
 
   inicializaDatos() {
+    this.bodyFilter = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
     this.es = {
       firstDayOfWeek: 1,
       dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],

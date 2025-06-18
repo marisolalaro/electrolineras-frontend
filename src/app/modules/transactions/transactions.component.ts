@@ -82,8 +82,8 @@ export default class TransactionsComponent implements OnInit {
   public bodyFilter: BodyFilterModel = new BodyFilterModel(
     this.page,
     this.itemsPerPage,
-    decodeLocal().user.roles[0].id,
-    decodeLocal().user.id
+    0,
+    0
   );
   public campoNombreRazonSocial: string = '';
   public campoNumeroDocumento: string = '';
@@ -113,6 +113,12 @@ export default class TransactionsComponent implements OnInit {
   }
 
   inicializaDatos() {
+    this.bodyFilter = new BodyFilterModel(
+    this.page,
+    this.itemsPerPage,
+    decodeLocal().user.roles[0].id,
+    decodeLocal().user.id
+  );
     this.es = {
       firstDayOfWeek: 1,
       dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],

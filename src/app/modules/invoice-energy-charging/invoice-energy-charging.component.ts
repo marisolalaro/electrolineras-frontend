@@ -79,8 +79,8 @@ export default class InvoiceEnergyChargingComponent {
   public bodyFilter: BodyFilterModel = new BodyFilterModel(
     this.page,
     this.itemsPerPage,
-    decodeLocal().user.roles[0].id,
-    decodeLocal().user.id
+    0,
+    0
   );
 
   constructor(
@@ -107,6 +107,12 @@ export default class InvoiceEnergyChargingComponent {
 
   inicializaDatos() {
     return new Promise((resolve) => {
+      this.bodyFilter = new BodyFilterModel(
+      this.page,
+      this.itemsPerPage,
+      decodeLocal().user.roles[0].id,
+      decodeLocal().user.id
+    );
       this.es = {
         firstDayOfWeek: 1,
         dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],

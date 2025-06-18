@@ -125,7 +125,7 @@ export default class ElectricStationsComponent implements OnInit {
   public descripcion: string = '';
   public campoLatitude: string = '';
   public campoLongitude: string = '';
-  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
+  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, 0, 0);
 
   constructor(
     public global: Global,
@@ -142,6 +142,7 @@ export default class ElectricStationsComponent implements OnInit {
 
   ngOnInit(): void {
     if (ValidaToken()) {
+      this.inizializaDatos();
       this.esSuperAdmin = this.global.getEsSuperAdmin();
       this.nombresPuertosSelect = [
         {nombre: "CONECTOR DE CARGA 1"},{nombre: "CONECTOR DE CARGA 2"},
@@ -151,6 +152,10 @@ export default class ElectricStationsComponent implements OnInit {
       this.router.navigate(['']);
     }
     
+  }
+
+  inizializaDatos() {
+    this.bodyFilter = new BodyFilterModel(this.page, this.itemsPerPage, decodeLocal().user.roles[0].id, decodeLocal().user.id);
   }
 
   getAllElectricStations(): void {
