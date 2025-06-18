@@ -1,4 +1,5 @@
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Component, ViewChild } from '@angular/core';
 import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 // librerias
@@ -24,6 +25,7 @@ import { InvoiceTransaction } from './services/pdf-invoice-transaction';
 import { Base64ToPdfService } from '../../core/services/base-64-to-pdf.service';
 import { InvoiveEnergyChargingService } from './services/invoive-energy-charging.service';
 import { messages } from 'src/app/core/constants/messages';
+import { ValidaToken } from 'src/app/core/utils/verificarToken';
 
 @Component({
   selector: 'app-invoice-energy-charging',
@@ -82,27 +84,25 @@ export default class InvoiceEnergyChargingComponent {
   );
 
   constructor(
+    private router: Router,
     public base64aXML: Base64ToPdfService,
     private invoiceTransaction: InvoiceTransaction,
     public InvoiceService: InvoiveEnergyChargingService,
   ) { }
 
   ngOnInit() {
-    this.inicializaDatos()
-    .then( datosInicializados => {
-      if (datosInicializados) {
-        return this.getInvoicesCharging();
-      } else {
-        return false;
-      }
-    })
-    // .then( listado => {
-    //   if (listado) {
-    //     return this.getInvoicesCharging();
-    //   } else {
-    //     return false;
-    //   }
-    // })
+    if (ValidaToken()) {
+      this.inicializaDatos()
+      .then( datosInicializados => {
+        if (datosInicializados) {
+          return this.getInvoicesCharging();
+        } else {
+          return false;
+        }
+      })
+    } else {
+      this.router.navigate(['']);
+    }
   }
 
   inicializaDatos() {

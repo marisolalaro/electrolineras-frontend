@@ -22,6 +22,7 @@ import { ConnectorStatusModel } from 'src/app/core/model/charging-connector-stat
 import { WebsocketService } from 'src/app/core/services/websocket.service';
 import { ConnectorStatusService } from 'src/app/core/services/connector-status.service';
 import { ElectricStationsService } from '../electric-stations/services/electric-stations.service';
+import { ValidaToken } from 'src/app/core/utils/verificarToken';
 
 @Component({
   standalone: true,
@@ -140,6 +141,14 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    if (ValidaToken()) {
+    this.inicializaDatos()
+    } else {
+      this.router.navigate(['']);
+    }
+  }
+
+  inicializaDatos() {
     this.getElectricStation();
 
     this.conectaWebSocket()

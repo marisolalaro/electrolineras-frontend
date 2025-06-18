@@ -1,4 +1,5 @@
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Component, ViewChild, ChangeDetectorRef  } from '@angular/core';
 import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 // Primeng
@@ -8,6 +9,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Global } from 'src/app/core/variables/globales';
 import { messages } from 'src/app/core/constants/messages';
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
+import { ValidaToken } from 'src/app/core/utils/verificarToken';
 import { mainTitles, titles } from 'src/app/core/constants/labels';
 import { DBAttributeName } from 'src/app/core/constants/dbAttributeName';
 // modules
@@ -85,21 +87,36 @@ export default class CustomersComponent {
   public bodyFilter: BodyFilterModel = new BodyFilterModel(
     this.page,
     this.itemsPerPage,
-    decodeLocal().user.roles[0].id,
-    decodeLocal().user.id
+    0,
+    0
   );
 
   constructor(
     public global: Global,
+    private router: Router,
     public customerService: CustomerService,
     public processService: ProcessService,
     private confirmationService: ConfirmationService,
     private chargingHistoryService: ChargingHistoryService,
   ) { }
 
-  ngOnInit() {
-    this.getCustomers();
-    this.esSuperAdmin = this.global.getEsSuperAdmin();
+  ngOnInit() {  
+    if (ValidaToken()) {
+      this.inicializaDatos()
+      this.getCustomers();
+      this.esSuperAdmin = this.global.getEsSuperAdmin();
+    } else {
+      this.router.navigate(['']);
+    }
+  }
+
+  inicializaDatos() {
+    this.bodyFilter = new BodyFilterModel(
+      this.page,
+      this.itemsPerPage,
+      decodeLocal().user.roles[0].id,
+      decodeLocal().user.id
+    );
   }
 
   getCustomers(): void {

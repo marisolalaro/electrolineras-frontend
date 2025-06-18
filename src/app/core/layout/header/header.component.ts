@@ -8,6 +8,7 @@ import { rutas } from '../../constants/rutas';
 import { Global } from '../../variables/globales';
 import { mainTitles } from '../../constants/labels';
 import { ThemeService } from '../../services/theme.service';
+import { ValidaToken } from '../../utils/verificarToken';
 
 @Component({
   selector: 'app-header',
@@ -39,21 +40,21 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
-    this.verificaIcono()
-      .then((datosInicializados) => {
-        if (datosInicializados) {
-          return this.inicializaDatos();
-        } else {
-          return false
-        }
-      })
-      .then((datosInicializados) => {
-        if (datosInicializados) {
-          this.componenteVisible = true;
-        }
-      })
-      ;
+    if (ValidaToken()) {
+      this.verificaIcono()
+        .then((datosInicializados) => {
+          if (datosInicializados) {
+            return this.inicializaDatos();
+          } else {
+            return false
+          }
+        })
+        .then((datosInicializados) => {
+          if (datosInicializados) {
+            this.componenteVisible = true;
+          }
+        });
+    }
   }
 
   inicializaDatos() {

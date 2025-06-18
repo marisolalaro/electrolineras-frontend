@@ -1,4 +1,5 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 // librerías
@@ -31,6 +32,7 @@ import { ConnectorStatusModel } from 'src/app/core/model/charging-connector-stat
 import { ConnectorStatusService } from 'src/app/core/services/connector-status.service';
 import { ModelElectricStation } from 'src/app/core/model/model-electric-station';
 import { Address } from 'src/app/core/model/address';
+import { ValidaToken } from 'src/app/core/utils/verificarToken';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -127,6 +129,7 @@ export default class ElectricStationsComponent implements OnInit {
 
   constructor(
     public global: Global,
+    private router: Router,
     public brandService: BrandService,
     public addressService: AddressService,
     public tasaCargaService: ParTasaCargaService,
@@ -138,11 +141,16 @@ export default class ElectricStationsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.esSuperAdmin = this.global.getEsSuperAdmin();
-    this.nombresPuertosSelect = [
-      {nombre: "CONECTOR DE CARGA 1"},{nombre: "CONECTOR DE CARGA 2"},
-    ]
-    this.getAllElectricStations();
+    if (ValidaToken()) {
+      this.esSuperAdmin = this.global.getEsSuperAdmin();
+      this.nombresPuertosSelect = [
+        {nombre: "CONECTOR DE CARGA 1"},{nombre: "CONECTOR DE CARGA 2"},
+      ]
+      this.getAllElectricStations();
+    } else {
+      this.router.navigate(['']);
+    }
+    
   }
 
   getAllElectricStations(): void {

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgStyle } from '@angular/common';
+import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -7,8 +8,9 @@ import { MenuItem } from 'primeng/api';
 // librerias
 import { Subscription } from 'rxjs';
 // cores
-import { EndPoins } from 'src/app/core/constants/endPoints';
 import { messages } from 'src/app/core/constants/messages';
+import { EndPoins } from 'src/app/core/constants/endPoints';
+import { ValidaToken } from 'src/app/core/utils/verificarToken';
 // modules
 import { ElectricStationOnlineModule } from './electric-station-online.module';
 // models
@@ -92,6 +94,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
 
   constructor(
     private global: Global,
+    private router: Router,
     private route: ActivatedRoute,
     private mobileService: MobileService,
     private forzarDetencionService: ForzarDetencionService,
@@ -122,7 +125,8 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   }
 
   async ngOnInit() {
-    await this.inicializaDatos();
+    if (ValidaToken()) {
+      await this.inicializaDatos();
       await this.getClienteCharging();
       await this.getAllConnectorStatus();
       await this.getOneElectricStation();
@@ -130,61 +134,64 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       this.componenteVisible = true;
       this.loading = false;
       this.verificarReconexión()
-    this.websocketService.initializeWebSocketConnection(this.websocketUrl);
+      this.websocketService.initializeWebSocketConnection(this.websocketUrl);
 
-    this.subscriptionConectorStatus = this.websocketService.getConnectorStatus()
-      .subscribe((data) => {
-        if (data[0].connector == '1') {
-          this.conectores[0].lastState = data[0].lastState;
-          this.conectores[0].id = data[0].connector;
-          this.status1 = JSON.parse(JSON.stringify(data[0].lastState));
-          if(data[0].lastState != 'Charging') {
-            this.conector1 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
-            this.cliente1 = new ClientChargingStatusModel();
+      this.subscriptionConectorStatus = this.websocketService.getConnectorStatus()
+        .subscribe((data) => {
+          if (data[0].connector == '1') {
+            this.conectores[0].lastState = data[0].lastState;
+            this.conectores[0].id = data[0].connector;
+            this.status1 = JSON.parse(JSON.stringify(data[0].lastState));
+            if(data[0].lastState != 'Charging') {
+              this.conector1 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
+              this.cliente1 = new ClientChargingStatusModel();
+            }
           }
-        }
-        if (data[1].connector == '2') {
-          this.conectores[1].lastState = data[1].lastState
-          this.conectores[1].id = data[1].connector;
-          this.status2 = JSON.parse(JSON.stringify(data[1].lastState));
-          if(data[1].lastState != 'Charging') {
-            this.conector2 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
-            this.cliente2 = new ClientChargingStatusModel();
+          if (data[1].connector == '2') {
+            this.conectores[1].lastState = data[1].lastState
+            this.conectores[1].id = data[1].connector;
+            this.status2 = JSON.parse(JSON.stringify(data[1].lastState));
+            if(data[1].lastState != 'Charging') {
+              this.conector2 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
+              this.cliente2 = new ClientChargingStatusModel();
+            }
           }
-        }
-        // this.reiniciarDatosCero(data); para cada puerto
-        // this.armaTablaConector()
-      });
-    // TODO debo revisar esta parte
-    this.subscriptionClientCharging = this.websocketService.getClientCharging()
-      .subscribe((data) => {
-        this.clientChargingStation = data;
-        this.clienteCargando();
-        this.armaTablaConector();
-      });
+          // this.reiniciarDatosCero(data); para cada puerto
+          // this.armaTablaConector()
+        });
+      // TODO debo revisar esta parte
+      this.subscriptionClientCharging = this.websocketService.getClientCharging()
+        .subscribe((data) => {
+          this.clientChargingStation = data;
+          this.clienteCargando();
+          this.armaTablaConector();
+        });
 
-    this.subscriptionMeterValues = this.websocketService.getMeterValues()
-      .subscribe((messages) => {
-        var message = messages;        
-        if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 1) {
-          this.transaccionid1 = message.connectorId = 1 ? message.transactionId : 0
-          this.conector1 = JSON.parse(JSON.stringify(message.sampleValues));
-          this.conector1.push(this.obtieneVelocidadCarga(this.conector1[0].value));
-          this.conector1.push(this.obtienePotenciaActual(this.conector1[1].value));
-          this.meterValues1 = message;
-        }
-        if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 2) {
-          this.transaccionid2 = message.connectorId == 2 ? message.transactionId : 0
-          this.conector2 = JSON.parse(JSON.stringify(message.sampleValues));
-          this.conector2.push(this.obtieneVelocidadCarga(this.conector2[0].value));
-          this.conector2.push(this.obtienePotenciaActual(this.conector2[1].value));
-          this.meterValues2 = message;
-        }
-        this.armaTablaConector();
-      });
-    try {
-    } catch (error) {
-      console.error('Ocurrió un error en la inicialización:', error);
+      this.subscriptionMeterValues = this.websocketService.getMeterValues()
+        .subscribe((messages) => {
+          var message = messages;        
+          if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 1) {
+            this.transaccionid1 = message.connectorId = 1 ? message.transactionId : 0
+            this.conector1 = JSON.parse(JSON.stringify(message.sampleValues));
+            this.conector1.push(this.obtieneVelocidadCarga(this.conector1[0].value));
+            this.conector1.push(this.obtienePotenciaActual(this.conector1[1].value));
+            this.meterValues1 = message;
+          }
+          if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 2) {
+            this.transaccionid2 = message.connectorId == 2 ? message.transactionId : 0
+            this.conector2 = JSON.parse(JSON.stringify(message.sampleValues));
+            this.conector2.push(this.obtieneVelocidadCarga(this.conector2[0].value));
+            this.conector2.push(this.obtienePotenciaActual(this.conector2[1].value));
+            this.meterValues2 = message;
+          }
+          this.armaTablaConector();
+        });
+      try {
+      } catch (error) {
+        console.error('Ocurrió un error en la inicialización:', error);
+      }
+    } else {
+      this.router.navigate(['']);
     }
   }
 

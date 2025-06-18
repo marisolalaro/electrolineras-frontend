@@ -1,8 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 // cores
 import { messages } from 'src/app/core/constants/messages';
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
+import { ValidaToken } from 'src/app/core/utils/verificarToken';
 import { BodyFilterModel } from 'src/app/core/model/body-filter';
 import { buttons, parametricaAddress, titles, mainTitles } from 'src/app/core/constants/labels';
 // primeNg
@@ -68,18 +70,27 @@ export default class AddressComponent {
   public dialogRegistro: boolean = false;
 
   constructor(
+    private router: Router,
     public addressService: AddressService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
   ) { }
 
   ngOnInit(): void {
-    this.inicializaDatos()
+    // TODO 
+    if (ValidaToken()) {
+      this.inicializaDatos()
       .then(datosInicializados => {
         if (datosInicializados) {
           this.getAllAddress()
         }
       })
+    } 
+    else {
+      this.router.navigate(['']);
+    }
+
+    
   }
 
   inicializaDatos() {

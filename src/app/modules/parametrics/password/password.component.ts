@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 // cores
 import { messages } from 'src/app/core/constants/messages';
@@ -15,6 +16,7 @@ import { PasswordModule } from './password.module';
 import { PasswordModel } from 'src/app/core/model/password';
 // services
 import { PasswordService } from './services/password.service';
+import { ValidaToken } from 'src/app/core/utils/verificarToken';
 
 @Component({
   selector: 'app-password',
@@ -62,18 +64,24 @@ export default class PasswordComponent {
   public dialogRegistro: boolean = false;
 
   constructor(
+    private router: Router,
     public passwordService: PasswordService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
   ) { }
 
   ngOnInit(): void {
-    this.inicializaDatos()
-      .then(datosInicializados => {
-        if (datosInicializados) {
-          this.getAllPasswords()
-        }
-      })
+    if (ValidaToken()) {
+      this.inicializaDatos()
+        .then(datosInicializados => {
+          if (datosInicializados) {
+            this.getAllPasswords()
+          }
+        })
+    } 
+    else {
+      this.router.navigate(['']);
+    }
   }
 
   inicializaDatos() {

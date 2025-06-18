@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 // librerías
@@ -9,6 +10,7 @@ import { MessageService } from 'primeng/api';
 // cores
 import { messages } from 'src/app/core/constants/messages';
 import { decodeLocal } from 'src/app/core/utils/decodeToken';
+import { ValidaToken } from 'src/app/core/utils/verificarToken';
 import { buttons, labels, titles, mainTitles } from 'src/app/core/constants/labels';
 // modules
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
@@ -79,21 +81,32 @@ export default class AdministratorsComponent {
   public administradors: AdministratorModel[] = [];
   public formRegistro: FormGroup = this.createFormGroup();
   public administrador: AdministratorModel = new AdministratorModel();
-  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, 2, decodeLocal().user.id);
+  public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, 2, 0);
 
   constructor(
     public global: Global,
+    private router: Router,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     public administratorsService: AdministratorsService,
   ) { }
 
   ngOnInit(): void {
+    if (ValidaToken()) {
     this.inicializaDatos()
     this.getAllAdministrations();
+    } else {
+      this.router.navigate(['']);
+    }
   }
 
   inicializaDatos() {
+    this.bodyFilter = new BodyFilterModel(
+      this.page,
+      this.itemsPerPage,
+      2,
+      decodeLocal().user.id
+    );
     this.esSuperAdmin = this.global.getEsSuperAdmin();
     this.userLogin = this.global.getUser();
   }

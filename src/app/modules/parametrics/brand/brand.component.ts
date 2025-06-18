@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 // cores
 import { messages } from 'src/app/core/constants/messages';
@@ -15,6 +16,7 @@ import { BrandModule } from './brand.module';
 import { Model } from 'src/app/core/model/model';
 // services
 import { BrandService } from './services/brand.service';
+import { ValidaToken } from 'src/app/core/utils/verificarToken';
 
 @Component({
   selector: 'app-brand',
@@ -71,18 +73,25 @@ export default class BrandComponent {
   public dialogRegistro: boolean = false;
 
   constructor(
+    private router: Router,
     public brandservice: BrandService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
   ) { }
 
   ngOnInit(): void {
-    this.inicializaDatos()
-      .then(datosInicializados => {
-        if (datosInicializados) {
-          this.getAllModels()
-        }
-      })
+    if (ValidaToken()) {
+      this.inicializaDatos()
+        .then(datosInicializados => {
+          if (datosInicializados) {
+            this.getAllModels()
+          }
+        })
+    } 
+    else {
+      this.router.navigate(['']);
+    }
+    
   }
 
   inicializaDatos() {

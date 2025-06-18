@@ -41,6 +41,8 @@ export default class LoginComponent {
   // variables propias del componente
   private dataLogin: any;
   public iconClass: string = 'pi pi-eye-slash';
+  // public iniciaSinToken = localStorage.removeItem('token');
+
 
   constructor(
     private router: Router,
@@ -54,6 +56,7 @@ export default class LoginComponent {
   ngOnInit() {
     this.changePrimaryColor(color.sistema);
     localStorage.setItem('theme', 'light');
+    localStorage.removeItem('token');
   }
 
   onIniciaSesion(): void {
@@ -67,6 +70,7 @@ export default class LoginComponent {
       }).then(logueado => {
         if (logueado) {
           return this.saveLoginStorage();
+
         } else {
           return false;
         }
@@ -78,6 +82,7 @@ export default class LoginComponent {
         }
       }).then(savedVariables => {
         if (savedVariables) {
+          
           return this.redireccionaRuta();
         } else {
           return false;
@@ -102,6 +107,7 @@ export default class LoginComponent {
   }
 
   login() {
+    
     this.loading = true;
     return new Promise((resolve) => {
       let form = this.loginForm.value

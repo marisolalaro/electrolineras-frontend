@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import * as moment from 'moment';
 // Primeng
@@ -17,6 +18,7 @@ import { TransactionsModel } from 'src/app/core/model/transactions';
 import { TransactionsService } from './services/transactions.service';
 import { Base64ToImageService } from '../../core/services/base-64-to-image.service';
 import { messages } from 'src/app/core/constants/messages';
+import { ValidaToken } from 'src/app/core/utils/verificarToken';
 
 @Component({
   selector: 'app-transactions',
@@ -95,13 +97,19 @@ export default class TransactionsComponent implements OnInit {
   public campoReceiverDocument: string = '';
 
   constructor(
+    private router: Router,
     public transactionService: TransactionsService,
     public base64ImageService: Base64ToImageService,
   ) { }
 
   ngOnInit(): void {
-    this.getTransactions(true);
-    this.inicializaDatos();
+    if (ValidaToken()) {
+      this.getTransactions(true);
+      this.inicializaDatos();
+    }
+    else {
+      this.router.navigate(['']);
+    }
   }
 
   inicializaDatos() {

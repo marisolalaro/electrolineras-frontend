@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 // Primeng
 import { Table } from 'primeng/table';
@@ -24,6 +25,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import { xmlToJsonUtil } from 'xml-to-json-util';
 import { messages } from 'src/app/core/constants/messages';
+import { ValidaToken } from 'src/app/core/utils/verificarToken';
 
 @Component({
   selector: 'app-invoice-purchase-sales',
@@ -75,6 +77,7 @@ export default class InvoiceElectricStationsComponent {
   @ViewChild('dt1') dt!: Table;
 
   constructor(
+    private router: Router,
     public base64aXML: Base64ToPdfService,
     private invoiceTransaction: InvoiceTransaction,
     public base64ImageService: Base64ToImageService,
@@ -82,8 +85,12 @@ export default class InvoiceElectricStationsComponent {
   ) { }
 
   ngOnInit(): void {
-    this.getInvoices();
+    if (ValidaToken()) {
+      this.getInvoices();
     this.inicializaDatos();
+    } else {
+      this.router.navigate(['']);
+    }
   }
 
   inicializaDatos() {

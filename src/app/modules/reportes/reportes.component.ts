@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
 import { NgFor, NgIf } from '@angular/common';
 import { ReportesModule } from './reportes.module';
 import { mainTitles, reports } from 'src/app/core/constants/labels';
 import { PrimeNGConfig } from 'primeng/api';
+import { ValidaToken } from 'src/app/core/utils/verificarToken';
 interface Tab {
   title: string;
   content: string;
@@ -45,11 +47,17 @@ export default class ReportesComponent {
   public tabs: Tab[] = [];
 
   constructor(
+    private router: Router,
     private primengConfig: PrimeNGConfig
   ) {}
 
   ngOnInit() {
-    this.inicializaDatos();
+    if (ValidaToken()) {
+      this.inicializaDatos();
+    }
+    else {
+      this.router.navigate(['']);
+    }
   }
 
   inicializaDatos() {

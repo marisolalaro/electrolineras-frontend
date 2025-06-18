@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 // cores
 import { messages } from 'src/app/core/constants/messages';
@@ -18,6 +19,7 @@ import { TasaCargaService } from './services/tasa-carga.service';
 import { ParTasaCargaService } from '../../par-tasa-carga/service/par-tasa-carga.service';
 
 import { DatePipe } from '@angular/common';
+import { ValidaToken } from 'src/app/core/utils/verificarToken';
 
 @Component({
   selector: 'app-tasa-carga',
@@ -77,6 +79,7 @@ export default class TasaCargaComponent {
   public dialogRegistro: boolean = false;
 
   constructor(
+    private router: Router,
     private datePipe: DatePipe,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
@@ -84,12 +87,17 @@ export default class TasaCargaComponent {
   ) { }
 
   ngOnInit(): void {
-    this.inicializaDatos()
-      .then(datosInicializados => {
-        if (datosInicializados) {
-          this.getAllModels()
-        }
-      })
+    if (ValidaToken()) {
+      this.inicializaDatos()
+        .then(datosInicializados => {
+          if (datosInicializados) {
+            this.getAllModels()
+          }
+        })
+    }
+    else {
+      this.router.navigate(['']);
+    }
   }
 
   inicializaDatos() {
