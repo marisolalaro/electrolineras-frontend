@@ -10,8 +10,18 @@
         <div class="text-900 font-bold text-5xl mb-4 text-center">
           <h3>Electrolineras</h3>
         </div>
+        <p-toolbar>
+            <div class="p-toolbar-group-start">
+              Bloque horario: {{tasaCargaLenta.startTime | formatHoraMinutoSegundo}} a {{tasaCargaLenta.endTime | formatHoraMinutoSegundo}}
+            </div>
+            <div class="p-toolbar-group-center">
+              Tasa de Carga Lenta: {{tasaCargaLenta.amount}}
+            </div>
+            <div class="p-toolbar-group-end">
+                Tasa de Carga Semi Rapida: {{tasaCargaSemiRapida.amount}}
+            </div>
+          </p-toolbar>
         <div class="grid" *ngIf="serviceResponse">
-
           <!-- OTRA ELECTROLINERA -->
           <div class="col-12 lg:col-4 md:col-6 sm:col-12">
             <div class="p-3 h-full">
@@ -73,12 +83,12 @@
                     <span
                       style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.model.firmwareVersion}}</span>
                   </li>
-                  <li class="flex align-items-center mb-1">
+                  <!-- <li class="flex align-items-center mb-1">
                     <i class="pi pi-sort-alt mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Tasa de Carga: </span>
                     <span
                       style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.chargeRate.amount}}</span>
-                  </li>
+                  </li> -->
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-map-marker mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Dirección: </span>
@@ -190,12 +200,12 @@
                     <span
                       style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.model.firmwareVersion}}</span>
                   </li>
-                  <li class="flex align-items-center mb-1">
+                  <!-- <li class="flex align-items-center mb-1">
                     <i class="pi pi-sort-alt mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Tasa de Carga: </span>
                     <span
                       style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.chargeRate.amount}}</span>
-                  </li>
+                  </li> -->
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-map-marker mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Dirección: </span>
@@ -307,12 +317,12 @@
                     <span
                       style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.model.firmwareVersion}}</span>
                   </li>
-                  <li class="flex align-items-center mb-1">
+                  <!-- <li class="flex align-items-center mb-1">
                     <i class="pi pi-sort-alt mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Tasa de Carga: </span>
                     <span
                       style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.chargeRate.amount}}</span>
-                  </li>
+                  </li> -->
                   <li class="flex align-items-center mb-1">
                     <i class="pi pi-map-marker mr-2"></i>
                     <span class="font-medium" style="color: var(--primary-color)">Dirección: </span>

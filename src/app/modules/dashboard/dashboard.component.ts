@@ -23,6 +23,7 @@ import { WebsocketService } from 'src/app/core/services/websocket.service';
 import { ConnectorStatusService } from 'src/app/core/services/connector-status.service';
 import { ElectricStationsService } from '../electric-stations/services/electric-stations.service';
 import { ValidaToken } from 'src/app/core/utils/verificarToken';
+import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
 
 @Component({
   standalone: true,
@@ -92,9 +93,14 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   private subscriptionEstados3: Subscription;
   private subscriptionAllES: Subscription;
 
+  public tasaCargaSemiRapida: any;
+  public tasaCargaLenta: any;
+  public fechaActual: any;
+
   constructor(
     private router: Router,
     private websocketService: WebsocketService,
+    private parTasaCargaService: ParTasaCargaService,
     private connectorStatusService: ConnectorStatusService,
     private electricStationsService: ElectricStationsService,
   ) { }
@@ -150,7 +156,8 @@ export default class DashboardComponent implements OnInit, OnDestroy {
 
   inicializaDatos() {
     this.getElectricStation();
-
+    this.getTasaCarga();
+    this.getDateNow();
     this.conectaWebSocket()
       .then((servicioResponse) => {
         if (servicioResponse) {
@@ -228,6 +235,29 @@ export default class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
+  getTasaCarga() {
+    this.parTasaCargaService.getCurrentRate().subscribe(
+      (data: any) => {
+        console.log(JSON.stringify(data));
+        this.tasaCargaLenta = data.data.filter(item => item.description == 'CARGA LENTA, ULTRA LENTA')[0];
+        this.tasaCargaSemiRapida = data.data.filter(item => item.description == 'CARGA SEMI RAPIDA')[0];
+      },
+      error => {
+        console.error('Error al obtener los datos de las tasas de carga', error);
+      });
+  }
+
+  getDateNow() {
+    this.parTasaCargaService.getCurrentDate().subscribe(
+      (data: any) => {
+        console.log(JSON.stringify(data));
+        this.fechaActual = data.data;
+      },
+      error => {
+        console.error('Error al obtener los datos de las tasas de carga', error);
+      });
+  }
+  
   getStatusConnectorES1() {
     return new Promise((resolve) => {
       this.subscriptionEstados1 = interval(5000).pipe(

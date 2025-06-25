@@ -33,4 +33,12 @@ export class ParTasaCargaService {
   update(tasaCarga) {
     return this.http.post(this.apiService, tasaCarga);
   }
+
+  getCurrentRate() {
+    return this.http.get(this.apiService + '/currentRate' );
+  }
+
+  getCurrentDate() {
+    return this.http.get(this.apiService + '/currentDate' );
+  }
 }
