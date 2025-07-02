@@ -75,7 +75,7 @@ export class TableTransaccionesClienteComponent {
       this.reporteService.getFacturaCompraVenta(rangoFechas).subscribe(
         (resp: any) => {
           if (resp) {
-            if (resp.data.length > 0) {
+            if (resp.data?.length > 0 || resp.data == null) {
               var respuesta = JSON.parse(JSON.stringify(resp.data));
               this.reporte = respuesta.filter(item => item.clientInvoiceList.length > 0);
               if (this.reporte.length == 0) {

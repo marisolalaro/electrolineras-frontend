@@ -65,18 +65,18 @@
               <app-table-report-simple [tab]="tab" [tipoReporte]="reporteSeleccionado"
                 (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-report-simple>
             </ng-container>
-
-            <ng-container *ngIf="showReport === '3er reporte'">
+            <!-- 3 -->
+            <ng-container *ngIf="showReport === 'crédito relacionado suministro energía'">
               <app-table-factura-relacionada [tab]="tab"
                 (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-factura-relacionada>
             </ng-container>
-
-            <ng-container *ngIf="showReport === '6to reporte'">
+            <!-- 6 -->
+            <ng-container *ngIf="showReport === 'compras crédito por cliente'">
               <app-table-transacciones-cliente [tab]="tab"
                 (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-transacciones-cliente>
             </ng-container>
-
-            <ng-container *ngIf="showReport === '7mo reporte'">
+            <!-- 7 -->
+            <ng-container *ngIf="showReport === 'suministro energía por cliente'">
               <app-table-suministro-cliente [tab]="tab"
                 (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-suministro-cliente>
             </ng-container>

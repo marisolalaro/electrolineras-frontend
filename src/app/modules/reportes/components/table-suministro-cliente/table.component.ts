@@ -75,7 +75,7 @@ export class TableSuministroClienteComponent {
         (resp: any) => {
           if (resp) {
             var respuesta = JSON.parse(JSON.stringify(resp.data));
-            if (resp.data.length > 0) {
+            if (resp.data?.length > 0 || resp.data == null) {
             this.reporte = respuesta.filter(item => item.clientInvoiceList.length > 0);
             if (this.reporte.length == 0) {
               this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });

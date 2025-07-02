@@ -104,16 +104,16 @@ export default class ReportesComponent {
       this.reporteSeleccionado.nombre == reports.labelReporte5
     ) {
       var title = '';
-      if (this.reporteSeleccionado.nombre.includes("1")) {
+      if (this.reporteSeleccionado.nombre.includes("crédito y suministro energía")) {
         title = reports.numeroReporte1;
       }
-      if (this.reporteSeleccionado.nombre.includes("2")) {
+      if (this.reporteSeleccionado.nombre.includes("compras crédito  ")) {
         title = reports.numeroReporte2;
       }
-      if (this.reporteSeleccionado.nombre.includes("4")) {
+      if (this.reporteSeleccionado.nombre.includes("suministro energía  ")) {
         title = reports.numeroReporte4;
       }
-      if (this.reporteSeleccionado.nombre.includes("5")) {
+      if (this.reporteSeleccionado.nombre.includes("detalle suministro energía")) {
         title = reports.numeroReporte5;
       }
       this.showReport = reports.xReporte;

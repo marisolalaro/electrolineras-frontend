@@ -73,7 +73,7 @@ export class TableFacturaRelacionadaComponent implements OnInit{
       (resp: any) => {
         if(resp) {
           this.reporte = JSON.parse(JSON.stringify(resp.data));
-          if (resp.data.length > 0) {
+          if (resp.data?.length > 0 || resp.data == null) {
           } else {
             this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
           }

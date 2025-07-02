@@ -70,16 +70,16 @@ export class TableReportSimpleComponent {
 
   identificaTipoReporte() {
     return new Promise((resolve) => {
-      if (this.tipoReporte.nombre.includes("1")) {
+      if (this.tipoReporte.nombre.includes("crédito y suministro energía")) {
         this.reporteX = 1;
       }
-      if (this.tipoReporte.nombre.includes("2")) {
+      if (this.tipoReporte.nombre.includes("compras crédito  ")) {
         this.reporteX = 2;
       }
-      if (this.tipoReporte.nombre.includes("4")) {
+      if (this.tipoReporte.nombre.includes("suministro energía  ")) {
         this.reporteX = 4;
       }
-      if (this.tipoReporte.nombre.includes("5")) {
+      if (this.tipoReporte.nombre.includes("detalle suministro energía")) {
         this.reporteX = 5;
       }
 
@@ -173,7 +173,7 @@ export class TableReportSimpleComponent {
         (resp: any) => {
           if (resp) {
             this.reporte = JSON.parse(JSON.stringify(resp.data));
-            if (resp.data.length > 0) {
+            if (resp.data?.length > 0 || resp.data == null) {
             } else {
               this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
             }
@@ -196,7 +196,7 @@ export class TableReportSimpleComponent {
         (resp: any) => {
           if (resp) {
             this.reporte = JSON.parse(JSON.stringify(resp.data));
-            if (resp.data.length > 0) {
+            if (resp.data?.length > 0 || resp.data == null) {
             } else {
               this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
             }
@@ -219,7 +219,7 @@ export class TableReportSimpleComponent {
         (resp: any) => {
           if (resp) {
             this.reporte = JSON.parse(JSON.stringify(resp.data));
-            if (resp.data.length > 0) {
+            if (resp.data?.length > 0 || resp.data == null) {
             } else {
               this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
             }
@@ -242,7 +242,7 @@ export class TableReportSimpleComponent {
         (resp: any) => {
           if (resp) {
             this.reporte = JSON.parse(JSON.stringify(resp.data));
-            if (resp.data.length > 0) {
+            if (resp.data?.length > 0 || resp.data == null) {
             } else {
               this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
             }

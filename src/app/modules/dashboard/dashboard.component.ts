@@ -24,6 +24,7 @@ import { ConnectorStatusService } from 'src/app/core/services/connector-status.s
 import { ElectricStationsService } from '../electric-stations/services/electric-stations.service';
 import { ValidaToken } from 'src/app/core/utils/verificarToken';
 import { ParTasaCargaService } from '../par-tasa-carga/service/par-tasa-carga.service';
+import { TasaCargaModel } from 'src/app/core/model/tasa-carga';
 
 @Component({
   standalone: true,
@@ -93,8 +94,8 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   private subscriptionEstados3: Subscription;
   private subscriptionAllES: Subscription;
 
-  public tasaCargaSemiRapida: any;
-  public tasaCargaLenta: any;
+  public tasaCargaSemiRapida: TasaCargaModel = new TasaCargaModel();
+  public tasaCargaLenta: TasaCargaModel = new TasaCargaModel();
   public fechaActual: any;
 
   constructor(
@@ -238,7 +239,6 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   getTasaCarga() {
     this.parTasaCargaService.getCurrentRate().subscribe(
       (data: any) => {
-        console.log(JSON.stringify(data));
         this.tasaCargaLenta = data.data.filter(item => item.description == 'CARGA LENTA, ULTRA LENTA')[0];
         this.tasaCargaSemiRapida = data.data.filter(item => item.description == 'CARGA SEMI RAPIDA')[0];
       },
@@ -250,7 +250,6 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   getDateNow() {
     this.parTasaCargaService.getCurrentDate().subscribe(
       (data: any) => {
-        console.log(JSON.stringify(data));
         this.fechaActual = data.data;
       },
       error => {
