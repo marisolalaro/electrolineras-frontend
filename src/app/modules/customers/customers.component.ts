@@ -80,10 +80,12 @@ export default class CustomersComponent {
   @ViewChild('dt1') dt!: Table;
 
   // variables para el filtro
-  public names: string = '';
-  public lastName: string = '';
-  public motherLastName: string = '';
-  public electronicMail: string = '';
+  public saldo: string = '';
+  public ultimaCompra: string = '';
+  public ultimoConsumo: string = '';
+  public username: string = '';
+  public fechaRegistro: string = '';
+
   public bodyFilter: BodyFilterModel = new BodyFilterModel(
     this.page,
     this.itemsPerPage,
@@ -216,26 +218,20 @@ export default class CustomersComponent {
     this.bodyFilter.sort.direction = '';
     let value = ($event.target as HTMLInputElement)?.value;
     this.dt.filter(value, field, matchMode);
-    if (field == 'names') {
-      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribName;
+    if (field == 'username') {
+      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribUsername;
     }
-    if (field == 'lastName') {
-      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribLastName;
+    if (field == 'saldo') {
+      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribSaldo;
     }
-    if (field == 'motherLastName') {
-      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribMotherLastName;
+    if (field == 'ultimaCompra') {
+      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribUltimaCompra;
     }
-    if (field == 'electronicMail') {
-      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribElectronicMail;
+    if (field == 'ultimoConsumo') {
+      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribUltimoConsumo;
     }
-    if (field == 'paymentTransactionsElectrolineraList') {
-      this.bodyFilter.search.column = 'paymentTransactionsElectrolineraList.amount';
-    }
-    if (field == 'chargeClientList') {
-      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribChargeClientList;
-    }
-    if (field == 'enabled') {
-      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribEnabled;
+    if (field == 'fechaRegistro') {
+      this.bodyFilter.search.column = DBAttributeName.tabClientUser_AttribRegistrationDt;
     }
     this.bodyFilter.search.value = value;
     this.getCustomers();
@@ -246,17 +242,20 @@ export default class CustomersComponent {
     this.bodyFilter.search.column = "";
     this.bodyFilter.search.value = "";
     this.bodyFilter.sort.column = "";
-    if (field == 'names') {
-      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribName;
+    if (field == 'saldo') {
+      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribSaldo;
     }
-    if (field == 'lastName') {
-      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribLastName;
+    if (field == 'ultimaCompra') {
+      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribUltimaCompra;
     }
-    if (field == 'motherLastName') {
-      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribMotherLastName;
+    if (field == 'ultimoConsumo') {
+      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribUltimoConsumo;
     }
-    if (field == 'electronicMail') {
-      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribElectronicMail;
+    if (field == 'username') {
+      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribUsername;
+    }
+    if (field == 'fechaRegistro') {
+      this.bodyFilter.sort.column = DBAttributeName.tabClientUser_AttribRegistrationDt;
     }
     if (this.bodyFilter.sort.column == "") {
       this.bodyFilter.sort.direction = ""
@@ -320,10 +319,11 @@ export default class CustomersComponent {
       decodeLocal().user.roles[0].id,
       decodeLocal().user.id
     );
-    this.names = '';
-    this.lastName = '';
-    this.motherLastName = '';
-    this.electronicMail = '';
+    this.saldo = '';
+    this.ultimaCompra = '';
+    this.ultimoConsumo = '';
+    this.username = '';
+    this.fechaRegistro = '';
   }
 
 }

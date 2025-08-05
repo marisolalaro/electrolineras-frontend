@@ -69,14 +69,14 @@ export class TableReportSimpleComponent {
   }
 
   identificaTipoReporte() {
-    return new Promise((resolve) => {
-      if (this.tipoReporte.nombre.includes("crédito y suministro energía")) {
+    return new Promise((resolve) => {      
+      if (this.tipoReporte.nombre === ("Factura de compras y carga de energía")) {
         this.reporteX = 1;
       }
-      if (this.tipoReporte.nombre.includes("compras crédito  ")) {
+      if (this.tipoReporte.nombre === ("Factura de compras")) {
         this.reporteX = 2;
       }
-      if (this.tipoReporte.nombre.includes("suministro energía  ")) {
+      if (this.tipoReporte.nombre === ("Factura cargas de energía")) {
         this.reporteX = 4;
       }
       if (this.tipoReporte.nombre.includes("detalle suministro energía")) {
@@ -99,6 +99,7 @@ export class TableReportSimpleComponent {
           { field: 'fechaEmision', header: 'Fecha de Emisión', pipe: '' },
           { field: 'tipoFactura', header: 'Tipo de Factura', pipe: '' },
           { field: 'urlFacturaSiat', header: 'Url Factura Siat', pipe: '' },
+          { field: 'codigoDescripcion', header: 'Estado', pipe: '' },
         ];
         return resolve(true);
       }

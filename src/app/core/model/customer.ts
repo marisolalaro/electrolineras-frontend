@@ -15,4 +15,11 @@ export class Customer extends Base {
   enabled: boolean;
   paymentTransactionsElectrolineraList: PaymentTransactionsElectrolineraList[];
   chargeClientList: ChargeClientList[];
+  username: string = '';
+  registrationDt: string = '';
+  ultimoConsumo: number = null;
+  ultimaCompra: number = null;
+  saldo: number = null;
+  fechaRegistro: string = '';
+
 }

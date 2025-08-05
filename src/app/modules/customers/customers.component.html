@@ -28,23 +28,30 @@
             <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">
               #
             </th>
-            <th style="width:16%; text-align:center; vertical-align:middle" pSortableColumn="'electronicMail'">
-              Correo Electrónico
-              <p-sortIcon field="electronicMail" (click)="customSort('electronicMail', orden)"></p-sortIcon>
+            <th style="width:16%; text-align:center; vertical-align:middle" pSortableColumn="'username'">
+              Usuario
+              <p-sortIcon field="username" (click)="customSort('username', orden)"></p-sortIcon>
             </th>
-            <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">
-              Ultima Transacción Bs
-            </th>
-            <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">
+            <th style="width:10%; text-align:center; vertical-align:middle" pSortableColumn="'saldo'">
               Saldo Actual Bs
+              <p-sortIcon field="saldo" (click)="customSort('saldo', orden)"></p-sortIcon>
             </th>
-            <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">
-              Ultima Estación de Carga
+            <th style="width:10%; text-align:center; vertical-align:middle" pSortableColumn="'ultimaCompra'">
+              Ultima Compra Bs
+              <p-sortIcon field="ultimaCompra" (click)="customSort('ultimaCompra', orden)"></p-sortIcon>
             </th>
-            <th style="width:15%; text-align:center; vertical-align:middle" rowspan="2" pSortableColumn="'enabled'">
+            <th style="width:10%; text-align:center; vertical-align:middle" pSortableColumn="'ultimoConsumo'">
+              Ultimo Consumo Bs
+              <p-sortIcon field="ultimoConsumo" (click)="customSort('ultimoConsumo', orden)"></p-sortIcon>
+            </th>
+            <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2" pSortableColumn="'fechaRegistro'">
+              Fecha Registro
+              <p-sortIcon field="fechaRegistro" (click)="customSort('fechaRegistro', orden)"></p-sortIcon>
+            </th>
+            <!-- <th style="width:15%; text-align:center; vertical-align:middle" rowspan="2" pSortableColumn="'enabled'">
               Estado
               <p-sortIcon field="enabled" (click)="customSort('enabled', orden)"></p-sortIcon>
-            </th>
+            </th> -->
             <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">
               Detalles
             </th>
@@ -52,28 +59,47 @@
 
           <tr>
             <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'electronicMail', 'contains')"
-                placeholder="Busca por Correo Electrónico" class="w-full" [(ngModel)]="electronicMail">
+              <input pInputText type="text" (input)="applyFilter($event, 'username', 'contains')"
+                placeholder="Busca Usermana" class="w-full" [(ngModel)]="username">
             </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'saldo', 'contains')"
+                placeholder="Busca Saldo Actual" class="w-full" [(ngModel)]="saldo">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'ultimaCompra', 'contains')"
+                placeholder="Busca Ultima Compra" class="w-full" [(ngModel)]="ultimaCompra">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'ultimoConsumo', 'contains')"
+                placeholder="Busca Ultimo Consumo" class="w-full" [(ngModel)]="ultimoConsumo">
+            </th>
+            <!-- <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'registrationDt', 'contains')"
+                placeholder="Busca Fecha de Registro" class="w-full" [(ngModel)]="registrationDt">
+            </th> -->
           </tr>
 
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
           <tr>
             <td style="text-align:center; vertical-align:middle">{{rowIndex + 1}}</td>
-            <td style="text-align:left; vertical-align:middle">{{rowData['electronicMail']}}</td>
 
-            <td style="text-align:right; vertical-align:middle" *ngIf="rowData['lastRechargeAmount']">
-              {{rowData['lastRechargeAmount'] | numberDecimal:2}}</td>
-            <td style="text-align:right; vertical-align:middle" *ngIf="!rowData['lastRechargeAmount']">0.00</td>
+            <td style="text-align:left; vertical-align:middle">{{rowData['username']}}</td>
 
-            <td style="text-align:right; vertical-align:middle">{{rowData['remainingCredit'] | numberDecimal:2}}</td>
+            <td style="text-align:right; vertical-align:middle" *ngIf="rowData['saldo']">{{rowData['saldo'] | numberDecimal:2}}</td>
+            <td style="text-align:right; vertical-align:middle" *ngIf="!rowData['saldo']">0.00</td>
 
-            <td style="text-align:center; vertical-align:middle" *ngIf="rowData['lastChargingStation']">
-              {{rowData['lastChargingStation']}}</td>
-            <td style="text-align:center; vertical-align:middle" *ngIf="!rowData['lastChargingStation']">Sin Carga</td>
+            <td style="text-align:right; vertical-align:middle" *ngIf="rowData['ultimaCompra']">{{rowData['ultimaCompra'] | numberDecimal:2}}</td>
+            <td style="text-align:right; vertical-align:middle" *ngIf="!rowData['ultimaCompra']">0.00</td>
 
-            <td style="text-align:center; vertical-align:middle">
+            <td style="text-align:right; vertical-align:middle" *ngIf="rowData['ultimoConsumo']">{{rowData['ultimoConsumo'] | numberDecimal:2}}</td>
+            <td style="text-align:right; vertical-align:middle" *ngIf="!rowData['ultimoConsumo']">0.00</td>
+
+            <td style="text-align:left; vertical-align:middle" *ngIf="rowData['fechaRegistro']">{{rowData['fechaRegistro'] | formatDiaMesAnio}}</td>
+            <td style="text-align:left; vertical-align:middle" *ngIf="!rowData['fechaRegistro']">Sin Fecha</td>
+            
+            <!-- <td style="text-align:center; vertical-align:middle">
               <div *ngIf="esSuperAdmin">
                 <p-inputSwitch [(ngModel)]="rowData['enabled']"
                   (onChange)="confirmSwitchChange($event, rowData)"></p-inputSwitch>
@@ -84,7 +110,7 @@
               <div *ngIf="!esSuperAdmin">
                 <label>{{rowData['enabled'] | formatHabilitadoDeshabilitado}}</label>
               </div>
-            </td>
+            </td> -->
 
             <td style="text-align:center; vertical-align:middle">
               <i class="pi pi-eye" style="font-size: 1.5rem; color: var(--primary-color)"
@@ -118,23 +144,25 @@
                 <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
                   <div class="text-500 w-6 md:w-2 font-medium"><b>Usuario:</b></div>
                   <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
-                    {{customer.electronicMail}}</div>
+                    {{customer.username}}</div>
                 </li>
                 <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
                   <div class="text-500 w-6 md:w-2 font-medium"><b>Última Transacción Bs: </b></div>
-                  <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
-                    {{customer.lastRechargeAmount}}</div>
+                  <div class="w-full md:w-8 md:flex-order-0 flex-order-1" *ngIf="customer.ultimoConsumo" style="color: var(--primary-color-text)">
+                    {{customer.ultimoConsumo}}</div>
+                  <div class="w-full md:w-8 md:flex-order-0 flex-order-1" *ngIf="!customer.ultimoConsumo" style="color: var(--primary-color-text)">
+                    0.0</div>
                 </li>
                 <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
                   <div class="text-500 w-6 md:w-2 font-medium"><b>Saldo Actual: </b></div>
                   <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
-                    {{customer.remainingCredit}}</div>
+                    {{customer.saldo}}</div>
                 </li>
-                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                <!-- <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
                   <div class="text-500 w-6 md:w-2 font-medium"><b>Última Estación de Carga: </b></div>
                   <div class="w-full md:w-8 md:flex-order-0 flex-order-1" style="color: var(--primary-color-text)">
                     {{customer.lastChargingStation}}</div>
-                </li>
+                </li> -->
               </ul>
             </div>
           </div>

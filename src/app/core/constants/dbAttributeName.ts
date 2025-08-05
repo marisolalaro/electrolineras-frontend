@@ -8,6 +8,11 @@ export class DBAttributeName {
     static tabClientUser_AttribChargeClientList = 'chargeClientList';
     static tabClientUser_AttribPaymentTransactionsElectrolineraList = 'paymentTransactionsElectrolineraList';
     static tabClientUser_AttribEnabled = 'enabled';
+    static tabClientUser_AttribUsername = 'username';
+    static tabClientUser_AttribSaldo = 'saldo';
+    static tabClientUser_AttribUltimaCompra = 'ultima_compra';
+    static tabClientUser_AttribUltimoConsumo = 'ultimo_consumo';
+    static tabClientUser_AttribRegistrationDt = 'fecha_registro';
 
     // tabla payment_transactions_electrolinera
     static tabPaymentTransactions_AttribConsumer = 'consumer_name';

@@ -2,10 +2,11 @@
 <p-table responsiveLayout="stack" *ngIf="componenteVisible" [columns]="cols" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%"
 class="custom-p-table">
 <ng-template pTemplate="caption">
-  <p-button icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" [rounded]="true" [text]="true"
-    [raised]="true" severity="success">
-  </p-button> &nbsp;
-  <label (click)="descargaArchivo()"><b>Descargar {{numeroReporte}} de {{tab.content.initialDate}} a {{tab.content.finalDate}}</b></label>
+  <label><b>{{numeroReporte}}</b></label>
+  <br>
+  <br>
+  <p-button label="Descargar" icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" size="small" [outlined]="true" />
+  <!-- <label (click)="descargaArchivo()"><b>Descargar {{numeroReporte}} de {{tab.content.initialDate}} a {{tab.content.finalDate}}</b></label> -->
 </ng-template>
 <ng-template pTemplate="header" let-columns>
   <tr>

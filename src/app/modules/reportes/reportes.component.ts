@@ -77,12 +77,13 @@ export default class ReportesComponent {
     });
     this.tiposReportes = [
       { nombre: reports.labelReporte1 },
-      { nombre: reports.labelReporte2 },
-      { nombre: reports.labelReporte3 },
       { nombre: reports.labelReporte4 },
-      { nombre: reports.labelReporte5 },
+      { nombre: reports.labelReporte8 },
+      { nombre: reports.labelReporte2 },
       { nombre: reports.labelReporte6 },
       { nombre: reports.labelReporte7 },
+      // { nombre: reports.labelReporte3 },
+      // { nombre: reports.labelReporte5 },
     ];
   }
 
@@ -104,13 +105,13 @@ export default class ReportesComponent {
       this.reporteSeleccionado.nombre == reports.labelReporte5
     ) {
       var title = '';
-      if (this.reporteSeleccionado.nombre.includes("crédito y suministro energía")) {
+      if (this.reporteSeleccionado.nombre ===("Factura de compras y carga de energía")) {
         title = reports.numeroReporte1;
       }
-      if (this.reporteSeleccionado.nombre.includes("compras crédito  ")) {
+      if (this.reporteSeleccionado.nombre === ("Factura de compras")) {
         title = reports.numeroReporte2;
       }
-      if (this.reporteSeleccionado.nombre.includes("suministro energía  ")) {
+      if (this.reporteSeleccionado.nombre === ("Factura cargas de energía")) {
         title = reports.numeroReporte4;
       }
       if (this.reporteSeleccionado.nombre.includes("detalle suministro energía")) {
@@ -140,7 +141,7 @@ export default class ReportesComponent {
         this.numeroReport = 3;
       }, 0);
     }
-    if (this.reporteSeleccionado.nombre == reports.labelReporte6) {
+    if (this.reporteSeleccionado.nombre === reports.labelReporte6) {
       this.showReport = reports.numeroReporte6;
       this.tabs.push({
         title: this.showReport,
@@ -149,11 +150,11 @@ export default class ReportesComponent {
       });
       setTimeout(() => {
         this.activeIndex = this.tabs.length - 1;
-        this.numeroReport = 5;
+        this.numeroReport = 6;
       }, 0);
     }
 
-    if (this.reporteSeleccionado.nombre == reports.labelReporte7) {
+    if (this.reporteSeleccionado.nombre === reports.labelReporte7) {
       this.showReport = reports.numeroReporte7;
       this.tabs.push({
         title: this.showReport,
@@ -163,6 +164,19 @@ export default class ReportesComponent {
       setTimeout(() => {
         this.activeIndex = this.tabs.length - 1;
         this.numeroReport = 7;
+      }, 0);
+    }
+
+    if (this.reporteSeleccionado.nombre == reports.labelReporte8) {
+      this.showReport = reports.numeroReporte8;
+      this.tabs.push({
+        title: this.showReport,
+        content: this.rangoFechas,
+        estado: false
+      });      
+      setTimeout(() => {
+        this.activeIndex = this.tabs.length - 1;
+        this.numeroReport = 8;
       }, 0);
     }
   }
@@ -224,6 +238,13 @@ export default class ReportesComponent {
       this.rangoFechas = this.tabs[event.index].content;
       setTimeout(() => {
         this.showReport = reports.numeroReporte7;
+      }, 0);
+    }
+    if (this.tabs[event.index].title == reports.numeroReporte8) {
+      this.tabs[event.index].estado = false;
+      this.rangoFechas = this.tabs[event.index].content;
+      setTimeout(() => {
+        this.showReport = reports.numeroReporte8;
       }, 0);
     }
   }
