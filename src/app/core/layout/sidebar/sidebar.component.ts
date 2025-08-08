@@ -42,6 +42,11 @@ export class SidebarComponent implements OnInit {
             icon: 'pi pi-fw pi-bolt',
             routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaElectrolineras],
           },
+          // {
+          //   label: mainTitles['desvincularCliente'].mainTitle,
+          //   icon: 'pi pi-fw pi-money-bill',
+          //   routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaDesvincular],
+          // },
           {
             label: mainTitles['transacciones'].mainTitle,
             icon: 'pi pi-fw pi-money-bill',

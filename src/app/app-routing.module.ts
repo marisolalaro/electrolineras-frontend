@@ -47,6 +47,10 @@ const routes: Routes = [
         path: rutas.rutaReportes,
         loadComponent: () => import('./modules/reportes/reportes.component'),
       },
+      {
+        path: rutas.rutaDesvincular,
+        loadComponent: () => import('./modules/desvincular-cliente/desvincular-cliente.component'),
+      },
       // parametricas
       {
         path: rutas.rutaParametricas + '/' + rutas.rutaModelo,

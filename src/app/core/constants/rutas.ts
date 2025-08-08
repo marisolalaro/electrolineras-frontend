@@ -16,4 +16,5 @@ export const rutas: any =
     rutaTasaCarga: 'load-rate',
     rutaAddress: 'address',
     rutaPassword: 'password',
+    rutaDesvincular: 'desvincular-cliente',
 }

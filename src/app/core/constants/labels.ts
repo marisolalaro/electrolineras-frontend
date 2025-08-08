@@ -213,6 +213,10 @@ export const mainTitles: IMainTitles = {
     mainTitle: 'Reportes',
     secondaryTitle: 'Reportes'
   },
+  desvincularCliente: {
+    mainTitle: 'Desvincular Cliente',
+    secondaryTitle: 'Desvincular Cliente'
+  },
 
   parametricas: {
     mainTitle: 'Administración Paramétricas',

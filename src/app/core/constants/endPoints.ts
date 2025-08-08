@@ -63,6 +63,9 @@ export class EndPoins {
     static stopTransaction = "/stopTransaction"
     static stopTransactionCliente = "/stopTransactionReleaseConnectorAndClients"
     
+    // desvincular cliente
+    static desvincularCliente = "/desvincular-cliente"
+
     // Reportes
     static facturasRelacionadas = "/invoicesRelationByDates"
     static clientesCarga = "/chargeClient"

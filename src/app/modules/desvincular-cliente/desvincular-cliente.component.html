@@ -1,0 +1,304 @@
+<p-confirmDialog
+  [style]="{width: '50vw'}"></p-confirmDialog>
+<div class="container">
+
+  <div class="card">
+    <div class="row">
+      <h3><b>{{componentTitle.mainTitle}}</b></h3>
+      <!-- <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;" *ngIf="serviceResponse">
+        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllModels()" pTooltip="Actualizar"
+          tooltipPosition="left"></p-button> &nbsp;
+        <button pButton pRipple class="mat-raised-button" (click)="openDialogCreate()">
+          Crear Nuevo Registro</button>
+      </div> -->
+    </div>
+
+    <!-- <div class="row" *ngIf="serviceResponse">
+      <p-table responsiveLayout="stack" #dt1 [value]="brands" dataKey="id"
+        styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
+        [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES"
+        currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros"
+        (sortFunction)="customSort($event)" [customSort]="true" width="100%">
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
+              (click)="clearFilters(dt1) ; getAllModels()"></button>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">#</th>
+            <th style="width:15%; text-align:center; vertical-align:middle" pSortableColumn="vendor">
+              Marca<p-sortIcon field="vendor"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="modelCode">
+              Código modelo<p-sortIcon field="modelCode"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="boxSerialNumber">
+              Número de Serie Modelo<p-sortIcon field="boxSerialNumber"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="pointModel">
+              Tipo<p-sortIcon field="pointModel"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="pointSerialNumber">
+              Número de Serie Tipo<p-sortIcon field="pointSerialNumber"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="firmwareVersion">
+              Versión Firmware<p-sortIcon field="firmwareVersion"></p-sortIcon></th>
+            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="activo" rowspan="2">
+              Estado<p-sortIcon field="activo"></p-sortIcon></th>
+            <th style="width:10%; text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
+          </tr>
+          <tr>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'vendor', 'contains')"
+                placeholder="Busca Modelo" class="w-full" [(ngModel)]="vendor">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'modelCode', 'contains')"
+                placeholder="Busca Código Modelo" class="w-full" [(ngModel)]="modelCode">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'boxSerialNumber', 'contains')"
+                placeholder="Busca Número Serie Modelo" class="w-full" [(ngModel)]="boxSerialNumber">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'pointModel', 'contains')"
+                placeholder="Busca Tipo" class="w-full" [(ngModel)]="pointModel">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'pointSerialNumber', 'contains')"
+                placeholder="Busca  Número Serie Tipo" class="w-full" [(ngModel)]="pointSerialNumber">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="applyFilter($event, 'firmwareVersion', 'contains')"
+                placeholder="Busca Version Firmware" class="w-full" [(ngModel)]="firmwareVersion">
+            </th>
+          
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+          <tr>
+            <td style="text-align:center; vertical-align:middle">{{rowIndex + 1}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['vendor']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['modelCode']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['boxSerialNumber']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['pointModel']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['pointSerialNumber']}}</td>
+            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['firmwareVersion']}}</td>
+
+            <td style="text-align:left; vertical-align:middle" class="uppercase">
+              <p-inputSwitch [(ngModel)]="rowData['activo']" (onChange)="confirmSwitchChange($event, rowData)">
+              </p-inputSwitch><br>
+              <label *ngIf="rowData['activo']">Habilitado</label>
+              <label *ngIf="!rowData['activo']">Deshabilitado</label>
+            </td>
+            <td style="text-align:center; vertical-align:middle">
+              <i class="pi pi-fw pi-pencil" style="font-size: 1.5rem; color: var(--primary-color);"
+                data-bs-toggle="modal" data-bs-target="#editModal" (click)="selectedEdit(rowData)" pTooltip="Editar"
+                 *ngIf="rowData['activo']"></i>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div> -->
+
+    <div *ngIf="!serviceResponse">
+      <app-not-found [mensajeNotFound]="mensaje" (datosEnviados)="getAllModels()"></app-not-found>
+      <br> <br>
+    </div>
+
+    <!-- modal Crear nuevo -->
+    <!-- <section class="dialogCrear">
+      <p-dialog header={{titlesGlobales.create}} [(visible)]="dialogRegistro" [style]="{width: '50vw'}" class="p-fluid"
+        [dismissableMask]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [draggable]="false"
+        [resizable]="false">
+        <ng-template pTemplate="content">
+          <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
+
+            <div class="form-group field">
+              <label for="vendor">{{labelsGlobales.vendor}}</label>
+              <input type="text" pInputText required formControlName="vendor" appUppercase
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['vendor'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['vendor'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('vendor')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="modelCode">{{labelsGlobales.modelCode}}</label>
+              <input type="text" pInputText required formControlName="modelCode"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['modelCode'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['modelCode'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('modelCode')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+
+
+            <div class="form-group field">
+              <label for="boxSerialNumber">{{labelsGlobales.boxSerialNumber}}</label>
+              <input type="text" pInputText required formControlName="boxSerialNumber"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['boxSerialNumber'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['boxSerialNumber'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('boxSerialNumber')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="pointModel">{{labelsGlobales.pointModel}}</label>
+              <input type="text" pInputText required formControlName="pointModel"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['pointModel'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['pointModel'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('pointModel')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="pointSerialNumber">{{labelsGlobales.pointSerialNumber}}</label>
+              <input type="text" pInputText required formControlName="pointSerialNumber"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['pointSerialNumber'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['pointSerialNumber'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('pointSerialNumber')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="firmwareVersion">{{labelsGlobales.firmwareVersion}}</label>
+              <input type="text" pInputText required formControlName="firmwareVersion"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['firmwareVersion'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['firmwareVersion'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('firmwareVersion')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+
+          </form>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+          <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
+            class="p-button-secondary p-button-rounded mr-2" (click)="actionDialog(false, 'create')"></button>
+          <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check" class="p-button-rounded mr-2"
+            (click)="onValidaFormulario()"></button>
+        </ng-template>
+      </p-dialog>
+    </section> -->
+    <!-- modal Crear nuevo -->
+
+    <!-- modal Editar -->
+    <!-- <section class="dialogEdit">
+      <p-dialog header={{titlesGlobales.edit}} [(visible)]="dialogEdit" [style]="{width: '50vw'}" class="p-fluid"
+        [dismissableMask]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [draggable]="false"
+        [resizable]="false">
+        <ng-template pTemplate="content">
+          <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
+
+            <div class="form-group field">
+              <label for="vendor">{{labelsGlobales.vendor}}</label>
+              <input type="text" pInputText required formControlName="vendor" appUppercase
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['vendor'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['vendor'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('vendor')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="modelCode">{{labelsGlobales.modelCode}}</label>
+              <input type="text" pInputText required formControlName="modelCode"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['modelCode'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['modelCode'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('modelCode')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="boxSerialNumber">{{labelsGlobales.boxSerialNumber}}</label>
+              <input type="text" pInputText required formControlName="boxSerialNumber"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['boxSerialNumber'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['boxSerialNumber'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('boxSerialNumber')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="pointModel">{{labelsGlobales.pointModel}}</label>
+              <input type="text" pInputText required formControlName="pointModel"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['pointModel'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['pointModel'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('pointModel')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="pointSerialNumber">{{labelsGlobales.pointSerialNumber}}</label>
+              <input type="text" pInputText required formControlName="pointSerialNumber"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['pointSerialNumber'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['pointSerialNumber'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('pointSerialNumber')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group field">
+              <label for="firmwareVersion">{{labelsGlobales.firmwareVersion}}</label>
+              <input type="text" pInputText required formControlName="firmwareVersion"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['firmwareVersion'].invalid}"
+                oninput="this.value = this.value.toUpperCase()" />
+              <div *ngIf="submitted && formRegistro.controls['firmwareVersion'].invalid">
+                <small class="p-error" *ngIf="formRegistro.get('firmwareVersion')?.hasError('required')">
+                  {{messagesGlobales.requiredField}}
+                </small>
+              </div>
+            </div>
+
+          </form>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+          <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
+            class="p-button-secondary p-button-rounded mr-2" (click)="actionDialog(false, 'edit')"></button>
+          <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check" class="p-button-rounded mr-2"
+            (click)="onValidaFormulario()"></button>
+        </ng-template>
+      </p-dialog>
+    </section> -->
+    <!-- modal Editar -->
+
+  </div>
+</div>
+
+<p-toast></p-toast>
+<p-blockUI [blocked]="loading">
+  <div class="loading-container">
+    <i class="pi pi-spin pi-spinner" style="font-size: 3em"></i>
+    <p>Cargando...</p>
+  </div>
+</p-blockUI>
