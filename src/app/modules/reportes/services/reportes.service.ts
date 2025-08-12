@@ -48,4 +48,8 @@ export class ReportesService {
   getFacturaSuministroEnergia(rangoFechas) {
     return this.http.post(this.apiService + EndPoins.invoicePaymentTransaction + EndPoins.facturaSuministro, rangoFechas);
   }
+
+  getReporteConsumoClientes(rangoFechas) {
+    
+  }
 }

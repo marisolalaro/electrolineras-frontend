@@ -91,6 +91,12 @@
                 (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-report-operacion>
             </ng-container>
 
+            <!-- 9 -->
+            <ng-container *ngIf="showReport === 'Reporte de Consumo por Cliente'">
+              <app-table-report-consumo [tab]="tab"
+                (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-report-consumo>
+            </ng-container>
+
           </p-tabPanel>
         </p-tabView>
 

@@ -1244,4 +1244,173 @@ export class CrearExcelService {
       saveAs(blob, `${fileName}.xlsx`);
     });
   }
+
+  // 9no Reporte de consumo por cliente
+  public excelConsumoPorCliente(jsonData: any[], fileName: string, nombreHoja: string, rangoFechas): void {
+    // Creacion del Libro
+    const workbook = new ExcelJS.Workbook();
+    // Agregando hoja de trabajo
+    const worksheet = workbook.addWorksheet(nombreHoja);
+
+    worksheet.addRow('');
+    worksheet.addRow('');
+    worksheet.addRow('');
+    worksheet.addRow('');
+    worksheet.addRow('');
+
+    // Agregar encabezados de las filas
+    const rowValues = [];
+    rowValues[1] = "clientes";
+    rowValues[2] = "fecha_carga_energia";
+    rowValues[3] = "electrolinera";
+    rowValues[4] = "bloque_bajo_kwh";
+    rowValues[5] = "bloque_medio_kwh";
+    rowValues[6] = "bloque_alto_kwh";
+    rowValues[7] = "total_energia_kwh";
+    rowValues[8] = "bloque_bajo_Bs";
+    rowValues[9] = "bloque_medio_bs";
+    rowValues[10] = "bloque_alto_bs";
+    rowValues[11] = "total_bs";
+    rowValues[12] = "tarifa_bloque_bajo";
+    rowValues[13] = "tarifa_bloque_medio";
+    rowValues[14] = "tarifa_bloque_alto";
+
+    worksheet.addRow(rowValues);
+
+    worksheet.getCell('A6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('B6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('C6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('D6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('E6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('F6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('G6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('H6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('I6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('J6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('K6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('L6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('M6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('N6').alignment = { vertical: 'middle', horizontal: 'center' };
+
+    // Agregar datos del json
+    jsonData.forEach((data: any) => {
+      worksheet.addRow([
+        data.clientes? data.clientes : '',
+        data.fecha_carga_energia? data.fecha_carga_energia : '',
+        data.electrolinera? data.electrolinera : '',
+        data.bloque_bajo_kwh? data.bloque_bajo_kwh : '',
+        data.bloque_medio_kwh? data.bloque_medio_kwh : '',
+        data.bloque_alto_kwh? data.bloque_alto_kwh : '',
+        data.total_energia_kwh? data.total_energia_kwh : '',
+        data.bloque_bajo_Bs? data.bloque_bajo_Bs : '',
+        data.bloque_medio_bs? data.bloque_medio_bs : '',
+        data.bloque_alto_bs? data.bloque_alto_bs : '',
+        data.total_bs? data.total_bs : '',
+        data.tarifa_bloque_bajo? data.tarifa_bloque_bajo : '',
+        data.tarifa_bloque_medio? data.tarifa_bloque_medio : '',
+        data.tarifa_bloque_alto? data.tarifa_bloque_alto : ''
+      ]);
+    });
+
+    // Ajustar el ancho de las columnas según el contenido
+    worksheet.columns.forEach((column) => {
+      let maxLength = 0;
+      column.eachCell({ includeEmpty: true }, (cell) => {
+        const cellValue = cell.value as string;
+        if (cellValue) {
+          const columnLength = cellValue.toString().length;
+          if (columnLength > maxLength) {
+            maxLength = columnLength;
+          }
+        }
+      });
+      column.width = maxLength < 10 ? 10 + 10 : maxLength; // Ajusta el ancho mínimo si es necesario
+    });
+
+    // poniendo titulo
+    worksheet.getCell('C2').value = reports.tituloReporte9;
+    worksheet.getCell('C2').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFFFFF' },
+      bgColor: { argb: 'afe' }
+    };
+    // poniendo subtitulo
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C3').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFFFFF' },
+      bgColor: { argb: 'afe' }
+    };
+
+
+    worksheet.getCell('C2').border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    worksheet.getCell('C3').border = { left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+
+    // poniendo estilos a los titulos y subtitulos
+    worksheet.mergeCells('C2:F2');
+    worksheet.mergeCells('C3:F3');
+    worksheet.getCell('C2').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('C3').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('C2').font = { bold: true, color: { argb: '000000' }, };
+    worksheet.getCell('C3').font = { bold: true, color: { argb: '000000' }, };
+
+    // poniendo bordes a las cabeceras
+    for (let i = 6; i < jsonData.length + 7; i++) {
+      const element = jsonData[i];
+      worksheet.getCell(`A${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`B${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`C${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`D${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`E${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`F${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`G${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`H${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`I${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`J${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`K${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`L${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`M${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`N${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+    }
+
+    // estilo fondo azul a las cabeceras
+    worksheet.getCell('A6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('B6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('C6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('D6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('E6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('F6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('G6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('H6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('I6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('J6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('K6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('L6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('M6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('N6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+
+    // estilo letras blancas a las cabeceras
+    worksheet.getCell('A6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('B6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('C6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('D6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('E6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('F6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('G6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('H6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('I6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('J6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('K6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('L6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('M6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('N6').font = { bold: true, color: { argb: 'FFFFFF' } };
+
+    // Guardar el archivo
+    workbook.xlsx.writeBuffer().then((data: BlobPart) => {
+      const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, `${fileName}.xlsx`);
+    });
+  }
 }

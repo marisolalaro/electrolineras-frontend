@@ -1,0 +1,28 @@
+<!-- Reporte simple, reportes 1,2,4,5 -->
+<p-table responsiveLayout="stack" *ngIf="componenteVisible" [columns]="cols" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%"
+class="custom-p-table">
+<ng-template pTemplate="caption">
+  <label><b>{{numeroReporte}}</b></label>
+  <br>
+  <br>
+  <p-button label="Descargar" icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" size="small" [outlined]="true" />
+  <!-- <label (click)="descargaArchivo()"><b>Descargar {{numeroReporte}} de {{tab.content.initialDate}} a {{tab.content.finalDate}}</b></label> -->
+</ng-template>
+<ng-template pTemplate="header" let-columns>
+  <tr>
+    <th *ngFor="let col of columns">
+      {{ col.header }}
+    </th>
+  </tr>
+</ng-template>
+<ng-template pTemplate="body" let-rowData let-columns="columns">
+  <tr>
+    <td *ngFor="let col of columns">
+      <div>
+        {{rowData[col.field]}}
+      </div>
+    </td>
+  </tr>
+</ng-template>
+</p-table>
+<!-- Reporte simple, reportes 1,2,4,5 -->

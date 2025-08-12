@@ -13,6 +13,7 @@ import { TableFacturaRelacionadaComponent } from './components/table-factura-rel
 import { TableTransaccionesClienteComponent } from './components/table-transacciones-cliente/table.component';
 import { NotFoundComponent } from '../not-found/not-found.component';
 import { TableReportOperacionComponent } from './components/table-report-operacion/table.component';
+import { TableReportConsumoComponent } from './components/table-report-consumo/table.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { TableReportOperacionComponent } from './components/table-report-operaci
     TableFacturaRelacionadaComponent,
     TableTransaccionesClienteComponent,
     TableReportOperacionComponent,
+    TableReportConsumoComponent
   ],
   imports: [
     CommonModule,
@@ -42,6 +44,7 @@ import { TableReportOperacionComponent } from './components/table-report-operaci
     TableFacturaRelacionadaComponent,
     TableTransaccionesClienteComponent,
     TableReportOperacionComponent,
+    TableReportConsumoComponent
   ],
   providers: [
     ReportesService,

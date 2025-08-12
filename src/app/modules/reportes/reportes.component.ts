@@ -82,6 +82,7 @@ export default class ReportesComponent {
       { nombre: reports.labelReporte2 },
       { nombre: reports.labelReporte6 },
       { nombre: reports.labelReporte7 },
+      { nombre: reports.labelReporte9 },
       // { nombre: reports.labelReporte3 },
       // { nombre: reports.labelReporte5 },
     ];
@@ -179,6 +180,18 @@ export default class ReportesComponent {
         this.numeroReport = 8;
       }, 0);
     }
+    if (this.reporteSeleccionado.nombre == reports.labelReporte9) {
+      this.showReport = reports.numeroReporte9;
+      this.tabs.push({
+        title: this.showReport,
+        content: this.rangoFechas,
+        estado: false
+      });      
+      setTimeout(() => {
+        this.activeIndex = this.tabs.length - 1;
+        this.numeroReport = 9;
+      }, 0);
+    }
   }
 
   onTabChange(event: any) {
@@ -245,6 +258,13 @@ export default class ReportesComponent {
       this.rangoFechas = this.tabs[event.index].content;
       setTimeout(() => {
         this.showReport = reports.numeroReporte8;
+      }, 0);
+    }
+    if (this.tabs[event.index].title == reports.numeroReporte9) {
+      this.tabs[event.index].estado = false;
+      this.rangoFechas = this.tabs[event.index].content;
+      setTimeout(() => {
+        this.showReport = reports.numeroReporte9;
       }, 0);
     }
   }
