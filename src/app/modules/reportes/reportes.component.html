@@ -86,13 +86,13 @@
             </ng-container>
 
             <!-- 8 -->
-            <ng-container *ngIf="showReport === 'Datos de operación en electrolinera'">
+            <ng-container *ngIf="showReport === 'Set42 - Datos mensuales de electrolineras'">
               <app-table-report-operacion [tab]="tab"
                 (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-report-operacion>
             </ng-container>
 
             <!-- 9 -->
-            <ng-container *ngIf="showReport === 'Reporte de Consumo por Cliente'">
+            <ng-container *ngIf="showReport === 'Cargas de clientes por bloques'">
               <app-table-report-consumo [tab]="tab"
                 (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-report-consumo>
             </ng-container>

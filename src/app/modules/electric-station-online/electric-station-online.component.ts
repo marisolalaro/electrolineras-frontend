@@ -159,7 +159,6 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
           // this.reiniciarDatosCero(data); para cada puerto
           // this.armaTablaConector()
         });
-      // TODO debo revisar esta parte
       this.subscriptionClientCharging = this.websocketService.getClientCharging()
         .subscribe((data) => {
           this.clientChargingStation = data;
@@ -394,8 +393,6 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
     });
   }
 
-
-  // TODO
   clienteCargando() {
     return new Promise((resolve) => {
       if (this.clientChargingStation.length > 0) {

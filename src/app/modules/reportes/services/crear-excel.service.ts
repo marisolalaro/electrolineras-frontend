@@ -1260,20 +1260,20 @@ export class CrearExcelService {
 
     // Agregar encabezados de las filas
     const rowValues = [];
-    rowValues[1] = "clientes";
-    rowValues[2] = "fecha_carga_energia";
-    rowValues[3] = "electrolinera";
-    rowValues[4] = "bloque_bajo_kwh";
-    rowValues[5] = "bloque_medio_kwh";
-    rowValues[6] = "bloque_alto_kwh";
-    rowValues[7] = "total_energia_kwh";
-    rowValues[8] = "bloque_bajo_Bs";
-    rowValues[9] = "bloque_medio_bs";
-    rowValues[10] = "bloque_alto_bs";
-    rowValues[11] = "total_bs";
-    rowValues[12] = "tarifa_bloque_bajo";
-    rowValues[13] = "tarifa_bloque_medio";
-    rowValues[14] = "tarifa_bloque_alto";
+    rowValues[1] = "Clientes";
+    rowValues[2] = "Fecha de la Carga de Energia";
+    rowValues[3] = "Electrolinera";
+    rowValues[4] = "Bloque Bajo Kwh";
+    rowValues[5] = "Bloque Bajo Bs";
+    rowValues[6] = "Tarifa Bloque Bajo";
+    rowValues[7] = "Bloque Medio Kwh";
+    rowValues[8] = "Bloque Medio Bs";
+    rowValues[9] = "Tarifa Bloque Medio";
+    rowValues[10] = "Bloque Alto Kwh";
+    rowValues[11] = "Bloque Alto Bs";
+    rowValues[12] = "Tarifa Bloque Alto";
+    rowValues[13] = "Total Energia  kwh";
+    rowValues[14] = "Total bs";
 
     worksheet.addRow(rowValues);
 
@@ -1296,19 +1296,19 @@ export class CrearExcelService {
     jsonData.forEach((data: any) => {
       worksheet.addRow([
         data.clientes? data.clientes : '',
-        data.fecha_carga_energia? data.fecha_carga_energia : '',
+        data.fechaCargaEnergia? data.fechaCargaEnergia : '',
         data.electrolinera? data.electrolinera : '',
-        data.bloque_bajo_kwh? data.bloque_bajo_kwh : '',
-        data.bloque_medio_kwh? data.bloque_medio_kwh : '',
-        data.bloque_alto_kwh? data.bloque_alto_kwh : '',
-        data.total_energia_kwh? data.total_energia_kwh : '',
-        data.bloque_bajo_Bs? data.bloque_bajo_Bs : '',
-        data.bloque_medio_bs? data.bloque_medio_bs : '',
-        data.bloque_alto_bs? data.bloque_alto_bs : '',
-        data.total_bs? data.total_bs : '',
-        data.tarifa_bloque_bajo? data.tarifa_bloque_bajo : '',
-        data.tarifa_bloque_medio? data.tarifa_bloque_medio : '',
-        data.tarifa_bloque_alto? data.tarifa_bloque_alto : ''
+        data.bloqueBajoKwh? data.bloqueBajoKwh : '',
+        data.bloqueBajoBs? data.bloqueBajoBs : '',
+        data.tarifaBloqueBajo? data.tarifaBloqueBajo : '',
+        data.bloqueMedioKwh? data.bloqueMedioKwh : '',
+        data.bloqueMedioBs? data.bloqueMedioBs : '',
+        data.tarifaBloqueMedio? data.tarifaBloqueMedio : '',
+        data.bloqueAltoKwh? data.bloqueAltoKwh : '',
+        data.bloqueAltoBs? data.bloqueAltoBs : '',
+        data.tarifaBloqueAlto? data.tarifaBloqueAlto : '',
+        data.totalEnergiaKwh? data.totalEnergiaKwh : '',
+        data.totalBs? data.totalBs : ''
       ]);
     });
 

@@ -49,7 +49,13 @@ export class ReportesService {
     return this.http.post(this.apiService + EndPoins.invoicePaymentTransaction + EndPoins.facturaSuministro, rangoFechas);
   }
 
-  getReporteConsumoClientes(rangoFechas) {
-    
+  // 8vo Reporte - Datos Mensuales
+  getReporteDatosMensuales() {
+    return this.http.get(this.apiService + EndPoins.reportes + EndPoins.datosMensuales)
+  }
+
+  // 9no Reporte
+  getSuministroCliente(rangoFechas) {
+    return this.http.post(this.apiService + EndPoins.chargingHistory + EndPoins.suministroCliente, rangoFechas)
   }
 }

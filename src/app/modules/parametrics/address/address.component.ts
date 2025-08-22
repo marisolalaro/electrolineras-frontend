@@ -77,7 +77,6 @@ export default class AddressComponent {
   ) { }
 
   ngOnInit(): void {
-    // TODO 
     if (ValidaToken()) {
       this.inicializaDatos()
       .then(datosInicializados => {

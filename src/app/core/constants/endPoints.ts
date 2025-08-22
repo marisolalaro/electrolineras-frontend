@@ -74,6 +74,9 @@ export class EndPoins {
     static facturaDatos = "/invoicesByDates"
     static facturaClienteCompraVenta = "/invoicesClientCompraVenta"
     static facturaSuministro = "/invoicesPaymentsTransactionSuministro"
+    static reportes = "/reportes"
+    static datosMensuales = "/datosMensualesSet42"
+    static suministroCliente = "/suministro-cliente"
 
     // ocpp
     static chargePoint = "/chargePoint"
@@ -83,7 +86,8 @@ export class EndPoins {
     static processelectrolinera = "/process-electrolinera"
     static inquiryElectrolinera = "/inquiry-electrolinera"
 
-    // paremetricas
+    //////////// paremetricas ////////////
+
     // models
     static models = "/models";
     static listar = "/list"
@@ -102,7 +106,6 @@ export class EndPoins {
     static validate = "/validate"
     static restoreById = "/restoreById"
 
-    
     // tasa de carga
     static chargeRate = "/chargeRate"
     static enable = "/enable"

@@ -79,19 +79,19 @@ export class TableReportConsumoComponent {
     return new Promise((resolve) => {
         this.cols = [
           { field: 'clientes', header: 'Clientes' },
-          { field: 'fecha_carga_energia', header: 'Fecha de la Carga de Energia' },
+          { field: 'fechaCargaEnergia', header: 'Fecha de la Carga de Energia' },
           { field: 'electrolinera', header: 'Electrolinera' },
-          { field: 'bloque_bajo_kwh', header: 'Bloque Bajo Kwh' },
-          { field: 'bloque_bajo_Bs', header: 'Bloque Bajo Bs' },
-          { field: 'tarifa_bloque_bajo', header: 'Tarifa Bloque Bajo' },
-          { field: 'bloque_medio_kwh', header: 'Bloque Medio Kwh' },
-          { field: 'bloque_medio_bs', header: 'Bloque Medio Bs' },
-          { field: 'tarifa_bloque_medio', header: 'Tarifa Bloque Medio' },
-          { field: 'bloque_alto_kwh', header: 'Bloque Alto Kwh' },
-          { field: 'bloque_alto_bs', header: 'Bloque Alto Bs' },
-          { field: 'tarifa_bloque_alto', header: 'Tarifa Bloque Alto' },
-          { field: 'total_energia_kwh', header: 'Total Energia  kwh' },
-          { field: 'total_bs', header: 'Total bs' },
+          { field: 'bloqueBajoKwh', header: 'Bloque Bajo Kwh' },
+          { field: 'bloqueBajoBs', header: 'Bloque Bajo Bs' },
+          { field: 'tarifaBloqueBajo', header: 'Tarifa Bloque Bajo' },
+          { field: 'bloqueMedioKwh', header: 'Bloque Medio Kwh' },
+          { field: 'bloqueMedioBs', header: 'Bloque Medio Bs' },
+          { field: 'tarifaBloqueMedio', header: 'Tarifa Bloque Medio' },
+          { field: 'bloqueAltoKwh', header: 'Bloque Alto Kwh' },
+          { field: 'bloqueAltoBs', header: 'Bloque Alto Bs' },
+          { field: 'tarifaBloqueAlto', header: 'Tarifa Bloque Alto' },
+          { field: 'totalEnergiaKwh', header: 'Total Energia  kwh' },
+          { field: 'totalBs', header: 'Total bs' },
         ];
         return resolve(true);
     })
@@ -108,56 +108,57 @@ export class TableReportConsumoComponent {
   getFacturasSuministro(rangoFechas) {
     this.reporte = [];
     return new Promise((resolve) => {
-      // this.reporteService.getReporteConsumoClientes(rangoFechas).subscribe(
-      //   (resp: any) => {
-      //     if (resp) {
-      //       this.reporte = JSON.parse(JSON.stringify(resp.data));
-      //       if (resp.data?.length > 0 || resp.data == null) {
-      //       } else {
-      //         this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
-      //       }
-      //       this.enviarDatos()
-      //       return resolve(true);
-      //     }
+      this.reporteService.getSuministroCliente(rangoFechas).subscribe(
+        (resp: any) => {
+          if (resp) {
+            this.reporte = JSON.parse(JSON.stringify(resp));
+            console.log(JSON.stringify(this.reporte))
+            // if (resp.data?.length > 0 || resp.data == null) {
+            // } else {
+            //   this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
+            // }
+            this.enviarDatos()
+            return resolve(true);
+          }
+        },
+        error => {
+          return resolve(false);
+        }
+      )
+      // this.reporte = [
+      //   {
+      //     "clientes": "juan",
+      //     "fecha_carga_energia": "08/01/2025",
+      //     "electrolinera": "Miraflores",
+      //     "bloque_bajo_kwh": 1.1,
+      //     "bloque_medio_kwh": 1,
+      //     "bloque_alto_kwh": 1,
+      //     "total_energia_kwh": 1.1,
+      //     "bloque_bajo_Bs": 1.2,
+      //     "bloque_medio_bs": 1,
+      //     "bloque_alto_bs": 1,
+      //     "total_bs": 1.2,
+      //     "tarifa_bloque_bajo": 1.944,
+      //     "tarifa_bloque_medio": 1.26,
+      //     "tarifa_bloque_alto": 1.089
       //   },
-      //   error => {
-      //     return resolve(false);
-      //   }
-      // )
-      this.reporte = [
-        {
-          "clientes": "juan",
-          "fecha_carga_energia": "08/01/2025",
-          "electrolinera": "Miraflores",
-          "bloque_bajo_kwh": 1.1,
-          "bloque_medio_kwh": 1,
-          "bloque_alto_kwh": 1,
-          "total_energia_kwh": 1.1,
-          "bloque_bajo_Bs": 1.2,
-          "bloque_medio_bs": 1,
-          "bloque_alto_bs": 1,
-          "total_bs": 1.2,
-          "tarifa_bloque_bajo": 1.944,
-          "tarifa_bloque_medio": 1.26,
-          "tarifa_bloque_alto": 1.089
-        },
-        {
-          "clientes": "Santiago",
-          "fecha_carga_energia": "08/02/2025",
-          "electrolinera": "Miraflores",
-          "bloque_bajo_kwh": 1.1,
-          "bloque_medio_kwh": 2,
-          "bloque_alto_kwh": 2,
-          "total_energia_kwh": 1.1,
-          "bloque_bajo_Bs": 1.2,
-          "bloque_medio_bs": 2,
-          "bloque_alto_bs": 2,
-          "total_bs": 1.2,
-          "tarifa_bloque_bajo": 1.944,
-          "tarifa_bloque_medio": 1.26,
-          "tarifa_bloque_alto": 1.089
-        },
-      ]
+      //   {
+      //     "clientes": "Santiago",
+      //     "fecha_carga_energia": "08/02/2025",
+      //     "electrolinera": "Miraflores",
+      //     "bloque_bajo_kwh": 1.1,
+      //     "bloque_medio_kwh": 2,
+      //     "bloque_alto_kwh": 2,
+      //     "total_energia_kwh": 1.1,
+      //     "bloque_bajo_Bs": 1.2,
+      //     "bloque_medio_bs": 2,
+      //     "bloque_alto_bs": 2,
+      //     "total_bs": 1.2,
+      //     "tarifa_bloque_bajo": 1.944,
+      //     "tarifa_bloque_medio": 1.26,
+      //     "tarifa_bloque_alto": 1.089
+      //   },
+      // ]
     })
   }
 

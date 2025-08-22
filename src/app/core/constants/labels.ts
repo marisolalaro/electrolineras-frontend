@@ -65,8 +65,8 @@ export const reports: any = {
   numeroReporte5: 'detalle suministro energía',
   numeroReporte6: 'Facturas de compras por cliente',
   numeroReporte7: 'Facturas de cargas por cliente',
-  numeroReporte8: 'Datos de operación en electrolinera',
-  numeroReporte9: 'Reporte de Consumo por Cliente',
+  numeroReporte8: 'Set42 - Datos mensuales de electrolineras',
+  numeroReporte9: 'Cargas de clientes por bloques',
   xReporte: 'x reporte',
   // nombre de options
   labelReporte1: 'Factura de compras y carga de energía',
@@ -76,8 +76,8 @@ export const reports: any = {
   labelReporte5: 'reporte detalle suministro energía',
   labelReporte6: 'Facturas de compras por cliente',
   labelReporte7: 'Facturas de cargas por cliente',
-  labelReporte8: 'Datos de operación en electrolinera',
-  labelReporte9: 'Reporte de Consumo por Cliente',
+  labelReporte8: 'Set42 - Datos mensuales de electrolineras',
+  labelReporte9: 'Cargas de clientes por bloques',
   // nombre archivo de descarga
   archivoReporte1: 'factura_de_compras_y_carga_de_energía',
   archivoReporte2: 'factura_de_compras',
@@ -107,7 +107,7 @@ export const reports: any = {
   tituloReporte6: 'FACTURAS DE COMPRAS POR CLIENTE',
   tituloReporte7: 'FACTURAS DE CARGAS POR CLIENTE',
   tituloReporte8: 'DATOS DE OPERACIÓN EN ELECTROLINERA',
-  tituloReporte9: 'REPORTE DE CONSUMO POR CLIENTE',
+  tituloReporte9: 'CARGAS DE CLIENTES POR BLOQUES',
 
   tituloAgrupador1Reporte3: 'Facturas Compra Venta Crédito',
   tituloAgrupador2Reporte3: 'Facturas Suministro de Energía',

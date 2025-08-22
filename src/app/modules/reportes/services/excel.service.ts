@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { HttpClient } from '@angular/common/http';
+import { ParTasaCargaService } from '../../par-tasa-carga/service/par-tasa-carga.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,10 +10,9 @@ import { HttpClient } from '@angular/common/http';
 export class ExcelService {
   private datosElectrolinera;
   // obtener el mes actual
-  private fechaActual = new Date();
-  // const mesActual = (fechaActual.getMonth() + 1) ; // Retorna 0-11 (0 = Enero, 11 = Diciembre)
-  private mesActual = 2;
-
+  public fechaActual = new Date();
+  private mesActual = (this.fechaActual.getMonth()) ; // Retorna 0-11 (0 = Enero, 11 = Diciembre)
+  private fechaServer;
   private columnasExcel: string[] = [
     'F',
     'G',
@@ -123,10 +123,19 @@ export class ExcelService {
     'DH',
     'DI',
   ];
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private tasaCargaService: ParTasaCargaService
+  ) {
+    this.getFullDate()
+  }
 
+  // TODO HACER LA PRUEVA Y VER SI LA HOJA DEL EXCEL CAMBIA CON EL ANIO
   async processExcelFromAssets(datos): Promise<void> {
     try {
+      var fechaServer = new Date(this.fechaServer);
+      var anio = fechaServer.getFullYear();
+      var mesShort = fechaServer.toLocaleString('es', { month: 'short' });
+      
       this.datosElectrolinera = JSON.parse(JSON.stringify(datos));
 
       // 1. Obtener el archivo desde assets
@@ -141,10 +150,11 @@ export class ExcelService {
         workbook.getWorksheet('2025_42SET') || workbook.worksheets[0];
 
       // 4. Modificar los datos necesarios
-      this.updateCompanyName(worksheet, datos);
+      this.updateCompanyName(worksheet, datos, fechaServer);
 
       // 5. Exportar el archivo modificado
-      await this.exportModifiedExcel(workbook, 'Set42_a_Jun25_MOD.xlsx');
+      await this.exportModifiedExcel(workbook, 'Set42_a_' + mesShort + anio+'.xlsx');
+
     } catch (error) {
       console.error('Error procesando el archivo Excel:', error);
       throw error;
@@ -156,7 +166,15 @@ export class ExcelService {
     return this.http.get(url, { responseType: 'arraybuffer' }).toPromise();
   }
 
-  private updateCompanyName(worksheet: ExcelJS.Worksheet, datos: any): void {
+  private updateCompanyName(worksheet: ExcelJS.Worksheet, datos: any, fechaServer: any): void {
+    const celdaGestion = worksheet.getCell('E7');
+    celdaGestion.value = fechaServer.getFullYear();
+
+    if(fechaServer.getMonth() == 0) {
+      this.mesActual = 12
+      celdaGestion.value = fechaServer.getFullYear() -1 ;
+    }
+
     var count = 0;
     for (let i: number = 0; i < 9 * this.mesActual; i++) {
       for (let j = 25; j < 28; j++) {
@@ -178,5 +196,14 @@ export class ExcelService {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
     saveAs(blob, fileName);
+  }
+
+  private getFullDate() {
+    this.tasaCargaService.getCurrentDate().subscribe(
+      (resp: any) => {
+        this.fechaServer = resp.data;
+        //this.fechaServer = '2025-01-20T16:17:52.000-04:00';
+      }
+    )
   }
 }
