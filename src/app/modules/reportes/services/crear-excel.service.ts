@@ -38,6 +38,7 @@ export class CrearExcelService {
     rowValues[6] = 'Fecha de Emisión';
     rowValues[7] = 'Tipo de Factura';
     rowValues[8] = 'Url Factura Siat';
+    rowValues[9] = 'Estado';
 
     worksheet.addRow(rowValues);
 
@@ -49,6 +50,7 @@ export class CrearExcelService {
     worksheet.getCell('F6').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell('G6').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell('H6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('I6').alignment = { vertical: 'middle', horizontal: 'center' };
 
     // Agregar datos del json
     jsonData.forEach((data: any) => {
@@ -61,6 +63,7 @@ export class CrearExcelService {
         data.fechaEmision ? moment(data.fechaEmision).format('DD/MM/YYYY, HH:mm:ss') : '',
         data.tipoFactura? data.tipoFactura : '',
         data.urlFacturaSiat? data.urlFacturaSiat : '',
+        data.codigoDescripcion? data.codigoDescripcion : '',
       ]);
     });
 
@@ -119,6 +122,7 @@ export class CrearExcelService {
       worksheet.getCell(`F${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
       worksheet.getCell(`G${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
       worksheet.getCell(`H${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`I${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
     }
 
     // estilo fondo azul a las cabeceras
@@ -130,6 +134,7 @@ export class CrearExcelService {
     worksheet.getCell('F6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
     worksheet.getCell('G6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
     worksheet.getCell('H6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('I6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
 
     // estilo letras blancas a las cabeceras
     worksheet.getCell('A6').font = { bold: true, color: { argb: 'FFFFFF' } };
@@ -140,6 +145,7 @@ export class CrearExcelService {
     worksheet.getCell('F6').font = { bold: true, color: { argb: 'FFFFFF' } };
     worksheet.getCell('G6').font = { bold: true, color: { argb: 'FFFFFF' } };
     worksheet.getCell('H6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('I6').font = { bold: true, color: { argb: 'FFFFFF' } };
 
     // Guardar el archivo
     workbook.xlsx.writeBuffer().then((data: BlobPart) => {
@@ -1272,8 +1278,9 @@ export class CrearExcelService {
     rowValues[10] = "Bloque Alto Kwh";
     rowValues[11] = "Bloque Alto Bs";
     rowValues[12] = "Tarifa Bloque Alto";
-    rowValues[13] = "Total Energia  kwh";
-    rowValues[14] = "Total bs";
+    rowValues[13] = "Modo de Carga";
+    rowValues[14] = "Total Energia  kwh";
+    rowValues[15] = "Total bs";
 
     worksheet.addRow(rowValues);
 
@@ -1291,9 +1298,11 @@ export class CrearExcelService {
     worksheet.getCell('L6').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell('M6').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell('N6').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('O6').alignment = { vertical: 'middle', horizontal: 'center' };
 
     // Agregar datos del json
     jsonData.forEach((data: any) => {
+      const modoCargaMapeado = data.modoDeCarga ? this.mapearModoCarga(data.modoDeCarga) : '';
       worksheet.addRow([
         data.clientes? data.clientes : '',
         data.fechaCargaEnergia? data.fechaCargaEnergia : '',
@@ -1307,6 +1316,7 @@ export class CrearExcelService {
         data.bloqueAltoKwh? data.bloqueAltoKwh : '',
         data.bloqueAltoBs? data.bloqueAltoBs : '',
         data.tarifaBloqueAlto? data.tarifaBloqueAlto : '',
+        modoCargaMapeado,
         data.totalEnergiaKwh? data.totalEnergiaKwh : '',
         data.totalBs? data.totalBs : ''
       ]);
@@ -1373,6 +1383,7 @@ export class CrearExcelService {
       worksheet.getCell(`L${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
       worksheet.getCell(`M${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
       worksheet.getCell(`N${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      worksheet.getCell(`O${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
     }
 
     // estilo fondo azul a las cabeceras
@@ -1390,6 +1401,7 @@ export class CrearExcelService {
     worksheet.getCell('L6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
     worksheet.getCell('M6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
     worksheet.getCell('N6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
+    worksheet.getCell('O6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
 
     // estilo letras blancas a las cabeceras
     worksheet.getCell('A6').font = { bold: true, color: { argb: 'FFFFFF' } };
@@ -1406,11 +1418,25 @@ export class CrearExcelService {
     worksheet.getCell('L6').font = { bold: true, color: { argb: 'FFFFFF' } };
     worksheet.getCell('M6').font = { bold: true, color: { argb: 'FFFFFF' } };
     worksheet.getCell('N6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('O6').font = { bold: true, color: { argb: 'FFFFFF' } };
 
     // Guardar el archivo
     workbook.xlsx.writeBuffer().then((data: BlobPart) => {
       const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       saveAs(blob, `${fileName}.xlsx`);
     });
+  }
+
+  mapearModoCarga(modoCarga: string): string {
+    const mapeo: { [key: string]: string } = {
+      'CARGA LENTA, ULTRA LENTA, Bb': 'CARGA LENTA, ULTRA LENTA, Bloque bajo',
+      'CARGA LENTA, ULTRA LENTA, Ba': 'CARGA LENTA, ULTRA LENTA, Bloque alto',
+      'CARGA LENTA, ULTRA LENTA, Bm': 'CARGA LENTA, ULTRA LENTA, Bloque medio',
+      'CARGA SEMI RAPIDA, Ba': 'CARGA SEMI RAPIDA, Bloque alto',
+      'CARGA SEMI RAPIDA, Bm': 'CARGA SEMI RAPIDA, Bloque medio',
+      'CARGA SEMI RAPIDA, Bb': 'CARGA SEMI RAPIDA, Bloque bajo'
+    };
+    
+    return mapeo[modoCarga] || modoCarga;
   }
 }

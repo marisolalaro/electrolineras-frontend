@@ -15,6 +15,7 @@ import { FormatPagadoNoPagadoPipe } from './numbers/format-pagado-no-pagado.pipe
 import { FormatSiNoPipe } from './booleans/format-si-no.pipe';
 import { FormatHabilitadoDeshabilitadoPipe } from './booleans/format-habilitado-deshabilitado.pipe';
 import { FormatFieldWattsToKilovatiosPipe } from './numbers/format-field-watts-to-kilovatios';
+import { MapeoModoCargaPipe } from './strings/mapeo-modo-carga.pipe';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { FormatFieldWattsToKilovatiosPipe } from './numbers/format-field-watts-t
     // strings
     TruncatePipe,
     FormatOnlineOfflinePipe,
+    MapeoModoCargaPipe,
     // numbers
     FormatFieldDecimalesPipe,
     FormatPagadoNoPagadoPipe,
@@ -43,6 +45,7 @@ import { FormatFieldWattsToKilovatiosPipe } from './numbers/format-field-watts-t
     // strings
     TruncatePipe,
     FormatOnlineOfflinePipe,
+    MapeoModoCargaPipe,
     // numbers
     FormatFieldDecimalesPipe,
     FormatPagadoNoPagadoPipe,

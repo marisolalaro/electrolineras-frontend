@@ -12,6 +12,7 @@ export class ExcelService {
   // obtener el mes actual
   public fechaActual = new Date();
   private mesActual = (this.fechaActual.getMonth()) ; // Retorna 0-11 (0 = Enero, 11 = Diciembre)
+  //private mesActual = 0
   private fechaServer;
   private columnasExcel: string[] = [
     'F',
@@ -133,8 +134,8 @@ export class ExcelService {
   async processExcelFromAssets(datos): Promise<void> {
     try {
       var fechaServer = new Date(this.fechaServer);
+      var fechaServerSinModificar = new Date(this.fechaServer);
       var anio = fechaServer.getFullYear();
-      var mesShort = fechaServer.toLocaleString('es', { month: 'short' });
       
       this.datosElectrolinera = JSON.parse(JSON.stringify(datos));
 
@@ -150,7 +151,10 @@ export class ExcelService {
         workbook.getWorksheet('2025_42SET') || workbook.worksheets[0];
 
       // 4. Modificar los datos necesarios
-      this.updateCompanyName(worksheet, datos, fechaServer);
+      this.updateCompanyName(worksheet, datos, fechaServerSinModificar);
+      
+      fechaServer.setMonth(fechaServer.getMonth() - 1)
+      var mesShort = fechaServer.toLocaleString('es', { month: 'short' });
 
       // 5. Exportar el archivo modificado
       await this.exportModifiedExcel(workbook, 'Set42_a_' + mesShort + anio+'.xlsx');
@@ -169,12 +173,16 @@ export class ExcelService {
   private updateCompanyName(worksheet: ExcelJS.Worksheet, datos: any, fechaServer: any): void {
     const celdaGestion = worksheet.getCell('E7');
     celdaGestion.value = fechaServer.getFullYear();
-
+    
     if(fechaServer.getMonth() == 0) {
       this.mesActual = 12
       celdaGestion.value = fechaServer.getFullYear() -1 ;
+      var anioAnterior = fechaServer.getFullYear() -1;
+      // TODO
+      worksheet.name = anioAnterior + '_42SET'
+    } else {
+      worksheet.name = fechaServer.getFullYear() + '' + '_42SET'
     }
-
     var count = 0;
     for (let i: number = 0; i < 9 * this.mesActual; i++) {
       for (let j = 25; j < 28; j++) {

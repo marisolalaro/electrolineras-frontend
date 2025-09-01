@@ -19,21 +19,19 @@ interface Tab {
   templateUrl: './reportes.component.html',
   styleUrls: ['./reportes.component.scss'],
   imports: [ReportesModule, NgIf, NgFor],
-  providers: [MessageService]
+  providers: [MessageService],
 })
-
 export default class ReportesComponent {
-
   // variables de control
   public loading: boolean = true;
   public serviceResponse: boolean = true;
 
-  // variables propias del componente  
+  // variables propias del componente
   public tiposReportes: any[] = [];
   public tituloComponente: any = mainTitles['reportes'];
 
   // variables para mostrar el componente seleccionado
-  public showReport = ''
+  public showReport = '';
   public numeroReport: number = 0;
   public activeIndex: number = 0;
 
@@ -46,16 +44,12 @@ export default class ReportesComponent {
   // variables pestañas temporales
   public tabs: Tab[] = [];
 
-  constructor(
-    private router: Router,
-    private primengConfig: PrimeNGConfig
-  ) {}
+  constructor(private router: Router, private primengConfig: PrimeNGConfig) {}
 
   ngOnInit() {
     if (ValidaToken()) {
       this.inicializaDatos();
-    }
-    else {
+    } else {
       this.router.navigate(['']);
     }
   }
@@ -63,16 +57,47 @@ export default class ReportesComponent {
   inicializaDatos() {
     this.primengConfig.setTranslation({
       firstDayOfWeek: 1,
-      dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
-      dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
-      dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
-      monthNames: [
-        "enero", "febrero", "marzo", "abril", "mayo", "junio",
-        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+      dayNames: [
+        'domingo',
+        'lunes',
+        'martes',
+        'miércoles',
+        'jueves',
+        'viernes',
+        'sábado',
       ],
-      monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
+      dayNamesShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
+      dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
+      monthNames: [
+        'enero',
+        'febrero',
+        'marzo',
+        'abril',
+        'mayo',
+        'junio',
+        'julio',
+        'agosto',
+        'septiembre',
+        'octubre',
+        'noviembre',
+        'diciembre',
+      ],
+      monthNamesShort: [
+        'ene',
+        'feb',
+        'mar',
+        'abr',
+        'may',
+        'jun',
+        'jul',
+        'ago',
+        'sep',
+        'oct',
+        'nov',
+        'dic',
+      ],
       today: 'Hoy',
-      clear: 'Limpiar'
+      clear: 'Limpiar',
       //translations
     });
     this.tiposReportes = [
@@ -90,39 +115,59 @@ export default class ReportesComponent {
 
   filtraReporte(event: any) {
     const query = event.query.toLowerCase();
-    this.coincidenciasFiltro = this.tiposReportes.filter(item => item.nombre.toLowerCase().includes(query));
+    this.coincidenciasFiltro = this.tiposReportes.filter((item) =>
+      item.nombre.toLowerCase().includes(query)
+    );
   }
 
-  onAdicionaTabs() {
+  onAdicionaTabs(datos) {
     this.showReport = 'nada';
-    this.rangoFechas = {
-      "initialDate": moment(this.rangeDates[0]).utc().format('YYYY-MM-DD'),
-      "finalDate": this.rangeDates[1] ? moment(this.rangeDates[1]).utc().format('YYYY-MM-DD') : moment(this.rangeDates[0]).utc().format('YYYY-MM-DD')
+    if (datos == 'sin fecha') {      
+      // this.rangoFechas = {
+      //   initialDate: new Date(),
+      //   finalDate: this.rangeDates[1]
+      //     ? moment(this.rangeDates[1]).utc().format('YYYY-MM-DD')
+      //     : moment(this.rangeDates[0]).utc().format('YYYY-MM-DD'),
+      // };
+    } else {
+      this.rangoFechas = {
+        initialDate: moment(this.rangeDates[0]).utc().format('YYYY-MM-DD'),
+        finalDate: this.rangeDates[1]
+          ? moment(this.rangeDates[1]).utc().format('YYYY-MM-DD')
+          : moment(this.rangeDates[0]).utc().format('YYYY-MM-DD'),
+      };
     }
+
     this.tabs.length + 1;
-    if (this.reporteSeleccionado.nombre == reports.labelReporte1 ||
+    if (
+      this.reporteSeleccionado.nombre == reports.labelReporte1 ||
       this.reporteSeleccionado.nombre == reports.labelReporte2 ||
       this.reporteSeleccionado.nombre == reports.labelReporte4 ||
       this.reporteSeleccionado.nombre == reports.labelReporte5
     ) {
       var title = '';
-      if (this.reporteSeleccionado.nombre ===("Factura de compras y carga de energía")) {
+      if (
+        this.reporteSeleccionado.nombre ===
+        'Factura de compras y carga de energía'
+      ) {
         title = reports.numeroReporte1;
       }
-      if (this.reporteSeleccionado.nombre === ("Factura de compras")) {
+      if (this.reporteSeleccionado.nombre === 'Factura de compras') {
         title = reports.numeroReporte2;
       }
-      if (this.reporteSeleccionado.nombre === ("Factura cargas de energía")) {
+      if (this.reporteSeleccionado.nombre === 'Factura cargas de energía') {
         title = reports.numeroReporte4;
       }
-      if (this.reporteSeleccionado.nombre.includes("detalle suministro energía")) {
+      if (
+        this.reporteSeleccionado.nombre.includes('detalle suministro energía')
+      ) {
         title = reports.numeroReporte5;
       }
       this.showReport = reports.xReporte;
       this.tabs.push({
         title: title,
         content: this.rangoFechas,
-        estado: false
+        estado: false,
       });
       setTimeout(() => {
         this.activeIndex = this.tabs.length - 1;
@@ -135,7 +180,7 @@ export default class ReportesComponent {
       this.tabs.push({
         title: this.showReport,
         content: this.rangoFechas,
-        estado: false
+        estado: false,
       });
       setTimeout(() => {
         this.activeIndex = this.tabs.length - 1;
@@ -147,7 +192,7 @@ export default class ReportesComponent {
       this.tabs.push({
         title: this.showReport,
         content: this.rangoFechas,
-        estado: false
+        estado: false,
       });
       setTimeout(() => {
         this.activeIndex = this.tabs.length - 1;
@@ -160,7 +205,7 @@ export default class ReportesComponent {
       this.tabs.push({
         title: this.showReport,
         content: this.rangoFechas,
-        estado: false
+        estado: false,
       });
       setTimeout(() => {
         this.activeIndex = this.tabs.length - 1;
@@ -173,8 +218,8 @@ export default class ReportesComponent {
       this.tabs.push({
         title: this.showReport,
         content: this.rangoFechas,
-        estado: false
-      });      
+        estado: false,
+      });
       setTimeout(() => {
         this.activeIndex = this.tabs.length - 1;
         this.numeroReport = 8;
@@ -185,8 +230,8 @@ export default class ReportesComponent {
       this.tabs.push({
         title: this.showReport,
         content: this.rangoFechas,
-        estado: false
-      });      
+        estado: false,
+      });
       setTimeout(() => {
         this.activeIndex = this.tabs.length - 1;
         this.numeroReport = 9;
@@ -198,7 +243,7 @@ export default class ReportesComponent {
     if (this.tabs[event.index].title == reports.numeroReporte1) {
       this.tabs[event.index].estado = false;
       this.showReport = 'nada';
-      this.reporteSeleccionado.nombre = reports.labelReporte1
+      this.reporteSeleccionado.nombre = reports.labelReporte1;
       this.rangoFechas = this.tabs[event.index].content;
       setTimeout(() => {
         this.showReport = reports.xReporte;
@@ -207,7 +252,7 @@ export default class ReportesComponent {
     if (this.tabs[event.index].title == reports.numeroReporte2) {
       this.tabs[event.index].estado = false;
       this.showReport = 'nada';
-      this.reporteSeleccionado.nombre = reports.labelReporte2
+      this.reporteSeleccionado.nombre = reports.labelReporte2;
       this.rangoFechas = this.tabs[event.index].content;
       setTimeout(() => {
         this.showReport = reports.xReporte;
@@ -216,7 +261,7 @@ export default class ReportesComponent {
     if (this.tabs[event.index].title == reports.numeroReporte4) {
       this.tabs[event.index].estado = false;
       this.showReport = 'nada';
-      this.reporteSeleccionado.nombre = reports.labelReporte4
+      this.reporteSeleccionado.nombre = reports.labelReporte4;
       this.rangoFechas = this.tabs[event.index].content;
       setTimeout(() => {
         this.showReport = reports.xReporte;
@@ -225,7 +270,7 @@ export default class ReportesComponent {
     if (this.tabs[event.index].title == reports.numeroReporte5) {
       this.tabs[event.index].estado = false;
       this.showReport = 'nada';
-      this.reporteSeleccionado.nombre = reports.labelReporte5
+      this.reporteSeleccionado.nombre = reports.labelReporte5;
       this.rangoFechas = this.tabs[event.index].content;
       setTimeout(() => {
         this.showReport = reports.xReporte;
@@ -270,7 +315,6 @@ export default class ReportesComponent {
   }
 
   cambiaEstadoTab(tabActualizado: any, index) {
-    this.tabs[index] = tabActualizado
+    this.tabs[index] = tabActualizado;
   }
-
 }

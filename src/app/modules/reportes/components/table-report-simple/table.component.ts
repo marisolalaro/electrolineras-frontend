@@ -121,7 +121,6 @@ export class TableReportSimpleComponent {
           { field: 'numeroFactura', header: 'Nº Factura'},
           { field: 'codigoDescripcion', header: 'Código' },
           { field: 'fechaRegistro', header: 'Fecha de Registro' },
-          { field: 'codigoRecepcion', header: 'Recepción' },
           { field: 'cuf', header: 'Cuf' },
           { field: 'paymentTransactionType', header: 'Tipo de Transacción' },
           { field: 'urlFacturaSiat', header: 'Url Factura Siat' },
@@ -297,6 +296,10 @@ export class TableReportSimpleComponent {
   enviarDatos() {
     this.tab.estado = true;
     this.datosEnviados.emit(this.tab);
+  }
+
+  onOpenUrl(url) {
+    window.open(url, '_blank');
   }
 
 }

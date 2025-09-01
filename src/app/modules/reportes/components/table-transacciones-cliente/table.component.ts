@@ -97,4 +97,8 @@ export class TableTransaccionesClienteComponent {
   descargaArchivo() {
     this.excelService.excelFacturasCompraVenta(this.reporte, reports.archivoReporte6, reports.hojaReporte6, this.tab.content);
   }
+
+  onOpenUrl(url) {
+    window.open(url, '_blank');
+  }
 }

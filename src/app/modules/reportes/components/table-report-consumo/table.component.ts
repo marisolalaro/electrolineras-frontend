@@ -90,6 +90,7 @@ export class TableReportConsumoComponent {
           { field: 'bloqueAltoKwh', header: 'Bloque Alto Kwh' },
           { field: 'bloqueAltoBs', header: 'Bloque Alto Bs' },
           { field: 'tarifaBloqueAlto', header: 'Tarifa Bloque Alto' },
+          { field: 'modoDeCarga', header: 'Modo de Carga' },
           { field: 'totalEnergiaKwh', header: 'Total Energia  kwh' },
           { field: 'totalBs', header: 'Total bs' },
         ];
@@ -112,11 +113,6 @@ export class TableReportConsumoComponent {
         (resp: any) => {
           if (resp) {
             this.reporte = JSON.parse(JSON.stringify(resp));
-            console.log(JSON.stringify(this.reporte))
-            // if (resp.data?.length > 0 || resp.data == null) {
-            // } else {
-            //   this.messageService.add({ severity: 'info', detail: '0 Registros Encontrados' });
-            // }
             this.enviarDatos()
             return resolve(true);
           }
@@ -125,40 +121,6 @@ export class TableReportConsumoComponent {
           return resolve(false);
         }
       )
-      // this.reporte = [
-      //   {
-      //     "clientes": "juan",
-      //     "fecha_carga_energia": "08/01/2025",
-      //     "electrolinera": "Miraflores",
-      //     "bloque_bajo_kwh": 1.1,
-      //     "bloque_medio_kwh": 1,
-      //     "bloque_alto_kwh": 1,
-      //     "total_energia_kwh": 1.1,
-      //     "bloque_bajo_Bs": 1.2,
-      //     "bloque_medio_bs": 1,
-      //     "bloque_alto_bs": 1,
-      //     "total_bs": 1.2,
-      //     "tarifa_bloque_bajo": 1.944,
-      //     "tarifa_bloque_medio": 1.26,
-      //     "tarifa_bloque_alto": 1.089
-      //   },
-      //   {
-      //     "clientes": "Santiago",
-      //     "fecha_carga_energia": "08/02/2025",
-      //     "electrolinera": "Miraflores",
-      //     "bloque_bajo_kwh": 1.1,
-      //     "bloque_medio_kwh": 2,
-      //     "bloque_alto_kwh": 2,
-      //     "total_energia_kwh": 1.1,
-      //     "bloque_bajo_Bs": 1.2,
-      //     "bloque_medio_bs": 2,
-      //     "bloque_alto_bs": 2,
-      //     "total_bs": 1.2,
-      //     "tarifa_bloque_bajo": 1.944,
-      //     "tarifa_bloque_medio": 1.26,
-      //     "tarifa_bloque_alto": 1.089
-      //   },
-      // ]
     })
   }
 
@@ -178,4 +140,16 @@ export class TableReportConsumoComponent {
     this.datosEnviados.emit(this.tab);
   }
 
+  mapearModoCarga(modoCarga: string): string {
+    const mapeo: { [key: string]: string } = {
+      'CARGA LENTA, ULTRA LENTA, Bb': 'CARGA LENTA, ULTRA LENTA, Bloque bajo',
+      'CARGA LENTA, ULTRA LENTA, Ba': 'CARGA LENTA, ULTRA LENTA, Bloque alto',
+      'CARGA LENTA, ULTRA LENTA, Bm': 'CARGA LENTA, ULTRA LENTA, Bloque medio',
+      'CARGA SEMI RAPIDA, Ba': 'CARGA SEMI RAPIDA, Bloque alto',
+      'CARGA SEMI RAPIDA, Bm': 'CARGA SEMI RAPIDA, Bloque medio',
+      'CARGA SEMI RAPIDA, Bb': 'CARGA SEMI RAPIDA, Bloque bajo'
+    };
+    
+    return mapeo[modoCarga] || modoCarga;
+  }
 }

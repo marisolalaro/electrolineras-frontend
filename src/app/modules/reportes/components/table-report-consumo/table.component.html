@@ -1,12 +1,25 @@
 <!-- Reporte simple, reportes 1,2,4,5 -->
-<p-table responsiveLayout="stack" *ngIf="componenteVisible" [columns]="cols" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%"
+<p-table *ngIf="componenteVisible" [columns]="cols" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%"
 class="custom-p-table">
 <ng-template pTemplate="caption">
-  <label><b>{{numeroReporte}}</b></label>
-  <br>
-  <br>
-  <p-button label="Descargar" icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" size="small" [outlined]="true" />
-  <!-- <label (click)="descargaArchivo()"><b>Descargar {{numeroReporte}} de {{tab.content.initialDate}} a {{tab.content.finalDate}}</b></label> -->
+  <div class="grid">
+      <div class="col-fixed" style="width:10%">
+        <div class="text-center p-0 border-round-sm font-bold">
+          <p-button
+            label="Descargar"
+            icon="pi pi-fw pi-file-excel"
+            (click)="descargaArchivo()"
+            size="small"
+            [outlined]="true"
+          />
+        </div>
+      </div>
+      <div class="col">
+          <div class="text-center p-0 border-round-sm font-bold">
+            <label><b>{{ numeroReporte }}</b></label>
+          </div>
+      </div>
+  </div>
 </ng-template>
 <ng-template pTemplate="header" let-columns>
   <tr>
@@ -18,8 +31,11 @@ class="custom-p-table">
 <ng-template pTemplate="body" let-rowData let-columns="columns">
   <tr>
     <td *ngFor="let col of columns">
-      <div>
+      <div *ngIf="col.field != 'modoDeCarga'" >
         {{rowData[col.field]}}
+      </div>
+      <div *ngIf="col.field === 'modoDeCarga'">
+          {{ rowData[col.field] | mapeaModoCarga}}
       </div>
     </td>
   </tr>

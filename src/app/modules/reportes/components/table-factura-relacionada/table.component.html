@@ -1,11 +1,25 @@
 <!-- Reporte anidado, reportes 3-->
-<p-table responsiveLayout="stack" *ngIf="componenteVisible" [columns]="cols3" [value]="reporte" [tableStyle]="{'min-width': '50rem'}"
+<p-table *ngIf="componenteVisible" [columns]="cols3" [value]="reporte" [tableStyle]="{'min-width': '50rem'}"
 	width="100%" class="custom-p-table">
 	<ng-template pTemplate="caption">
-		<label><b>{{numeroReporte}}</b></label>
-		<br>
-		<br>
-		<p-button label="Descargar" icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" size="small" [outlined]="true" />
+		<div class="grid">
+			<div class="col-fixed" style="width:10%">
+				<div class="text-center p-0 border-round-sm font-bold">
+				<p-button
+					label="Descargar"
+					icon="pi pi-fw pi-file-excel"
+					(click)="descargaArchivo()"
+					size="small"
+					[outlined]="true"
+				/>
+				</div>
+			</div>
+			<div class="col">
+				<div class="text-center p-0 border-round-sm font-bold">
+					<label><b>{{ numeroReporte }}</b></label>
+				</div>
+			</div>
+		</div>
 	</ng-template>
 	<ng-template pTemplate="header" let-columns>
 		<tr>
@@ -18,7 +32,7 @@
 		<tr>
 			<td style="text-align:left; vertical-align:top"> {{rowData.codigoDescripcion}}</td>
 			<td style="text-align:left; vertical-align:top"> {{rowData.fechaRegistro | formatDateAndTime}}</td>
-			<td style="text-align:left; vertical-align:top"> {{rowData.cuf}}</td>
+			<td style="text-align:left; vertical-align:top"> {{rowData.cuf | truncate}}</td>
 			<td style="text-align:left; vertical-align:top"> {{rowData.paymentTransactionType}}</td>
 			<td *ngIf="rowData.invoicesPaymentTrasantionsResponseDtoList.length > 0">
 				<p-table [value]="rowData.invoicesPaymentTrasantionsResponseDtoList">
@@ -36,10 +50,10 @@
 		<tr>
 			<td style="text-align:left; vertical-align:middle"> {{rowData.numeroFactura}}</td>
 			<td style="text-align:left; vertical-align:middle"> {{rowData.codigoDescripcion }}</td>
-			<td style="text-align:left; vertical-align:middle"> {{rowData.cuf }}</td>
+			<td style="text-align:left; vertical-align:middle"> {{rowData.cuf | truncate}}</td>
 			<td style="text-align:left; vertical-align:middle"> {{rowData.paymentTransactionType }}</td>
 			<td style="text-align:left; vertical-align:middle"> {{rowData.fechaRegistro | formatDateAndTime }}</td>
-			<td style="text-align:left; vertical-align:middle"> {{rowData.urlFacturaSiat }}</td>
+			<td style="text-align:left; vertical-align:middle"> {{rowData.urlFacturaSiat | truncate}}</td>
 		</tr>
 	</ng-template>
 </p-table>

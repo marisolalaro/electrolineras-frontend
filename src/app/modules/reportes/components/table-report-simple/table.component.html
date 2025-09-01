@@ -1,62 +1,116 @@
 <!-- Reporte simple, reportes 1,2,4,5 -->
-<p-table responsiveLayout="stack" *ngIf="componenteVisible" [columns]="cols" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%"
-class="custom-p-table">
-<ng-template pTemplate="caption">
-  <label><b>{{numeroReporte}}</b></label>
-  <br>
-  <br>
-  <p-button label="Descargar" icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" size="small" [outlined]="true" />
-  <!-- <label (click)="descargaArchivo()"><b>Descargar {{numeroReporte}} de {{tab.content.initialDate}} a {{tab.content.finalDate}}</b></label> -->
-</ng-template>
-<ng-template pTemplate="header" let-columns>
-  <tr>
-    <th *ngFor="let col of columns">
-      {{ col.header }}
-    </th>
-  </tr>
-</ng-template>
-<ng-template pTemplate="body" let-rowData let-columns="columns">
-  <tr>
-    <td *ngFor="let col of columns" [class]="[col.field == 'amount' || col.field == 'monto'?'numero' : 'normal']">
+<p-table
+  *ngIf="componenteVisible"
+  [columns]="cols"
+  [value]="reporte"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  class="custom-p-table p-0"
+  [scrollable]='true'
+  scrollDirection="horizontal"
+  styleClass="p-datatable-gridlines"
+>
+  <ng-template pTemplate="caption">
 
-      <div *ngIf="col.field != 'amount' && col.field != 'monto' && col.field != 'finisheAt' && col.field != 'staredChargingAt' && col.field != 'energyComsumed' && col.field != 'duration' && col.field != 'fechaEmision' && col.field != 'fechaCarga'  && col.field != 'fechaRegistro'">
-        {{rowData[col.field]}}
+    <div class="grid">
+      <div class="col-fixed" style="width:10%">
+        <div class="text-center p-0 border-round-sm font-bold">
+          <p-button
+            label="Descargar"
+            icon="pi pi-fw pi-file-excel"
+            (click)="descargaArchivo()"
+            size="small"
+            [outlined]="true"
+          />
+        </div>
       </div>
-
-      <div *ngIf="col.field === 'id'">
-        {{ rowData[col.field]}}
+      <div class="col">
+          <div class="text-center p-0 border-round-sm font-bold">
+            <label><b>{{ numeroReporte }}</b></label>
+          </div>
       </div>
+    </div>
+    <!-- <label (click)="descargaArchivo()"><b>Descargar {{numeroReporte}} de {{tab.content.initialDate}} a {{tab.content.finalDate}}</b></label> -->
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns">
+        {{ col.header }}
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
+    <tr>
+      <td
+        *ngFor="let col of columns"
+        [class]="[
+          col.field == 'amount' || col.field == 'monto' ? 'numero' : 'normal'
+        ]"
+      >
+        <div
+          *ngIf="
+            col.field != 'amount' &&
+            col.field != 'monto' &&
+            col.field != 'finisheAt' &&
+            col.field != 'staredChargingAt' &&
+            col.field != 'energyComsumed' &&
+            col.field != 'duration' &&
+            col.field != 'fechaEmision' &&
+            col.field != 'fechaCarga' &&
+            col.field != 'fechaRegistro' &&
+            col.field != 'cuf' &&
+            col.field != 'urlFacturaSiat'
+          "
+        >
+          {{ rowData[col.field] }}
+        </div>
 
-      <div *ngIf="col.field == 'amount' || col.field == 'monto'" style="text-align:right; vertical-align:middle">
-        {{ rowData[col.field] | numberDecimal:2}}
-      </div>
+        <div *ngIf="col.field === 'id'">
+          {{ rowData[col.field] }}
+        </div>
 
-      <div *ngIf="col.field === 'finisheAt' || col.field === 'staredChargingAt'">
-        {{ rowData[col.field] | formatDateAndTime}}
-      </div>
+        <div
+          *ngIf="col.field == 'amount' || col.field == 'monto'"
+          style="text-align: right; vertical-align: middle"
+        >
+          {{ rowData[col.field] | numberDecimal : 2 }}
+        </div>
 
-      <div *ngIf="col.field === 'fechaEmision'">
-        {{ rowData[col.field] | formatDateAndTime}}
-      </div>
+        <div
+          *ngIf="col.field === 'finisheAt' || col.field === 'staredChargingAt'"
+        >
+          {{ rowData[col.field] | formatDateAndTime }}
+        </div>
 
-      <div *ngIf="col.field === 'fechaRegistro'">
-        {{ rowData[col.field] | formatDateAndTime}}
-      </div>
+        <div *ngIf="col.field === 'fechaEmision'">
+          {{ rowData[col.field] | formatDateAndTime }}
+        </div>
 
-      <div *ngIf="col.field === 'fechaCarga'">
-        {{ rowData[col.field] | formatDiaMesAnio}}
-      </div>
+        <div *ngIf="col.field === 'fechaRegistro'">
+          {{ rowData[col.field] | formatDateAndTime }}
+        </div>
 
-      <div *ngIf="col.field === 'energyComsumed'">
-        {{ rowData[col.field] | wattsToKilovatios}}
-      </div>
+        <div *ngIf="col.field === 'fechaCarga'">
+          {{ rowData[col.field] | formatDiaMesAnio }}
+        </div>
 
-      <div *ngIf="col.field === 'duration'">
-        {{ rowData[col.field] | formatSegundosEnHoraMinutoSegundo}}
-      </div>
+        <div *ngIf="col.field === 'energyComsumed'">
+          {{ rowData[col.field] | wattsToKilovatios }}
+        </div>
 
-    </td>
-  </tr>
-</ng-template>
+        <div *ngIf="col.field === 'duration'">
+          {{ rowData[col.field] | formatSegundosEnHoraMinutoSegundo }}
+        </div>
+
+        <div *ngIf="col.field === 'cuf'" [pTooltip]="rowData[col.field]" >
+          {{ rowData[col.field] | truncate }}
+        </div>
+
+        <div *ngIf="col.field === 'urlFacturaSiat'" (click)="onOpenUrl(rowData[col.field])" class="p-button p-button-link text-blue-600 underline cursor-pointer" pTooltip="Abrir en Siat">
+          {{ rowData[col.field] | truncate }}
+        </div>
+        
+      </td>
+    </tr>
+  </ng-template>
 </p-table>
-<!-- Reporte simple, reportes 1,2,4,5 -->
+<!-- Reporte simple, reportes 1,2,4,5 --> 

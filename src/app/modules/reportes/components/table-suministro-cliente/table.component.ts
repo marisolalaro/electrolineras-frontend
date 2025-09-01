@@ -102,4 +102,8 @@ export class TableSuministroClienteComponent {
     this.tab.estado = true;
     this.datosEnviados.emit(this.tab);
   }
+
+  onOpenUrl(url) {
+    window.open(url, '_blank');
+  }
 }

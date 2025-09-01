@@ -1,13 +1,13 @@
-<div class="container">
+<div >
   <p-card [style]="{ width: '100%' }">
 
     <div class="row">
       <h3><b>{{tituloComponente.mainTitle}}</b></h3>
     </div>
 
-    <div class="row">
-      <p-card header="" subheader="">
-        <ng-template pTemplate="header">
+    <div class="row p-0">
+      <p-card header="" subheader="" class="p-0">
+        <!-- <ng-template pTemplate="header">
           <p-toolbar>
             <div class="p-toolbar-group-start">
               <p>Filtros</p>
@@ -15,17 +15,12 @@
             <div class="p-toolbar-group-end">
             </div>
           </p-toolbar>
-        </ng-template>
-        <div class="form-group field">
-          <div class="row">
-            <div class="grid">
-              <div class="col">
-                <label>Rango de fechas: &nbsp;</label>
-                <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" dateFormat="dd/mm/yy"
-                  [showIcon]="true"></p-calendar>
-                  <!-- para deshabilitar el calendar si es reporte 8 -->
-                  <!-- [disabled]="reporteSeleccionado?.nombre == 'Datos de operación en electrolinera'" -->
-              </div>
+        </ng-template> -->
+
+        <!-- <div class="form-group field"> -->
+          <!-- <div class="row"> -->
+            
+            <div class="grid p-0">
               <div class="col">
                 <label>Seleccione Reporte: &nbsp;</label>
                 <p-autoComplete [(ngModel)]="reporteSeleccionado" [suggestions]="coincidenciasFiltro"
@@ -34,25 +29,37 @@
                 </p-autoComplete>
               </div>
               <div class="col">
+                <label>Rango de fechas: &nbsp;</label>
+                <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" dateFormat="dd/mm/yy"
+                  [showIcon]="true"></p-calendar>
+                  <!-- para deshabilitar el calendar si es reporte 8 -->
+                  <!-- [disabled]="reporteSeleccionado?.nombre == 'Datos de operación en electrolinera'" -->
+              </div>
+              
+              <div class="col">
                 <label>&nbsp;</label>
                 <!-- TODO boton que no restrinja al reporte 8 -->
-                <p-button label="Generar Vista Previa" icon="pi pi-filter"
-                  [disabled]="rangeDates == undefined || !reporteSeleccionado" (click)="onAdicionaTabs()"></p-button>
+                <p-button label="Generar Vista Previa" icon="pi pi-filter" *ngIf="reporteSeleccionado?.nombre != 'Set42 - Datos mensuales de electrolineras'"
+                  [disabled]="rangeDates == undefined || !reporteSeleccionado" (click)="onAdicionaTabs('con fecha')"></p-button>
+
+                <p-button label="Generar Vista Previa" icon="pi pi-filter" *ngIf="reporteSeleccionado?.nombre == 'Set42 - Datos mensuales de electrolineras'"
+                  [disabled]="!reporteSeleccionado" (click)="onAdicionaTabs('sin fecha')"></p-button>
               </div>
             </div>
-          </div>
-        </div>
+          <!-- </div> -->
+        <!-- </div> -->
+
       </p-card>
     </div>
 
-    <div class="row">
+    <!-- <div class="row">
       <div class="col"></div>
-    </div>
+    </div> -->
 
-    <div class="row" style="width: 100%;">
-      <p-card [style]="{ width: '100%' }">
+    <div class="row p-0" style="width: 100%;">
+      <p-card [style]="{ width: '100%' }" class="p-0">
 
-        <ng-template pTemplate="header">
+        <!-- <ng-template pTemplate="header">
           <p-toolbar>
             <div class="p-toolbar-group-start">
               <p>Vista Previa</p>
@@ -60,9 +67,9 @@
             <div class="p-toolbar-group-end">
             </div>
           </p-toolbar>
-        </ng-template>
-        <p-tabView (onChange)="onTabChange($event)" [(activeIndex)]="activeIndex" [scrollable]="true">
-          <p-tabPanel *ngFor="let tab of tabs; index as i" [header]="tab.title | truncate" [closable]="true" >
+        </ng-template> -->
+        <p-tabView (onChange)="onTabChange($event)" [(activeIndex)]="activeIndex" [scrollable]="true" class="p-0">
+          <p-tabPanel *ngFor="let tab of tabs; index as i" [header]="tab.title | truncate" [closable]="true" class="p-0">
 
             <ng-container *ngIf="showReport === 'x reporte'">
               <app-table-report-simple [tab]="tab" [tipoReporte]="reporteSeleccionado"

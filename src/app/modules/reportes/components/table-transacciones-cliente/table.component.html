@@ -1,9 +1,23 @@
-<p-table responsiveLayout="stack" *ngIf="componenteVisible" [columns]="cols6" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%" class="custom-p-table">
+<p-table *ngIf="componenteVisible" [columns]="cols6" [value]="reporte" [tableStyle]="{'min-width': '50rem'}" width="100%" class="custom-p-table">
     <ng-template pTemplate="caption">
-        <label><b>{{numeroReporte}}</b></label>
-        <br>
-        <br>
-        <p-button label="Descargar" icon="pi pi-fw pi-file-excel" (click)="descargaArchivo()" size="small" [outlined]="true" />
+        <div class="grid">
+      <div class="col-fixed" style="width:10%">
+        <div class="text-center p-0 border-round-sm font-bold">
+          <p-button
+            label="Descargar"
+            icon="pi pi-fw pi-file-excel"
+            (click)="descargaArchivo()"
+            size="small"
+            [outlined]="true"
+          />
+        </div>
+      </div>
+      <div class="col">
+          <div class="text-center p-0 border-round-sm font-bold">
+            <label><b>{{ numeroReporte }}</b></label>
+          </div>
+      </div>
+  </div>
     </ng-template>
     <ng-template pTemplate="header" let-columns>
         <tr>
@@ -34,11 +48,11 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr>
             <td style="text-align:left; vertical-align:middle"> {{rowData.numeroFactura}}</td>
-            <td style="text-align:left; vertical-align:middle"> {{rowData.cuf }}</td>
+            <td style="text-align:left; vertical-align:middle"> {{rowData.cuf | truncate}}</td>
             <td style="text-align:left; vertical-align:middle"> {{rowData.codigoDescripcion }}</td>
             <td style="text-align:left; vertical-align:middle"> {{rowData.codigoRecepcion }}</td>
             <td style="text-align:left; vertical-align:middle"> {{rowData.fechaRegistro | formatDateAndTime}}</td>
-            <td style="text-align:left; vertical-align:middle"> {{rowData.urlFacturaSiat }}</td>
+            <td style="text-align:left; vertical-align:middle" (click)="onOpenUrl(rowData.urlFacturaSiat)" class="p-button p-button-link text-blue-600 underline cursor-pointer" pTooltip="Abrir en Siat"> {{rowData.urlFacturaSiat | truncate}}</td>
         </tr>
     </ng-template>
 </p-table>
