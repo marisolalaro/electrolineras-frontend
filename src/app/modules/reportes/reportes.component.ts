@@ -102,6 +102,7 @@ export default class ReportesComponent {
     });
     this.tiposReportes = [
       { nombre: reports.labelReporte1 },
+      { nombre: reports.labelReporte5 },
       { nombre: reports.labelReporte4 },
       { nombre: reports.labelReporte8 },
       { nombre: reports.labelReporte2 },
@@ -109,7 +110,6 @@ export default class ReportesComponent {
       { nombre: reports.labelReporte7 },
       { nombre: reports.labelReporte9 },
       // { nombre: reports.labelReporte3 },
-      // { nombre: reports.labelReporte5 },
     ];
   }
 

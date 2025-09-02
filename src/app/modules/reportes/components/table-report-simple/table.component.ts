@@ -79,7 +79,7 @@ export class TableReportSimpleComponent {
       if (this.tipoReporte.nombre === ("Factura cargas de energía")) {
         this.reporteX = 4;
       }
-      if (this.tipoReporte.nombre.includes("detalle suministro energía")) {
+      if (this.tipoReporte.nombre.includes("Cargas de energía por cliente")) {
         this.reporteX = 5;
       }
 
@@ -130,9 +130,8 @@ export class TableReportSimpleComponent {
       if (this.reporteX == 5) {
         this.cols = [
           { field: 'username', header: 'Usuario' },
-          { field: 'changeFee', header: 'Carga' },
           { field: 'status', header: 'Estado' },
-          { field: 'duration', header: 'Duración' },
+          { field: 'duration', header: 'Duración Hrs' },
           { field: 'chargingStation', header: 'Estación de Carga' },
           { field: 'staredChargingAt', header: 'Fecha Inicio' },
           { field: 'finisheAt', header: 'Fecha Finalización' },

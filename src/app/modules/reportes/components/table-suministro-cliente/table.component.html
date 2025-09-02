@@ -49,7 +49,7 @@
   <ng-template pTemplate="body" let-rowData let-columns="columns">
     <tr>
       <td style="text-align:left; vertical-align:middle"> {{rowData.numeroFactura}}</td>
-      <td style="text-align:left; vertical-align:middle"> {{rowData.cuf | truncate}}</td>
+      <td style="text-align:left; vertical-align:middle" [pTooltip]="rowData.cuf"> {{rowData.cuf | truncate}}</td>
       <td style="text-align:left; vertical-align:middle"> {{rowData.codigoDescripcion }}</td>
       <td style="text-align:left; vertical-align:middle"> {{rowData.codigoRecepcion }}</td>
       <td style="text-align:left; vertical-align:middle"> {{rowData.fechaRegistro }}</td>

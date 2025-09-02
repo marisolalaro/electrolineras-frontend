@@ -647,16 +647,15 @@ export class CrearExcelService {
     // Agregar encabezados de las filas
     const rowValues = [];
     rowValues[1] = 'Usuario';
-    rowValues[2] = 'Carga';
-    rowValues[3] = 'Estado';
-    rowValues[4] = 'Duración';
-    rowValues[5] = 'Estación de Carga';
-    rowValues[6] = 'Fecha Inicio';
-    rowValues[7] = 'Fecha Finalización';
-    rowValues[8] = 'Energía Consumida kW';
-    rowValues[9] = 'Monto Bs';
-    rowValues[10] = 'Total Energía Consumida kW';
-    rowValues[11] = 'Total Monto Bs';
+    rowValues[2] = 'Estado';
+    rowValues[3] = 'Duración';
+    rowValues[4] = 'Estación de Carga';
+    rowValues[5] = 'Fecha Inicio';
+    rowValues[6] = 'Fecha Finalización';
+    rowValues[7] = 'Energía Consumida kW';
+    rowValues[8] = 'Monto Bs';
+    rowValues[9] = 'Total Energía Consumida kW';
+    rowValues[10] = 'Total Monto Bs';
 
     worksheet.addRow(rowValues);
 
@@ -668,13 +667,13 @@ export class CrearExcelService {
     worksheet.getCell('F6').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell('G6').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell('H6').alignment = { vertical: 'middle', horizontal: 'center' };
-    worksheet.getCell('I6').alignment = { vertical: 'middle', horizontal: 'center' };
+    // worksheet.getCell('I6').alignment = { vertical: 'middle', horizontal: 'center' };
 
     // Agregar datos del json
     jsonData.forEach((data: any) => {
       const row = worksheet.addRow([
         data.username? data.username : '',
-        data.changeFee? data.changeFee : '',
+        // data.changeFee? data.changeFee : '',
         data.status == 'charged' ? 'Cargado' : 'Finalizado',
         data.duration? SegundosEnHoras(data.duration) : '',
         data.chargingStation? data.chargingStation : '',
@@ -702,8 +701,8 @@ export class CrearExcelService {
 
     // suma el monto total
     var filas = 7 + jsonData.length - 1;
+    worksheet.getCell('I7').value = { formula: `SUM(G7:G${filas})` };
     worksheet.getCell('J7').value = { formula: `SUM(H7:H${filas})` };
-    worksheet.getCell('K7').value = { formula: `SUM(I7:I${filas})` };
 
     // poniendo titulo
     worksheet.getCell('C2').value = reports.tituloReporte5;
@@ -734,7 +733,7 @@ export class CrearExcelService {
       worksheet.getCell(`F${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
       worksheet.getCell(`G${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
       worksheet.getCell(`H${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-      worksheet.getCell(`I${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      // worksheet.getCell(`I${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
     }
 
     // poniendo estilos a los titulos y subtitulos
@@ -758,9 +757,9 @@ export class CrearExcelService {
     worksheet.getCell('H6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
     worksheet.getCell('I6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
     worksheet.getCell('J6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
-    worksheet.getCell('K6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
-    worksheet.getCell('J7').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C93D82' } };
-    worksheet.getCell('K7').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '5457CD' } };
+    worksheet.getCell('I7').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C93D82' } };
+    worksheet.getCell('J7').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '5457CD' } };
+    // worksheet.getCell('K7').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '5457CD' } };
 
     // estilo letras blancas a las cabeceras
     worksheet.getCell('A6').font = { bold: true, color: { argb: 'FFFFFF' } };
@@ -773,13 +772,13 @@ export class CrearExcelService {
     worksheet.getCell('H6').font = { bold: true, color: { argb: 'FFFFFF' } };
     worksheet.getCell('I6').font = { bold: true, color: { argb: 'FFFFFF' } };
     worksheet.getCell('J6').font = { bold: true, color: { argb: 'FFFFFF' } };
-    worksheet.getCell('K6').font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getCell('I7').font = { bold: true, color: { argb: 'FFFFFF' } };
     worksheet.getCell('J7').font = { bold: true, color: { argb: 'FFFFFF' } };
-    worksheet.getCell('K7').font = { bold: true, color: { argb: 'FFFFFF' } };
+    // worksheet.getCell('K7').font = { bold: true, color: { argb: 'FFFFFF' } };
 
     // estilo bordes a los resultados
+    worksheet.getCell('I7').border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
     worksheet.getCell('J7').border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-    worksheet.getCell('K7').border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
 
     // Guardar el archivo
     workbook.xlsx.writeBuffer().then((data: BlobPart) => {

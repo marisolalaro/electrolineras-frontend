@@ -164,21 +164,21 @@ export default class DashboardComponent implements OnInit, OnDestroy {
         if (servicioResponse) {
           return this.getStatusConnectorES1();
         } else {
-          return false;
+          return true;
         }
       })
       .then((servicioResponse) => {
         if (servicioResponse) {
           return this.getStatusConnectorES2();
         } else {
-          return false;
+          return true;
         }
       })
       .then((servicioResponse) => {
         if (servicioResponse) {
           return this.getStatusConnectorES3();
         } else {
-          return false;
+          return true;
         }
       })
 
@@ -187,7 +187,7 @@ export default class DashboardComponent implements OnInit, OnDestroy {
           this.escucharHeartbeat();
           return true
         } else {
-          return false;
+          return true;
         }
       })
       .then((conexionWs) => {
@@ -239,8 +239,8 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   getTasaCarga() {
     this.parTasaCargaService.getCurrentRate().subscribe(
       (data: any) => {
-        this.tasaCargaLenta = data.data.filter(item => item.description == 'CARGA LENTA, ULTRA LENTA')[0];
-        this.tasaCargaSemiRapida = data.data.filter(item => item.description == 'CARGA SEMI RAPIDA')[0];
+        this.tasaCargaLenta = data.data.filter(item => (item.description == 'CARGA LENTA, ULTRA LENTA, Ba' || item.description == 'CARGA LENTA, ULTRA LENTA, Bb' || item.description == 'CARGA LENTA, ULTRA LENTA, Bm') )[0];
+        this.tasaCargaSemiRapida = data.data.filter(item => (item.description == 'CARGA SEMI RAPIDA, Ba' || item.description == 'CARGA SEMI RAPIDA, Bb' || item.description == 'CARGA SEMI RAPIDA, Bm'))[0];
       },
       error => {
         console.error('Error al obtener los datos de las tasas de carga', error);
