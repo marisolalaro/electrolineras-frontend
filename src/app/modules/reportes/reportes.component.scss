@@ -1,5 +1,5 @@
 .my-card-container {
-  width: 100%;
+  // width: 100%;
 }
 
 @media (min-width: 768px) {
@@ -16,4 +16,13 @@
     width: 99%;
     /* Ajusta el ancho en pantallas aún más grandes */
   }
+}
+.tab-panel-scroll {
+  // background-color: red;
+  padding: 5px;
+  box-sizing: border-box;
+  overflow-x: auto;    /* scroll horizontal solo si el contenido es más ancho */
+  overflow-y: hidden;  /* evita scroll vertical */
+  max-width: 90vw;
+  // max-width: 100%;
 }

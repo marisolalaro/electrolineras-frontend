@@ -159,7 +159,7 @@ export default class ReportesComponent {
         title = reports.numeroReporte4;
       }
       if (
-        this.reporteSeleccionado.nombre.includes('detalle suministro energía')
+        this.reporteSeleccionado.nombre === 'Cargas de energía por cliente'
       ) {
         title = reports.numeroReporte5;
       }

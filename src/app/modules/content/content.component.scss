@@ -11,6 +11,8 @@ app-header {
 .layout-content {
   display: flex;
   flex: 1 1 auto;
+  // overflow-x: auto;   /* permite scroll horizontal */
+  // min-width: 0;       /* truco necesario en flexbox */
 }
 
 app-sidebar {

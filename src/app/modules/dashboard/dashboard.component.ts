@@ -231,7 +231,12 @@ export default class DashboardComponent implements OnInit, OnDestroy {
         this.serviceResponse = true;
       },
       error => {
-        this.serviceResponse = false;
+        if (error.status == 404) {
+            this.serviceResponse = false;
+          } else {
+            this.serviceResponse = true;
+          }
+          this.loading = false
       }
     );
   }
@@ -280,8 +285,12 @@ export default class DashboardComponent implements OnInit, OnDestroy {
           }
         },
         error => {
+          if (error.status == 404) {
+            this.serviceResponse = false;
+          } else {
+            this.serviceResponse = true;
+          }
           this.loading = false
-          this.serviceResponse = false;
           resolve(false);
         }
       );
@@ -311,8 +320,12 @@ export default class DashboardComponent implements OnInit, OnDestroy {
           }
         },
         error => {
+          if (error.status == 404) {
+            this.serviceResponse = false;
+          } else {
+            this.serviceResponse = true;
+          }
           this.loading = false
-          this.serviceResponse = false;
           resolve(false);
         }
       );
@@ -342,8 +355,12 @@ export default class DashboardComponent implements OnInit, OnDestroy {
           }
         },
         error => {
+          if (error.status == 404) {
+            this.serviceResponse = false;
+          } else {
+            this.serviceResponse = true;
+          }
           this.loading = false
-          this.serviceResponse = false;
           resolve(false);
         }
       );

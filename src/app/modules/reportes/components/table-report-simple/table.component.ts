@@ -79,7 +79,7 @@ export class TableReportSimpleComponent {
       if (this.tipoReporte.nombre === ("Factura cargas de energía")) {
         this.reporteX = 4;
       }
-      if (this.tipoReporte.nombre.includes("Cargas de energía por cliente")) {
+      if (this.tipoReporte.nombre === ("Cargas de energía por cliente")) {
         this.reporteX = 5;
       }
 

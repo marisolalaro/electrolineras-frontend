@@ -141,8 +141,12 @@ export default class InvoiceEnergyChargingComponent {
           }
           this.serviceResponse = true;
         }, err => {
+          if (err.status == 404) {
+            this.serviceResponse = false;
+          } else {
+            this.serviceResponse = true;
+          }
           this.loading = false
-          this.serviceResponse = false;
         })
   }
 

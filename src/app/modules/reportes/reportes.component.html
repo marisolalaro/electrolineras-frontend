@@ -1,5 +1,5 @@
 <div >
-  <p-card [style]="{ width: '100%' }">
+  <p-card >
 
     <div class="row">
       <h3><b>{{tituloComponente.mainTitle}}</b></h3>
@@ -28,17 +28,14 @@
                   placeholder="Buscar Reporte">
                 </p-autoComplete>
               </div>
-              <div class="col">
+              <div class="col" *ngIf="reporteSeleccionado?.nombre != 'Set42 - Datos mensuales de electrolineras'">
                 <label>Rango de fechas: &nbsp;</label>
                 <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" dateFormat="dd/mm/yy"
                   [showIcon]="true"></p-calendar>
-                  <!-- para deshabilitar el calendar si es reporte 8 -->
-                  <!-- [disabled]="reporteSeleccionado?.nombre == 'Datos de operación en electrolinera'" -->
               </div>
               
               <div class="col">
                 <label>&nbsp;</label>
-                <!-- TODO boton que no restrinja al reporte 8 -->
                 <p-button label="Generar Vista Previa" icon="pi pi-filter" *ngIf="reporteSeleccionado?.nombre != 'Set42 - Datos mensuales de electrolineras'"
                   [disabled]="rangeDates == undefined || !reporteSeleccionado" (click)="onAdicionaTabs('con fecha')"></p-button>
 
@@ -56,8 +53,8 @@
       <div class="col"></div>
     </div> -->
 
-    <div class="row p-0" style="width: 100%;">
-      <p-card [style]="{ width: '100%' }" class="p-0">
+    <div class="row p-0">
+      <p-card class="p-0">
 
         <!-- <ng-template pTemplate="header">
           <p-toolbar>
@@ -68,9 +65,10 @@
             </div>
           </p-toolbar>
         </ng-template> -->
-        <p-tabView (onChange)="onTabChange($event)" [(activeIndex)]="activeIndex" [scrollable]="true" class="p-0">
+        <p-tabView (onChange)="onTabChange($event)" [(activeIndex)]="activeIndex" [scrollable]="true" class="p-0" [ngStyle]="{ width: '100%' }">
           <p-tabPanel *ngFor="let tab of tabs; index as i" [header]="tab.title | truncate" [closable]="true" class="p-0">
-
+           <div class="tab-panel-scroll" >
+            
             <ng-container *ngIf="showReport === 'x reporte'">
               <app-table-report-simple [tab]="tab" [tipoReporte]="reporteSeleccionado"
                 (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-report-simple>
@@ -103,7 +101,7 @@
               <app-table-report-consumo [tab]="tab"
                 (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-report-consumo>
             </ng-container>
-
+</div>
           </p-tabPanel>
         </p-tabView>
 

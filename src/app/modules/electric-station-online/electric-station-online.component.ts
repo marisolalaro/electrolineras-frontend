@@ -387,8 +387,12 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
         this.serviceResponse = true;
       }, err => {
         reject();
-        this.loading = false
-        this.serviceResponse = false;
+        if (err.status == 404) {
+            this.serviceResponse = false;
+          } else {
+            this.serviceResponse = true;
+          }
+          this.loading = false
       });
     });
   }

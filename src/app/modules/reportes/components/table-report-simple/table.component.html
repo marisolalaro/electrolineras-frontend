@@ -1,9 +1,9 @@
 <!-- Reporte simple, reportes 1,2,4,5 -->
+<!-- <div class="table-scroll"> -->
 <p-table
   *ngIf="componenteVisible"
-  [columns]="cols"
   [value]="reporte"
-  [tableStyle]="{ 'min-width': '10rem' }"
+  [columns]="cols"
 >
   <ng-template pTemplate="caption">
 
@@ -29,7 +29,7 @@
   </ng-template>
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th *ngFor="let col of columns">
+      <th *ngFor="let col of columns"  [style]="{ 'min-width': '200px' }">
         {{ col.header }}
       </th>
     </tr>
@@ -109,4 +109,6 @@
     </tr>
   </ng-template>
 </p-table>
+<!-- </div> -->
 <!-- Reporte simple, reportes 1,2,4,5 --> 
+ 

@@ -150,8 +150,12 @@ export default class TransactionsComponent implements OnInit {
         }
         this.serviceResponse = true;
       }, err => {
-        this.loading = false
-        this.serviceResponse = false;
+        if (err.status == 404) {
+            this.serviceResponse = false;
+          } else {
+            this.serviceResponse = true;
+          }
+          this.loading = false
       }
     )
   }
