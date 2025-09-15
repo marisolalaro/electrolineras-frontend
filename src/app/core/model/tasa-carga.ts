@@ -5,6 +5,7 @@ export class TasaCargaModel {
     registrationDate?: string;
     activo?: boolean;
     startTime: string;
+    starTime: string;
     endTime: string;
     enabled: boolean;
     minimumCurrent: number;
@@ -12,4 +13,5 @@ export class TasaCargaModel {
     description: string;
     tiempoInicial: string;
     tiempoFinal: string;
+    periodo: string;
 }

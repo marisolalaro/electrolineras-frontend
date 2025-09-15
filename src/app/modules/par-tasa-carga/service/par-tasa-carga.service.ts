@@ -41,4 +41,12 @@ export class ParTasaCargaService {
   getCurrentDate() {
     return this.http.get(this.apiService + '/currentDate' );
   }
+
+  getChargeRateCurrent(){
+    return this.http.get(this.apiService + EndPoins.currentChargeRate);
+  }
+
+  getAllChargeRate() {
+    return this.http.get(this.apiService + EndPoins.getAll);
+  }
 }

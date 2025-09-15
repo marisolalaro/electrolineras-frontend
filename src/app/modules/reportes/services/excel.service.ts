@@ -178,7 +178,6 @@ export class ExcelService {
       this.mesActual = 12
       celdaGestion.value = fechaServer.getFullYear() -1 ;
       var anioAnterior = fechaServer.getFullYear() -1;
-      // TODO
       worksheet.name = anioAnterior + '_42SET'
     } else {
       worksheet.name = fechaServer.getFullYear() + '' + '_42SET'

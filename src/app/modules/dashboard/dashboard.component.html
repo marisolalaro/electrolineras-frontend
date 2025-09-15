@@ -10,7 +10,20 @@
         <div class="text-900 font-bold text-5xl mb-4 text-center">
           <h3>Electrolineras</h3>
         </div>
-        <p-toolbar>
+        <!-- tarifas de cargas vigentes -->
+        <div>
+          <div class="grid m-0 p-0">
+            <div class="col-12 lg:col-4 md:col-6 sm:col-12 m-0 p-0" *ngFor="let tasa of tasasVigentes">
+              <p-card [header]="tasa.amount">
+                <p class="m-0 p-0">{{tasa.description | mapeaModoCarga}}</p> 
+                <p>Bloque horario: {{tasa.starTime | formatHoraMinutoSegundo}} a {{tasa.endTime | formatHoraMinutoSegundo}}</p>
+                <p>{{tasa.periodo}}</p>
+              </p-card>
+            </div>
+          </div>
+        </div>
+        <!-- tarifas de cargas vigentes -->
+        <!-- <p-toolbar>
             <div class="p-toolbar-group-start">
               Bloque horario: {{tasaCargaLenta.startTime | formatHoraMinutoSegundo}} a {{tasaCargaLenta.endTime | formatHoraMinutoSegundo}}
             </div>
@@ -20,7 +33,7 @@
             <div class="p-toolbar-group-end">
                 Tasa de Carga Semi Rapida: {{tasaCargaSemiRapida.amount}}
             </div>
-          </p-toolbar>
+          </p-toolbar> -->
         <div class="grid" *ngIf="serviceResponse">
           <!-- OTRA ELECTROLINERA -->
           <div class="col-12 lg:col-4 md:col-6 sm:col-12">

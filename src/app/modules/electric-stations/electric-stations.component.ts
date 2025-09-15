@@ -234,7 +234,7 @@ export default class ElectricStationsComponent implements OnInit {
   onSelecetedEdit(item) {
     this.electricStation = item;
     this.formRegistro.patchValue(item);
-    this.selectedTasaCarga = item.chargeRate;
+    // this.selectedTasaCarga = item.chargeRate;
     this.selectedModel = item.model;
     this.selectedAddress = item.address;
     this.dialogEdit = true;
@@ -298,7 +298,7 @@ export default class ElectricStationsComponent implements OnInit {
       address: new FormControl('', [Validators.required]),
       latitude: new FormControl('', [Validators.required]),
       longitude: new FormControl('', [Validators.required]),
-      chargeRate: new FormControl('', [Validators.required]),
+      // chargeRate: new FormControl('', [Validators.required]),
       model: new FormControl('', [Validators.required]),
       codeStationQr: new FormControl('', [Validators.required]),
     });
@@ -319,7 +319,7 @@ export default class ElectricStationsComponent implements OnInit {
     var registro: ElectricStationModel = {
       ...this.formRegistro.value,
     };
-    registro.chargeRate = this.selectedTasaCarga.id;
+    // registro.chargeRate = this.selectedTasaCarga.id;
     registro.model= this.selectedModel.id;
     registro.address = this.selectedAddress.id;
     this.electricStationsService.create(registro).subscribe(
@@ -361,7 +361,7 @@ export default class ElectricStationsComponent implements OnInit {
     var registro: ElectricStationModel = {
       ...this.formRegistro.value,
     };
-    registro.chargeRate = this.selectedTasaCarga.id;
+    // registro.chargeRate = this.selectedTasaCarga.id;
     registro.model = this.selectedModel.id
     registro.direccion = this.selectedAddress.district
     registro.address = this.selectedAddress.id;

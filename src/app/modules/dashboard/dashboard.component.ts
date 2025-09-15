@@ -94,6 +94,7 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   private subscriptionEstados3: Subscription;
   private subscriptionAllES: Subscription;
 
+  public tasasVigentes: TasaCargaModel[] = [];
   public tasaCargaSemiRapida: TasaCargaModel = new TasaCargaModel();
   public tasaCargaLenta: TasaCargaModel = new TasaCargaModel();
   public fechaActual: any;
@@ -158,6 +159,7 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   inicializaDatos() {
     this.getElectricStation();
     this.getTasaCarga();
+    this.getTasaCargaVigente();
     this.getDateNow();
     this.conectaWebSocket()
       .then((servicioResponse) => {
@@ -246,6 +248,16 @@ export default class DashboardComponent implements OnInit, OnDestroy {
       (data: any) => {
         this.tasaCargaLenta = data.data.filter(item => (item.description == 'CARGA LENTA, ULTRA LENTA, Ba' || item.description == 'CARGA LENTA, ULTRA LENTA, Bb' || item.description == 'CARGA LENTA, ULTRA LENTA, Bm') )[0];
         this.tasaCargaSemiRapida = data.data.filter(item => (item.description == 'CARGA SEMI RAPIDA, Ba' || item.description == 'CARGA SEMI RAPIDA, Bb' || item.description == 'CARGA SEMI RAPIDA, Bm'))[0];
+      },
+      error => {
+        console.error('Error al obtener los datos de las tasas de carga', error);
+      });
+  }
+
+  getTasaCargaVigente() {
+    this.parTasaCargaService.getChargeRateCurrent().subscribe(
+      (data: any) => {
+        this.tasasVigentes = data;
       },
       error => {
         console.error('Error al obtener los datos de las tasas de carga', error);

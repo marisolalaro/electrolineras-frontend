@@ -110,5 +110,7 @@ export class EndPoins {
     static chargeRate = "/chargeRate"
     static enable = "/enable"
     static disable = "/disable"
+    static currentChargeRate = "/currentChargeRate"
+    static getAll = "/getAll"
     
 };

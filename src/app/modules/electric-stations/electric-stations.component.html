@@ -193,7 +193,7 @@
               </div>
             </div>
 
-            <div class="form-group field">
+            <!-- <div class="form-group field">
               <label for="descripcion">{{labelsGlobales.tasaCarga}}</label>
               <p-autoComplete [(ngModel)]="selectedTasaCarga" [dropdown]="true" [suggestions]="filteredTasaCarga"
                 (completeMethod)="filterTasaCarga($event)" field="amount" id="chargeRate" formControlName="chargeRate"
@@ -203,7 +203,7 @@
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>
-            </div>
+            </div> -->
 
             <div class="form-group field">
               <label for="latitude">{{labelsGlobales.latitude}}</label>
@@ -314,7 +314,7 @@
               </div>
             </div>
 
-            <div class="form-group field">
+            <!-- <div class="form-group field">
               <label for="descripcion">{{labelsGlobales.tasaCarga}}</label>
               <p-autoComplete [(ngModel)]="selectedTasaCarga" [dropdown]="true" [suggestions]="filteredTasaCarga"
                 (completeMethod)="filterTasaCarga($event)" field="amount" id="chargeRate" formControlName="chargeRate"
@@ -324,7 +324,7 @@
                   {{messagesGlobales.requiredField}}
                 </small>
               </div>
-            </div>
+            </div> -->
 
             <div class="form-group field">
               <label for="latitude">{{labelsGlobales.latitude}}</label>
@@ -529,10 +529,10 @@
                   </li> -->
                   
                   
-                  <li>
+                  <!-- <li>
                     <i class="pi pi-sort-alt" style="color: var(--primary-color)"></i> &nbsp;
                     <b>Tasa de Carga: </b>
-                  </li>
+                  </li> -->
                   <li>
                     <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
                     <b>Código QR: </b>
@@ -590,7 +590,7 @@
                   <li><label>{{electricStation.model.firmwareVersion}}</label></li>
                   <!-- <li><label>iccid</label></li>
                   <li><label>imsi</label></li> -->
-                  <li><label>{{electricStation.chargeRate.amount}}</label></li>
+                  <!-- <li><label>{{electricStation.chargeRate.amount}}</label></li> -->
                   <li><label>{{electricStation.codeStationQr}}</label></li>
                   <li>
                     <img [src]="imagenQR" alt="Converted Image" />
