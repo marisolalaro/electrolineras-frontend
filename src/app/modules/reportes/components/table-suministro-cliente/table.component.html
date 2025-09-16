@@ -30,10 +30,10 @@
   <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowgroup="rowgroup" let-rowspan="rowspan">
     <tr>
       <td style="text-align:left; vertical-align:top"> {{rowData.electronicMail}}</td>
-      <td style="text-align:left; vertical-align:top"> {{rowData.names}}</td>
+      <!-- <td style="text-align:left; vertical-align:top"> {{rowData.names}}</td>
       <td style="text-align:left; vertical-align:top"> {{rowData.lastName}}</td>
       <td style="text-align:left; vertical-align:top"> {{rowData.motherLastName}}</td>
-      <td style="text-align:left; vertical-align:top"> {{rowData.identificationNumber}}</td>
+      <td style="text-align:left; vertical-align:top"> {{rowData.identificationNumber}}</td> -->
       <td *ngIf="rowData.clientInvoiceList.length > 0">
         <p-table [value]="rowData.clientInvoiceList">
           <ng-template pTemplate="header" let-columns>

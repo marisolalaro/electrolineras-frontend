@@ -29,7 +29,7 @@
   </ng-template>
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th *ngFor="let col of columns"  [style]="{ 'min-width': '200px' }">
+      <th *ngFor="let col of columns"  [style]="{ 'min-width': '200px', 'text-align': 'center' }">
         {{ col.header }}
       </th>
     </tr>
@@ -54,13 +54,21 @@
             col.field != 'fechaCarga' &&
             col.field != 'fechaRegistro' &&
             col.field != 'cuf' &&
-            col.field != 'urlFacturaSiat'
+            col.field != 'urlFacturaSiat'&&
+            col.field != 'codigoDescripcion'&&
+            col.field != 'nitCi'&&
+            col.field != 'numeroFactura'&&
+            col.field != 'numeroDocumento'&&
+            col.field != 'paymentTransactionType'&&
+            col.field != 'status'
+
           "
         >
           {{ rowData[col.field] }}
         </div>
 
-        <div *ngIf="col.field === 'id'">
+        <div *ngIf="col.field === 'id'"
+        >
           {{ rowData[col.field] }}
         </div>
 
@@ -89,7 +97,9 @@
           {{ rowData[col.field] | formatDiaMesAnio }}
         </div>
 
-        <div *ngIf="col.field === 'energyComsumed'">
+        <div *ngIf="col.field === 'energyComsumed'"
+         style="text-align: right; vertical-align: middle"
+        >
           {{ rowData[col.field] | wattsToKilovatios }}
         </div>
 
@@ -103,6 +113,30 @@
 
         <div *ngIf="col.field === 'urlFacturaSiat'" (click)="onOpenUrl(rowData[col.field])" class="p-button p-button-link text-blue-600 underline cursor-pointer" pTooltip="Abrir en Siat">
           {{ rowData[col.field] | truncate }}
+        </div>
+        
+         <div *ngIf="col.field === 'codigoDescripcion'"  style="text-align: center; vertical-align: middle">
+          {{ rowData[col.field] }}
+        </div>
+
+        <div *ngIf="col.field === 'nitCi'"  style="text-align: right; vertical-align: middle">
+          {{ rowData[col.field] }}
+        </div>
+
+        <div *ngIf="col.field === 'numeroFactura'"  style="text-align: center; vertical-align: middle">
+          {{ rowData[col.field] }}
+        </div>
+        
+        <div *ngIf="col.field === 'numeroDocumento'"  style="text-align: right; vertical-align: middle">
+          {{ rowData[col.field] }}
+        </div>
+
+        <div *ngIf="col.field === 'paymentTransactionType'"  style="text-align: center; vertical-align: middle">
+          {{ rowData[col.field] }}
+        </div>
+
+        <div *ngIf="col.field === 'status'"  style="text-align: center; vertical-align: middle">
+          {{ rowData[col.field] }}
         </div>
         
       </td>

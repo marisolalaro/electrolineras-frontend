@@ -57,10 +57,10 @@ export class TableTransaccionesClienteComponent {
     return new Promise((resolve) => {
     this.cols6 = [
       { field: 'electronicMail', header: 'Correo Electrónico' },
-      { field: 'names', header: 'Nombres' },
-      { field: 'lastName', header: 'Apellido Paterno' },
-      { field: 'motherLastName', header: 'Apellido Materno' },
-      { field: 'identificationNumber', header: 'Número de Identificación' },
+      // { field: 'names', header: 'Nombres' },
+      // { field: 'lastName', header: 'Apellido Paterno' },
+      // { field: 'motherLastName', header: 'Apellido Materno' },
+      // { field: 'identificationNumber', header: 'Número de Identificación' },
       { field: '', header: 'Detalle Facturas' }
     ];
     resolve(true);
