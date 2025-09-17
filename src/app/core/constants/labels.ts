@@ -240,7 +240,7 @@ export const mainTitles: IMainTitles = {
     secondaryTitle: 'Dirección'
   },
   contrasenias: {
-    mainTitle: 'Constraseñas',
+    mainTitle: 'Contraseñas',
     secondaryTitle: 'Contraseña'
   },
 }
