@@ -112,7 +112,7 @@ export class TableReportConsumoComponent {
       this.reporteService.getSuministroCliente(rangoFechas).subscribe(
         (resp: any) => {
           if (resp) {
-            this.reporte = JSON.parse(JSON.stringify(resp));
+            this.reporte = JSON.parse(JSON.stringify(resp.data));
             this.enviarDatos()
             return resolve(true);
           }
