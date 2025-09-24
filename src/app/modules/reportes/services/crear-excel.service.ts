@@ -523,10 +523,9 @@ export class CrearExcelService {
     rowValues[1] = 'Nº Factura';
     rowValues[2] = 'Código';
     rowValues[3] = 'Fecha de Registro';
-    rowValues[4] = 'Recepción';
-    rowValues[5] = 'Cuf';
-    rowValues[6] = 'Tipo de Transacción';
-    rowValues[7] = 'Url Factura Siat';
+    rowValues[4] = 'Cuf';
+    rowValues[5] = 'Tipo de Transacción';
+    rowValues[6] = 'Url Factura Siat';
 
     worksheet.addRow(rowValues);
 
@@ -536,7 +535,6 @@ export class CrearExcelService {
     worksheet.getCell('D6').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell('E6').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell('F6').alignment = { vertical: 'middle', horizontal: 'center' };
-    worksheet.getCell('G6').alignment = { vertical: 'middle', horizontal: 'center' };
 
     // Agregar datos del json
     jsonData.forEach((data: any) => {
@@ -544,7 +542,6 @@ export class CrearExcelService {
         data.numeroFactura? data.numeroFactura : '',
         data.codigoDescripcion? data.codigoDescripcion : '',
         data.fechaRegistro? moment(data.fechaRegistro).format('DD/MM/YYYY, HH:mm:ss') : '',
-        data.codigoRecepcion? data.codigoRecepcion : '',
         data.cuf? data.cuf : '',
         data.paymentTransactionType? data.paymentTransactionType : '',
         data.urlFacturaSiat? data.urlFacturaSiat : '',
@@ -590,7 +587,7 @@ export class CrearExcelService {
       worksheet.getCell(`D${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
       worksheet.getCell(`E${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
       worksheet.getCell(`F${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-      worksheet.getCell(`G${i}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+
     }
 
     // poniendo estilos a los titulos y subtitulos
@@ -610,7 +607,6 @@ export class CrearExcelService {
     worksheet.getCell('D6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
     worksheet.getCell('E6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
     worksheet.getCell('F6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
-    worksheet.getCell('G6').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2C518F' } };
 
     // estilo letras blancas a las cabeceras
     worksheet.getCell('A6').font = { bold: true, color: { argb: 'FFFFFF' } };
@@ -619,7 +615,6 @@ export class CrearExcelService {
     worksheet.getCell('D6').font = { bold: true, color: { argb: 'FFFFFF' } };
     worksheet.getCell('E6').font = { bold: true, color: { argb: 'FFFFFF' } };
     worksheet.getCell('F6').font = { bold: true, color: { argb: 'FFFFFF' } };
-    worksheet.getCell('G6').font = { bold: true, color: { argb: 'FFFFFF' } };
 
     // Guardar el archivo
     workbook.xlsx.writeBuffer().then((data: BlobPart) => {
