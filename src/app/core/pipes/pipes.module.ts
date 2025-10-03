@@ -5,6 +5,7 @@ import { FormatDiaMesAnioPipe } from './dates/format-field-date.pipe';
 import { FormatHoraMinutoSegundoPipe } from './dates/format-field-time.pipe';
 import { FormatSegundosEnHoraMinutoSegundoPipe } from './dates/format-field-time-carga';
 import { FormatDateAndTimePipe } from './dates/format-field-date-time.pipe';
+import { FormatMesPipe } from './dates/format-field-mount.pipe';
 // strings
 import { TruncatePipe } from './strings/truncate.pipe';
 import { FormatOnlineOfflinePipe } from './strings/format-online-offline.pipe';
@@ -17,6 +18,7 @@ import { FormatHabilitadoDeshabilitadoPipe } from './booleans/format-habilitado-
 import { FormatFieldWattsToKilovatiosPipe } from './numbers/format-field-watts-to-kilovatios';
 import { MapeoModoCargaPipe } from './strings/mapeo-modo-carga.pipe';
 
+
 @NgModule({
   declarations: [
     // dates
@@ -24,6 +26,7 @@ import { MapeoModoCargaPipe } from './strings/mapeo-modo-carga.pipe';
     FormatDateAndTimePipe,
     FormatHoraMinutoSegundoPipe,
     FormatSegundosEnHoraMinutoSegundoPipe,
+    FormatMesPipe,
     // strings
     TruncatePipe,
     FormatOnlineOfflinePipe,
@@ -42,6 +45,7 @@ import { MapeoModoCargaPipe } from './strings/mapeo-modo-carga.pipe';
     FormatDateAndTimePipe,
     FormatHoraMinutoSegundoPipe,
     FormatSegundosEnHoraMinutoSegundoPipe,
+    FormatMesPipe,
     // strings
     TruncatePipe,
     FormatOnlineOfflinePipe,

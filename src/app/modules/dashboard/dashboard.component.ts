@@ -662,4 +662,5 @@ export default class DashboardComponent implements OnInit, OnDestroy {
       return { estado: estadosConectores.noDisponible, severity: estadosConectores.colorSinConexion }
     }
   }
+
 }

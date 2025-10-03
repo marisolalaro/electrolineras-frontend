@@ -14,4 +14,5 @@ export class TasaCargaModel {
     tiempoInicial: string;
     tiempoFinal: string;
     periodo: string;
+    mes: string;
 }

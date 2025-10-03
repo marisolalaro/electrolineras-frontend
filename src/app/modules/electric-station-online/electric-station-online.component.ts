@@ -231,6 +231,9 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   getAllConnectorStatus() {
     this.connectorStatusService.getAllConnectorByIdElectricStation(this.id).subscribe(
       (data: any) => {
+        const sorted = data.data.sort(
+          (a, b) => Number(a.connector) - Number(b.connector)
+        );
         this.conectorStatus = data.data;
         if (this.conectorStatus[0].connector == '1') {
           this.status1 = this.conectorStatus[0].lastState;
@@ -418,15 +421,15 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   obtieneVelocidadCarga(currentOffered: number) {
     let potencia = 230 * currentOffered;
     let carga: number = potencia / 1000;
-    if (carga >= 0 && carga <= 2.3) {
-      return {
-        measurand: 'Carga Ultra Lenta',
-        value: 0,
-        unit: 'Kw',
-        phases: '#808080'
-      }
-    }
-    if (carga >= 3.7 && carga <= 7.4) {
+    // if (carga >= 0 && carga <= 2.3) {
+    //   return {
+    //     measurand: 'Carga Ultra Lenta',
+    //     value: 0,
+    //     unit: 'Kw',
+    //     phases: '#808080'
+    //   }
+    // }
+    if (currentOffered >= 0 && currentOffered <= 31.99) {
       return {
         measurand: 'Carga Lenta',
         value: 0,
@@ -434,7 +437,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
         phases: '#32CD32'
       }
     }
-    if (carga > 7.4 && carga <= 22) {
+    if (currentOffered >= 32 && currentOffered <= 96) {
       return {
         measurand: 'Carga Semi Rápida',
         value: 0,
@@ -442,22 +445,22 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
         phases: '#00FF00'
       }
     }
-    if (carga > 22 && carga <= 50) {
-      return {
-        measurand: 'Carga Rápida',
-        value: 0,
-        unit: 'Kw',
-        phases: '#FF8C00'
-      }
-    }
-    if (carga > 50 && carga <= 350) {
-      return {
-        measurand: 'Carga Ultra Rápida',
-        value: 0,
-        unit: 'Kw',
-        phases: '#B22222'
-      }
-    }
+    // if (carga > 22 && carga <= 50) {
+    //   return {
+    //     measurand: 'Carga Rápida',
+    //     value: 0,
+    //     unit: 'Kw',
+    //     phases: '#FF8C00'
+    //   }
+    // }
+    // if (carga > 50 && carga <= 350) {
+    //   return {
+    //     measurand: 'Carga Ultra Rápida',
+    //     value: 0,
+    //     unit: 'Kw',
+    //     phases: '#B22222'
+    //   }
+    // }
     return {
       measurand: 'Carga no definida',
       value: 0,
