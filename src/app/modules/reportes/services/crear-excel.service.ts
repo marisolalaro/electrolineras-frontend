@@ -91,7 +91,7 @@ export class CrearExcelService {
       bgColor: { argb: 'afe' }
     };
     // poniendo subtitulo
-    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate?moment(rangoFechas.initialDate).format('DD/MM/YYYY') : ''}" AL "${rangoFechas.finalDate?moment(rangoFechas.finalDate).format('DD/MM/YYYY') : ''}"`;
     worksheet.getCell('C3').fill = {
       type: 'pattern',
       pattern: 'solid',
@@ -226,7 +226,7 @@ export class CrearExcelService {
       bgColor: { argb: 'afe' }
     };
     // poniendo subtitulo
-    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate?moment(rangoFechas.initialDate).format('DD/MM/YYYY') : ''}" AL "${rangoFechas.finalDate?moment(rangoFechas.finalDate).format('DD/MM/YYYY') : ''}"`;
     worksheet.getCell('C3').fill = {
       type: 'pattern',
       pattern: 'solid',
@@ -428,7 +428,7 @@ export class CrearExcelService {
       fgColor: { argb: 'FFFFFF' },
     };
     // poniendo subtitulo
-    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate?moment(rangoFechas.initialDate).format('DD/MM/YYYY') : ''}" AL "${rangoFechas.finalDate?moment(rangoFechas.finalDate).format('DD/MM/YYYY') : ''}"`;
     worksheet.getCell('C3').fill = {
       type: 'pattern',
       pattern: 'solid',
@@ -571,7 +571,7 @@ export class CrearExcelService {
       fgColor: { argb: 'FFFFFF' },
     };
     // poniendo subtitulo
-    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate?moment(rangoFechas.initialDate).format('DD/MM/YYYY') : ''}" AL "${rangoFechas.finalDate?moment(rangoFechas.finalDate).format('DD/MM/YYYY') : ''}"`;
     worksheet.getCell('C3').fill = {
       type: 'pattern',
       pattern: 'solid',
@@ -709,7 +709,7 @@ export class CrearExcelService {
     };
 
     // poniendo subtitulo
-    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate?moment(rangoFechas.initialDate).format('DD/MM/YYYY') : ''}" AL "${rangoFechas.finalDate?moment(rangoFechas.finalDate).format('DD/MM/YYYY') : ''}"`;
     worksheet.getCell('C3').fill = {
       type: 'pattern',
       pattern: 'solid',
@@ -935,7 +935,7 @@ export class CrearExcelService {
     };
 
     // poniendo subtitulo
-    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate?moment(rangoFechas.initialDate).format('DD/MM/YYYY') : ''}" AL "${rangoFechas.finalDate?moment(rangoFechas.finalDate).format('DD/MM/YYYY') : ''}"`;
     worksheet.getCell('C3').fill = {
       type: 'pattern',
       pattern: 'solid',
@@ -1163,7 +1163,7 @@ export class CrearExcelService {
       fgColor: { argb: 'FFFFFF' },
     };
     // poniendo subtitulo
-    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate?moment(rangoFechas.initialDate).format('DD/MM/YYYY') : ''}" AL "${rangoFechas.finalDate?moment(rangoFechas.finalDate).format('DD/MM/YYYY') : ''}"`;
     worksheet.getCell('C3').fill = {
       type: 'pattern',
       pattern: 'solid',
@@ -1337,7 +1337,7 @@ export class CrearExcelService {
       bgColor: { argb: 'afe' }
     };
     // poniendo subtitulo
-    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate}" AL "${rangoFechas.finalDate}"`;
+    worksheet.getCell('C3').value = `DEL "${rangoFechas.initialDate?moment(rangoFechas.initialDate).format('DD/MM/YYYY') : ''}" AL "${rangoFechas.finalDate?moment(rangoFechas.finalDate).format('DD/MM/YYYY') : ''}"`;
     worksheet.getCell('C3').fill = {
       type: 'pattern',
       pattern: 'solid',
