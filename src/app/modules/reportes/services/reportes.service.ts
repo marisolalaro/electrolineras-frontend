@@ -50,8 +50,10 @@ export class ReportesService {
   }
 
   // 8vo Reporte - Datos Mensuales
-  getReporteDatosMensuales() {
-    return this.http.get(this.apiService + EndPoins.reportes + EndPoins.datosMensuales)
+ getReporteDatosMensuales() {
+    return this.http.get(this.apiService + EndPoins.reportes + EndPoins.datosMensualesExcel,
+      { responseType: 'blob' as 'json' }
+    );
   }
 
   // 9no Reporte

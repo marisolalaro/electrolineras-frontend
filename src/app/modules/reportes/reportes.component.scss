@@ -1,5 +1,5 @@
 .my-card-container {
-  // width: 100%;
+  width: 100%;
 }
 
 @media (min-width: 768px) {
@@ -17,12 +17,54 @@
     /* Ajusta el ancho en pantallas aún más grandes */
   }
 }
-.tab-panel-scroll {
-  // background-color: red;
-  padding: 5px;
-  box-sizing: border-box;
-  overflow-x: auto;    /* scroll horizontal solo si el contenido es más ancho */
-  overflow-y: hidden;  /* evita scroll vertical */
-  max-width: 90vw;
-  // max-width: 100%;
+
+
+.report-btn-sivel {
+    width: 220px;
+    height: 220px;
+    margin: 15px;
+    border: none;
+    border-radius: 15px;
+    background-color: #00adc1;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s 
+ease;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.report-btn-sivel.icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+    opacity: 0.9;
+    color: #922f2f;
+}
+
+.card-interactiva ::ng-deep .p-card {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid transparent; 
+}
+
+.card-interactiva:hover ::ng-deep .p-card {
+    transform: translateY(-5px); 
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+
+.card-interactiva.card-seleccionado ::ng-deep .p-card {
+    border: 2px solid #9fa1a5; 
+    transform: scale(1.05);    /* Crece */
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.6); 
+    background-color: #f0f9ff; 
+    z-index: 10;
 }

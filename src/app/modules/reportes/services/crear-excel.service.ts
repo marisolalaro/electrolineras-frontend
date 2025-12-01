@@ -1417,6 +1417,12 @@ export class CrearExcelService {
       saveAs(blob, `${fileName}.xlsx`);
     });
   }
+  // Agrega esto al final de tu servicio de Excel si no está Reporte 10
+  public descargarExcelDesdeBlob(blobData: any, fileName: string): void {
+    if (blobData.size === 0) return;
+    const blob = new Blob([blobData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    saveAs(blob, `${fileName}.xlsx`);
+  }
 
   mapearModoCarga(modoCarga: string): string {
     const mapeo: { [key: string]: string } = {

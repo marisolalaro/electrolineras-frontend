@@ -1,117 +1,58 @@
-<div >
-  <p-card >
-
+<div>
+  <p-card>
     <div class="row">
       <h3><b>{{tituloComponente.mainTitle}}</b></h3>
     </div>
 
     <div class="row p-0">
       <p-card header="" subheader="" class="p-0">
-        <!-- <ng-template pTemplate="header">
-          <p-toolbar>
-            <div class="p-toolbar-group-start">
-              <p>Filtros</p>
+        
+        <div class="grid p-0 justify-content-center">
+          
+          <div class="col-12 md:col-6 lg:col-4 text-center" *ngIf="reporteSeleccionado?.nombre != 'Set42 - Datos mensuales de electrolineras'">
+            <div class="flex flex-column align-items-center justify-content-center">
+                <label class="mb-2 font-bold">Rango de fechas:</label>
+                <p-calendar [(ngModel)]="rangeDates" 
+                            selectionMode="range" 
+                            [readonlyInput]="true" 
+                            dateFormat="dd/mm/yy"
+                            [showIcon]="true"
+                            [style]="{'width':'100%'}"> </p-calendar>
             </div>
-            <div class="p-toolbar-group-end">
-            </div>
-          </p-toolbar>
-        </ng-template> -->
+          </div>
 
-        <!-- <div class="form-group field"> -->
-          <!-- <div class="row"> -->
-            
-            <div class="grid p-0">
-              <div class="col">
-                <label>Seleccione Reporte: &nbsp;</label>
-                <p-autoComplete [(ngModel)]="reporteSeleccionado" [suggestions]="coincidenciasFiltro"
-                  (completeMethod)="filtraReporte($event)" field="nombre" [dropdown]="true"
-                  placeholder="Buscar Reporte">
-                </p-autoComplete>
-              </div>
-              <div class="col" *ngIf="reporteSeleccionado?.nombre != 'Set42 - Datos mensuales de electrolineras'">
-                <label>Rango de fechas: &nbsp;</label>
-                <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" dateFormat="dd/mm/yy"
-                  [showIcon]="true"></p-calendar>
-              </div>
-              
-              <div class="col">
-                <label>&nbsp;</label>
-                <p-button label="Generar Vista Previa" icon="pi pi-filter" *ngIf="reporteSeleccionado?.nombre != 'Set42 - Datos mensuales de electrolineras'"
-                  [disabled]="rangeDates == undefined || !reporteSeleccionado" (click)="onAdicionaTabs('con fecha')"></p-button>
-
-                <p-button label="Generar Vista Previa" icon="pi pi-filter" *ngIf="reporteSeleccionado?.nombre == 'Set42 - Datos mensuales de electrolineras'"
-                  [disabled]="!reporteSeleccionado" (click)="onAdicionaTabs('sin fecha')"></p-button>
-              </div>
-            </div>
-          <!-- </div> -->
-        <!-- </div> -->
-
+        </div>
       </p-card>
     </div>
+    <br>
 
-    <!-- <div class="row">
-      <div class="col"></div>
-    </div> -->
+  <div class="grid m-0 p-0">
+      <div class="card flex justify-content-center col-12 lg:col-4 md:col-6 sm:col-12"
+        *ngFor="let reporte of tiposReportes">
+        
+        <p-card [header]="reporte.nombre" 
+                class="card-interactiva" 
+                [class.card-seleccionado]="reporte === reporteActivoVisual"
+                [style]="{ width: '360px', cursor: 'pointer' }" 
+                (click)="descargarDesdeCard(reporte)">
+          
+          <ng-template pTemplate="header">
+            <img [alt]="reporte.nombre" 
+                 [src]="reporte.imagen" 
+                 style="height: 200px; object-fit: cover;" 
+                 onerror="this.src='https://primefaces.org/cdn/primeng/images/card-ng.jpg';" />
+          </ng-template>
 
+        </p-card>
+
+      </div>
+    </div>
+    
     <div class="row p-0">
-      <p-card class="p-0">
+      </div>
+    <div>
+        </div>
 
-        <!-- <ng-template pTemplate="header">
-          <p-toolbar>
-            <div class="p-toolbar-group-start">
-              <p>Vista Previa</p>
-            </div>
-            <div class="p-toolbar-group-end">
-            </div>
-          </p-toolbar>
-        </ng-template> -->
-        <p-tabView (onChange)="onTabChange($event)" [(activeIndex)]="activeIndex" [scrollable]="true" class="p-0" [ngStyle]="{ width: '100%' }">
-          <p-tabPanel *ngFor="let tab of tabs; index as i" [header]="tab.title | truncate" [closable]="true" class="p-0">
-           <div class="tab-panel-scroll" >
-            
-            <ng-container *ngIf="showReport === 'x reporte'">
-              <app-table-report-simple [tab]="tab" [tipoReporte]="reporteSeleccionado"
-                (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-report-simple>
-            </ng-container>
-            <!-- 3 -->
-            <ng-container *ngIf="showReport === 'crédito relacionado suministro energía'">
-              <app-table-factura-relacionada [tab]="tab"
-                (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-factura-relacionada>
-            </ng-container>
-            <!-- 6 -->
-            <ng-container *ngIf="showReport === 'Facturas de compras por cliente'">
-              <app-table-transacciones-cliente [tab]="tab"
-                (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-transacciones-cliente>
-            </ng-container>
-
-            <!-- 7 -->
-            <ng-container *ngIf="showReport === 'Facturas de cargas por cliente'">
-              <app-table-suministro-cliente [tab]="tab"
-                (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-suministro-cliente>
-            </ng-container>
-
-            <!-- 8 -->
-            <ng-container *ngIf="showReport === 'Set42 - Datos mensuales de electrolineras'">
-              <app-table-report-operacion [tab]="tab"
-                (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-report-operacion>
-            </ng-container>
-
-            <!-- 9 -->
-            <ng-container *ngIf="showReport === 'Cargas de clientes por bloques'">
-              <app-table-report-consumo [tab]="tab"
-                (datosEnviados)="cambiaEstadoTab($event, i)"></app-table-report-consumo>
-            </ng-container>
-</div>
-          </p-tabPanel>
-        </p-tabView>
-
-      </p-card>
-    </div>
-
-    <div class="row">
-      <div class="col"></div>
-    </div>
   </p-card>
 </div>
-
 <p-toast></p-toast>

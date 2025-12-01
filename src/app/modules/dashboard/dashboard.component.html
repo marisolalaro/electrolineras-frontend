@@ -15,11 +15,11 @@
           <div class="grid m-0 p-0">
             <div class="col-12 lg:col-4 md:col-6 sm:col-12 m-0 p-0" *ngFor="let tasa of tasasVigentes">
               <p-card [header]="tasa.amount">
-                
-                <p class="m-0 p-0">{{tasa.description | mapeaModoCarga}}</p> 
+
+                <p class="m-0 p-0">{{tasa.description | mapeaModoCarga}}</p>
                 <p>Bloque horario: {{tasa.starTime | formatHoraMinutoSegundo}} a {{tasa.endTime | formatHoraMinutoSegundo}}</p>
-                <p>{{tasa.periodo}} - {{tasa.mes| formatMesPipe}}</p> 
-                
+                <p>{{tasa.periodo}} - {{tasa.mes| formatMesPipe}}</p>
+
               </p-card>
             </div>
           </div>

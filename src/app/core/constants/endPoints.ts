@@ -77,6 +77,7 @@ export class EndPoins {
     static reportes = "/reportes"
     static datosMensuales = "/datosMensualesSet42"
     static suministroCliente = "/suministro-cliente"
+    static datosMensualesExcel ="/datosMensualesSet42Excel"
 
     // ocpp
     static chargePoint = "/chargePoint"
