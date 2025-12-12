@@ -62,13 +62,9 @@ export class ReportesService {
   }
 
   // 10mo Reporte de consumo de credito 
- getConsumoCredito(rangoFechas) {
-    return this.http.get(
-      this.apiService + EndPoins.transaction + EndPoins.consumoCreditoExcel, 
-      { 
-        params: rangoFechas, 
-        responseType: 'blob' as 'json' 
-      }
+ getConsumoCredito() {
+    return this.http.get(this.apiService + EndPoins.transaction + EndPoins.consumoCreditoExcel,
+      {  responseType: 'blob' as 'json'}
     );
 }
 }

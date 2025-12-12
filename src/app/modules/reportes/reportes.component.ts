@@ -100,40 +100,39 @@ export default class ReportesComponent implements OnInit {
     );
   }
 
-  descargarDesdeCard(reporte: any) {
+descargarDesdeCard(reporte: any) {
    this.reporteActivoVisual = reporte;
-    setTimeout(() => {
-      this.reporteActivoVisual = null; 
-    }, 300); 
-    
-    this.reporteSeleccionado = reporte; 
-    
-    // 1. Validar si es reporte mensual (que no usa rango de fechas)
-    const esReporteMensual = reporte.nombre === 'Set42 - Datos mensuales de electrolineras' || reporte.nombre === reports.labelReporte8;
+   setTimeout(() => {
+     this.reporteActivoVisual = null; 
+   }, 300); 
+   
+   this.reporteSeleccionado = reporte; 
+   
+   // 1. Validar si es reporte mensual (que no usa rango de fechas)
+   const esReporteMensual = reporte.nombre === reports.labelReporte8 || reporte.nombre === reports.labelReporte10; // <-- AÑADIDO REPORTE 10
 
-    // 2. Validar fechas para el resto
-    if (!esReporteMensual) {
-      if (!this.rangeDates || this.rangeDates.length < 2 || !this.rangeDates[0] || !this.rangeDates[1]) {
-        this.messageService.add({ 
-            severity: 'warn', 
-            summary: 'Atención', 
-            detail: 'Por favor, seleccione un rango de fechas (Inicio y Fin).' 
-        });
-        return;
-      }
-    }
+   // 2. Validar fechas para el resto
+   if (!esReporteMensual) {
+     if (!this.rangeDates || this.rangeDates.length < 2 || !this.rangeDates[0] || !this.rangeDates[1]) {
+       this.messageService.add({ 
+           severity: 'warn', 
+           summary: 'Atención', 
+           detail: 'Por favor, seleccione un rango de fechas (Inicio y Fin).' 
+       });
+       return;
+     }
+   }
 
-    this.loading = true;
+   this.loading = true;
     //this.messageService.add({ severity: 'info', summary: 'Procesando', detail: 'Generando reporte...' });
 
-    let payload: any = {};
-    if (!esReporteMensual) {
+   let payload: any = {};
+   if (!esReporteMensual) {
        payload = {
         initialDate: moment(this.rangeDates[0]).utc().format('YYYY-MM-DD'),
         finalDate: moment(this.rangeDates[1]).utc().format('YYYY-MM-DD'),
-      };
-    }
-
+       };
+   }
     switch (reporte.nombre) {
 
       // REPORTE 1
@@ -283,32 +282,32 @@ export default class ReportesComponent implements OnInit {
         });
         break;
 
-        // NUEVO REPORTE 10: 
-      case reports.labelReporte10:
-        this.reportesService.getConsumoCredito(payload).subscribe({
-          next: (resp: any) => {
-            this.loading = false;
-            if (resp && resp.size > 0) {
-               this.excelService.descargarExcelDesdeBlob(resp, reports.archivoReporte10);
-               this.exitoDescarga();
-            } else {
-               this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'El archivo generado está vacío.' });
-            }
-          },
-          error: (err) => {
-            this.loading = false;
-            console.error(err);
-            if (err.error instanceof Blob) {
-                const reader = new FileReader();
-                reader.onload = (e: any) => {
-                    console.error('Error del backend:', e.target.result);
-                };
-                reader.readAsText(err.error);
-            }
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo descargar el archivo.' });
-          }
-        });
-        break;
+        // REPORTE 10: consumo de credito 
+     case reports.labelReporte10:
+       this.reportesService.getConsumoCredito().subscribe({
+         next: (resp: any) => {
+           this.loading = false;
+           if (resp && resp.size > 0) {
+              this.excelService.descargarExcelDesdeBlob(resp, reports.archivoReporte10); 
+              this.exitoDescarga();
+           } else {
+              this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'El archivo generado está vacío.' });
+           }
+         },
+         error: (err) => {
+           this.loading = false;
+           console.error(err);
+           if (err.error instanceof Blob) {
+              const reader = new FileReader();
+              reader.onload = (e: any) => {
+                 console.error('Error del backend:', e.target.result);
+              };
+              reader.readAsText(err.error);
+           }
+           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo descargar el archivo.' });
+         }
+       });
+       break;
 
       default:
         this.loading = false;

@@ -4,26 +4,26 @@
       <h3><b>{{tituloComponente.mainTitle}}</b></h3>
     </div>
 
-    <div class="row p-0">
-      <p-card header="" subheader="" class="p-0">
-        
-        <div class="grid p-0 justify-content-center">
-          
-          <div class="col-12 md:col-6 lg:col-4 text-center" *ngIf="reporteSeleccionado?.nombre != 'Set42 - Datos mensuales de electrolineras'">
-            <div class="flex flex-column align-items-center justify-content-center">
-                <label class="mb-2 font-bold">Rango de fechas:</label>
-                <p-calendar [(ngModel)]="rangeDates" 
-                            selectionMode="range" 
-                            [readonlyInput]="true" 
-                            dateFormat="dd/mm/yy"
-                            [showIcon]="true"
-                            [style]="{'width':'100%'}"> </p-calendar>
-            </div>
-          </div>
+<div class="row p-0">
+  <p-card header="" subheader="" class="p-0">
 
+    <div class="grid p-0 justify-content-center">
+
+      <div class="col-12 md:col-4 text-center">
+        <div class="flex flex-column align-items-center justify-content-center">
+          <label class="mb-2 font-bold">Rango de fechas:</label>
+          <p-calendar [(ngModel)]="rangeDates"
+                      selectionMode="range"
+                      [readonlyInput]="true"
+                      dateFormat="dd/mm/yy"
+                      [showIcon]="true"
+                      [style]="{'width':'250px'}"> </p-calendar>
         </div>
-      </p-card>
+      </div>
+
     </div>
+  </p-card>
+</div>
     <br>
 
   <div class="grid m-0 p-0">
