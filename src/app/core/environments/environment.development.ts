@@ -2,7 +2,7 @@ export const environment = {
     production: false,
     // apiUrl: 'http://localhost:8050/electrolinerasbackend', // server localhost
     // apiUrl: 'http://10.241.74.31:8050/electrolinerasbackend', // server ende ip
-    apiUrl: 'https://test-dlpelectrolineras.et.bo/electrolinerasbackend', // server test
+    // apiUrl: 'https://test-dlpelectrolineras.et.bo/electrolinerasbackend', // server test
     // apiUrl: 'https://dlpelectrolineras.et.bo/electrolinerasbackend', // server test
 
     // apiUrlOcpp: 'http://localhost:8051', // server localhost

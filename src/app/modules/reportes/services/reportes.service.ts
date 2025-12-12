@@ -60,4 +60,15 @@ export class ReportesService {
   getSuministroCliente(rangoFechas) {
     return this.http.post(this.apiService + EndPoins.chargingHistory + EndPoins.suministroCliente, rangoFechas)
   }
+
+  // 10mo Reporte de consumo de credito 
+ getConsumoCredito(rangoFechas) {
+    return this.http.get(
+      this.apiService + EndPoins.transaction + EndPoins.consumoCreditoExcel, 
+      { 
+        params: rangoFechas, 
+        responseType: 'blob' as 'json' 
+      }
+    );
+}
 }

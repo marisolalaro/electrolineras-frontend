@@ -89,6 +89,7 @@ export default class ReportesComponent implements OnInit {
       { nombre: reports.labelReporte6, imagen: 'assets/img/reporte6.jpg' },
       { nombre: reports.labelReporte7, imagen: 'assets/img/reporte7.jpg' },
       { nombre: reports.labelReporte9, imagen: 'assets/img/reporte9.jpg' },
+      { nombre: reports.labelReporte10, imagen: 'assets/img/reporte10.jpg'}
     ];
   }
 
@@ -279,6 +280,33 @@ export default class ReportesComponent implements OnInit {
             }
           },
           error: (err) => this.manejarError(err)
+        });
+        break;
+
+        // NUEVO REPORTE 10: 
+      case reports.labelReporte10:
+        this.reportesService.getConsumoCredito(payload).subscribe({
+          next: (resp: any) => {
+            this.loading = false;
+            if (resp && resp.size > 0) {
+               this.excelService.descargarExcelDesdeBlob(resp, reports.archivoReporte10);
+               this.exitoDescarga();
+            } else {
+               this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'El archivo generado está vacío.' });
+            }
+          },
+          error: (err) => {
+            this.loading = false;
+            console.error(err);
+            if (err.error instanceof Blob) {
+                const reader = new FileReader();
+                reader.onload = (e: any) => {
+                    console.error('Error del backend:', e.target.result);
+                };
+                reader.readAsText(err.error);
+            }
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo descargar el archivo.' });
+          }
         });
         break;
 

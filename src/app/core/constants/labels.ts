@@ -67,6 +67,7 @@ export const reports: any = {
   numeroReporte7: 'Facturas de cargas por cliente',
   numeroReporte8: 'Set42 - Datos mensuales de electrolineras',
   numeroReporte9: 'Cargas de clientes por bloques',
+  numeroReporte10: 'Consumo de crédito',
   xReporte: 'x reporte',
   // nombre de options
   labelReporte1: 'Factura de compras y carga de energía',
@@ -78,6 +79,7 @@ export const reports: any = {
   labelReporte7: 'Facturas de cargas por cliente',
   labelReporte8: 'Set42 - Datos mensuales de electrolineras',
   labelReporte9: 'Cargas de clientes por bloques',
+  labelReporte10: 'Consumo de crédito',
   // nombre archivo de descarga
   archivoReporte1: 'factura_de_compras_y_carga_de_energía',
   archivoReporte2: 'factura_de_compras',
@@ -88,6 +90,7 @@ export const reports: any = {
   archivoReporte7: 'facturas_de_cargas_por_cliente',
   archivoReporte8: 'set42_datos_mensuales_de_electrolineras',
   archivoReporte9: 'cargas_de_clientes_por_bloques',
+  archivoReporte10:'reporte_consumo_credito',
   // nombre de la hoja
   hojaReporte1: 'factura_de_compras_y_carga_de_energía',
   hojaReporte2: 'factura_de_compras',
@@ -98,6 +101,7 @@ export const reports: any = {
   hojaReporte7: 'facturas_de_cargas_por_cliente',
   hojaReporte8: 'set42_datos_mensuales_de_electrolineras',
   hojaReporte9: 'cargas_de_clientes_por_bloques',
+  hojaReporte10: 'consumo_credito',
   // titulo dentro del excel
   tituloReporte1: 'FACTURA DE COMPRAS Y CARGA DE ENERGÍA',
   tituloReporte2: 'FACTURA DE COMPRAS',
@@ -108,6 +112,7 @@ export const reports: any = {
   tituloReporte7: 'FACTURAS DE CARGAS POR CLIENTE',
   tituloReporte8: 'DATOS DE OPERACIÓN EN ELECTROLINERA',
   tituloReporte9: 'CARGAS DE CLIENTES POR BLOQUES',
+  tituloReporte10: 'CONSUMO DE CREDITO',
 
   tituloAgrupador1Reporte3: 'Facturas Compra Venta Crédito',
   tituloAgrupador2Reporte3: 'Facturas Suministro de Energía',

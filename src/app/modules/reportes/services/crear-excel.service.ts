@@ -1436,4 +1436,5 @@ export class CrearExcelService {
     
     return mapeo[modoCarga] || modoCarga;
   }
+
 }
