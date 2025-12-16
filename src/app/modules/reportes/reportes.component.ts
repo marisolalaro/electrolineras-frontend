@@ -109,7 +109,7 @@ descargarDesdeCard(reporte: any) {
    this.reporteSeleccionado = reporte; 
    
    // 1. Validar si es reporte mensual (que no usa rango de fechas)
-   const esReporteMensual = reporte.nombre === reports.labelReporte8 || reporte.nombre === reports.labelReporte10; // <-- AÑADIDO REPORTE 10
+   const esReporteMensual = reporte.nombre === reports.labelReporte8 || reporte.nombre === reports.labelReporte10; 
 
    // 2. Validar fechas para el resto
    if (!esReporteMensual) {
