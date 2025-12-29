@@ -56,6 +56,8 @@ export class EndPoins {
     // Charging History
     static chargingHistory = "/chargingHistory"
     static findByClientUser = "/findByClientUser"
+    static getDataToPrediction = "/chargingHistoryToPrediction"
+
     // mobile
     static mobile = "/mobile"
     static chargingStations = "/chargingStations"

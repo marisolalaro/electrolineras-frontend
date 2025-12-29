@@ -99,7 +99,11 @@
                 tooltipPosition="bottom"></i> &nbsp;
 
               <i class="pi pi-eye" style="font-size: 1.5rem; color: var(--blue-600);" data-bs-toggle="modal"
-                (click)="onDialogDetalles(rowData)" pTooltip="Ver Detalles" tooltipPosition="bottom"></i>
+                (click)="onDialogDetalles(rowData)" pTooltip="Ver Detalles" tooltipPosition="bottom"></i>&nbsp;
+
+              <i class="pi pi-chart-line" style="font-size: 1.5rem; color: var(--decorative-color);"
+                data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="onVerPrediccion(rowData);" pTooltip="Ver Mapa"
+                tooltipPosition="bottom"></i> &nbsp;
             </td>
           </tr>
         </ng-template>
@@ -652,6 +656,50 @@
       </p-dialog>
     </div>
     <!-- modal Detalle Registro -->
+
+    <!-- modal predictor -->
+   <div class="row">
+    <p-dialog 
+        header="{{titlesGlobales.estimacionConsumo}}" 
+        [(visible)]="prediccionVisible"
+        [style]="{width: '60vw', height: '70vh'}" 
+        [contentStyle]="{'height': '100%', 'overflow': 'hidden'}" 
+        class="p-fluid" 
+        [dismissableMask]="true"
+        [breakpoints]="{ '1199px': '75vw', '765px': '90vw' }" 
+        [draggable]="false" 
+        [resizable]="false">
+
+        <ng-template pTemplate="content">
+            <div class="card" style="height: 100%; display: flex; flex-direction: column;">
+                
+                <div style="flex-grow: 1; position: relative; width: 100%; min-height: 0;" *ngIf="!analizandoDatos">
+                    <p-chart 
+                        type="line" 
+                        [data]="chartData" 
+                        [options]="chartOptions" 
+                        height="100%" 
+                        width="100%">
+                    </p-chart>
+                </div>
+
+                <div style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;" *ngIf="analizandoDatos">
+                    <i class="pi pi-bolt" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                    <h5 style="margin-bottom: 0.5rem; color: var(--text-color);">Analizando patrones de consumo...</h5>
+                    <p style="margin-bottom: 1.5rem; color: var(--text-color-secondary); font-size: 0.9rem;">
+                        La IA está generando la predicción para las próximas 24 horas.
+                    </p>
+                    <div style="width: 60%;">
+                        <p-progressBar mode="indeterminate" [style]="{ height: '6px' }"></p-progressBar>
+                    </div>
+                </div>
+
+            </div>
+        </ng-template>
+
+    </p-dialog>
+</div>
+    <!-- modal predictor -->
 
   </div>
 </div>

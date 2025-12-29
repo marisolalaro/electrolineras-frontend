@@ -33,6 +33,10 @@ import { ConnectorStatusService } from 'src/app/core/services/connector-status.s
 import { ModelElectricStation } from 'src/app/core/model/model-electric-station';
 import { Address } from 'src/app/core/model/address';
 import { ValidaToken } from 'src/app/core/utils/verificarToken';
+//import { log } from 'console';
+import { ChargingHistoryService } from 'src/app/core/services/charging-history.service';
+import { AgenteIaService } from 'src/app/core/services/agente-ia.service';
+import { ChartModule } from 'primeng/chart';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -46,7 +50,9 @@ interface AutoCompleteCompleteEvent {
   styleUrls: ['./electric-stations.component.scss'],
   providers: [
     MessageService,
-    ConfirmationService
+    ConfirmationService,
+    ChargingHistoryService,
+    AgenteIaService
   ],
   imports: [
     ElectricStationsModule,
@@ -57,6 +63,7 @@ interface AutoCompleteCompleteEvent {
     NgClass,
     NgSwitch,
     NgSwitchCase,
+    ChartModule
   ],
 })
 
@@ -67,6 +74,7 @@ export default class ElectricStationsComponent implements OnInit {
   public loading: boolean = true;
   public submitted: boolean = false;
   public mapaVisible: boolean = false;
+  public prediccionVisible: boolean = false;
   public esSuperAdmin: boolean = false;
   public serviceResponse: boolean = true;
 
@@ -126,6 +134,11 @@ export default class ElectricStationsComponent implements OnInit {
   public campoLatitude: string = '';
   public campoLongitude: string = '';
   public bodyFilter: BodyFilterModel = new BodyFilterModel(this.page, this.itemsPerPage, 0, 0);
+// Variables para el gráfico
+  public chartData: any;
+  public chartOptions: any;
+  public analizandoDatos: boolean = false;
+
 
   constructor(
     public global: Global,
@@ -138,6 +151,8 @@ export default class ElectricStationsComponent implements OnInit {
     public portConnectorService: PortConnectionService,
     private connectorStatusService: ConnectorStatusService,
     public electricStationsService: ElectricStationsService,
+    private chargingHistoryService: ChargingHistoryService,
+    private agenteIaService: AgenteIaService,
   ) { }
 
   ngOnInit(): void {
@@ -148,8 +163,10 @@ export default class ElectricStationsComponent implements OnInit {
         {nombre: "CONECTOR DE CARGA 1"},{nombre: "CONECTOR DE CARGA 2"},
       ]
       this.getAllElectricStations();
+      this.initChartOptions();
     } else {
       this.router.navigate(['']);
+      
     }
     
   }
@@ -180,6 +197,37 @@ export default class ElectricStationsComponent implements OnInit {
       }
     )
   }
+
+  getDataToPrediccion(idElectricStation: number) {
+    this.analizandoDatos = true;
+    
+    this.chargingHistoryService.getDataToPrediction(idElectricStation).subscribe(
+      (resp: any) => {
+        if (resp) {
+          this.agenteIaService.obtenerPrediccionIa(resp.data).subscribe(
+            (respIa: any) => {
+               this.analizandoDatos = false;
+              let textoLimpio = respIa.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, "").trim();
+              try {
+                const objetoJson = JSON.parse(textoLimpio);
+                console.log("Fecha inicio:", objetoJson.prediction_start);
+                console.log("Predicciones:", objetoJson.predictions);
+                this.processPredictionData(objetoJson.predictions);
+              } catch (error) {
+                console.error("Error al parsear el JSON:", error);
+              }
+
+            }, err => {
+          this.analizandoDatos = false;
+            }
+          )
+        }
+      }, err => {
+         this.analizandoDatos = false;
+      }
+    )
+  }
+
 
   filterTasaCarga(event: AutoCompleteCompleteEvent) {
     let filtered: any[] = [];
@@ -455,6 +503,14 @@ export default class ElectricStationsComponent implements OnInit {
     this.longitude = parseFloat(rowData.longitude);
   }
 
+  onVerPrediccion(rowData) {
+    this.getDataToPrediccion(rowData.id);
+     this.prediccionVisible = true;
+    // this.latitude = parseFloat(rowData.latitude);
+    // this.longitude = parseFloat(rowData.longitude);
+    console.log(" ver prediccion");
+  }
+
   openDialog(state: any, stateSubmitted?: any, tipo?: any) {
     if (tipo == 'crear') {
       this.dialogRegistro = state;
@@ -474,6 +530,10 @@ export default class ElectricStationsComponent implements OnInit {
 
   cerrarMapa(event) {
     this.mapaVisible = false
+  }
+
+  cerrarPrediccion(event) {
+    this.prediccionVisible = false
   }
 
   customSort(event) {
@@ -536,5 +596,145 @@ export default class ElectricStationsComponent implements OnInit {
     this.campoLatitude = '';
     this.campoLongitude = '';
   }
+/// ESTO PARA GRAFICAR LA PREDICCIOON
 
+processPredictionData(predictions: any[]) {
+    if (!predictions || predictions.length === 0) return;
+
+    // 1. Preparamos los arrays de datos
+    const labels = [];
+    const dataMedia = [];
+    const dataSuperior = [];
+    const dataInferior = [];
+    
+    // (Opcional) Valor para la línea roja de capacidad máxima (ej: 65 o el máximo de tus datos)
+    const capacidadMaxima = 65; 
+    const dataCapacidad = [];
+
+  predictions.forEach(p => {
+    // Formato de hora (ej: "17:00")
+    const fechaReal = new Date(p.timestamp);
+
+    // 2. Ahora sí puedes usar toLocaleTimeString sobre 'fechaReal'
+    const horaFormateada = fechaReal.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+      labels.push(horaFormateada);
+
+      // Línea principal
+      dataMedia.push(p.consumption_estimated);
+
+      // Banda de error (Superior e Inferior)
+      // Aseguramos que no sea menor a 0 si la lógica lo requiere
+      const inferior = Math.max(0, p.consumption_estimated - p.margin_error); 
+      const superior = p.consumption_estimated + p.margin_error;
+
+      dataInferior.push(inferior);
+      dataSuperior.push(superior);
+      
+      // Línea constante roja
+      dataCapacidad.push(capacidadMaxima);
+    });
+
+    // 2. Construimos el objeto para PrimeNG
+    this.chartData = {
+      labels: labels,
+      datasets: [
+        // Dataset 0: Límite Inferior (Invisible, solo sirve de tope)
+        {
+          label: 'Límite Inferior',
+          data: dataInferior,
+          fill: false, // No rellenar hacia abajo
+          borderColor: 'transparent',
+          pointRadius: 0,
+          tension: 0.4
+        },
+        // Dataset 1: Límite Superior (Rellena hasta el dataset 0)
+        {
+          label: 'Margen de Error',
+          data: dataSuperior,
+          fill: '-1', // <--- TRUCO: Rellena hasta el dataset anterior (índice 0)
+          borderColor: 'transparent', // Borde transparente para que no se vea línea arriba
+          backgroundColor: 'rgba(59, 130, 246, 0.2)', // Azul clarito transparente
+          pointRadius: 0,
+          tension: 0.4
+        },
+        // Dataset 2: Predicción Media (Línea Azul visible)
+        {
+          label: 'Predicción Media (kWh)',
+          data: dataMedia,
+          fill: false,
+          borderColor: '#3B82F6', // Azul fuerte
+          backgroundColor: '#3B82F6',
+          tension: 0.4,
+          pointBackgroundColor: '#ffffff',
+          pointBorderColor: '#3B82F6',
+          pointBorderWidth: 2,
+          pointRadius: 4
+        },
+        // Dataset 3: Capacidad Máxima (Línea Roja Punteada)
+        {
+          label: 'Capacidad Máxima',
+          data: dataCapacidad,
+          fill: false,
+          borderColor: '#EF4444', // Rojo
+          borderDash: [5, 5], // Punteado
+          pointRadius: 0,
+          tension: 0
+        }
+      ]
+    };
+  }
+
+  initChartOptions() {
+    const documentStyle = getComputedStyle(document.documentElement);
+    const textColor = documentStyle.getPropertyValue('--text-color');
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+
+    this.chartOptions = {
+      maintainAspectRatio: false,
+      responsive: true,
+      aspectRatio: 0.6,
+      plugins: {
+        legend: {
+          labels: {
+            color: textColor
+          },
+          // Ocultamos el label del límite inferior para que no salga en la leyenda
+          filter: function(item, chart) {
+            return item.text !== 'Límite Inferior';
+          }
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: textColorSecondary
+          },
+          grid: {
+            color: surfaceBorder,
+            drawBorder: false
+          }
+        },
+        y: {
+          ticks: {
+            color: textColorSecondary
+          },
+          grid: {
+            color: surfaceBorder,
+            drawBorder: false
+          },
+          min: 0 // Empezar en 0
+        }
+      }
+    };
+  }
 }
+

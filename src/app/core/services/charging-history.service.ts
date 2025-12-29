@@ -17,4 +17,8 @@ export class ChargingHistoryService {
     return this.http.get(this.apiService + EndPoins.findByClientUser + '/' + idClient);
   }
 
+  getDataToPrediction(idElectricStation: number) {
+    return this.http.get(this.apiService + EndPoins.getDataToPrediction + '/' + idElectricStation);
+  }
+
 }

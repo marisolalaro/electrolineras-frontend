@@ -129,6 +129,7 @@ export const titles: any = {
   detail: 'Detalle registro',
   info: 'Detalle Información',
   createConnector: 'Adicionar Conector',
+  estimacionConsumo: 'Estimación de Consumo (Próximas 24h)',
 }
 
 export const buttons: any = {
