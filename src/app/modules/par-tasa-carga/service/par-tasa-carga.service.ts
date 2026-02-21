@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { EndPoins } from 'src/app/core/constants/endPoints';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,10 @@ export class ParTasaCargaService {
   }
 
   getAllChargeRate() {
-    return this.http.get(this.apiService + EndPoins.getAll);
+   return this.http.get(this.apiService + EndPoins.getAll).pipe(
+      map((response: any[]) => {
+        return response.filter(item => item.activo === true);
+      })
+    );
   }
 }

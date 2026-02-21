@@ -50,10 +50,10 @@
               Código
               <p-sortIcon field="codigoDescripcion" (click)="customSort('codigoDescripcion', orden)"></p-sortIcon>
             </th>
-            <th style="text-align:center; vertical-align:middle" pSortableColumn="'urlFacturaSiat'">
+            <!-- <th style="text-align:center; vertical-align:middle" pSortableColumn="'urlFacturaSiat'">
               URL Factura
               <p-sortIcon field="urlFacturaSiat" (click)="customSort('urlFacturaSiat', orden)"></p-sortIcon>
-            </th>
+            </th> -->
             <th style="text-align:center; vertical-align:middle" pSortableColumn="'nombreRazonSocial'" rowspan="2">
               Opciones
             </th>
@@ -73,10 +73,10 @@
               <input pInputText type="text" (input)="applyFilter($event, 'codigoDescripcion', 'contains')"
                 placeholder="Busca codigo" class="w-full" [(ngModel)]="campoCodigoDescripcion">
             </th>
-            <th>
+            <!-- <th>
               <input pInputText type="text" (input)="applyFilter($event, 'urlFacturaSiat', 'contains')"
                 placeholder="Busca url" class="w-full" [(ngModel)]="campoUrlFacturaSiat">
-            </th>
+            </th> -->
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
@@ -97,12 +97,12 @@
             <td style="text-align:right; vertical-align:middle">{{rowData['idPaymentTransactionElectrolinera'].amount |
               numberDecimal:2}}</td>
             <td style="text-align:center; vertical-align:middle">{{rowData['codigoDescripcion']}}</td>
-            <td style="text-align:center; vertical-align:middle">
+            <!-- <td style="text-align:center; vertical-align:middle">
               <a href="{{rowData['urlFacturaSiat']}}" target="_blank">Factura Siat</a>
-            </td>
+            </td> -->
             <td style="text-align:center; vertical-align:middle">
-              <i class="pi pi-file-pdf" style="font-size: 1.5rem; color: var(--pdf)" (click)="onOpenFactura(rowData)"
-                tooltipPosition="top" pTooltip="Ver Factura"></i>
+              <!-- <i class="pi pi-file-pdf" style="font-size: 1.5rem; color: var(--pdf)" (click)="onOpenFactura(rowData)"
+                tooltipPosition="top" pTooltip="Ver Factura"></i> -->
               &nbsp;
               <i class="pi pi-qrcode" style="font-size: 1.5rem; color: var(--primary-color)"
                 (click)="onOpenImagenQR(rowData)" tooltipPosition="top" pTooltip="Ver QR"></i>

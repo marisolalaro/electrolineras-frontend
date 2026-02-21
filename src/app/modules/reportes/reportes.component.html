@@ -9,7 +9,7 @@
 
     <div class="grid p-0 justify-content-center">
 
-      <div class="col-12 md:col-4 text-center">
+      <div class="col-12 md:col-2 text-center">
         <div class="flex flex-column align-items-center justify-content-center">
           <label class="mb-2 font-bold">Rango de fechas:</label>
           <p-calendar [(ngModel)]="rangeDates"
@@ -27,7 +27,7 @@
     <br>
 
   <div class="grid m-0 p-0">
-      <div class="card flex justify-content-center col-12 lg:col-4 md:col-6 sm:col-12"
+      <div class="card flex justify-content-center col-12 md:col-4 "
         *ngFor="let reporte of tiposReportes">
         
         <p-card [header]="reporte.nombre" 

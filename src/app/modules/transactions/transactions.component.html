@@ -53,7 +53,7 @@
             <th style="text-align:center; vertical-align:middle" pSortableColumn="'receiverDocument'">Documento
               Recibido<p-sortIcon field="receiverDocument" (click)="customSort('receiverDocument', orden)"></p-sortIcon>
             </th>
-            <th style="text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
+            <!-- <th style="text-align:center; vertical-align:middle" rowspan="2">Opciones</th> -->
           </tr>
           <tr>
             <th>
@@ -112,10 +112,10 @@
             <td style="text-align:center; vertical-align:middle" class="uppercase">{{rowData['placaVehiculo']}}</td>
             <td style="text-align:center; vertical-align:middle" class="uppercase">{{rowData['receiverBank']}}</td>
             <td style="text-align:center; vertical-align:middle" class="uppercase">{{rowData['receiverDocument']}}</td>
-            <td style="text-align:center; vertical-align:middle">
+            <!-- <td style="text-align:center; vertical-align:middle">
               <i class="pi pi-qrcode" style="font-size: 1.5rem; color: var(--primary-color)"
                 (click)="onOpenImagenQR(rowData)" tooltipPosition="left" pTooltip="Ver QR"></i>
-            </td>
+            </td> -->
           </tr>
         </ng-template>
       </p-table>
@@ -125,12 +125,12 @@
       </p-paginator>
     </div>
 
-    <div class="row">
+    <!-- <div class="row">
       <p-dialog header={{titulosGlobales.info}} [(visible)]="visible" [breakpoints]="{ '960px': '75vw' }"
         [draggable]="false" [resizable]="false" [draggable]="false" [resizable]="false" [modal]="true">
         <img *ngIf="imageUrl" [src]="imageUrl" alt="Converted Image" />
       </p-dialog>
-    </div>
+    </div> -->
 
     <div *ngIf="!serviceResponse">
       <app-not-found [mensajeNotFound]="mensaje" (datosEnviados)="getTransactions(true)"></app-not-found>

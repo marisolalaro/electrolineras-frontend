@@ -28,9 +28,7 @@ export class AgenteIaService {
       "fechaHoraActual": new Date().toISOString(), // Genera formato "2024-12-25T10:00:00.000Z"
      "data": semillas
     };
-    // CORRECCIÓN CLAVE:
-    // Si 'semillas' es un objeto o array, lo convertimos a texto plano.
-    // Si ya es un string, lo dejamos tal cual.
+   
     const semillasComoTexto = typeof semillasModificadas === 'string' ? semillasModificadas : JSON.stringify(semillasModificadas);
 
     const systemInstructionText = `Eres un experto en análisis de series temporales y predicción de consumo energético.

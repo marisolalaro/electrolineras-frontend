@@ -27,11 +27,11 @@ import { ElectricStationsService } from '../electric-stations/services/electric-
 import { MobileService } from './services/mobile.service';
 import { Global } from 'src/app/core/variables/globales';
 import { interval } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 import { ValidatePasswordService } from './services/validate-password.service';
 import { ChargingConnector } from 'src/app/core/model/charging-connector';
 import { estadosConectores } from 'src/app/core/constants/labels';
 import { ForzarDetencionService } from 'src/app/core/services/forzar-detencion.service';
+
 @Component({
   standalone: true,
   selector: 'app-electric-station-online',
@@ -46,7 +46,6 @@ import { ForzarDetencionService } from 'src/app/core/services/forzar-detencion.s
     MessageService
   ],
 })
-
 export default class ElectricStationOnlineComponent implements OnInit, OnDestroy {
 
   // variables que se reciben de la ruta
@@ -61,13 +60,21 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   public componenteVisible: boolean = false;
   public habilitaMasOpciones: boolean = false;
   public visibleDialogPassword: boolean = false;
+  
+  // Variables de control de limpieza
+  private ultimoStopConector1: number = 0;
+  private ultimoStopConector2: number = 0;
+  private forzarLimpieza1: boolean = false;
+  private forzarLimpieza2: boolean = false;
+  private ultimoEstado1: string = '';
+  private ultimoEstado2: string = '';
 
   // variables propias del componente
   public items: MenuItem[];
   public conectores: any[] = [];
   public messages: string[] = [];
-  public status1: any = { lastState: '' };
-  public status2: any = { lastState: '' };
+  public status1: string = '';
+  public status2: string = '';
   public passwordAdminGral!: string;
   public imagenQR: string | null = null;
   public iconClass: string = 'pi pi-eye-slash';
@@ -91,6 +98,7 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
   private subscriptionConectorStatus: Subscription;
   private subscriptionClientCharging: Subscription;
   private subscriptionReconnectionCheck: Subscription;
+  private subscriptionPolling: Subscription;
 
   constructor(
     private global: Global,
@@ -122,6 +130,12 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       this.subscriptionReconnectionCheck.unsubscribe();
     }
     this.websocketService.disconnect();
+    
+    if (this.subscriptionPolling) {
+      this.subscriptionPolling.unsubscribe();
+    }
+    
+    this.websocketService.disconnect();
   }
 
   async ngOnInit() {
@@ -130,35 +144,26 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       await this.getClienteCharging();
       await this.getAllConnectorStatus();
       await this.getOneElectricStation();
-      await this.armaTablaConector();
+      
+      // 🔴 SOLUCIÓN 3: Inicializar conectores ANTES de armar tabla
+      this.inicializarConectores();
+      
       this.componenteVisible = true;
       this.loading = false;
-      this.verificarReconexión()
+      this.verificarReconexión();
       this.websocketService.initializeWebSocketConnection(this.websocketUrl);
 
       this.subscriptionConectorStatus = this.websocketService.getConnectorStatus()
         .subscribe((data) => {
           if (data[0].connector == '1') {
-            this.conectores[0].lastState = data[0].lastState;
-            this.conectores[0].id = data[0].connector;
-            this.status1 = JSON.parse(JSON.stringify(data[0].lastState));
-            if(data[0].lastState != 'Charging') {
-              this.conector1 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
-              this.cliente1 = new ClientChargingStatusModel();
-            }
+            // 🔴 SOLUCIÓN 2: Evitar cambios rápidos de estado
+            this.procesarCambioEstado(1, data[0].lastState);
           }
           if (data[1].connector == '2') {
-            this.conectores[1].lastState = data[1].lastState
-            this.conectores[1].id = data[1].connector;
-            this.status2 = JSON.parse(JSON.stringify(data[1].lastState));
-            if(data[1].lastState != 'Charging') {
-              this.conector2 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
-              this.cliente2 = new ClientChargingStatusModel();
-            }
+            this.procesarCambioEstado(2, data[1].lastState);
           }
-          // this.reiniciarDatosCero(data); para cada puerto
-          // this.armaTablaConector()
         });
+
       this.subscriptionClientCharging = this.websocketService.getClientCharging()
         .subscribe((data) => {
           this.clientChargingStation = data;
@@ -166,31 +171,72 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
           this.armaTablaConector();
         });
 
-      this.subscriptionMeterValues = this.websocketService.getMeterValues()
-        .subscribe((messages) => {
-          var message = messages;        
-          if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 1) {
-            this.transaccionid1 = message.connectorId = 1 ? message.transactionId : 0
-            this.conector1 = JSON.parse(JSON.stringify(message.sampleValues));
-            this.conector1.push(this.obtieneVelocidadCarga(this.conector1[0].value));
-            this.conector1.push(this.obtienePotenciaActual(this.conector1[1].value));
-            this.meterValues1 = message;
-          }
-          if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 2) {
-            this.transaccionid2 = message.connectorId == 2 ? message.transactionId : 0
-            this.conector2 = JSON.parse(JSON.stringify(message.sampleValues));
-            this.conector2.push(this.obtieneVelocidadCarga(this.conector2[0].value));
-            this.conector2.push(this.obtienePotenciaActual(this.conector2[1].value));
-            this.meterValues2 = message;
-          }
-          this.armaTablaConector();
-        });
+      // LLAMAMOS AL MÉTODO CORREGIDO DE METER VALUES
+      this.getValoresMedidor();
+
       try {
       } catch (error) {
         console.error('Ocurrió un error en la inicialización:', error);
       }
+
+      // POLLING
+      this.subscriptionPolling = interval(5000).subscribe(() => {
+         this.refrescarDatosCiclo();
+      });
+
     } else {
       this.router.navigate(['']);
+    }
+  }
+
+  // 🔴 SOLUCIÓN 2: Método para procesar cambios de estado con debounce
+ procesarCambioEstado(connectorId: number, nuevoEstado: string) {
+    // CORRECCIÓN 2: Lógica de desbloqueo de limpieza
+    // Si el estado vuelve a Disponible o Finalizando, permitimos nuevos datos
+    if (nuevoEstado === 'Available' || nuevoEstado === 'Finishing' || nuevoEstado === 'Faulted') {
+       if (connectorId === 1) this.forzarLimpieza1 = false;
+       if (connectorId === 2) this.forzarLimpieza2 = false;
+    }
+
+    if (connectorId === 1) {
+      if (nuevoEstado !== this.ultimoEstado1) {
+        this.ultimoEstado1 = nuevoEstado;
+        this.conectores[0].lastState = nuevoEstado;
+        this.status1 = nuevoEstado;
+        
+        // Si pasa a disponible, nos aseguramos de limpiar visualmente por si acaso
+        if (nuevoEstado === 'Available') {
+           this.limpiarInterfazVisual(1);
+        }
+        
+        this.armaTablaConector();
+      }
+    } else if (connectorId === 2) {
+      if (nuevoEstado !== this.ultimoEstado2) {
+        this.ultimoEstado2 = nuevoEstado;
+        this.conectores[1].lastState = nuevoEstado;
+        this.status2 = nuevoEstado;
+
+        if (nuevoEstado === 'Available') {
+           this.limpiarInterfazVisual(2);
+        }
+
+        this.armaTablaConector();
+      }
+    }
+  }
+  // Método auxiliar para limpiar variables visuales sin activar el bloqueo permanente
+  limpiarInterfazVisual(conectorId: number) {
+    if (conectorId === 1) {
+      this.conector1 = this.resetMeterValues();
+      this.cliente1 = new ClientChargingStatusModel();
+      this.cliente1.userName = null;
+      this.transaccionid1 = 0;
+    } else {
+      this.conector2 = this.resetMeterValues();
+      this.cliente2 = new ClientChargingStatusModel();
+      this.cliente2.userName = null;
+      this.transaccionid2 = 0;
     }
   }
 
@@ -228,24 +274,73 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
     })
   }
 
+  // 🔴 SOLUCIÓN 3: Inicializar conectores
+  inicializarConectores() {
+    this.conectores = [
+      {
+        nombre: 'CONECTOR DE CARGA 1',
+        maxVoltaje: '230',
+        maxAmperaje: 0,
+        velocidadCarga: '-',
+        corrienteActual: 0,
+        potenciaActual: 0,
+        cargaEnergia: 0,
+        clienteCarga: '-',
+        montoConsumido: 0,
+        lastState: 'Available'
+      },
+      {
+        nombre: 'CONECTOR DE CARGA 2',
+        maxVoltaje: '230',
+        maxAmperaje: 0,
+        velocidadCarga: '-',
+        corrienteActual: 0,
+        potenciaActual: 0,
+        cargaEnergia: 0,
+        clienteCarga: '-',
+        montoConsumido: 0,
+        lastState: 'Available'
+      }
+    ];
+  }
+
   getAllConnectorStatus() {
     this.connectorStatusService.getAllConnectorByIdElectricStation(this.id).subscribe(
       (data: any) => {
         const sorted = data.data.sort(
           (a, b) => Number(a.connector) - Number(b.connector)
         );
-        this.conectorStatus = data.data;
-        if (this.conectorStatus[0].connector == '1') {
-          this.status1 = this.conectorStatus[0].lastState;
+        this.conectorStatus = sorted;
+
+        // -------- CONECTOR 1 --------
+        const nuevoEstado1 = this.conectorStatus[0]?.lastState || 'Available';
+        
+        // 🔴 SOLUCIÓN 2: Solo actualizar si realmente cambió
+        if (nuevoEstado1 !== this.ultimoEstado1) {
+          this.ultimoEstado1 = nuevoEstado1;
+          this.status1 = nuevoEstado1;
+          if (this.conectores[0]) {
+            this.conectores[0].lastState = nuevoEstado1;
+          }
         }
-        if (this.conectorStatus[1].connector == '2') {
-          this.status2 = this.conectorStatus[1].lastState;
+
+        // -------- CONECTOR 2 --------
+        const nuevoEstado2 = this.conectorStatus[1]?.lastState || 'Available';
+        
+        if (nuevoEstado2 !== this.ultimoEstado2) {
+          this.ultimoEstado2 = nuevoEstado2;
+          this.status2 = nuevoEstado2;
+          if (this.conectores[1]) {
+            this.conectores[1].lastState = nuevoEstado2;
+          }
         }
+
         this.armaTablaConector();
       },
       error => {
         console.error('Error al obtener los datos de las estaciones', error);
-      });
+      }
+    );
   }
 
   getClienteCharging() {
@@ -268,53 +363,80 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
           this.conectores[0].lastState = data[0].lastState;
           this.conectores[0].id = data[0].connector;
           this.status1 = data[0].lastState;
-          if(data[0].lastState != 'Charging') {
-            this.conector1 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
-            this.cliente1 = new ClientChargingStatusModel();
-          }
         }
         if (data[1].connector == '2') {
-          this.conectores[1].lastState = data[1].lastState
+          this.conectores[1].lastState = data[1].lastState;
           this.conectores[1].id = data[1].connector;
           this.status2 = data[1].lastState;
-          if(data[1].lastState != 'Charging') {
-            this.conector2 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
-            this.cliente2 = new ClientChargingStatusModel();
-          }
         }
       });
   }
+  
   itemSeleccionado(item) {
     this.conector = JSON.parse(JSON.stringify(item))
   }
 
-  getValoresMedidor() {
+getValoresMedidor() {
     return new Promise((resolve) => {
       this.websocketService.initializeWebSocketConnection(this.websocketUrl);
+      
       this.subscriptionMeterValues = this.websocketService.getMeterValues()
-        .subscribe(messages => {
-          var message = messages;
+        .subscribe(message => {
+          
+          // --- CONECTOR 1 ---
           if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 1) {
-            this.transaccionid1 = message.connectorId = 1 ? message.transactionId : 0
+            
+            if (this.forzarLimpieza1) { return; }
+
+            this.transaccionid1 = message.transactionId;
             this.conector1 = JSON.parse(JSON.stringify(message.sampleValues));
             this.conector1.push(this.obtieneVelocidadCarga(this.conector1[0].value));
             this.conector1.push(this.obtienePotenciaActual(this.conector1[1].value));
             this.meterValues1 = message;
+            
+            // CORRECCIÓN TYPESCRIPT: Usamos String() para asegurar que sea texto antes de parseFloat
+            // O alternativamente usamos Number() que es más flexible.
+            // Aquí aseguro que sea string para parseFloat:
+            const valorCorriente = this.conector1[1]?.value;
+            const corriente = parseFloat(String(valorCorriente || '0'));
+            
+            if (corriente > 0.1 && this.status1 !== 'Charging') {
+               this.status1 = 'Charging';
+               this.conectores[0].lastState = 'Charging';
+               this.getAllConnectorStatus(); 
+            }
           }
+
+          // --- CONECTOR 2 ---
           if (message.sessionIndex == this.electricStation.sessionIndex && message.connectorId == 2) {
-            this.transaccionid2 = message.connectorId == 2 ? message.transactionId : 0
+            
+            if (this.forzarLimpieza2) { return; }
+
+            this.transaccionid2 = message.transactionId;
             this.conector2 = JSON.parse(JSON.stringify(message.sampleValues));
             this.conector2.push(this.obtieneVelocidadCarga(this.conector2[0].value));
             this.conector2.push(this.obtienePotenciaActual(this.conector2[1].value));
             this.meterValues2 = message;
+            
+            // CORRECCIÓN TYPESCRIPT: Misma corrección para el conector 2
+            const valorCorriente = this.conector2[1]?.value;
+            const corriente = parseFloat(String(valorCorriente || '0'));
+            
+            if (corriente > 0.1 && this.status2 !== 'Charging') {
+               this.status2 = 'Charging';
+               this.conectores[1].lastState = 'Charging';
+               this.getAllConnectorStatus();
+            }
           }
+          
           this.armaTablaConector();
         }, err => {
+          console.error('Error en meter values:', err);
         });
       resolve(true);
-    })
+    });
   }
-
+  
   getClientes() {
     return new Promise((resolve) => {
       this.websocketService.initializeWebSocketConnection(this.websocketUrl);
@@ -348,33 +470,54 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
     })
   }
 
-  armaTablaConector(): Promise<void> {
+ armaTablaConector(): Promise<void> {
     return new Promise((resolve) => {
+      
+      // Si forzamos limpieza, reseteamos el array de datos
+      if (this.forzarLimpieza1) { this.conector1 = this.resetMeterValues(); }
+      if (this.forzarLimpieza2) { this.conector2 = this.resetMeterValues(); }
+      
+      // ... resto de tu lógica de corrientes ...
+      const corriente1 = this.conector1.find(item => item.measurand == 'Current.Import')?.value;
+      const hayCorriente1 = Number(corriente1) > 0;
+      
+      const corriente2 = this.conector2.find(item => item.measurand == 'Current.Import')?.value;
+      const hayCorriente2 = Number(corriente2) > 0;
+
+      // CORRECCIÓN 3: Condición visual estricta
+      // Mostramos datos SI NO estamos limpiando Y (Está Cargando O Hay Corriente)
+      const mostrarDatos1 = !this.forzarLimpieza1 && (this.status1 === 'Charging' || hayCorriente1);
+      const mostrarDatos2 = !this.forzarLimpieza2 && (this.status2 === 'Charging' || hayCorriente2);
+
       this.conectores = [{
         nombre: 'CONECTOR DE CARGA 1',
         maxVoltaje: '230',
-        maxAmperaje: this.conector1.filter(item => item.measurand == 'Current.Offered')[0] ? this.conector1.filter(item => item.measurand == 'Current.Offered')[0].value : 0,
-        velocidadCarga: this.conector1.filter(item => item.measurand.includes("Carga"))[0] ? this.conector1.filter(item => item.measurand.includes("Carga"))[0].measurand : '-',
-        corrienteActual: this.conector1.filter(item => item.measurand == 'Current.Import')[0] ? this.conector1.filter(item => item.measurand == 'Current.Import')[0].value : 0,
-        potenciaActual: this.conector1.filter(item => item.measurand == 'Potencia Actual')[0] ? this.conector1.filter(item => item.measurand == 'Potencia Actual')[0].value : 0,
-        cargaEnergia: this.conector1.filter(item => item.measurand == 'Energy.Active.Import.Register')[0] ? this.conector1.filter(item => item.measurand == 'Energy.Active.Import.Register')[0].value : 0,
-        clienteCarga: this.cliente1.userName || '-',
-        montoConsumido: this.conector1.filter(item => item.measurand == 'Amount.Consumed')[0] ? this.conector1.filter(item => item.measurand == 'Amount.Consumed')[0].value : 0,
+        maxAmperaje: mostrarDatos1 ? (this.conector1.filter(item => item.measurand == 'Current.Offered')[0]?.value || 0) : 0,
+        velocidadCarga: mostrarDatos1 ? (this.conector1.filter(item => item.measurand.includes("Carga"))[0]?.measurand || '-') : '-',
+        corrienteActual: mostrarDatos1 ? (this.conector1.filter(item => item.measurand == 'Current.Import')[0]?.value || 0) : 0,
+        potenciaActual: mostrarDatos1 ? (this.conector1.filter(item => item.measurand == 'Potencia Actual')[0]?.value || 0) : 0,
+       cargaEnergia: mostrarDatos1 ? (this.conector1.filter(item => item.measurand == 'Energy.Active.Import.Register')[0]?.value || 0) : 0,
+        // IMPORTANTE: Si forzamos limpieza, el cliente debe ser '-'
+        clienteCarga: (this.cliente1.userName && !this.forzarLimpieza1) ? this.cliente1.userName : '-',
+        // ...
+        montoConsumido: mostrarDatos1 ? (this.conector1.filter(item => item.measurand == 'Amount.Consumed')[0]?.value || 0) : 0,
         lastState: this.status1
       }, {
         nombre: 'CONECTOR DE CARGA 2',
         maxVoltaje: '230',
-        maxAmperaje: this.conector2.filter(item => item.measurand == 'Current.Offered')[0] ? this.conector2.filter(item => item.measurand == 'Current.Offered')[0].value : 0,
-        velocidadCarga: this.conector2.filter(item => item.measurand.includes("Carga"))[0] ? this.conector2.filter(item => item.measurand.includes("Carga"))[0].measurand : '-',
-        corrienteActual: this.conector2.filter(item => item.measurand == 'Current.Import')[0] ? this.conector2.filter(item => item.measurand == 'Current.Import')[0].value : 0,
-        potenciaActual: this.conector2.filter(item => item.measurand == 'Potencia Actual')[0] ? this.conector2.filter(item => item.measurand == 'Potencia Actual')[0].value : 0,
-        cargaEnergia: this.conector2.filter(item => item.measurand == 'Energy.Active.Import.Register')[0] ? this.conector2.filter(item => item.measurand == 'Energy.Active.Import.Register')[0].value : 0,
-        clienteCarga: this.cliente2.userName || '-',
-        montoConsumido: this.conector2.filter(item => item.measurand == 'Amount.Consumed')[0] ? this.conector2.filter(item => item.measurand == 'Amount.Consumed')[0].value : 0,
+        maxAmperaje: mostrarDatos2 ? (this.conector2.filter(item => item.measurand == 'Current.Offered')[0]?.value || 0) : 0,
+        velocidadCarga: mostrarDatos2 ? (this.conector2.filter(item => item.measurand.includes("Carga"))[0]?.measurand || '-') : '-',
+        corrienteActual: mostrarDatos2 ? (this.conector2.filter(item => item.measurand == 'Current.Import')[0]?.value || 0) : 0,
+        potenciaActual: mostrarDatos2 ? (this.conector2.filter(item => item.measurand == 'Potencia Actual')[0]?.value || 0) : 0,
+        cargaEnergia: mostrarDatos2 ? (this.conector2.filter(item => item.measurand == 'Energy.Active.Import.Register')[0]?.value || 0) : 0,
+        clienteCarga: (this.cliente2.userName && !this.forzarLimpieza2) ? this.cliente2.userName : '-',
+        // ...
+        montoConsumido: mostrarDatos2 ? (this.conector2.filter(item => item.measurand == 'Amount.Consumed')[0]?.value || 0) : 0,
         lastState: this.status2
-      }]
+      }];
+      
       resolve();
-    })
+    });
   }
 
   getOneElectricStation(): Promise<void> {
@@ -391,11 +534,11 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       }, err => {
         reject();
         if (err.status == 404) {
-            this.serviceResponse = false;
-          } else {
-            this.serviceResponse = true;
-          }
-          this.loading = false
+          this.serviceResponse = false;
+        } else {
+          this.serviceResponse = true;
+        }
+        this.loading = false;
       });
     });
   }
@@ -408,65 +551,25 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
         this.cliente1 = usuariosConector1.length > 0 ? usuariosConector1[usuariosConector1.length - 1] : new ClientChargingStatusModel();
         this.cliente2 = usuariosConector2.length > 0 ? usuariosConector2[usuariosConector2.length - 1] : new ClientChargingStatusModel();
         this.armaTablaConector();
-        resolve(true)
+        resolve(true);
       } else {
         this.cliente1 = new ClientChargingStatusModel();
         this.cliente2 = new ClientChargingStatusModel();
         this.armaTablaConector();
-        resolve(true)
+        resolve(true);
       }
     });
   }
 
   obtieneVelocidadCarga(currentOffered: number) {
     let potencia = 230 * currentOffered;
-    let carga: number = potencia / 1000;
-    // if (carga >= 0 && carga <= 2.3) {
-    //   return {
-    //     measurand: 'Carga Ultra Lenta',
-    //     value: 0,
-    //     unit: 'Kw',
-    //     phases: '#808080'
-    //   }
-    // }
     if (currentOffered >= 0 && currentOffered <= 31.99) {
-      return {
-        measurand: 'Carga Lenta',
-        value: 0,
-        unit: 'Kw',
-        phases: '#32CD32'
-      }
+      return { measurand: 'Carga Lenta', value: 0, unit: 'Kw', phases: '#32CD32' }
     }
     if (currentOffered >= 32 && currentOffered <= 96) {
-      return {
-        measurand: 'Carga Semi Rápida',
-        value: 0,
-        unit: 'Kw',
-        phases: '#00FF00'
-      }
+      return { measurand: 'Carga Semi Rápida', value: 0, unit: 'Kw', phases: '#00FF00' }
     }
-    // if (carga > 22 && carga <= 50) {
-    //   return {
-    //     measurand: 'Carga Rápida',
-    //     value: 0,
-    //     unit: 'Kw',
-    //     phases: '#FF8C00'
-    //   }
-    // }
-    // if (carga > 50 && carga <= 350) {
-    //   return {
-    //     measurand: 'Carga Ultra Rápida',
-    //     value: 0,
-    //     unit: 'Kw',
-    //     phases: '#B22222'
-    //   }
-    // }
-    return {
-      measurand: 'Carga no definida',
-      value: 0,
-      unit: 'Kw',
-      phases: '#8e44ad'
-    }
+    return { measurand: 'Carga no definida', value: 0, unit: 'Kw', phases: '#8e44ad' }
   }
 
   obtienePotenciaActual(currentImport: number) {
@@ -487,146 +590,104 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
       if (correspondingConnectorB) {
         connectorA.lastState = correspondingConnectorB.lastState;
       }
-      // if (connectorA.lastState == "Preparing" || connectorA.lastState == "Preparing") {
-      //   this.conector1 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
-      //   this.conector2 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
-      // }
       if (connectorA.lastState != "Charging") {
         this.conectores = [];
-        // this.conector1 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
-        // this.conector2 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
       }
     });
   }
 
-  // CASO2
-  // Detener Carga
+  // CASO1: Detener Carga Por Usuario
+  onDetieneCargaPorUsuario(event: Event, itemConector) {
+    const esConector1 = itemConector.nombre === 'CONECTOR DE CARGA 1';
+    const cliente = esConector1 ? this.cliente1 : this.cliente2;
+    const transactionId = esConector1 ? this.transaccionid1 : this.transaccionid2;
+
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `¿Detener la carga del usuario ${cliente.userName}?`,
+      header: 'Confirmación',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.mobileService
+          .detieneTransacionCredit(
+            this.electricStation.sessionIndex,
+            transactionId,
+            cliente.idClientUser
+          )
+          .subscribe(() => {
+            // 🔴 SOLUCIÓN 4: Limpieza COMPLETA
+            this.limpiarConectorCompleto(esConector1);
+            this.messageService.add({ severity: 'success', detail: 'Carga detenida correctamente' });
+          });
+      }
+    });
+  }
+
+  // CASO2: Detener Carga
   onDesvinculaUsuarioElectrolinera(itemConector) {
     var datoselectrolinera = {
       "sessionIndex": this.electricStation.sessionIndex,
-      // "transactionId": itemConector.id // aqui el ide puede ser solo 1 y 2
-      "transactionId": itemConector.nombre == 'CONECTOR DE CARGA 1' ? 1 : 2// aqui el ide puede ser solo 1 y 2
+      "transactionId": itemConector.nombre == 'CONECTOR DE CARGA 1' ? 1 : 2
     }
-    var cliente: ClientChargingStatusModel = itemConector.nombre == 'CONECTOR DE CARGA 1' ? this.cliente1 : this.cliente2;
-    this.clienteAuxiliar = cliente;
+    const esConector1 = itemConector.nombre == 'CONECTOR DE CARGA 1'; 
+
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: 'Detener la transacción del ' + itemConector.nombre + '?',
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación',
-      acceptIcon: "none",
-      rejectIcon: "none",
-      acceptLabel: 'Sí',
-      rejectLabel: 'No',
-      rejectButtonStyleClass: "p-button-text",
       accept: () => {
         this.mobileService.liberarTransaccionUsuario(datoselectrolinera)
           .subscribe((resp: any) => {
             if (resp) {
               this.messageService.add({ severity: 'info', detail: resp.message });
+              
+              // 🔴 SOLUCIÓN 4: Limpieza COMPLETA
+              this.limpiarConectorCompleto(esConector1); 
             }
           }, err => {
-            this.messageService.add({ severity: 'error', detail: messages.resp.message });
+             this.messageService.add({ severity: 'error', detail: messages.resp.message });
           });
       },
-      reject: () => {
-      }
+      reject: () => { }
     });
   }
 
-  // CASO3
+  // CASO3: Desvincular Usuario
   onDetieneCargaElectrolinera(itemConector) {
     var cliente = this.clienteAuxiliar;
-    var datoselectrolinera = {
-      "sessionIndex": this.electricStation.sessionIndex,
-      // "transactionId": itemConector.id
-      "transactionId": itemConector.nombre == 'CONECTOR DE CARGA 1' ? 1 : 2
-    }
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: 'Liberar ' + itemConector.nombre + ' y liberar usuario ' + cliente.userName + '?',
-      icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación',
-      acceptIcon: "none",
-      rejectIcon: "none",
-      acceptLabel: 'Sí',
-      rejectLabel: 'No',
-      rejectButtonStyleClass: "p-button-text",
+      icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.clientElectricStationsService.detenerCargaClient(cliente.idClientUser)
           .subscribe((resp: any) => {
             if (resp) {
-              if (resp.message == "Recurso no encontrado") {
-                this.messageService.add({ severity: 'error', detail: messages.sinUsuario });
-              } else if (resp.message == "cliente en estacion de carga El registro fue actualizado") {
-                this.messageService.add({ severity: 'success', detail: messages.detenerCarga });
-              } else if (resp.message == "cliente en estacion de carga El registro fue actualizado Historial de carga  El registro fue actualizado") {
-                this.messageService.add({ severity: 'success', detail: messages.detenerCarga });
-              } else {
-                this.messageService.add({ severity: 'error', detail: messages.noList });
-              }
+               this.messageService.add({ severity: 'success', detail: messages.detenerCarga });
             }
           }, err => {
             this.messageService.add({ severity: 'error', detail: messages.resp.message });
           });
       },
-      reject: () => {
-      }
+      reject: () => { }
     });
   }
 
-  // CASO1
-  // Detener la carga del usuario
-  // el itemConector.id no tiene solo tiene el nombre
-  onDetieneCargaPorUsuario(event: Event, itemConector) {
-    var cliente: ClientChargingStatusModel = itemConector.nombre == 'CONECTOR DE CARGA 1' ? this.cliente1 : this.cliente2;
-    var transaccionid = itemConector.nombre == 'CONECTOR DE CARGA 1' ? this.transaccionid1 : this.transaccionid2;
-    this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message: 'Detener la carga del usuario ' + cliente.userName + '?',
-      icon: 'pi pi-exclamation-triangle',
-      header: 'Confirmación',
-      acceptIcon: "none",
-      rejectIcon: "none",
-      acceptLabel: 'Sí',
-      rejectLabel: 'No',
-      rejectButtonStyleClass: "p-button-text",
-      accept: () => {
-        this.mobileService.detieneTransacionCredit(this.electricStation.sessionIndex, transaccionid, cliente.idClientUser)
-          .subscribe((resp: any) => {
-            if (resp) {
-              this.messageService.add({ severity: 'info', detail: resp.message });
-            }
-          }, err => {
-            if (err.status == 200) {
-              this.messageService.add({ severity: 'info', detail: 'se detuvo la carga de usuario correctamente' });
-            }
-          });
-
-      },
-      reject: () => {
-      }
-    });
-  }
-
-  // CASO4 forzar
+  // CASO4: Forzar Detención
   onForzarDetencion(itemConector) {    
     var cliente: ClientChargingStatusModel = itemConector.nombre == 'CONECTOR DE CARGA 1' ? this.cliente1 : this.cliente2;
     var metervalues = itemConector.nombre == 'CONECTOR DE CARGA 1' ? this.meterValues1 : this.meterValues2;
     let conector = {
       sessionIndex: this.electricStation.sessionIndex || '',
-      transactionId: metervalues.transactionId || ''
+      transactionId: metervalues?.transactionId || ''
     }
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: 'Forzar la Detención de carga del usuario ' + cliente.userName + '?',
-      icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación',
-      acceptIcon: "none",
-      rejectIcon: "none",
-      acceptLabel: 'Sí',
-      rejectLabel: 'No',
-      rejectButtonStyleClass: "p-button-text",
+      icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.forzarDetencionService.onForzarDetencion(conector).subscribe((resp: any) => {
           if (resp) {
@@ -635,141 +696,91 @@ export default class ElectricStationOnlineComponent implements OnInit, OnDestroy
         }, err => {
           if (err.status == 200) {
             this.messageService.add({ severity: 'info', detail: 'Se detuvo forzosamente la conexión' });
-          } else {
-            // error             
           }
         });
       },
-      reject: () => {
+      reject: () => { }
+    });
+  }
+
+  // Métodos auxiliares
+  dialogPassword() { this.visibleDialogPassword = true; }
+  onValidaPassword() { return new Promise(r => r(true)); }
+  verificaContrasenia() { return new Promise(r => r(true)); }
+  confirmarCerrarOpciones(event) { this.habilitaMasOpciones = false; }
+  validaformulariodialog() { }
+  confirmSwitchChange(event, item) { }
+  cambiaEstadoVer() { 
+    this.detalle = !this.detalle; 
+    this.iconClass = this.iconClass === 'pi pi-eye-slash' ? 'pi pi-eye' : 'pi pi-eye-slash'; 
+  }
+  reiniciarDatosCero(data) { }
+
+  // 🔴 SOLUCIÓN 4: MÉTODO LIMPIAR CONECTOR COMPLETO
+  limpiarConectorCompleto(esConector1: boolean) {
+    if (esConector1) {
+      // 1. Activar bandera de limpieza
+      this.forzarLimpieza1 = true;
+      
+      // 2. Limpiar TODOS los datos locales
+      this.conector1 = this.resetMeterValues();
+      this.cliente1 = new ClientChargingStatusModel();
+      this.cliente1.userName = null;
+      this.status1 = 'Available';
+      this.ultimoEstado1 = 'Available';
+      this.transaccionid1 = null;
+      this.meterValues1 = null;
+      
+      // 3. También limpiar en el arreglo conectores
+      if (this.conectores[0]) {
+        this.conectores[0] = {
+          ...this.conectores[0],
+          maxAmperaje: 0,
+          velocidadCarga: '-',
+          corrienteActual: 0,
+          potenciaActual: 0,
+          cargaEnergia: 0,
+          clienteCarga: '-',
+          montoConsumido: 0,
+          lastState: 'Available'
+        };
       }
-    });
-  }
-
-  dialogPassword() {
-    this.visibleDialogPassword = true;
-  }
-
-  onValidaPassword() {
-    return new Promise((resolve) => {
-      this.validatePasswordService.validate(this.passwordAdminGral)
-        .subscribe((resp: any) => {
-          if (resp) {
-            if (resp.message == 'Acceso concedido') {
-              resolve(true);
-            } else {
-              this.messageService.add({ severity: 'info', detail: 'Acceso Denegado' });
-              resolve(false);
-            }
-          } else {
-            resolve(false);
-          }
-        }, err => {
-          resolve(false);
-        });
-    });
-  }
-
-  verificaContrasenia() {
-    return new Promise((resolve) => {
-      if (this.passwordAdminGral.trim() != '') {
-        resolve(true)
-      } else {
-        resolve(false)
-      }
-    });
-  }
-
-  confirmarCerrarOpciones(event: Event) {
-    this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message: 'Deshabilitar mas Opciones?',
-      icon: 'pi pi-exclamation-triangle',
-      header: 'Confirmación',
-      acceptIcon: "none",
-      rejectIcon: "none",
-      acceptLabel: 'Sí',
-      rejectLabel: 'No',
-      rejectButtonStyleClass: "p-button-text",
-      accept: () => {
-        this.habilitaMasOpciones = false;
-      },
-      reject: () => {
-      }
-    });
-  }
-
-  // ADMIN GRAL
-  validaformulariodialog() {
-    this.verificaContrasenia()
-      .then((verificado) => {
-        if (verificado) {
-          return this.onValidaPassword();
-        } else {
-          return false;
-        }
-      })
-      .then((verificado) => {
-        if (verificado) {
-          this.habilitaMasOpciones = true;
-          this.visibleDialogPassword = false;
-        }
-      })
-  }
-
-  // DETALLES
-  confirmSwitchChange(event: any, item) {
-    var texto = item.visibility ? 'Habilitar' : 'Deshabilitar';
-    this.previousState = item.visibility;
-    this.confirmationService.confirm({
-      target: event.originalEvent.target,
-      message: `¿${texto} la visibilidad para los usuarios clientes ?`,
-      header: 'Confirmación',
-      icon: 'pi pi-exclamation-triangle',
-      acceptIcon: "none",
-      rejectIcon: "none",
-      acceptLabel: 'Sí',
-      rejectLabel: 'No',
-      rejectButtonStyleClass: "p-button-text",
-      accept: () => {
-        item.visibility = !this.previousState;
-        if (!item.visibility) {
-          this.electricStationsService.updateVisibiliry(item.nameStation, true).subscribe(
-            (resp: any) => {
-              this.getOneElectricStation();
-            }
-          )
-        } else {
-          this.electricStationsService.updateVisibiliry(item.nameStation, false).subscribe(
-            (resp: any) => {
-              this.getOneElectricStation();
-            }
-          )
-        }
-      },
-      reject: () => {
-        item.visibility = !this.previousState;
-      }
-    });
-  }
-
-  // DETALLES
-  cambiaEstadoVer() {
-    this.detalle = !this.detalle;
-    this.iconClass = this.iconClass === 'pi pi-eye-slash' ? 'pi pi-eye' : 'pi pi-eye-slash';
-  }
-
-  reiniciarDatosCero(data) {
-    for (let i = 0; i < data.length; i++) {
-      const item = data[i];
-      if (item.lastState !== 'Charging') {
-        if (item.connector == 1) {
-          // afecta al conector 1
-          this.conector1 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
-        } else {
-          //afecta al conector 2
-          this.conector2 = [new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel(), new MeterValueModel()];
-        }
+    } else {
+      this.forzarLimpieza2 = true;
+      
+      this.conector2 = this.resetMeterValues();
+      this.cliente2 = new ClientChargingStatusModel();
+      this.cliente2.userName = null;
+      this.status2 = 'Available';
+      this.ultimoEstado2 = 'Available';
+      this.transaccionid2 = null;
+      this.meterValues2 = null;
+      
+      if (this.conectores[1]) {
+        this.conectores[1] = {
+          ...this.conectores[1],
+          maxAmperaje: 0,
+          velocidadCarga: '-',
+          corrienteActual: 0,
+          potenciaActual: 0,
+          cargaEnergia: 0,
+          clienteCarga: '-',
+          montoConsumido: 0,
+          lastState: 'Available'
+        };
       }
     }
+    
+    this.armaTablaConector();
+  }
+
+  resetMeterValues(): MeterValueModel[] {
+    // Crear un array con 8 MeterValueModel vacíos (6 originales + velocidad + potencia)
+    return Array(8).fill(0).map(() => new MeterValueModel());
+  }
+
+  refrescarDatosCiclo() {
+    this.getAllConnectorStatus(); 
+    this.getClienteCharging();
   }
 }

@@ -209,7 +209,7 @@
                   {{item.cargaEnergia}}
                 </td>
                 <td style="text-align:center; vertical-align:middle">
-                  {{item.clienteCarga}}
+                  {{item.clienteCarga ? item.clienteCarga : '-'}}
                 </td>
                 <td style="text-align:center; vertical-align:middle">
                   {{item.montoConsumido | numberDecimal:3}}
@@ -272,7 +272,6 @@
           <p> Ver Detalles</p>
         </div>
       </div>
-
 
       <div class="card" *ngIf="detalle">
         <div class="surface-section">

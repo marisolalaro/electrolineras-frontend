@@ -36,12 +36,12 @@
             <th style="width: 13%; text-align: center; vertical-align: middle" pSortableColumn="description">
               Descripción<p-sortIcon field="description"></p-sortIcon>
             </th>
-            <th style="width: 13%; text-align: center; vertical-align: middle" pSortableColumn="minimumCurrent">
+            <!-- <th style="width: 13%; text-align: center; vertical-align: middle" pSortableColumn="minimumCurrent">
               Corriente Mínima (A)<p-sortIcon field="minimumCurrent"></p-sortIcon>
             </th>
             <th style="width: 13%; text-align: center; vertical-align: middle" pSortableColumn="maximumCurrent">
               Corriente Máxima (A)<p-sortIcon field="maximumCurrent"></p-sortIcon>
-            </th>
+            </th> -->
             <th style="width: 13%; text-align: center; vertical-align: middle" pSortableColumn="periodo">
               Período<p-sortIcon field="periodo"></p-sortIcon>
             </th>
@@ -68,14 +68,14 @@
               <input pInputText type="text" (input)="applyFilter($event, 'description', 'contains')"
                 placeholder="Descripción" class="w-full" [(ngModel)]="description" />
             </th>
-            <th>
+            <!-- <th>
               <input pInputText type="text" (input)="applyFilter($event, 'minimumCurrent', 'contains')"
                 placeholder="Corriente Mínima" class="w-full" [(ngModel)]="minimumCurrent" />
             </th>
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'maximumCurrent', 'contains')"
                 placeholder="Corriente Máxima" class="w-full" [(ngModel)]="maximumCurrent" />
-            </th>
+            </th> -->
             <th>
               <input pInputText type="text" (input)="applyFilter($event, 'periodo', 'contains')" placeholder="Período"
                 class="w-full" [(ngModel)]="periodo" />
@@ -101,12 +101,12 @@
             <td style="text-align: left; vertical-align: middle" class="uppercase">
               {{ rowData["description"] }}
             </td>
-            <td style="text-align: left; vertical-align: middle" class="uppercase">
+            <!-- <td style="text-align: left; vertical-align: middle" class="uppercase">
               {{ rowData["minimumCurrent"] }}
             </td>
             <td style="text-align: left; vertical-align: middle" class="uppercase">
               {{ rowData["maximumCurrent"] }}
-            </td>
+            </td> -->
             <td style="text-align: left; vertical-align: middle" class="uppercase">
               {{ rowData["periodo"] }}
             </td>

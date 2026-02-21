@@ -47,21 +47,21 @@ export class SidebarComponent implements OnInit {
           //   icon: 'pi pi-fw pi-money-bill',
           //   routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaDesvincular],
           // },
-          {
-            label: mainTitles['transacciones'].mainTitle,
-            icon: 'pi pi-fw pi-money-bill',
-            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaTransacciones],
-          },
-          {
-            label: mainTitles['facturas'].mainTitle,
-            icon: 'pi pi-fw pi-file',
-            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaFacturaTransferencias],
-          },
-          {
-            label: mainTitles['facturasCargaEnergia'].mainTitle,
-            icon: 'pi pi-fw pi-list',
-            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaFacturasCargasEnergia],
-          },
+          // {
+          //   label: mainTitles['transacciones'].mainTitle,
+          //   icon: 'pi pi-fw pi-money-bill',
+          //   routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaTransacciones],
+          // },
+          // {
+          //   label: mainTitles['facturas'].mainTitle,
+          //   icon: 'pi pi-fw pi-file',
+          //   routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaFacturaTransferencias],
+          // },
+          // {
+          //   label: mainTitles['facturasCargaEnergia'].mainTitle,
+          //   icon: 'pi pi-fw pi-list',
+          //   routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaFacturasCargasEnergia],
+          // },
           {
             label: mainTitles['reportes'].mainTitle,
             icon: 'pi pi-fw pi-file-excel',
@@ -87,11 +87,11 @@ export class SidebarComponent implements OnInit {
             icon: 'pi pi-fw pi-map',
             routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaParametricas + '/' + rutas.rutaAddress],
           },
-          {
-            label: mainTitles['contrasenias'].mainTitle,
-            icon: 'pi pi-fw pi-key',
-            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaParametricas + '/' + rutas.rutaPassword],
-          },
+          // {
+          //   label: mainTitles['contrasenias'].mainTitle,
+          //   icon: 'pi pi-fw pi-key',
+          //   routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaParametricas + '/' + rutas.rutaPassword],
+          // },
     
         ];
       } 
@@ -107,21 +107,21 @@ export class SidebarComponent implements OnInit {
             icon: 'pi pi-fw pi-bolt',
             routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaElectrolineras],
           },
-          {
-            label: mainTitles['transacciones'].mainTitle,
-            icon: 'pi pi-fw pi-money-bill',
-            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaTransacciones],
-          },
-          {
-            label: mainTitles['facturas'].mainTitle,
-            icon: 'pi pi-fw pi-file',
-            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaFacturaTransferencias],
-          },
-          {
-            label: mainTitles['facturasCargaEnergia'].mainTitle,
-            icon: 'pi pi-fw pi-list',
-            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaFacturasCargasEnergia],
-          },
+          // {
+          //   label: mainTitles['transacciones'].mainTitle,
+          //   icon: 'pi pi-fw pi-money-bill',
+          //   routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaTransacciones],
+          // },
+          // {
+          //   label: mainTitles['facturas'].mainTitle,
+          //   icon: 'pi pi-fw pi-file',
+          //   routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaFacturaTransferencias],
+          // },
+          // {
+          //   label: mainTitles['facturasCargaEnergia'].mainTitle,
+          //   icon: 'pi pi-fw pi-list',
+          //   routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaFacturasCargasEnergia],
+          // },
           {
             label: mainTitles['reportes'].mainTitle,
             icon: 'pi pi-fw pi-file-excel',

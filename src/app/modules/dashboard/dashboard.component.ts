@@ -224,23 +224,49 @@ export default class DashboardComponent implements OnInit, OnDestroy {
 
   getElectricStation() {
     this.subscriptionAllES = interval(5000).pipe(
-      switchMap(() => this.electricStationsService.getAllnoCrud()) // Llama al servicio
+      switchMap(() => this.electricStationsService.getAllnoCrud())
     ).subscribe(
       (resp: any) => {
         if (resp) {
           this.electricStations = resp.data;
+
+          // --- AGREGAMOS ESTA SINCRONIZACIÓN VISUAL ---
+          // Esto actualiza tus variables visuales con el dato real de la BD
+          this.sincronizarEstadoVisual(0, this.electricStations[0]?.stationConnectivityStatus);
+          this.sincronizarEstadoVisual(1, this.electricStations[1]?.stationConnectivityStatus);
+          this.sincronizarEstadoVisual(2, this.electricStations[2]?.stationConnectivityStatus);
+          // ---------------------------------------------
         }
         this.serviceResponse = true;
       },
-      error => {
-        if (error.status == 404) {
-            this.serviceResponse = false;
-          } else {
-            this.serviceResponse = true;
-          }
-          this.loading = false
-      }
+      // ... resto del error handler igual ...
     );
+  }
+
+  // Agrega esta nueva función auxiliar en tu clase
+  sincronizarEstadoVisual(index: number, statusBackend: string) {
+    let nuevoEstado = estadosConectores.conectando; // Por defecto
+    let nuevoColor = estadosConectores.colorConectando;
+
+    if (statusBackend === 'ONLINE') {
+      nuevoEstado = estadosConectores.enLinea; // "En línea"
+      nuevoColor = estadosConectores.colorEnLinea; // Verde
+    } else if (statusBackend === 'OFFLINE') {
+      nuevoEstado = estadosConectores.sinConexion; // "Desconectado" o "Sin Conexión"
+      nuevoColor = estadosConectores.colorSinConexion; // Rojo
+    }
+
+    // Actualizamos la variable correcta según el índice
+    if (index === 0) {
+      this.estadoHeartbeat = { estado: nuevoEstado, severity: nuevoColor };
+      if (statusBackend === 'ONLINE') this.tiempo = 0; // Reiniciar barra si ya conectó
+    } else if (index === 1) {
+      this.estadoHeartbeat2 = { estado: nuevoEstado, severity: nuevoColor };
+      if (statusBackend === 'ONLINE') this.tiempo2 = 0;
+    } else if (index === 2) {
+      this.estadoHeartbeat3 = { estado: nuevoEstado, severity: nuevoColor };
+      if (statusBackend === 'ONLINE') this.tiempo3 = 0;
+    }
   }
 
   getTasaCarga() {
@@ -662,5 +688,8 @@ export default class DashboardComponent implements OnInit, OnDestroy {
       return { estado: estadosConectores.noDisponible, severity: estadosConectores.colorSinConexion }
     }
   }
+
+
+  
 
 }

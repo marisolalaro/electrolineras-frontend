@@ -81,13 +81,13 @@ export default class ReportesComponent implements OnInit {
     });
     
     this.tiposReportes = [
-      { nombre: reports.labelReporte1, imagen: 'assets/img/reporte1.jpg' },
+     // { nombre: reports.labelReporte1, imagen: 'assets/img/reporte1.jpg' },
       { nombre: reports.labelReporte5, imagen: 'assets/img/reporte5.jpg' },
-      { nombre: reports.labelReporte4, imagen: 'assets/img/reporte4.jpg' },
-      { nombre: reports.labelReporte8, imagen: 'assets/img/reporte8.jpg' },
-      { nombre: reports.labelReporte2, imagen: 'assets/img/reporte2.jpg' },
-      { nombre: reports.labelReporte6, imagen: 'assets/img/reporte6.jpg' },
-      { nombre: reports.labelReporte7, imagen: 'assets/img/reporte7.jpg' },
+     // { nombre: reports.labelReporte4, imagen: 'assets/img/reporte4.jpg' },
+     // { nombre: reports.labelReporte8, imagen: 'assets/img/reporte8.jpg' },
+     // { nombre: reports.labelReporte2, imagen: 'assets/img/reporte2.jpg' },
+     // { nombre: reports.labelReporte6, imagen: 'assets/img/reporte6.jpg' },
+     // { nombre: reports.labelReporte7, imagen: 'assets/img/reporte7.jpg' },
       { nombre: reports.labelReporte9, imagen: 'assets/img/reporte9.jpg' },
       { nombre: reports.labelReporte10, imagen: 'assets/img/reporte10.jpg'}
     ];
@@ -135,15 +135,15 @@ descargarDesdeCard(reporte: any) {
    }
     switch (reporte.nombre) {
 
-      // REPORTE 1
-      case reports.labelReporte1:
-        this.reportesService.getFacturasCompraVenta(payload).subscribe({
-          next: (resp: any) => this.procesarRespuestaSimple(resp, (data) => 
-              this.excelService.excelFacturasCargaCredito(data, reports.archivoReporte1, reports.hojaReporte1, payload)
-          ),
-          error: (err) => this.manejarError(err)
-        });
-        break;
+      // // REPORTE 1
+      // case reports.labelReporte1:
+      //   this.reportesService.getFacturasCompraVenta(payload).subscribe({
+      //     next: (resp: any) => this.procesarRespuestaSimple(resp, (data) => 
+      //         this.excelService.excelFacturasCargaCredito(data, reports.archivoReporte1, reports.hojaReporte1, payload)
+      //     ),
+      //     error: (err) => this.manejarError(err)
+      //   });
+      //   break;
 
       // REPORTE 2
       case reports.labelReporte2:
@@ -172,15 +172,15 @@ descargarDesdeCard(reporte: any) {
         });
         break;
 
-      // REPORTE 4
-      case reports.labelReporte4:
-        this.reportesService.getPagoDatos(payload).subscribe({
-          next: (resp: any) => this.procesarRespuestaSimple(resp, (data) => 
-              this.excelService.excelPagoDatos(data, reports.archivoReporte4, reports.hojaReporte4, payload)
-          ),
-          error: (err) => this.manejarError(err)
-        });
-        break;
+      // // REPORTE 4
+      // case reports.labelReporte4:
+      //   this.reportesService.getPagoDatos(payload).subscribe({
+      //     next: (resp: any) => this.procesarRespuestaSimple(resp, (data) => 
+      //         this.excelService.excelPagoDatos(data, reports.archivoReporte4, reports.hojaReporte4, payload)
+      //     ),
+      //     error: (err) => this.manejarError(err)
+      //   });
+      //   break;
 
       // REPORTE 5
       case reports.labelReporte5:
