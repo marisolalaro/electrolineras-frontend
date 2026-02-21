@@ -19,6 +19,16 @@ app-sidebar {
   flex: 0 0 250px;
 }
 
+::ng-deep .p-sidebar {
+        background: 
+       linear-gradient(rgba(41, 128, 185, 0.7), rgba(41, 128, 185, 0.7)),
+        url('https://www.sectorelectricidad.com/wp-content/uploads/2023/05/dia-del-trabajador.jpg');
+    background-repeat: no-repeat;
+    background-position: right;
+   
+}
+
+
 .content {
   flex: 1 1 auto;
   padding: 1rem;

@@ -1,7 +1,50 @@
-:host ::ng-deep .p-panelmenu .p-panelmenu-header .p-panelmenu-content .p-menu-list .p-panelmenu-icon .p-menuitem-icon{
-    background-color: var(--primary-color);
-}
+:host ::ng-deep {
+  /* Fondo del menú transparente (para que se vea la imagen del sidebar) */
+  .p-panelmenu {
+    background: transparent;
+  }
 
-:host ::ng-deep .p-menuitem-text {
-    color: var(--primary-color-text);
+  /* ---------- HOVER (mouse encima) - SIN TRANSPARENCIA ---------- */
+  .p-panelmenu .p-panelmenu-header-action:hover {
+    transition: background-color 0.2s;
+    border: 2px solid var(--primary-color) !important; /* Borde del mismo color */
+    border-radius: 8px !important;
+  }
+
+  /* Texto e iconos en hover (color de contraste) */
+  .p-panelmenu .p-panelmenu-header-action:hover .p-menuitem-text,
+  .p-panelmenu .p-panelmenu-header-action:hover .p-menuitem-icon {
+    color: var(--primary-color-text, #ffffff) !important;
+    border-radius: 16px !important;
+    border: 2px solid var(--primary-color) !important; /* Borde del mismo color */
+    border-radius: 8px !important;
+  }
+
+  /* ---------- SELECCIONADO (activo) ---------- */
+  /* Cuando el header (panel) tiene la clase p-highlight (por routerLinkActive) */
+  .p-panelmenu .p-panelmenu-header.p-highlight .p-panelmenu-header-action {
+    background-color: var(--primary-color) !important;
+
+  }
+
+  .p-panelmenu .p-panelmenu-header.p-highlight .p-panelmenu-header-action .p-menuitem-text,
+  .p-panelmenu .p-panelmenu-header.p-highlight .p-panelmenu-header-action .p-menuitem-icon {
+    color: var(--primary-color-text, #ffffff) !important;
+  }
+
+  /* Por si acaso existen submenús (p-menuitem-link) en el futuro */
+  .p-panelmenu .p-menuitem-link:hover {
+    background-color: var(--primary-color) !important;
+  }
+  .p-panelmenu .p-menuitem-link:hover .p-menuitem-text,
+  .p-panelmenu .p-menuitem-link:hover .p-menuitem-icon {
+    color: var(--primary-color-text, #ffffff) !important;
+  }
+  .p-panelmenu .p-menuitem.p-highlight .p-menuitem-link {
+    background-color: var(--primary-color) !important;
+  }
+  .p-panelmenu .p-menuitem.p-highlight .p-menuitem-link .p-menuitem-text,
+  .p-panelmenu .p-menuitem.p-highlight .p-menuitem-link .p-menuitem-icon {
+    color: var(--primary-color-text, #ffffff) !important;
+  }
 }

@@ -1,6 +1,6 @@
 <div class="layout-wrapper">
     <app-header (toggleSidebar)="toggleSidebar()"></app-header>
-    <p-sidebar [(visible)]="visibleSidebar" [baseZIndex]="10000">
+    <p-sidebar [(visible)]="visibleSidebar" [baseZIndex]="10000" class="mi-sidebar-fondo">
         <app-sidebar (itemClick)="toggleSidebar()"></app-sidebar>
     </p-sidebar>
     <div class="layout-content" [ngClass]="{'sidebar-visible': visibleSidebar}">

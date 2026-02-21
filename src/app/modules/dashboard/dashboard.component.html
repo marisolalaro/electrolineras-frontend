@@ -9,21 +9,26 @@
       <div class=" px-4 py-5 md:px-6 lg:px-8">
         <div class="text-900 font-bold text-5xl mb-4 text-center">
           <h3>Electrolineras</h3>
+          <div class="flex justify-content-center my-3">
+  <img src="assets/img/auto-cargando.gif" alt="Animación de carga"
+    style="width: 200px; height: 180px; object-fit: contain;">
+</div>
+<hr class="new new my-3 mx-0 border-top-1 border-none" />
         </div>
         <!-- tarifas de cargas vigentes -->
-        <div>
+        <!-- <div>
           <div class="grid m-0 p-0">
             <div class="col-12 lg:col-4 md:col-6 sm:col-12 m-0 p-0" *ngFor="let tasa of tasasVigentes">
               <p-card [header]="tasa.amount">
 
-                <p class="m-0 p-0">{{tasa.description | mapeaModoCarga}}</p>
-                <p>Bloque horario: {{tasa.starTime | formatHoraMinutoSegundo}} a {{tasa.endTime | formatHoraMinutoSegundo}}</p>
-                <!-- <p>{{tasa.periodo}} - {{tasa.mes| formatMesPipe}}</p> -->
+              <p class="m-0 p-0">{{tasa.description | mapeaModoCarga}}</p> 
+                <p>Bloque horario: {{tasa.starTime | formatHoraMinutoSegundo}} a {{tasa.endTime | formatHoraMinutoSegundo}}</p> 
+              <p>{{tasa.periodo}} - {{tasa.mes| formatMesPipe}}</p> 
 
               </p-card>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- tarifas de cargas vigentes -->
         <!-- <p-toolbar>
             <div class="p-toolbar-group-start">
@@ -43,7 +48,10 @@
               <div class="level shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px">
                 <div class="font-medium text-xl mb-2" style="color: var(--primary-color-text)">
                   {{electricStations[0]?.nameStation}}</div>
+                  
                 <div class="text-600">{{electricStations[0]?.descripcion}}</div>
+
+
                 <hr class="new new my-3 mx-0 border-top-1 border-none" />
                 <div class="text-center justify-content-between lg:justify-content-center align-items-center flex-wrap">
                   <li class="flex align-items-center mb-1">
