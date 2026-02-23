@@ -1,57 +1,76 @@
-ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+/* Aplicar la fuente que pediste a todo el componente */
+:host {
+  font-family: Inter var, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji" !important;
 }
 
-li {
-  padding: 8px 0;
-}
+$ende-blue-dark: #0a3364; /* Tu color azul exacto */
+$online-green: #10b981;
+$offline-red: #ef4444;
 
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between; /* Ajusta el espacio entre tarjetas */
-  gap: 16px; /* Espacio entre las tarjetas */
-}
+.modern-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  border-top-width: 8px !important;
 
-.p-card {
-  flex: 1 1 360px; /* Hace que cada tarjeta tenga un tamaño mínimo de 360px */
-  margin-bottom: 16px; /* Espacio en la parte inferior cuando las tarjetas se apilen en pantallas pequeñas */
-}
+  &.border-online { border-top-color: $online-green !important; }
+  &.border-offline { border-top-color: $offline-red !important; }
 
-@media (max-width: 768px) {
-  .p-card {
-    flex: 1 1 100%; /* Las tarjetas ocuparán todo el ancho en pantallas pequeñas */
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   }
 }
 
-table {
-  width: 50%;
-  margin: 0 auto; /* Centra la tabla horizontalmente */
-  border-collapse: collapse;
-}
-th, td {
-  padding: 8px;
-  text-align: left;
-}
-th {
-  background-color: var(--color-white);
+.icon-circle {
+  background: $ende-blue-dark;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-hr.new {
-  border-top: 1px solid var(--highlight-bg);
-  // background-color: #afe;
-  // color: #afe;
+.data-list {
+  list-style: none;
+  padding: 0;
+  li {
+    padding: 8px 0;
+    border-bottom: 1px solid #f3f4f6;
+    color: #4b5563;
+    font-size: 0.9rem;
+    
+    b { color: $ende-blue-dark; } /* Los títulos de los datos en azul */
+    i { color: $ende-blue-dark; opacity: 0.8; }
+  }
 }
 
-div.level {
-  border-style: solid;
-  border-color: var(--color-0);
+.ports-box {
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid #f3f4f6;
 }
 
+/* Botón con tu color azul */
+::ng-deep .p-button.p-button-raised {
+    background: $ende-blue-dark !important;
+    border-color: $ende-blue-dark !important;
+}
 
-p-progressBar {
-  width: 100%;
-  height: 20px;
+.siat-title {
+    color: #0a3364; /* Tu azul exacto */
+    font-weight: 850; /* Extra bold */
+    font-size: 2.5rem;
+    letter-spacing: -1px;
+}
+
+.siat-subtitle {
+    color: #64748b; /* Gris del SIAT */
+    font-weight: 500;
+    font-size: 1.1rem;
+    margin-top: -5px;
 }

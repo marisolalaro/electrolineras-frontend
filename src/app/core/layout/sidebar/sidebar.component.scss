@@ -1,7 +1,81 @@
-:host ::ng-deep .p-panelmenu .p-panelmenu-header .p-panelmenu-content .p-menu-list .p-panelmenu-icon .p-menuitem-icon{
-    background-color: var(--primary-color);
+/* ==========================================
+   DISEÑO EXACTO AL DE LA IMAGEN (ESTILO ENDE)
+   ========================================== */
+
+.p-panelmenu {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 10px;
 }
 
-:host ::ng-deep .p-menuitem-text {
-    color: var(--primary-color-text);
+/* 1. DISEÑO DE LAS CAJITAS (Fondo blanco, bordes y separación) */
+.p-panelmenu .p-panelmenu-panel {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+    margin-bottom: 0.8rem !important; /* Separación entre cajas */
+}
+
+/* Ajuste del relleno de cada caja y transición suave */
+.p-panelmenu .p-panelmenu-header-link,
+.p-panelmenu .p-panelmenu-header > a {
+    background: transparent !important;
+    border: none !important;
+    padding: 1rem 1.2rem !important;
+    text-decoration: none !important;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease !important;
+}
+
+/* ==========================================
+   ¡AQUÍ ESTÁ EL HOVER AZUL LIGERO!
+   ========================================== */
+.p-panelmenu .p-panelmenu-header:not(.p-disabled) > a:hover {
+    background: #5c7596 !important; /* Azul suave */
+}
+
+/* 2. ICONOS: AZUL OSCURO ENDE */
+.p-panelmenu .p-menuitem-icon {
+    color: #102a43 !important; /* Azul noche corporativo */
+    font-size: 1.6rem !important;
+    margin-right: 1.2rem !important;
+}
+
+/* 3. TEXTO: AZUL OSCURO ENDE */
+.p-panelmenu .p-menuitem-text {
+    color: #102a43 !important; 
+    font-weight: 600 !important;
+    font-size: 1.1rem !important;
+}
+
+/* ==========================================
+   4. TÍTULO "ADMINISTRACIÓN PARAMÉTRICAS"
+   ========================================== */
+/* Le quitamos el formato de "caja blanca" al título para que sea solo texto */
+.p-panelmenu .p-disabled > a,
+.p-panelmenu .p-disabled .p-panelmenu-header-link {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding-top: 1.5rem !important; /* Separación de arriba */
+}
+
+/* Color Naranja ENDE para el texto del título */
+.p-panelmenu .p-disabled .p-menuitem-text {
+    color: #cf7a30 !important; /* Naranja ENDE */
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    font-size: 0.95rem !important;
+    letter-spacing: 0.5px !important;
+}
+
+.p-panelmenu .p-disabled .p-menuitem-icon {
+    display: none !important;
+}
+
+/* Ocultar la flechita desplegable derecha */
+.p-panelmenu .p-submenu-icon {
+    display: none !important;
 }

@@ -1,14 +1,43 @@
 .footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
+    // Tu azul exacto
+    background-color: #0a3364; 
+    color: #ffffff;
+    padding: 1.2rem;
     width: 100%;
-    text-align: center;
-    background: var(--dark-primary-color);
-    color: var(--color-black);
-    padding: 1rem
- }
+    
+    // Tipografía moderna
+    font-family: Inter var, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+    
+    // Para que no flote sobre el contenido si hay poco texto
+    position: relative; 
+    margin-top: auto; 
 
- a {
-    color: var(--color-3);
- }
+    .footer-content {
+        display: flex;
+        justify-content: center; // Centra horizontalmente
+        align-items: center;     // Centra verticalmente
+        text-align: center;
+    }
+
+    .copyright {
+        font-size: 0.9rem;
+        letter-spacing: 0.3px;
+        opacity: 0.9;
+
+        b {
+            color: #ffffff;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+    }
+}
+
+// Para asegurar que se vea bien en celulares
+@media (max-width: 768px) {
+    .footer {
+        padding: 1rem;
+        .copyright {
+            font-size: 0.8rem;
+        }
+    }
+}

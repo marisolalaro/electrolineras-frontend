@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { mainTitles } from '../../constants/labels';
 import { rutas } from '../../constants/rutas';
@@ -9,6 +9,7 @@ import { ValidaToken } from '../../utils/verificarToken';
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
+  encapsulation: ViewEncapsulation.None // <-- ¡ESTA ES LA LÍNEA MÁGICA!
 })
 export class SidebarComponent implements OnInit {
 
@@ -74,7 +75,7 @@ export class SidebarComponent implements OnInit {
           },
           {
             label: mainTitles['modelos'].mainTitle,
-            icon: 'pi pi-fw pi-verified',
+            icon: 'pi pi-fw pi-car',
             routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaParametricas + '/' + rutas.rutaModelo],
           },
           {

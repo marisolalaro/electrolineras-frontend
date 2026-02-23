@@ -1,408 +1,96 @@
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.2/dist/sockjs.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-
 <div class="container">
   <p-card header="">
-    <div class="row">
-      <!-- <div class="surface-ground px-4 py-8 md:px-6 lg:px-8"> -->
-      <div class=" px-4 py-5 md:px-6 lg:px-8">
-        <div class="text-900 font-bold text-5xl mb-4 text-center">
-          <h3>Electrolineras</h3>
-        </div>
-        <!-- tarifas de cargas vigentes -->
-        <div>
-          <div class="grid m-0 p-0">
-            <div class="col-12 lg:col-4 md:col-6 sm:col-12 m-0 p-0" *ngFor="let tasa of tasasVigentes">
-              <p-card [header]="tasa.amount">
+    <div class="px-4 py-5 md:px-6 lg:px-8">
+      <div class="text-center mb-6 py-3 border-bottom-1 border-300">
+    <h1 class="siat-title m-0">ELECTROLINERAS</h1>
+    <p class="siat-subtitle m-0">Tablero de Control y Monitoreo de Estaciones</p>
+</div>
 
-                <p class="m-0 p-0">{{tasa.description | mapeaModoCarga}}</p>
-                <p>Bloque horario: {{tasa.starTime | formatHoraMinutoSegundo}} a {{tasa.endTime | formatHoraMinutoSegundo}}</p>
-                <!-- <p>{{tasa.periodo}} - {{tasa.mes| formatMesPipe}}</p> -->
-
-              </p-card>
-            </div>
-          </div>
-        </div>
-        <!-- tarifas de cargas vigentes -->
-        <!-- <p-toolbar>
-            <div class="p-toolbar-group-start">
-              Bloque horario: {{tasaCargaLenta.startTime | formatHoraMinutoSegundo}} a {{tasaCargaLenta.endTime | formatHoraMinutoSegundo}}
-            </div>
-            <div class="p-toolbar-group-center">
-              Tasa de Carga Lenta: {{tasaCargaLenta.amount}}
-            </div>
-            <div class="p-toolbar-group-end">
-                Tasa de Carga Semi Rapida: {{tasaCargaSemiRapida.amount}}
-            </div>
-          </p-toolbar> -->
-        <div class="grid" *ngIf="serviceResponse">
-          <!-- OTRA ELECTROLINERA -->
-          <div class="col-12 lg:col-4 md:col-6 sm:col-12">
-            <div class="p-3 h-full">
-              <div class="level shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px">
-                <div class="font-medium text-xl mb-2" style="color: var(--primary-color-text)">
-                  {{electricStations[0]?.nameStation}}</div>
-                <div class="text-600">{{electricStations[0]?.descripcion}}</div>
-                <hr class="new new my-3 mx-0 border-top-1 border-none" />
-                <div class="text-center justify-content-between lg:justify-content-center align-items-center flex-wrap">
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-qrcode mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Código QR:</span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.codeStationQR}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-wifi mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Estado conexión: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;
-                      <i class="pi pi-circle-fill" [style]="estadoHeartbeat.severity"></i>
-                      <span style="color: var(--primary-color-text)"> {{estadoHeartbeat.estado}}</span>
-                      <p-progressBar [value]="tiempo" *ngIf="estadoHeartbeat.estado != 'En línea'" [showValue]="false"  [style]="{'height': '6px'}"></p-progressBar>
-                    </span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Marca:</span>
-                    <span style="color: var(--primary-color-text)">&nbsp; {{electricStations[0]?.model.vendor}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Código de Modelo: </span>
-                    <span style="color: var(--primary-color-text)"
-                      [pTooltip]="electricStations[0]?.model.modelCode">&nbsp;{{electricStations[0]?.model.modelCode
-                      | truncate:15}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Número de Serie Modelo:</span>
-                    <span style="color: var(--primary-color-text)"
-                      [pTooltip]="electricStations[0]?.model.boxSerialNumber">&nbsp;{{electricStations[0]?.model.boxSerialNumber
-                      | truncate:15}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Modelo Tipo:</span>
-                    <span
-                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.model.pointModel}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Número Serial Tipo: </span>
-                    <span style="color: var(--primary-color-text)"
-                      [pTooltip]="electricStations[0]?.model.pointSerialNumber">&nbsp;{{electricStations[0]?.model.pointSerialNumber
-                      | truncate:15}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Versión Firmware: </span>
-                    <span
-                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.model.firmwareVersion}}</span>
-                  </li>
-                  <!-- <li class="flex align-items-center mb-1">
-                    <i class="pi pi-sort-alt mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Tasa de Carga: </span>
-                    <span
-                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.chargeRate.amount}}</span>
-                  </li> -->
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-map-marker mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Dirección: </span>
-                    <span style="color: var(--primary-color-text)" [pTooltip]="electricStations[0]?.direccion"
-                      tooltipPosition="bottom">&nbsp;{{electricStations[0]?.direccion | truncate:15}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-building mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Publico: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[0]?.ocppPublicAccessAllowed
-                      |
-                      formatSiNo}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Estado Puertos: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;
-                      <i class="pi pi-circle-fill" [style]="statusElectrolinera0.severity"></i>
-                      <span style="color: var(--primary-color-text)"> {{statusElectrolinera0.estado}}</span>
-                    </span>
-                  </li>
-                  <hr class="new mb-3 mx-0 border-top-1 border-none mt-auto" />
-                  <li class="flex align-items-center mb-1">
-                    <table>
-                      <thead>
-                        <tr style="color: var(--primary-color)">
-                          <th>Conector</th>
-                          <th>Usuario</th>
-                          <th>Estado</th>
-                        </tr>
-                      </thead>
-                      <tbody *ngFor="let item of conectorStatus0">
-                        <tr>
-                          <td>{{item.connector}}</td>
-                          <td [pTooltip]="item.userName">
-                            {{item.userName | truncate:15}}
-                          </td>
-                          <td>{{item.lastState}}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </li>
+      <div class="grid" *ngIf="serviceResponse">
+        
+        <div class="col-12 lg:col-4 md:col-6 sm:col-12" *ngFor="let es of [0, 1, 2]; let i = index">
+          <div class="p-3 h-full">
+            <div class="modern-card shadow-3 h-full flex flex-column" 
+                 [ngClass]="{'border-online': i==0 ? estadoHeartbeat.estado == 'En línea' : i==1 ? estadoHeartbeat2.estado == 'En línea' : estadoHeartbeat3.estado == 'En línea',
+                            'border-offline': i==0 ? estadoHeartbeat.estado != 'En línea' : i==1 ? estadoHeartbeat2.estado != 'En línea' : estadoHeartbeat3.estado != 'En línea'}">
+              
+              <div class="p-4 border-bottom-1 border-300 bg-gray-50 flex align-items-center">
+                <div class="icon-circle mr-3">
+                  <i class="pi pi-bolt text-2xl text-white"></i>
                 </div>
-                <hr class="new mb-3 mx-0 border-top-1 border-none mt-auto" />
-                <button pButton pRipple label="Ver Puertos" class="p-3 w-full mt-auto" *ngIf="electricStations[0]"
-                  (click)="onVerTodasElectrolineras(electricStations[0]?.id)"></button>
+                <div>
+                  <div class="font-bold text-xl text-900">{{electricStations[i]?.nameStation}}</div>
+                  <div class="text-600 text-sm">{{electricStations[i]?.descripcion}}</div>
+                </div>
+              </div>
+
+              <div class="p-4 flex-1">
+                <div class="flex justify-content-between align-items-center mb-4">
+                  <span class="font-bold text-700">Estado:</span>
+                  <p-tag [severity]="(i==0 ? estadoHeartbeat.estado : i==1 ? estadoHeartbeat2.estado : estadoHeartbeat3.estado) == 'En línea' ? 'success' : 'danger'" 
+                         [value]="i==0 ? estadoHeartbeat.estado : i==1 ? estadoHeartbeat2.estado : estadoHeartbeat3.estado" 
+                         [rounded]="true">
+                  </p-tag>
+                </div>
+                
+                <p-progressBar [value]="i==0 ? tiempo : i==1 ? tiempo2 : tiempo3" 
+                               *ngIf="(i==0 ? estadoHeartbeat.estado : i==1 ? estadoHeartbeat2.estado : estadoHeartbeat3.estado) != 'En línea'" 
+                               [showValue]="false" class="mb-3"></p-progressBar>
+
+                <ul class="data-list">
+                  <li><i class="pi pi-qrcode mr-2 color-primary"></i> <b>QR:</b> {{electricStations[i]?.codeStationQR}}</li>
+                  <li><i class="pi pi-map-marker mr-2 color-primary"></i> <b>Dirección:</b> <span [pTooltip]="electricStations[i]?.direccion">{{electricStations[i]?.direccion | truncate:20}}</span></li>
+                  <li><i class="pi pi-tag mr-2 color-primary"></i> <b>Marca:</b> {{electricStations[i]?.model?.vendor}}</li>
+                  <li><i class="pi pi-info-circle mr-2 color-primary"></i> <b>Modelo:</b> {{electricStations[i]?.model?.modelCode | truncate:15}}</li>
+                  <li><i class="pi pi-cog mr-2 color-primary"></i> <b>Firmware:</b> {{electricStations[i]?.model?.firmwareVersion}}</li>
+                  <li><i class="pi pi-users mr-2 color-primary"></i> <b>Público:</b> {{electricStations[i]?.ocppPublicAccessAllowed | formatSiNo}}</li>
+                </ul>
+
+                <div class="ports-container mt-4">
+                  <div class="text-center font-bold mb-2 text-sm text-600 uppercase">Resumen de Puertos</div>
+                  <table class="w-full clean-table">
+                    <thead>
+                      <tr>
+                        <th>Puerto</th>
+                        <th>Usuario</th>
+                        <th>Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody *ngFor="let item of (i==0 ? conectorStatus0 : i==1 ? conectorStatus1 : conectorStatus2)">
+                      <tr>
+                        <td>{{item.connector}}</td>
+                        <td [pTooltip]="item.userName">{{item.userName | truncate:10}}</td>
+                        <td>
+                          <span [ngClass]="{'text-green-500': item.lastState == 'Disponible', 'text-blue-500': item.lastState == 'Cargando'}">
+                            {{item.lastState}}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="p-4 pt-0">
+                <button pButton pRipple label="Gestionar Puertos" 
+                        icon="pi pi-external-link"
+                        class="p-button-raised w-full" 
+                        *ngIf="electricStations[i]"
+                        (click)="onVerTodasElectrolineras(electricStations[i]?.id)">
+                </button>
               </div>
             </div>
           </div>
-
-          <!-- OTRA ELECTROLINERA -->
-          <div class="col-12 lg:col-4 md:col-6 sm:col-12">
-            <div class="p-3 h-full">
-              <div class="level shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px">
-                <div class="font-medium text-xl mb-2" style="color: var(--primary-color-text)">
-                  {{electricStations[1]?.nameStation}}</div>
-                <div class="text-600">{{electricStations[1]?.descripcion}}</div>
-                <hr class="new my-3 mx-0 border-top-1 border-none" />
-                <div class="text-center justify-content-between lg:justify-content-center align-items-center flex-wrap">
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-qrcode mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Código QR:</span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.codeStationQR}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-wifi mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Estado conexión: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;
-                      <i class="pi pi-circle-fill" [style]="estadoHeartbeat2.severity"></i>
-                      <span style="color: var(--primary-color-text)"> {{estadoHeartbeat2.estado}}</span>
-                      <p-progressBar [value]="tiempo2" *ngIf="estadoHeartbeat2.estado != 'En línea'" [showValue]="false"  [style]="{'height': '6px'}"></p-progressBar>
-                    </span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Marca:</span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.model.vendor}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Código de Modelo: </span>
-                    <span style="color: var(--primary-color-text)"
-                      [pTooltip]="electricStations[1]?.model.modelCode">&nbsp;{{electricStations[1]?.model.modelCode
-                      | truncate:15}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Número de Serie Modelo:</span>
-                    <span style="color: var(--primary-color-text)"
-                      [pTooltip]="electricStations[1]?.model.boxSerialNumber">&nbsp;{{electricStations[1]?.model.boxSerialNumber
-                      | truncate:15}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Modelo Tipo:</span>
-                    <span
-                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.model.pointModel}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Número Serial Tipo: </span>
-                    <span style="color: var(--primary-color-text)"
-                      [pTooltip]="electricStations[1]?.model.pointSerialNumber">&nbsp;{{electricStations[1]?.model.pointSerialNumber
-                      | truncate:15}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Versión Firmware: </span>
-                    <span
-                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.model.firmwareVersion}}</span>
-                  </li>
-                  <!-- <li class="flex align-items-center mb-1">
-                    <i class="pi pi-sort-alt mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Tasa de Carga: </span>
-                    <span
-                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.chargeRate.amount}}</span>
-                  </li> -->
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-map-marker mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Dirección: </span>
-                    <span style="color: var(--primary-color-text)" [pTooltip]="electricStations[1]?.direccion"
-                      tooltipPosition="bottom">&nbsp;{{electricStations[1]?.direccion | truncate:15}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-building mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Publico: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[1]?.ocppPublicAccessAllowed
-                      |
-                      formatSiNo}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Estado Puertos: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;
-                      <i class="pi pi-circle-fill" [style]="statusElectrolinera1.severity"></i>
-                      <span style="color: var(--primary-color-text)"> {{statusElectrolinera1.estado}}</span>
-                    </span>
-                  </li>
-                  <hr class="new mb-3 mx-0 border-top-1 border-none mt-auto" />
-                  <li class="flex align-items-center mb-1">
-                    <table>
-                      <thead>
-                        <tr style="color: var(--primary-color)">
-                          <th>Conector</th>
-                          <th>Usuario</th>
-                          <th>Estado</th>
-                        </tr>
-                      </thead>
-                      <tbody *ngFor="let item of conectorStatus1">
-                        <tr>
-                          <td>{{item.connector}}</td>
-                          <td [pTooltip]="item.userName">
-                            {{item.userName | truncate:15}}
-                          </td>
-                          <td>{{item.lastState}}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </li>
-                </div>
-                <hr class="new mb-3 mx-0 border-top-1 border-none mt-auto" />
-                <button pButton pRipple label="Ver Puertos" class="p-3 w-full mt-auto" *ngIf="electricStations[1]"
-                  (click)="onVerTodasElectrolineras(electricStations[1]?.id)"></button>
-              </div>
-            </div>
-          </div>
-
-          <!-- OTRA ELECTROLINERA -->
-          <div class="col-12 lg:col-4 md:col-6 sm:col-12">
-            <div class="p-3 h-full">
-              <div class="level shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px">
-                <div class="font-medium text-xl mb-2" style="color: var(--primary-color-text)">
-                  {{electricStations[2]?.nameStation}}</div>
-                <div class="text-600">{{electricStations[2]?.descripcion}}</div>
-                <hr class="new my-3 mx-0 border-top-1 border-none" />
-                <div class="text-center justify-content-between lg:justify-content-center align-items-center flex-wrap">
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-qrcode mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Código QR:</span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.codeStationQR}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-wifi mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Estado conexión: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;
-                      <i class="pi pi-circle-fill" [style]="estadoHeartbeat3.severity"></i>
-                      <span style="color: var(--primary-color-text)"> {{estadoHeartbeat3.estado}}</span>
-                      <p-progressBar [value]="tiempo3" *ngIf="estadoHeartbeat3.estado != 'En línea'" [showValue]="false"  [style]="{'height': '6px'}"></p-progressBar>
-                    </span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Marca:</span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.model.vendor}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Código de Modelo: </span>
-                    <span style="color: var(--primary-color-text)"
-                      [pTooltip]="electricStations[2]?.model.modelCode">&nbsp;{{electricStations[2]?.model.modelCode
-                      | truncate:15}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Número de Serie Modelo:</span>
-                    <span style="color: var(--primary-color-text)"
-                      [pTooltip]="electricStations[2]?.model.boxSerialNumber">&nbsp;{{electricStations[2]?.model.boxSerialNumber
-                      | truncate:15}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Modelo Tipo:</span>
-                    <span
-                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.model.pointModel}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Número Serial Tipo: </span>
-                    <span style="color: var(--primary-color-text)"
-                      [pTooltip]="electricStations[2]?.model.pointSerialNumber">&nbsp;{{electricStations[2]?.model.pointSerialNumber
-                      | truncate:15}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Versión Firmware: </span>
-                    <span
-                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.model.firmwareVersion}}</span>
-                  </li>
-                  <!-- <li class="flex align-items-center mb-1">
-                    <i class="pi pi-sort-alt mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Tasa de Carga: </span>
-                    <span
-                      style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.chargeRate.amount}}</span>
-                  </li> -->
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-map-marker mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Dirección: </span>
-                    <span style="color: var(--primary-color-text)" [pTooltip]="electricStations[2]?.direccion"
-                      tooltipPosition="bottom">&nbsp;{{electricStations[2]?.direccion | truncate:15}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-building mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Publico: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;{{electricStations[2]?.ocppPublicAccessAllowed
-                      |
-                      formatSiNo}}</span>
-                  </li>
-                  <li class="flex align-items-center mb-1">
-                    <i class="pi pi-info-circle mr-2"></i>
-                    <span class="font-medium" style="color: var(--primary-color)">Estado Puertos: </span>
-                    <span style="color: var(--primary-color-text)">&nbsp;
-                      <i class="pi pi-circle-fill" [style]="statusElectrolinera2.severity"></i>
-                      <span style="color: var(--primary-color-text)"> {{statusElectrolinera2.estado}}</span>
-                    </span>
-                  </li>
-                  <hr class="new mb-3 mx-0 border-top-1 border-none mt-auto" />
-                  <li class="flex align-items-center mb-1">
-                    <table>
-                      <thead>
-                        <tr style="color: var(--primary-color)">
-                          <th>Conector</th>
-                          <th>Usuario</th>
-                          <th>Estado</th>
-                        </tr>
-                      </thead>
-                      <tbody *ngFor="let item of conectorStatus2">
-                        <tr>
-                          <td>{{item.connector}}</td>
-                          <td [pTooltip]="item.userName">
-                            {{item.userName | truncate:15}}
-                          </td>
-                          <td>{{item.lastState}}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </li>
-                </div>
-                <hr class="new mb-3 mx-0 border-top-1 border-none mt-auto" />
-                <button pButton pRipple label="Ver Puertos" class="p-3 w-full mt-auto" *ngIf="electricStations[2]"
-                  (click)="onVerTodasElectrolineras(electricStations[2]?.id)"></button>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
-      <!--  -->
+
+      <!-- <div class="flex justify-content-center mt-6" *ngIf="serviceResponse">
+        <img src="assets/images/electrolinera-ende-banner.png" alt="Banner ENDE" style="max-width: 80%; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+      </div> -->
+
       <div *ngIf="!serviceResponse">
         <app-not-found [mensajeNotFound]="mensaje" (datosEnviados)="getElectricStation()"></app-not-found>
-        <br> <br>
       </div>
     </div>
   </p-card>
 </div>
-
-<p-toast></p-toast>
-<p-blockUI [blocked]="loading">
-  <div class="loading-container">
-    <i class="pi pi-spin pi-spinner" style="font-size: 3em"></i>
-    <p>Cargando...</p>
-  </div>
-</p-blockUI>

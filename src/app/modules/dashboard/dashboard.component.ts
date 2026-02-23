@@ -3,6 +3,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgFor, NgIf, NgStyle } from '@angular/common';
 import { Router } from '@angular/router';
+/// nuevos //////
+import { TagModule } from 'primeng/tag';
+import { AccordionModule } from 'primeng/accordion';
+import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { RippleModule } from 'primeng/ripple';
+import { NgClass } from '@angular/common'; // Muy importante
+
 // librerias
 import { switchMap } from 'rxjs/operators';
 import { TableModule } from 'primeng/table';
@@ -35,7 +44,15 @@ import { TasaCargaModel } from 'src/app/core/model/tasa-carga';
     TableModule,
     DashboardModule,
     NgFor,
-    NgIf
+    NgIf,
+    NgClass,
+   TagModule,        // <--- ¡ESTA ES LA QUE FALTA PARA EL ERROR p-tag!
+    AccordionModule,  // <--- Para los detalles técnicos
+    ButtonModule,     // <--- Para los botones modernos
+    TooltipModule,    // <--- Para los textos que se cortan
+    ProgressBarModule, // <--- Para la barra de carga
+    RippleModule      // <--- Para el efecto de clic
+    
   ]
 })
 
@@ -67,7 +84,7 @@ export default class DashboardComponent implements OnInit, OnDestroy {
   public statusElectrolinera1: any = { estado: estadosConectores.noDisponible, severity: estadosConectores.colorSinConexion };
   public statusElectrolinera2: any = { estado: estadosConectores.noDisponible, severity: estadosConectores.colorSinConexion };
   private subscription: Subscription; // Para el cronómetro
-  private maxHeartbeatTime = 100000; // 100 segundos en milisegundos
+  private maxHeartbeatTime = 180000; // 100 segundos en milisegundos
   private reconnectionInterval = 10000; // 10 segundos en milisegundos
   public estadoHeartbeat = { estado: estadosConectores.conectando, severity: estadosConectores.colorConectando }
   public estadoHeartbeat2 = { estado: estadosConectores.conectando, severity: estadosConectores.colorConectando };
