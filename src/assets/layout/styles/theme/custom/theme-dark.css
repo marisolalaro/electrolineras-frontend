@@ -2341,13 +2341,13 @@
 
   .p-button.p-button-text {
     background-color: transparent;
-    color: var(--primary-color);
+    color: var(--white);
     border-color: transparent;
   }
 
   .p-button.p-button-text:enabled:hover {
     background: var(--primary-tranparent-3);
-    color: var(--primary-color);
+    color: var(--color-claro);
     border-color: transparent;
   }
 
