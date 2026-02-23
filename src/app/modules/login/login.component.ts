@@ -106,7 +106,7 @@ export default class LoginComponent {
     })
   }
 
-  /*login() {
+  login() {
     
     this.loading = true;
     return new Promise((resolve) => {
@@ -124,9 +124,9 @@ export default class LoginComponent {
           resolve(false);
         });
     });
-  }*/
+  }
 
-login() {
+/*login() {
     this.loading = true;
     return new Promise((resolve) => {
       
@@ -160,7 +160,7 @@ login() {
       }, 1500); // Simula tiempo de respuesta
       
     });
-  }
+  }*/
 
   saveLoginStorage() {
     return new Promise((resolve) => {
