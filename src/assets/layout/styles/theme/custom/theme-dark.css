@@ -4,31 +4,31 @@
   font-variation-settings: normal;
   --font-family: "Inter var", sans-serif;
   --font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-  --surface-a: var(--color-white);
-  --surface-b: #16202E;
-  --surface-c: var(--surface-c);
-  --surface-d: #253144;
-  --surface-e: var(--color-white);
-  --surface-f: var(--color-white);
+  --surface-a: #0a0f1a;
+  --surface-b: #111827;
+  --surface-c: #1f2937;
+  --surface-d: #2d3748;
+  --surface-e: #0a0f1a;
+  --surface-f: #0a0f1a;
 
-  --primary-color: #14B8A6;
-  --primary-color-60: #00796B99;
-  --dark-primary-color: #00796B;
-  --highlight-text-color: #0F766E;
-  --color-focus: #99F6E4;
-  --color-claro: #0D9488;
-  --primary-tranparent-1: rgba(20, 184, 166, 0.24);
-  --primary-tranparent-2: rgba(20, 184, 166, 0.16);
-  --primary-tranparent-3: rgba(20, 184, 166, 0.04);
+  --primary-color: #3b82f6;
+  --primary-color-60: #3b82f699;
+  --dark-primary-color: #2563eb;
+  --highlight-text-color: #60a5fa;
+  --color-focus: #1e3a8a;
+  --color-claro: #3b82f6;
+  --primary-tranparent-1: rgba(59, 130, 246, 0.24);
+  --primary-tranparent-2: rgba(59, 130, 246, 0.16);
+  --primary-tranparent-3: rgba(59, 130, 246, 0.04);
 
-  --secondary-color: #FF6F61;
-  --accent-color: #FFC107;
-  --cta-color: #FF9800;
-  --decorative-color: #9C27B0;
-  --background-color: #F0F0F0;
+  --secondary-color: #fb923c;
+  --accent-color: #fbbf24;
+  --cta-color: #3b82f6;
+  --decorative-color: #c084fc;
+  --background-color: #0a0f1a;
   /* color de texto en general */
-  --text-color: var(--primary-color-text);
-  --primary-color-text: #d3dbe6;
+  --text-color: #f3f4f6;
+  --primary-color-text: #f3f4f6;
 
   --pdf: #B30C00;
 
@@ -42,7 +42,7 @@
   --color-white-60: rgba(255, 255, 255, 0.4);
   --color-black: #000000;
   --color-error: #e24c4c;
-  --color-green: #27ae60;
+  --color-green: #27ae5f5d;
   /* colores para los estados de los connectores de la electrolinera */
   --color-available: #4CAF50; /* Verde */
   --color-preparing: #FFC107; /* Amarillo */
@@ -3450,7 +3450,7 @@
   }
 
   .p-datatable .p-datatable-header {
-    background: var(--surface-b);
+    background: var(--surface-card);
     color: var(--color-4);
     border: 1px solid var(--surface-d);
     border-width: 1px 0 1px 0;
@@ -3459,7 +3459,7 @@
   }
 
   .p-datatable .p-datatable-footer {
-    background: var(--surface-b);
+    background: var(--surface-card);
     color: var(--color-4);
     border: 1px solid var(--surface-d);
     border-width: 0 0 1px 0;
@@ -6209,9 +6209,9 @@
   }
 
   .p-panelmenu .p-panelmenu-header .p-panelmenu-header-content {
-    border: 1px solid var(--surface-d);
+    border: 1px solid var(--surface-card);
     color: var(--color-1);
-    background: var(--surface-b);
+    background: var(--surface-card);
     border-radius: 6px;
     transition: box-shadow 0.2s;
   }
@@ -7481,7 +7481,7 @@
   }
   /* TODO aqui hay 2 colores verdes */
   .p-button:focus {
-    box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px #75f0e3, 0 1px 2px 0 black;
+    box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-focus), 0 1px 2px 0 black;
   }
 
   .p-button.p-button-secondary:enabled:focus {
@@ -7489,7 +7489,7 @@
   }
 
   .p-button.p-button-success:enabled:focus {
-    box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px #88eaac, 0 1px 2px 0 black;
+    box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-focus), 0 1px 2px 0 black;
   }
 
   .p-button.p-button-info:enabled:focus {

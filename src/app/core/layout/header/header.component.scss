@@ -1,16 +1,47 @@
-:host ::ng-deep .p-menuitem-icon {
-  color: var(--primary-color);
-}
-
-:host ::ng-deep .p-menuitem-text {
-  color: var(--primary-color-text);
-  font-weight: bold;
-}
-
-.fixed-menubar {
-  position: fixed;
-  top: 0;
-  left: 0;
+// header.component.scss
+:host {
+  display: block;
   width: 100%;
-  z-index: 1000;
+}
+
+// Estilos del menú
+:host ::ng-deep {
+  .p-menuitem-icon {
+    color: var(--primary-color);
+    transition: color 0.3s ease;
+  }
+
+  .p-menuitem-text {
+    color: var(--primary-color-text);
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .p-menubar {
+    border-radius: 0;
+    padding: 0.5rem 1rem;
+    background: var(--surface-ground);
+    border: none;
+    border-bottom: 1px solid var(--surface-ground);
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+
+      .p-menubar-start {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+}
+
+// Si quieres mantener la apariencia fija pero que se adapte
+.menubar-container {
+  width: 100%;
+  background: var(--surface-card);
+  border-bottom: 1px solid var(--surface-border);
+  
+  // Se adaptará automáticamente porque está en el flujo
+  :host-context(.sidebar-open) & {
+    width: 100%; // El layout content ya controla el margin
+  }
 }

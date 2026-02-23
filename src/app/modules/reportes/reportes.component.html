@@ -1,58 +1,55 @@
-<div>
-  <p-card>
+<div class="container">
+  <div class="card">
     <div class="row">
-      <h3><b>{{tituloComponente.mainTitle}}</b></h3>
-    </div>
+      <p-table responsiveLayout="stack" dataKey="id" styleClass="p-datatable-gridlines p-datatable-striped"
+        [paginator]="false" [rows]="5" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]"
+        paginatorLocale="es-ES" [customSort]="true" width="100%">
+        <ng-template pTemplate="caption">
+          <div class="flex align-items-center justify-content-between w-full mb-3">
+            <!-- Título a la izquierda -->
+            <h5 class="m-0 text-lg font-medium text-color">
+              {{tituloComponente.secondaryTitle}}
+            </h5>
 
-<div class="row p-0">
-  <p-card header="" subheader="" class="p-0">
+            <!-- Filtros a la derecha -->
+            <div class="flex align-items-center gap-3">
+              <div class="flex align-items-center gap-2">
+                <label class="font-bold ">Rango de fechas:</label>
+                <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" dateFormat="dd/mm/yy"
+                  [showIcon]="true" [style]="{'width':'250px'}" placeholder="dd/mm/aaaa - dd/mm/aaaa"
+                  styleClass="border-round-lg">
+                </p-calendar>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-table>
 
-    <div class="grid p-0 justify-content-center">
 
-      <div class="col-12 md:col-2 text-center">
-        <div class="flex flex-column align-items-center justify-content-center">
-          <label class="mb-2 font-bold">Rango de fechas:</label>
-          <p-calendar [(ngModel)]="rangeDates"
-                      selectionMode="range"
-                      [readonlyInput]="true"
-                      dateFormat="dd/mm/yy"
-                      [showIcon]="true"
-                      [style]="{'width':'250px'}"> </p-calendar>
+      <br>
+
+      <div class="grid m-0 p-0">
+        <div class="card flex justify-content-center col-12 md:col-4 " *ngFor="let reporte of tiposReportes">
+
+          <p-card [header]="reporte.nombre" class="card-interactiva"
+            [class.card-seleccionado]="reporte === reporteActivoVisual" [style]="{ width: '360px', cursor: 'pointer' }"
+            (click)="descargarDesdeCard(reporte)">
+
+            <ng-template pTemplate="header">
+              <img [alt]="reporte.nombre" [src]="reporte.imagen" style="height: 200px; object-fit: cover;"
+                onerror="this.src='https://primefaces.org/cdn/primeng/images/card-ng.jpg';" />
+            </ng-template>
+
+          </p-card>
+
         </div>
       </div>
 
-    </div>
-  </p-card>
-</div>
-    <br>
-
-  <div class="grid m-0 p-0">
-      <div class="card flex justify-content-center col-12 md:col-4 "
-        *ngFor="let reporte of tiposReportes">
-        
-        <p-card [header]="reporte.nombre" 
-                class="card-interactiva" 
-                [class.card-seleccionado]="reporte === reporteActivoVisual"
-                [style]="{ width: '360px', cursor: 'pointer' }" 
-                (click)="descargarDesdeCard(reporte)">
-          
-          <ng-template pTemplate="header">
-            <img [alt]="reporte.nombre" 
-                 [src]="reporte.imagen" 
-                 style="height: 200px; object-fit: cover;" 
-                 onerror="this.src='https://primefaces.org/cdn/primeng/images/card-ng.jpg';" />
-          </ng-template>
-
-        </p-card>
-
+      <div class="row p-0">
+      </div>
+      <div>
       </div>
     </div>
-    
-    <div class="row p-0">
-      </div>
-    <div>
-        </div>
-
-  </p-card>
+  </div>
 </div>
 <p-toast></p-toast>

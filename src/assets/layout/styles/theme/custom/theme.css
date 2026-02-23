@@ -4,31 +4,31 @@
   font-variation-settings: normal;
   --font-family: "Inter var", sans-serif;
   --font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-  --surface-a: var(--color-white);
-  --surface-b: #f8f9fa;
-  --surface-c: var(--surface-c);
-  --surface-d: #e9ecef;
-  --surface-e: var(--color-white);
-  --surface-f: var(--color-white);
+  --surface-a: #ffffff;
+  --surface-b: #f8fafc;
+  --surface-c: #f1f5f9;
+  --surface-d: #e2e8f0;
+  --surface-e: #ffffff;
+  --surface-f: #ffffff;
 
-  --primary-color: #14B8A6;
-  --primary-color-60: #00796B99;
-  --dark-primary-color: #00796B;
-  --highlight-text-color: #0F766E;
-  --color-focus: #99F6E4;
-  --color-claro: #0D9488;
-  --primary-tranparent-1: rgba(20, 184, 166, 0.24);
-  --primary-tranparent-2: rgba(20, 184, 166, 0.16);
-  --primary-tranparent-3: rgba(20, 184, 166, 0.04);
+  --primary-color: #3b82f6;
+  --primary-color-60: #3b82f699;
+  --dark-primary-color: #1d4ed8;
+  --highlight-text-color: #2563eb;
+  --color-focus: #93c5fd;
+  --color-claro: #3b82f6;
+  --primary-tranparent-1: rgba(59, 130, 246, 0.24);
+  --primary-tranparent-2: rgba(59, 130, 246, 0.16);
+  --primary-tranparent-3: rgba(59, 130, 246, 0.04);
 
-  --secondary-color: #FF6F61;
-  --accent-color: #FFC107;
-  --cta-color: #FF9800;
-  --decorative-color: #9C27B0;
-  --background-color: #F0F0F0;
+  --secondary-color: #f97316;
+  --accent-color: #fbbf24;
+  --cta-color: #3b82f6;
+  --decorative-color: #8b5cf6;
+  --background-color: #ffffff;
   /* color de texto en general */
-  --text-color: var(--primary-color-text);
-  --primary-color-text: #212121;
+  --text-color: #1e293b;
+  --primary-color-text: #1e293b;
 
   --pdf: #B30C00;
 
@@ -42,9 +42,9 @@
   --color-white-60: rgba(255, 255, 255, 0.4);
   --color-black: #000000;
   --color-error: #e24c4c;
-  --color-green: #27ae60;
+  --color-green: red;
   /* colores para los estados de los connectores de la electrolinera */
-  --color-available: #4CAF50; /* Verde */
+  --color-available: red; /* Verde */
   --color-preparing: #FFC107; /* Amarillo */
   --color-charging: #2196F3;  /* Azul */
   --color-finishing: #e67e22; /* Naranja */
@@ -56,8 +56,8 @@
   --color-especial:#9b59b6; /* plomo */
 /* colores para la velocidad de carga */
   --colore-velocidad1:#808080;
-  --colore-velocidad2:#32CD32;
-  --colore-velocidad3:#00FF00;
+  --colore-velocidad2:red;
+  --colore-velocidad3:red;
   --colore-velocidad4:#FF8C00;
   --colore-velocidad5:#B22222;
 
@@ -5959,7 +5959,7 @@
 
   .p-menubar {
     padding: 0.5rem;
-    background: var(--surface-b);
+    background: var(--surface-ground);
     color: var(--color-2);
     border: 1px solid var(--surface-d);
     border-radius: 6px;
@@ -6209,9 +6209,9 @@
   }
 
   .p-panelmenu .p-panelmenu-header .p-panelmenu-header-content {
-    border: 1px solid var(--surface-d);
+    border: 1px solid var(--surface-card);
     color: var(--color-1);
-    background: var(--surface-b);
+    background: var(--surface-card);
     border-radius: 6px;
     transition: box-shadow 0.2s;
   }
@@ -7481,7 +7481,7 @@
   }
 
   .p-button:focus {
-    box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px #75f0e3, 0 1px 2px 0 black;
+    box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-focus), 0 1px 2px 0 black;
   }
 
   .p-button.p-button-secondary:enabled:focus {
@@ -7489,7 +7489,7 @@
   }
 
   .p-button.p-button-success:enabled:focus {
-    box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px #88eaac, 0 1px 2px 0 black;
+    box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-focus), 0 1px 2px 0 black;
   }
 
   .p-button.p-button-info:enabled:focus {

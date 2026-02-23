@@ -4,6 +4,7 @@ import { mainTitles } from '../../constants/labels';
 import { rutas } from '../../constants/rutas';
 import { Global } from 'src/app/core/variables/globales';
 import { ValidaToken } from '../../utils/verificarToken';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,7 +12,6 @@ import { ValidaToken } from '../../utils/verificarToken';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-
   // variables d econtrol
   public esSuperAdmin: boolean = false;
 
@@ -19,8 +19,8 @@ export class SidebarComponent implements OnInit {
   public items: MenuItem[];
 
   constructor(
-    public global: Global
-  ) { }
+    public global: Global,
+  ) {}
 
   onItemClick() {
     this.itemClick.emit();
@@ -38,9 +38,23 @@ export class SidebarComponent implements OnInit {
             routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaDashboard],
           },
           {
+            label: mainTitles['administradores'].mainTitle,
+            icon: 'pi pi-fw pi-user',
+            routerLink: [
+              '/' + rutas.rutaPrincipal + '/' + rutas.rutaAdministradores,
+            ],
+          },
+          {
+            label: mainTitles['clientes'].mainTitle,
+            icon: 'pi pi-fw pi-users',
+            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaClientes],
+          },
+          {
             label: mainTitles['electrolineras'].mainTitle,
             icon: 'pi pi-fw pi-bolt',
-            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaElectrolineras],
+            routerLink: [
+              '/' + rutas.rutaPrincipal + '/' + rutas.rutaElectrolineras,
+            ],
           },
           // {
           //   label: mainTitles['desvincularCliente'].mainTitle,
@@ -68,34 +82,48 @@ export class SidebarComponent implements OnInit {
             routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaReportes],
           },
           {
-            label: mainTitles['parametricas'].mainTitle,
-            separator: true,
-            disabled: true
-          },
-          {
             label: mainTitles['modelos'].mainTitle,
             icon: 'pi pi-fw pi-verified',
-            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaParametricas + '/' + rutas.rutaModelo],
+            routerLink: [
+              '/' +
+                rutas.rutaPrincipal +
+                '/' +
+                rutas.rutaParametricas +
+                '/' +
+                rutas.rutaModelo,
+            ],
           },
           {
             label: mainTitles['tasaCarga'].mainTitle,
             icon: 'pi pi-fw pi-verified',
-            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaParametricas + '/' + rutas.rutaTasaCarga],
+            routerLink: [
+              '/' +
+                rutas.rutaPrincipal +
+                '/' +
+                rutas.rutaParametricas +
+                '/' +
+                rutas.rutaTasaCarga,
+            ],
           },
           {
             label: mainTitles['direcciones'].mainTitle,
             icon: 'pi pi-fw pi-map',
-            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaParametricas + '/' + rutas.rutaAddress],
+            routerLink: [
+              '/' +
+                rutas.rutaPrincipal +
+                '/' +
+                rutas.rutaParametricas +
+                '/' +
+                rutas.rutaAddress,
+            ],
           },
           // {
           //   label: mainTitles['contrasenias'].mainTitle,
           //   icon: 'pi pi-fw pi-key',
           //   routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaParametricas + '/' + rutas.rutaPassword],
           // },
-    
         ];
-      } 
-      else {
+      } else {
         this.items = [
           {
             label: mainTitles['dashboard'].mainTitle,
@@ -105,7 +133,9 @@ export class SidebarComponent implements OnInit {
           {
             label: mainTitles['electrolineras'].mainTitle,
             icon: 'pi pi-fw pi-bolt',
-            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaElectrolineras],
+            routerLink: [
+              '/' + rutas.rutaPrincipal + '/' + rutas.rutaElectrolineras,
+            ],
           },
           // {
           //   label: mainTitles['transacciones'].mainTitle,
@@ -127,11 +157,17 @@ export class SidebarComponent implements OnInit {
             icon: 'pi pi-fw pi-file-excel',
             routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaReportes],
           },
-
         ];
       }
+      
     }
+
+    /*setTimeout(() => {
+      const currentUrl = this.router.url;
+      console.log('URL actual:', currentUrl);
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigateByUrl(currentUrl);
+      });
+    });*/
   }
-
-
 }

@@ -1,12 +1,45 @@
-<div class="layout-wrapper">
-    <app-header (toggleSidebar)="toggleSidebar()"></app-header>
-    <p-sidebar [(visible)]="visibleSidebar" [baseZIndex]="10000">
-        <app-sidebar (itemClick)="toggleSidebar()"></app-sidebar>
-    </p-sidebar>
-    <div class="layout-content" [ngClass]="{'sidebar-visible': visibleSidebar}">
-        <div class="content">
-            <router-outlet></router-outlet>
+<div class="layout-wrapper" [ngClass]="{'sidebar-open': visibleSidebar}">
+    <div class="layout-main">
+
+<p-sidebar [(visible)]="visibleSidebar" [baseZIndex]="10000" [modal]="false" [blockScroll]="false">
+    <!-- Fondo con imagen y capa blanca (z-index bajo) -->
+    <div class="sidebar-image-background"></div>
+    
+    <!-- HEADER (z-index alto) -->
+    <ng-template pTemplate="header">
+        <div class="flex align-items-center justify-content-center w-full p-3 header-content">
+            <img [src]="logoUrl"  alt="logo" width="200px">
+        </div>
+    </ng-template>
+    
+    <!-- CONTENT (z-index alto) -->
+    <ng-template pTemplate="content">
+        <div class="sidebar-content">
+            <app-sidebar (itemClick)="selectedItemSidebar()"></app-sidebar>
+        </div>
+    </ng-template>
+    
+    <!-- FOOTER (z-index alto) -->
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-center p-3 footer-content">
+            <p-button 
+                label="@Electrolineras v:1.16" 
+                [raised]="true" 
+                [style]="{'max-width': '280px', 'width': '100%', 'color': 'white', 'background-color': 'var(--color-claro)'}"
+            />
+        </div>
+    </ng-template>
+</p-sidebar>
+        <div class="layout-content mr-4">
+            <div class="content">
+
+                <app-header (toggleSidebar)="toggleSidebar()" class="mb-1"></app-header>
+                <router-outlet></router-outlet>
+                <app-footer></app-footer>
+
+
+            </div>
+
         </div>
     </div>
-    <app-footer></app-footer>
 </div>

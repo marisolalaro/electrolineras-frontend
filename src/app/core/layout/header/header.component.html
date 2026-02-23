@@ -2,11 +2,78 @@
   <ng-template pTemplate="menuicon">
     <i class="pi pi-angle-down"></i>
   </ng-template>
+  
   <ng-template pTemplate="start">
-    <button pButton pRipple icon="pi pi-bars" (click)="onToggleSidebar()"></button>
+    <p-button icon="pi pi-bars" [text]="true" (click)="onToggleSidebar()"/>
+    <span class="text-2xl font-bold" style="color: var(--color-claro);">
+      {{ tituloPrincipal }}
+    </span>
   </ng-template>
+    <div class="flex align-items-center justify-content-center flex-grow-1 mx-4">
+    <span class="p-input-icon-left w-full" style="max-width: 400px;">
+      <i class="pi pi-search"></i>
+      <input 
+        type="text" 
+        pInputText 
+        placeholder="Buscar..." 
+        class="w-full bg-white border-round-3xl"
+        style="border-radius: 30px; 
+               padding-left: 2.5rem;
+               border: 1px solid var(--surface-300);
+               width: 100%;"
+      >
+    </span>
+  </div>
+  
   <ng-template pTemplate="end">
-    <button pButton pRipple icon="pi pi-power-off" (click)="salir()" class="mr-2" pTooltip="Salir"
-      tooltipPosition="bottom"></button>
-  </ng-template>
-</p-menubar>  
+  <div class="flex align-items-center gap-2">
+    <!-- Buscador - se oculta en móvil -->
+    <span class="p-input-icon-left hidden md:block mr-2">
+      <i class="pi pi-search"></i>
+      <input 
+        type="text" 
+        pInputText 
+        placeholder="Buscar..." 
+        class="bg-white border-round-3xl"
+        style="border-radius: 30px; 
+               padding-left: 2.5rem;
+               width: 200px;
+               color: var(--color-claro);
+               border: 1px solid var(--color-claro);"
+      >
+    </span>
+    
+
+    <p-button [icon]="iconoActual" [rounded]="true" [text]="true" (click)="cambiarModo()" class="mr-2"/>
+    <p-button icon="pi pi-bell" [rounded]="true" [text]="true" class="mr-4"/>
+    <p-button 
+      #menuButton
+      icon="pi pi-user" 
+      [rounded]="true"
+      [style]="{'color': 'white'}"
+      (click)="menu.toggle($event)" class="mr-2">
+    </p-button>
+
+    <p-menu #menu [popup]="true" [model]="itemsMenu">
+      <ng-template pTemplate="start">
+        <div class="flex flex-column p-3 border-bottom-1 surface-border">
+          <span class="font-bold text-lg">{{ user.userName }}</span>
+          <span class="text-sm text-color-secondary">{{ user.electronicMail }}</span>
+        </div>
+      </ng-template>
+      
+      <ng-template pTemplate="item" let-item>
+        <a *ngIf="!item.separator; else separator"
+           class="p-menuitem-link flex align-items-center p-3 gap-2"
+           >
+          <span [class]="'p-menuitem-icon ' + item.icon"></span>
+          <span class="p-menuitem-text">{{ item.label }}</span>
+        </a>
+        <ng-template #separator>
+          <div class="p-menuitem-separator"></div>
+        </ng-template>
+      </ng-template>
+    </p-menu>
+  </div>
+</ng-template>
+</p-menubar>

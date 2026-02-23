@@ -1,4 +1,5 @@
 import { IMainTitles } from "../interfaces/labels.interface"
+import { rutas } from './rutas';
 
 export const labels: any = {
   // electric station
@@ -189,64 +190,78 @@ export const mainTitles: IMainTitles = {
   // menu Horizontal
   clientes: {
     mainTitle: 'Clientes',
-    secondaryTitle: 'Listado de Clientes'
+    secondaryTitle: 'Listado de Clientes',
+    route: rutas.rutaClientes
   },
   administradores: {
     mainTitle: 'Administradores',
-    secondaryTitle: 'Listado de Administradores'
+    secondaryTitle: 'Listado de Administradores',
+    route: rutas.rutaAdministradores
   },
   // menu Lateral
   electrolineras: {
     mainTitle: 'Electrolineras',
-    secondaryTitle: 'Listado de Electrolineras'
+    secondaryTitle: 'Listado de Electrolineras',
+    route: rutas.rutaElectrolineras
   },
   dashboard: {
     mainTitle: 'Dashboard',
-    secondaryTitle: 'Dashboard'
+    secondaryTitle: 'Dashboard',
+    route: rutas.rutaDashboard 
   },
   transacciones: {
     mainTitle: 'Transacciones',
-    secondaryTitle: 'Listado de Transacciones'
+    secondaryTitle: 'Listado de Transacciones',
+    route: rutas.rutaTransacciones
   },
   facturas: {
     mainTitle: 'Facturas-compra-venta',
-    secondaryTitle: 'Listado de Facturas Compras de crédito'
+    secondaryTitle: 'Listado de Facturas Compras de crédito',
+    route: rutas.rutaFacturaTransferencias
   },
   facturasCargaEnergia: {
-    mainTitle: 'Facturas suministro de energía ',
-    secondaryTitle: 'Listado de Facturas Carga de Energía'
+    mainTitle: 'Facturas suministro de energía',
+    secondaryTitle: 'Listado de Facturas Carga de Energía',
+    route: rutas.rutaFacturasCargasEnergia
   },
   electrolinerasOnline: {
     mainTitle: 'Electrolineras en Linea',
-    secondaryTitle: 'Listado de Electrolineras en Linea'
+    secondaryTitle: 'Listado de Electrolineras en Linea',
+    route: rutas.rutaElectrolinerasOnline
   },
   reportes: {
     mainTitle: 'Reportes',
-    secondaryTitle: 'Reportes'
+    secondaryTitle: 'Listado de Reportes',
+    route: rutas.rutaReportes
   },
   desvincularCliente: {
     mainTitle: 'Desvincular Cliente',
-    secondaryTitle: 'Desvincular Cliente'
+    secondaryTitle: 'Desvincular Cliente',
+    route: rutas.rutaDesvincular
   },
-
   parametricas: {
-    mainTitle: 'Administración Paramétricas',
-    secondaryTitle: 'Paramétricas'
+    mainTitle: 'Paramétricas',
+    secondaryTitle: 'Listado de Paramétricas',
+    route: rutas.rutaParametricas
   },
   modelos: {
     mainTitle: 'Modelos de Electrolineras',
-    secondaryTitle: 'Modelo'
+    secondaryTitle: 'Listado de Modelos de Electrolineras',
+    route: rutas.rutaModelo
   },
   tasaCarga: {
     mainTitle: 'Tasas de carga',
-    secondaryTitle: 'Tasas de carga'
+    secondaryTitle: 'Listado de Tasas de carga',
+    route: rutas.rutaTasaCarga
   },
   direcciones: {
     mainTitle: 'Direcciones',
-    secondaryTitle: 'Dirección'
+    secondaryTitle: 'Lista de direcciones',
+    route: rutas.rutaAddress
   },
   contrasenias: {
     mainTitle: 'Contraseñas',
-    secondaryTitle: 'Contraseña'
-  },
+    secondaryTitle: 'Contraseña',
+    route: rutas.rutaPassword
+  }
 }

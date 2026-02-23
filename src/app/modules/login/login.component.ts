@@ -106,7 +106,7 @@ export default class LoginComponent {
     })
   }
 
-  login() {
+  /*login() {
     
     this.loading = true;
     return new Promise((resolve) => {
@@ -123,6 +123,42 @@ export default class LoginComponent {
           this.loading = false;
           resolve(false);
         });
+    });
+  }*/
+
+login() {
+    this.loading = true;
+    return new Promise((resolve) => {
+      
+      // SIMULACIÓN: Datos de ejemplo para pruebas
+      setTimeout(() => {
+        const mockData = {
+    "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbi5zeXMiLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNzcxODI0MTAzLCJ1c2VyIjp7ImlkIjoxLCJ1c2VyTmFtZSI6ImFkbWluLnN5cyIsImVsZWN0cm9uaWNNYWlsIjoiYWRtaW4uc3lzQGVuZGVzeWMuYm8iLCJuYW1lcyI6bnVsbCwibGFzdE5hbWUiOm51bGwsInJvbGVzIjpbeyJpZCI6MSwibmFtZVJvbGUiOiJST0xFX0FETUlOX1NZUyJ9XX0sImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU5fU1lTIl0sImp0aSI6Il9IQzVjcDZnTnl6dGR6LURWM3lMVkJncjA3TSIsImNsaWVudF9pZCI6ImVwYWdvcyJ9.HEI8fQySaJgiev-tfieA2z60LqX3oPow_FH2rssM5DkqJ510cWPGQlzEGoUshrY8T_3CwnI9ThSrbZPPRzb8c2b2usBcOMduQLoLJwVeiCstExIGMesp0NtOCXUiXhGxGuC1w7NU83U742czEyOvPRTUXyjVsKXI92N117_mg9xWr5s-wWX93y9Q5EVBnPwnX9KbE5PWSlMQ_G5Bix5w5m2nWK4GETgZ1u5b-_8T5QV_qJHFY-58WOy0lr8ndxEuTBxKfa0IYp0pgAA3XhDLRtH0FZcTqMxAkykIzWkTd-v1jzFMRalE2Fj7l0-28sFA-KgZ_a4GD_RKcB3IGA-zRw",
+    "token_type": "bearer",
+    "refresh_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbi5zeXMiLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiYXRpIjoiX0hDNWNwNmdOeXp0ZHotRFYzeUxWQmdyMDdNIiwiZXhwIjoxNzcxNzM0MTAzLCJ1c2VyIjp7ImlkIjoxLCJ1c2VyTmFtZSI6ImFkbWluLnN5cyIsImVsZWN0cm9uaWNNYWlsIjoiYWRtaW4uc3lzQGVuZGVzeWMuYm8iLCJuYW1lcyI6bnVsbCwibGFzdE5hbWUiOm51bGwsInJvbGVzIjpbeyJpZCI6MSwibmFtZVJvbGUiOiJST0xFX0FETUlOX1NZUyJ9XX0sImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU5fU1lTIl0sImp0aSI6InNwZDZIRzltNlN3ZFFZRkNfaVZIa2xZVWdOQSIsImNsaWVudF9pZCI6ImVwYWdvcyJ9.N5urL8a3CPOiRo2vB9rSNPWd_78S1SSlIsOjTecF6OKGIBBS-eZWIakMTvtF92Yus26x6ZnpaCNF330KchfOCRLpWGONhBHp-C8xBTOvDOVTgrtlYoJd4CaD0vgTkHClkrHn9YuNPQy2_TthQOi4po_P2k5ngPpvuvpYWPwTBFwAh7wHyK-R6slzbVYqY4RmN2tLJMyr7AEtIaJIn9xiNaoeeSLvJrk-iqUliRx2YG8wOIMEkTU1zkz7MW8RdnzgP-GtFmSazUl-TOKPHRUY9io24RWOxVHftnyZ7CrbtEDn-NPDzMdEHWvGkHTnXWRccBmAM6wbmw8YxIh6TK0Ttg",
+    "expires_in": 99999,
+    "scope": "read write",
+    "user": {
+        "id": 1,
+        "userName": "admin.sys",
+        "electronicMail": "admin.sys@endesyc.bo",
+        "names": null,
+        "lastName": null,
+        "roles": [
+            {
+                "id": 1,
+                "nameRole": "ROLE_ADMIN_SYS"
+            }
+        ]
+    },
+    "jti": "_HC5cp6gNyztdz-DV3yLVBgr07M"
+};
+        
+        this.dataLogin = mockData;
+        this.loading = false;
+        resolve(true);
+      }, 1500); // Simula tiempo de respuesta
+      
     });
   }
 

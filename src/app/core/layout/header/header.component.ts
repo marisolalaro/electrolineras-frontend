@@ -1,8 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { PrimeModule } from 'src/app/prime.module';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 // core
 import { rutas } from '../../constants/rutas';
 import { Global } from '../../variables/globales';
@@ -17,27 +19,50 @@ import { ValidaToken } from '../../utils/verificarToken';
   imports: [CommonModule, RouterModule, PrimeModule],
   standalone: true,
 })
-
-export class HeaderComponent implements OnInit {
-
+export class HeaderComponent implements OnInit, OnDestroy {
   // variables de control
   public componenteVisible: boolean = false;
 
   // variables propias del componente
   public user: any;
   public items: MenuItem[] | undefined;
+  itemsMenu: MenuItem[] = [
+  {
+    label: 'Mi Perfil',
+    icon: 'pi pi-id-card',
+    command: () => console.log()
+  },
+  {
+    label: 'Configuración',
+    icon: 'pi pi-cog',
+    command: () => console.log()
+  },
+  {
+    separator: true
+  },
+  {
+    label: 'Cerrar Sesión',
+    icon: 'pi pi-power-off',
+    command: () => this.salir()
+  }
+];
+
 
   // Nueva variable para controlar el icono
   public iconoActual: string = 'pi pi-fw pi-sun';
 
+  public tituloPrincipal: string = '';
+
   // variables de salida
   @Output() toggleSidebar = new EventEmitter<void>();
+  
+  private routerSubscription: Subscription;
 
   constructor(
     private router: Router,
     private global: Global,
-    public themeService: ThemeService
-  ) { }
+    public themeService: ThemeService,
+  ) {}
 
   ngOnInit() {
     if (ValidaToken()) {
@@ -46,22 +71,49 @@ export class HeaderComponent implements OnInit {
           if (datosInicializados) {
             return this.inicializaDatos();
           } else {
-            return false
+            return false;
           }
         })
         .then((datosInicializados) => {
           if (datosInicializados) {
             this.componenteVisible = true;
+            this.actualizarTitulo(); // Actualizar título inicial
           }
         });
+      
+      // Suscribirse a los cambios de ruta
+      this.routerSubscription = this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd)
+      ).subscribe(() => {
+        this.actualizarTitulo();
+      });
     }
+  }
+  
+  ngOnDestroy() {
+    // Desuscribirse para evitar memory leaks
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+  }
+  
+  actualizarTitulo() {
+    const ruta = this.router.url.split('/')[2];
+    console.log('Ruta actual:', ruta);
+    
+    const tituloEncontrado = Object.values(mainTitles).find(
+      (item) => item.route === ruta,
+    );
+
+    this.tituloPrincipal = tituloEncontrado?.mainTitle || 'Electrolineras';
+    console.log('Título actualizado:', this.tituloPrincipal);
   }
 
   inicializaDatos() {
     return new Promise((resolve) => {
       this.user = this.global.getUser();
       this.items = [
-        {
+        /*{
           label: mainTitles['administradores'].mainTitle,
           icon: 'pi pi-fw pi-user',
           routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaAdministradores],
@@ -70,11 +122,8 @@ export class HeaderComponent implements OnInit {
           label: mainTitles['clientes'].mainTitle,
           icon: 'pi pi-fw pi-users',
           routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaClientes],
-        },
-        {
-          separator: true
-        },
-        {
+        },*/
+        /*{
           label: this.user.roles[0].nameRole == 'ROLE_ADMIN_SYS' ? 'Rol: Administrador' : 'Rol: General',
           icon: 'pi pi-id-card',
           disabled: true,
@@ -88,39 +137,39 @@ export class HeaderComponent implements OnInit {
         {
           icon: this.iconoActual,
           command: () => this.cambiarModo()
-        }
+        }*/
       ];
       resolve(true);
-    })
+    });
   }
 
   verificaIcono() {
     return new Promise((resolve) => {
-    if (localStorage.getItem('theme')) {
-      if(localStorage.getItem('theme') == 'dark') {
-        this.iconoActual = 'pi pi-fw pi-sun'
-        this.themeService.enableDarkTheme();
+      if (localStorage.getItem('theme')) {
+        if (localStorage.getItem('theme') == 'dark') {
+          this.iconoActual = 'pi pi-fw pi-sun';
+          this.themeService.enableDarkTheme();
+        } else {
+          this.iconoActual = 'pi pi-fw pi-moon';
+          this.themeService.disableDarkTheme();
+        }
       } else {
-        this.iconoActual = 'pi pi-fw pi-moon'
-        this.themeService.disableDarkTheme();
+        this.iconoActual = 'pi pi-fw pi-moon';
+        localStorage.setItem('theme', 'light');
       }
-    } else {
-      this.iconoActual = 'pi pi-fw pi-moon';
-      localStorage.setItem('theme', 'light');
-    }
-    resolve(true);
-    })
+      resolve(true);
+    });
   }
 
   cambiarModo() {
     if (this.themeService.isDarkThemeEnabled()) {
       this.themeService.disableDarkTheme();
       this.iconoActual = 'pi pi-fw pi-moon';
-    } else{
+    } else {
       this.themeService.enableDarkTheme();
       this.iconoActual = 'pi pi-fw pi-sun';
     }
-    this.inicializaDatos()
+    this.inicializaDatos();
   }
 
   onToggleSidebar() {
@@ -128,13 +177,11 @@ export class HeaderComponent implements OnInit {
   }
 
   salir() {
-    var c = confirm("¿Salir del sitio web?");
+    var c = confirm('¿Salir del sitio web?');
     if (c == true) {
       localStorage.removeItem('token');
       localStorage.removeItem('theme');
       this.router.navigate(['']);
     }
   }
-
 }
-
