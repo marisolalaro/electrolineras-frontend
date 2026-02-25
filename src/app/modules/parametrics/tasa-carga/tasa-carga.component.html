@@ -1,385 +1,73 @@
 <p-confirmDialog [style]="{ width: '50vw' }"></p-confirmDialog>
-<div class="container">
-  <div class="card">
-    <div class="row">
-      <h3>
-        <b>{{ componentTitle.mainTitle }}</b>
-      </h3>
-      <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem" *ngIf="serviceResponse">
-        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllModels()" pTooltip="Actualizar"
-          tooltipPosition="left"></p-button>
-        &nbsp;
-      </div>
+
+<div class="container p-2">
+  <div class="card shadow-2 border-round-xl overflow-hidden">
+    
+    <div class="text-center mb-3 py-3 border-bottom-1 border-300" style="background: var(--surface-section);">
+      <h1 class="siat-title m-0 uppercase">
+        {{ componentTitle.mainTitle }}
+      </h1>
+      <p class="siat-subtitle m-0 text-600 font-medium">Administración de Tarifas de Consumo</p>
     </div>
 
-    <div class="row" *ngIf="serviceResponse">
-      <p-table #dt1 [value]="tasasCarga" (sortFunction)="customSort($event)" [customSort]="true" [paginator]="true"
-        [rows]="5" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 20]" paginatorLocale="es-ES"
-        currentPageReportTemplate="Mostrando {first} a {last} de {{
-          totalRecords
-        }} registros">
-        <ng-template pTemplate="caption">
-          <div class="flex">
-            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
-              (click)="clearFilters(dt1); getAllModels()"></button>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <!-- ordenar asc y desc -->
-          <tr>
-            <th style="width: 5%; text-align: center; vertical-align: middle" rowspan="2">
-              #
-            </th>
-            <th style="width: 15%; text-align: center; vertical-align: middle" pSortableColumn="amount">
-              Tasa de Carga (Bs/Kw)<p-sortIcon field="amount"></p-sortIcon>
-            </th>
-            <th style="width: 13%; text-align: center; vertical-align: middle" pSortableColumn="description">
-              Descripción<p-sortIcon field="description"></p-sortIcon>
-            </th>
-            <!-- <th style="width: 13%; text-align: center; vertical-align: middle" pSortableColumn="minimumCurrent">
-              Corriente Mínima (A)<p-sortIcon field="minimumCurrent"></p-sortIcon>
-            </th>
-            <th style="width: 13%; text-align: center; vertical-align: middle" pSortableColumn="maximumCurrent">
-              Corriente Máxima (A)<p-sortIcon field="maximumCurrent"></p-sortIcon>
-            </th> -->
-            <th style="width: 13%; text-align: center; vertical-align: middle" pSortableColumn="periodo">
-              Período<p-sortIcon field="periodo"></p-sortIcon>
-            </th>
-            <th style="width: 13%; text-align: center; vertical-align: middle" pSortableColumn="starTime">
-              Hora Inicio<p-sortIcon field="starTime"></p-sortIcon>
-            </th>
-            <th style="width: 13%; text-align: center; vertical-align: middle" pSortableColumn="endTime">
-              Hora final<p-sortIcon field="endTime"></p-sortIcon>
-            </th>
-            <th style="width: 13%; text-align: center; vertical-align: middle" pSortableColumn="enabled" rowspan="2">
-              Estado<p-sortIcon field="enabled"></p-sortIcon>
-            </th>
-            <th style="width: 10%; text-align: center; vertical-align: middle" rowspan="2">
-              Opciones
-            </th>
-          </tr>
-          <!-- filtros -->
-          <tr>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'amount', 'contains')"
-                placeholder="Tasa de Carga" class="w-full" [(ngModel)]="amount" />
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'description', 'contains')"
-                placeholder="Descripción" class="w-full" [(ngModel)]="description" />
-            </th>
-            <!-- <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'minimumCurrent', 'contains')"
-                placeholder="Corriente Mínima" class="w-full" [(ngModel)]="minimumCurrent" />
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'maximumCurrent', 'contains')"
-                placeholder="Corriente Máxima" class="w-full" [(ngModel)]="maximumCurrent" />
-            </th> -->
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'periodo', 'contains')" placeholder="Período"
-                class="w-full" [(ngModel)]="periodo" />
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'startTime', 'contains')"
-                placeholder="Hora inicio" class="w-full" [(ngModel)]="startTime" />
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'endTime', 'contains')"
-                placeholder="Hora Final" class="w-full" [(ngModel)]="endTime" />
-            </th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
-          <tr>
-            <td style="text-align: center; vertical-align: middle">
-              {{ rowIndex + 1 }}
-            </td>
-            <td style="text-align: left; vertical-align: middle" class="uppercase">
-              {{ rowData["amount"] }}
-            </td>
-            <td style="text-align: left; vertical-align: middle" class="uppercase">
-              {{ rowData["description"] }}
-            </td>
-            <!-- <td style="text-align: left; vertical-align: middle" class="uppercase">
-              {{ rowData["minimumCurrent"] }}
-            </td>
-            <td style="text-align: left; vertical-align: middle" class="uppercase">
-              {{ rowData["maximumCurrent"] }}
-            </td> -->
-            <td style="text-align: left; vertical-align: middle" class="uppercase">
-              {{ rowData["periodo"] }}
-            </td>
-            <td style="text-align: left; vertical-align: middle" class="uppercase">
-              {{ rowData["startTime"] | formatHoraMinutoSegundo }}
-            </td>
-            <td style="text-align: left; vertical-align: middle" class="uppercase">
-              {{ rowData["endTime"] | formatHoraMinutoSegundo }}
-            </td>
-            <td style="text-align: left; vertical-align: middle" class="uppercase" [ngClass]="
-                rowData['enabled']
-                  ? 'estado-habilitado'
-                  : 'estado-deshabilitado'
-              ">
-              {{ rowData["enabled"] | formatHabilitadoDeshabilitado }}
-            </td>
+    <div class="px-4 pb-4">
+      <div class="flex justify-content-between align-items-center mb-3">
+        <div class="flex gap-2">
+          <button pButton label="Limpiar Filtros" class="p-button-outlined p-button-sm" 
+                  icon="pi pi-filter-slash" (click)="clearFilters(dt1); getAllModels()"></button>
+        </div>
+        <div class="flex gap-2">
+          <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllModels()" 
+                    pTooltip="Actualizar" severity="secondary"></p-button>
+        </div>
+      </div>
 
-            <td style="text-align: center; vertical-align: middle">
-              <i class="pi pi-fw pi-pencil" style="font-size: 1.5rem; color: var(--primary-color)"
-                data-bs-toggle="modal" data-bs-target="#editModal" (click)="selectedEdit(rowData)" pTooltip="Editar"
-                *ngIf="rowData['enabled']"></i>
+      <p-table #dt1 [value]="tasasCarga" (sortFunction)="customSort($event)" [customSort]="true" 
+               [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+               styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm shadow-1"
+               currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros">
+        
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="text-center" style="width: 5%" rowspan="2">#</th>
+            <th pSortableColumn="amount" style="width: 15%">Bs/Kw <p-sortIcon field="amount"></p-sortIcon></th>
+            <th pSortableColumn="description">Descripción <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="periodo" style="width: 12%">Período <p-sortIcon field="periodo"></p-sortIcon></th>
+            <th pSortableColumn="startTime" style="width: 12%">Inicio <p-sortIcon field="startTime"></p-sortIcon></th>
+            <th pSortableColumn="endTime" style="width: 12%">Fin <p-sortIcon field="endTime"></p-sortIcon></th>
+            <th class="text-center" pSortableColumn="enabled" style="width: 12%" rowspan="2">Estado <p-sortIcon field="enabled"></p-sortIcon></th>
+            <th class="text-center" style="width: 10%" rowspan="2">Opciones</th>
+          </tr>
+          <tr>
+            <th><input pInputText type="text" (input)="applyFilter($event, 'amount', 'contains')" placeholder="Tasa" class="w-full p-inputtext-sm" [(ngModel)]="amount" /></th>
+            <th><input pInputText type="text" (input)="applyFilter($event, 'description', 'contains')" placeholder="Descripción" class="w-full p-inputtext-sm" [(ngModel)]="description" /></th>
+            <th><input pInputText type="text" (input)="applyFilter($event, 'periodo', 'contains')" placeholder="Período" class="w-full p-inputtext-sm" [(ngModel)]="periodo" /></th>
+            <th><input pInputText type="text" (input)="applyFilter($event, 'startTime', 'contains')" placeholder="Hora" class="w-full p-inputtext-sm" [(ngModel)]="startTime" /></th>
+            <th><input pInputText type="text" (input)="applyFilter($event, 'endTime', 'contains')" placeholder="Hora" class="w-full p-inputtext-sm" [(ngModel)]="endTime" /></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+          <tr>
+            <td class="text-center font-bold text-600">{{ rowIndex + 1 }}</td>
+            <td class="font-bold text-lg" style="color: var(--primary-color);">{{ rowData["amount"] }} <small class="text-500">Bs.</small></td>
+            <td class="text-xs uppercase">{{ rowData["description"] }}</td>
+            <td class="text-xs uppercase text-700 font-semibold">{{ rowData["periodo"] }}</td>
+            <td class="text-center text-xs font-mono border-1 border-round surface-border">{{ rowData["startTime"] | formatHoraMinutoSegundo }}</td>
+            <td class="text-center text-xs font-mono border-1 border-round surface-border">{{ rowData["endTime"] | formatHoraMinutoSegundo }}</td>
+            <td class="text-center">
+                <span [class]="rowData['enabled'] ? 'estado-habilitado' : 'estado-deshabilitado'">
+                    <i class="pi" [ngClass]="rowData['enabled'] ? 'pi-check-circle' : 'pi-times-circle'"></i>
+                    {{ rowData["enabled"] ? 'ACTIVO' : 'INACTIVO' }}
+                </span>
+            </td>
+            <td class="text-center">
+              <i class="pi pi-pencil text-blue-700 cursor-pointer hover:scale-125 transition-all" 
+                 (click)="selectedEdit(rowData)" pTooltip="Editar" *ngIf="rowData['enabled']"></i>
             </td>
           </tr>
         </ng-template>
       </p-table>
     </div>
-
-    <div *ngIf="!serviceResponse">
-      <app-not-found [mensajeNotFound]="mensaje" (datosEnviados)="getAllModels()"></app-not-found>
-      <br />
-      <br />
-    </div>
-
-    <!-- modal Crear nuevo -->
-    <section class="dialogCrear">
-      <p-dialog header="{{ titlesGlobales.create }}" [(visible)]="dialogRegistro" [style]="{ width: '50vw' }"
-        class="p-fluid" [dismissableMask]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-        [draggable]="false" [resizable]="false">
-        <ng-template pTemplate="content">
-          <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
-            <div class="form-group field">
-              <label for="amount">{{ labelsGlobales.tasaCarga }}</label>
-              <div class="p-inputgroup">
-                <input type="text" pInputText required formControlName="amount" appUppercase [ngClass]="{
-                    'ng-invalid ng-dirty':
-                      submitted && formRegistro.controls['amount'].invalid
-                  }" oninput="this.value = this.value.toUpperCase()" />
-                <span class="p-inputgroup-addon">Bs/Kw.</span>
-              </div>
-
-              <div *ngIf="submitted && formRegistro.controls['amount'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('amount')?.hasError('required')">
-                  {{ messagesGlobales.requiredField }}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="description">{{ labelsGlobales.descripcion }}</label>
-              <input type="text" pInputText required formControlName="description" [ngClass]="{
-                  'ng-invalid ng-dirty':
-                    submitted && formRegistro.controls['description'].invalid
-                }" oninput="this.value = this.value.toUpperCase()" />
-              <div *ngIf="
-                  submitted && formRegistro.controls['description'].invalid
-                ">
-                <small class="p-error" *ngIf="formRegistro.get('description')?.hasError('required')">
-                  {{ messagesGlobales.requiredField }}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="startTime">{{ labelsGlobales.horaInicio }}</label>
-              <!-- <input type="text" pInputText required formControlName="startTime"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['startTime'].invalid}"
-                oninput="this.value = this.value.toUpperCase()" /> -->
-              <p-calendar formControlName="startTime" [showTime]="true" [showSeconds]="true"
-                [timeOnly]="true"></p-calendar>
-
-              <div *ngIf="submitted && formRegistro.controls['startTime'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('startTime')?.hasError('required')">
-                  {{ messagesGlobales.requiredField }}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="endTime">{{ labelsGlobales.horaFin }}</label>
-              <!-- <input type="text" pInputText required formControlName="endTime"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['endTime'].invalid}"
-                oninput="this.value = this.value.toUpperCase()" /> -->
-              <p-calendar formControlName="endTime" [showTime]="true" [showSeconds]="true"
-                [timeOnly]="true"></p-calendar>
-              <div *ngIf="submitted && formRegistro.controls['endTime'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('endTime')?.hasError('required')">
-                  {{ messagesGlobales.requiredField }}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="minimumCurrent">{{
-                labelsGlobales.corrienteMinima
-                }}</label>
-              <input type="text" pInputText required formControlName="minimumCurrent" [ngClass]="{
-                  'ng-invalid ng-dirty':
-                    submitted && formRegistro.controls['minimumCurrent'].invalid
-                }" oninput="this.value = this.value.toUpperCase()" />
-              <div *ngIf="
-                  submitted && formRegistro.controls['minimumCurrent'].invalid
-                ">
-                <small class="p-error" *ngIf="
-                    formRegistro.get('minimumCurrent')?.hasError('required')
-                  ">
-                  {{ messagesGlobales.requiredField }}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="maximumCurrent">{{
-                labelsGlobales.corrienteMaxima
-                }}</label>
-              <input type="text" pInputText required formControlName="maximumCurrent" [ngClass]="{
-                  'ng-invalid ng-dirty':
-                    submitted && formRegistro.controls['maximumCurrent'].invalid
-                }" oninput="this.value = this.value.toUpperCase()" />
-              <div *ngIf="
-                  submitted && formRegistro.controls['maximumCurrent'].invalid
-                ">
-                <small class="p-error" *ngIf="
-                    formRegistro.get('maximumCurrent')?.hasError('required')
-                  ">
-                  {{ messagesGlobales.requiredField }}
-                </small>
-              </div>
-            </div>
-          </form>
-        </ng-template>
-
-        <ng-template pTemplate="footer">
-          <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
-            class="p-button-secondary p-button-rounded mr-2" (click)="actionDialog(false, 'create')"></button>
-          <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check" class="p-button-rounded mr-2"
-            (click)="onValidaFormulario()"></button>
-        </ng-template>
-      </p-dialog>
-    </section>
-    <!-- modal Crear nuevo -->
-
-    <!-- modal Editar -->
-    <section class="dialogEdit">
-      <p-dialog header="{{ titlesGlobales.edit }}" [(visible)]="dialogEdit" [style]="{ width: '50vw' }" class="p-fluid"
-        [dismissableMask]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [draggable]="false"
-        [resizable]="false">
-        <ng-template pTemplate="content">
-          <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
-            <div class="form-group field">
-              <label for="amount">{{ labelsGlobales.tasaCarga }}</label>
-              <div class="p-inputgroup">
-                <input type="text" pInputText required formControlName="amount" appUppercase [ngClass]="{
-                    'ng-invalid ng-dirty':
-                      submitted && formRegistro.controls['amount'].invalid
-                  }" oninput="this.value = this.value.toUpperCase()" />
-                <span class="p-inputgroup-addon">Bs/Kw.</span>
-              </div>
-              <div *ngIf="submitted && formRegistro.controls['amount'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('amount')?.hasError('required')">
-                  {{ messagesGlobales.requiredField }}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="description">{{ labelsGlobales.descripcion }}</label>
-              <input type="text" pInputText required formControlName="description" [ngClass]="{
-                  'ng-invalid ng-dirty':
-                    submitted && formRegistro.controls['description'].invalid
-                }" oninput="this.value = this.value.toUpperCase()" />
-              <div *ngIf="
-                  submitted && formRegistro.controls['description'].invalid
-                ">
-                <small class="p-error" *ngIf="formRegistro.get('description')?.hasError('required')">
-                  {{ messagesGlobales.requiredField }}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="tiempoInicial">{{ labelsGlobales.horaInicio }}</label>
-              <p-calendar formControlName="tiempoInicial" [showTime]="true" [showSeconds]="true"
-                [timeOnly]="true"></p-calendar>
-              <div *ngIf="
-                  submitted && formRegistro.controls['tiempoInicial'].invalid
-                ">
-                <small class="p-error" *ngIf="
-                    formRegistro.get('tiempoInicial')?.hasError('required')
-                  ">
-                  {{ messagesGlobales.requiredField }}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="tiempoFinal">{{ labelsGlobales.horaFin }}</label>
-              <p-calendar formControlName="tiempoFinal" [showTime]="true" [showSeconds]="true"
-                [timeOnly]="true"></p-calendar>
-              <div *ngIf="
-                  submitted && formRegistro.controls['tiempoFinal'].invalid
-                ">
-                <small class="p-error" *ngIf="formRegistro.get('tiempoFinal')?.hasError('required')">
-                  {{ messagesGlobales.requiredField }}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="minimumCurrent">{{
-                labelsGlobales.corrienteMinima
-                }}</label>
-              <input type="text" pInputText required formControlName="minimumCurrent" [ngClass]="{
-                  'ng-invalid ng-dirty':
-                    submitted && formRegistro.controls['minimumCurrent'].invalid
-                }" oninput="this.value = this.value.toUpperCase()" />
-              <div *ngIf="
-                  submitted && formRegistro.controls['minimumCurrent'].invalid
-                ">
-                <small class="p-error" *ngIf="
-                    formRegistro.get('minimumCurrent')?.hasError('required')
-                  ">
-                  {{ messagesGlobales.requiredField }}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="maximumCurrent">{{
-                labelsGlobales.corrienteMaxima
-                }}</label>
-              <input type="text" pInputText required formControlName="maximumCurrent" [ngClass]="{
-                  'ng-invalid ng-dirty':
-                    submitted && formRegistro.controls['maximumCurrent'].invalid
-                }" oninput="this.value = this.value.toUpperCase()" />
-              <div *ngIf="
-                  submitted && formRegistro.controls['maximumCurrent'].invalid
-                ">
-                <small class="p-error" *ngIf="
-                    formRegistro.get('maximumCurrent')?.hasError('required')
-                  ">
-                  {{ messagesGlobales.requiredField }}
-                </small>
-              </div>
-            </div>
-          </form>
-        </ng-template>
-
-        <ng-template pTemplate="footer">
-          <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
-            class="p-button-secondary p-button-rounded mr-2" (click)="actionDialog(false, 'edit')"></button>
-          <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check" class="p-button-rounded mr-2"
-            (click)="onValidaFormulario()"></button>
-        </ng-template>
-      </p-dialog>
-    </section>
-    <!-- modal Editar -->
   </div>
 </div>
-
-<p-toast></p-toast>
-<p-blockUI [blocked]="loading">
-  <div class="loading-container">
-    <i class="pi pi-spin pi-spinner" style="font-size: 3em"></i>
-    <p>Cargando...</p>
-  </div>
-</p-blockUI>

@@ -159,11 +159,12 @@ export default class BrandComponent {
   }
 
   selectedEdit(item: Model) {
-    this.model = new Model();
-    this.model = item;
-    this.formRegistro.patchValue(JSON.parse(JSON.stringify(item)));
-    this.actionDialog(true, 'edit')
-  }
+    this.model = { ...item }; // Copia el objeto para no editar la referencia de la tabla
+    this.formRegistro.patchValue(item);
+    this.submitted = false;
+    // IMPORTANTE: Ponemos 'create' para que abra el modal que definimos arriba
+    this.actionDialog(true, 'create'); 
+}
 
   confirmSwitchChange(event: any, item) {
     var texto = item.activo ? 'Habilitar' : 'Deshabilitar';

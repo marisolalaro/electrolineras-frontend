@@ -235,10 +235,11 @@ export default class AddressComponent {
   }
 
   openDialogCreate() {
-    this.formRegistro.reset();
-    this.formRegistro = this.createFormGroup();
-    this.actionDialog(true, 'create')
-  }
+    this.submitted = false; // Resetear el estado de validación
+    this.formRegistro.reset(); // Limpiar campos
+    this.formRegistro.get('id')?.setValue(null); // Asegurar que el ID sea nulo para que sea "Crear"
+    this.actionDialog(true, 'create'); // Abrir el modal
+}
   
   actionDialog(status, tipo) {
     tipo == 'create' ? this.dialogRegistro = status : this.dialogEdit = status;

@@ -1,713 +1,194 @@
-<p-confirmDialog
-  [style]="{width: '50vw'}"></p-confirmDialog>
-<div class="container">
-  <div class="card">
-    <div class="row">
-      <h3><b>{{componentTitle.mainTitle}}</b></h3>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+
+<div class="container p-2">
+  <div class="card shadow-2 border-round-xl overflow-hidden">
+    
+    <div class="text-center mb-3 py-3 border-bottom-1 border-300" [style]="{'background': 'var(--surface-section)'}">
+      <h1 class="siat-title m-0 uppercase">
+        {{componentTitle.mainTitle}}
+      </h1>
+      <p class="siat-subtitle m-0 text-600 font-medium">Gestión y Monitoreo de Estaciones de Carga</p>
     </div>
-    <div class="row" *ngIf="serviceResponse">
-      <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;">
-        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllElectricStations()" pTooltip="Actualizar"
-          tooltipPosition="left"></p-button> &nbsp;
-        <button *ngIf="esSuperAdmin" pButton pRipple class="mat-raised-button"
-          (click)="getTasaDeCarga(); getModels(); getAddress(); openDialog(true, false, 'crear')">Nuevo
-          Registro</button>
+
+    <div class="px-4 pb-4">
+      <div class="flex justify-content-between align-items-center mb-3">
+        <div class="flex gap-2">
+          <button pButton label="Limpiar Filtros" class="p-button-outlined p-button-sm" 
+                  icon="pi pi-filter-slash" (click)="clearFilters(dt1); getAllElectricStations()"></button>
+        </div>
+        <div class="flex gap-2">
+          <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllElectricStations()" 
+                    pTooltip="Actualizar datos" tooltipPosition="left" severity="secondary"></p-button>
+          
+          <button *ngIf="esSuperAdmin" pButton pRipple icon="pi pi-plus" label="Nuevo Registro" 
+                  class="p-button-raised shadow-2" style="background: #0a3364; border: none;"
+                  (click)="getTasaDeCarga(); getModels(); getAddress(); openDialog(true, false, 'crear')">
+          </button>
+        </div>
       </div>
-    </div>
-    <div class="row" *ngIf="serviceResponse">
+
       <p-table responsiveLayout="stack" #dt1 [value]="electricStations" dataKey="id"
-        styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
-        [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES"
-        currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros"
-        (sortFunction)="customSort($event)" [customSort]="true" width="100%">
-        <ng-template pTemplate="caption">
-          <div class="flex">
-            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
-              (click)="clearFilters(dt1) ; getAllElectricStations()"></button>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header" let-columns>
-          <tr>
-            <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2"> # </th>
-            <th style="width:12%; text-align:center; vertical-align:middle" pSortableColumn="nameStation">
-              Nombre<p-sortIcon field="nameStation"></p-sortIcon></th>
-            <th style="width:20%; text-align:center; vertical-align:middle" pSortableColumn="direccion">
-              Dirección<p-sortIcon field="direccion"></p-sortIcon></th>
-            <th style="width:20%; text-align:center; vertical-align:middle" pSortableColumn="descripcion">
-              Descripción<p-sortIcon field="descripcion"></p-sortIcon></th>
-            <th style="width:8%; text-align:center; vertical-align:middle" pSortableColumn="latitude">
-              Latitud<p-sortIcon field="latitude"></p-sortIcon></th>
-            <th style="width:8%; text-align:center; vertical-align:middle" pSortableColumn="longitude">
-              Longitud<p-sortIcon field="longitude"></p-sortIcon></th>
-            <th style="width:12%; text-align:center; vertical-align:middle" rowspan="2" pSortableColumn="enabled">
-              Estado<p-sortIcon field="enabled"></p-sortIcon></th>
-            <th style="width:13%; text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
+               styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm shadow-1" 
+               [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+               currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros">
+        
+        <ng-template pTemplate="header">
+          <tr class="bg-gray-100">
+            <th class="text-center" style="width:4%" rowspan="2">#</th>
+            <th pSortableColumn="nameStation" style="width:12%">Nombre <p-sortIcon field="nameStation"></p-sortIcon></th>
+            <th pSortableColumn="direccion" style="width:15%">Dirección <p-sortIcon field="direccion"></p-sortIcon></th>
+            <th pSortableColumn="descripcion" style="width:15%">Descripción <p-sortIcon field="descripcion"></p-sortIcon></th>
+            <th class="text-center" style="width:8%">Latitud</th>
+            <th class="text-center" style="width:8%">Longitud</th>
+            <th class="text-center" style="width:10%" rowspan="2">Estado</th>
+            <th class="text-center" style="width:15%" rowspan="2">Opciones</th>
           </tr>
           <tr>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'nameStation', 'contains')"
-                placeholder="Busca por Nombre" class="w-full" [(ngModel)]="nameStation">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'direccion', 'contains')"
-                placeholder="Busca por Dirección" class="w-full" [(ngModel)]="direccion">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'descripcion', 'contains')"
-                placeholder="Busca por Descripción" class="w-full" [(ngModel)]="descripcion">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'latitude', 'contains')"
-                placeholder="Busca por Latitud" class="w-full" [(ngModel)]="campoLatitude">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'longitude', 'contains')"
-                placeholder="Busca por Longitud" class="w-full" [(ngModel)]="campoLongitude">
-            </th>
+            <th><input pInputText type="text" (input)="applyFilter($event, 'nameStation', 'contains')" placeholder="Busca Nombre" class="w-full p-inputtext-sm"></th>
+            <th><input pInputText type="text" (input)="applyFilter($event, 'direccion', 'contains')" placeholder="Busca Dirección" class="w-full p-inputtext-sm"></th>
+            <th><input pInputText type="text" (input)="applyFilter($event, 'descripcion', 'contains')" placeholder="Busca Descripción" class="w-full p-inputtext-sm"></th>
+            <th><input pInputText type="text" (input)="applyFilter($event, 'latitude', 'contains')" placeholder="Lat." class="w-full p-inputtext-sm"></th>
+            <th><input pInputText type="text" (input)="applyFilter($event, 'longitude', 'contains')" placeholder="Long." class="w-full p-inputtext-sm"></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+
+        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
           <tr>
-            <td style="text-align:center; vertical-align:middle">{{rowIndex + 1}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['nameStation']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['direccion']}}, {{rowData.address.district}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['descripcion']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['latitude']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['longitude']}}</td>
-            <td style="text-align:center; vertical-align:middle">
-              <div *ngIf="esSuperAdmin">
-                <p-inputSwitch [(ngModel)]="rowData['enabled']" (onChange)="confirm($event, rowData)">
-                </p-inputSwitch><br>
-                <label *ngIf="rowData['enabled']">Habilitado</label>
-                <label *ngIf="!rowData['enabled']">Deshabilitado</label>
-              </div>
-              <div *ngIf="!esSuperAdmin">
-                <label>{{rowData['enabled'] | formatHabilitadoDeshabilitado}}</label>
+            <td class="text-center font-bold text-600">{{rowIndex + 1}}</td>
+            <td class="font-bold uppercase" [style]="{'color': 'var(--primary-color)'}">{{rowData['nameStation']}}</td>
+            <td class="text-xs uppercase">{{rowData['direccion']}}</td>
+            <td class="text-xs uppercase text-500 italic">{{rowData['descripcion']}}</td>
+            <td class="text-xs font-mono text-center">{{rowData['latitude']}}</td>
+            <td class="text-xs font-mono text-center">{{rowData['longitude']}}</td>
+            <td class="text-center">
+              <div class="flex flex-column align-items-center gap-1">
+                <p-inputSwitch [(ngModel)]="rowData['enabled']" (onChange)="confirm($event, rowData)"></p-inputSwitch>
+                <label class="text-xs font-bold">{{rowData['enabled'] ? 'HABILITADO' : 'DESHABILITADO'}}</label>
               </div>
             </td>
-          <td style="text-align:center; vertical-align:middle">
-            <div class="flex justify-content-center align-items-center gap-2">
-          
-              <i *ngIf="esSuperAdmin" class="pi pi-mobile cursor-pointer" style="font-size: 1.5rem; color: var(--color-green);"
-                (click)="onDialogConnector(rowData)" pTooltip="Adicionar Conector de Carga" tooltipPosition="bottom"></i>
-          
-              <i *ngIf="esSuperAdmin" class="pi pi-pencil cursor-pointer" style="font-size: 1.5rem; color: var(--primary-color);"
-                (click)="onSelecetedEdit(rowData)" pTooltip="Editar" tooltipPosition="bottom"></i>
-          
-              <i class="pi pi-map-marker cursor-pointer" style="font-size: 1.5rem; color: var(--decorative-color);"
-                (click)="onVerMapa(rowData);" pTooltip="Ver Mapa" tooltipPosition="bottom"></i>
-          
-              <i class="pi pi-eye cursor-pointer" style="font-size: 1.5rem; color: var(--blue-600);"
-                (click)="onDialogDetalles(rowData)" pTooltip="Ver Detalles" tooltipPosition="bottom"></i>
-          
-              <i class="pi pi-chart-line cursor-pointer" style="font-size: 1.5rem; color: var(--decorative-color);"
-                (click)="onVerPrediccion(rowData);" pTooltip="Ver Predicción" tooltipPosition="bottom"></i>
-          
-            </div>
-          </td>
+            <td class="text-center">
+              <div class="flex justify-content-center gap-2">
+                <i class="pi pi-mobile text-green-600 cursor-pointer" (click)="onDialogConnector(rowData)" pTooltip="Adicionar Conector"></i>
+                <i class="pi pi-pencil text-blue-700 cursor-pointer" (click)="onSelecetedEdit(rowData)" pTooltip="Editar"></i>
+                <i class="pi pi-map-marker text-orange-500 cursor-pointer" (click)="onVerMapa(rowData)" pTooltip="Ver Mapa"></i>
+                <i class="pi pi-eye text-blue-400 cursor-pointer" (click)="onDialogDetalles(rowData)" pTooltip="Ver Detalles"></i>
+                <i class="pi pi-chart-line text-purple-500 cursor-pointer" (click)="onVerPrediccion(rowData)" pTooltip="Ver Predicción"></i>
+              </div>
+            </td>
           </tr>
         </ng-template>
       </p-table>
     </div>
-
-    <div class="row">
-      <div *ngIf="mapaVisible" class="map-modal">
-        <app-mapa [lat]="latitude" [lon]="longitude" [titulo]="title" (newItemEvent)="cerrarMapa($event)"></app-mapa>
-      </div>
-    </div>
-
-    <div *ngIf="!serviceResponse">
-      <app-not-found [mensajeNotFound]="mensaje" (datosEnviados)="getAllElectricStations()"></app-not-found>
-      <br> <br>
-    </div>
-
-    <!-- modal Crear nuevo -->
-    <div class="row">
-      <p-dialog header={{titlesGlobales.create}} [(visible)]="dialogRegistro" [style]="{width: '50vw'}" class="p-fluid"
-        [dismissableMask]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [draggable]="false"
-        [resizable]="false">
-        <ng-template pTemplate="content">
-          <form class="row g-2" [formGroup]="formRegistro">
-
-            <div class="form-group field">
-              <label for="name">{{labelsGlobales.nameStation}}</label>
-              <input type="text" pInputText id="nameStation" required formControlName="nameStation"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['nameStation'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['nameStation'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('nameStation')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label>{{labelsGlobales.address}}</label>
-              <p-autoComplete [(ngModel)]="selectedAddress" [dropdown]="true" [suggestions]="filteredAddresses"
-                (completeMethod)="filterAddress($event)" field="district" id="address" formControlName="address"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['address'].invalid}"></p-autoComplete>
-              <div *ngIf="submitted && formRegistro.controls['address'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('address')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <!-- <div class="form-group field">
-              <label for="direccion">{{labelsGlobales.address}}</label>
-              <input type="text" pInputText id="direccion" required formControlName="direccion"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['direccion'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['direccion'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('direccion')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div> -->
-
-            <div class="form-group field">
-              <label for="descripcion">{{labelsGlobales.description}}</label>
-              <input type="text" pInputText id="descripcion" required formControlName="descripcion"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['descripcion'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['descripcion'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('descripcion')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="codeStationQr">{{labelsGlobales.codeStationQr}}</label>
-              <input type="text" pInputText id="codeStationQr" required formControlName="codeStationQr"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['codeStationQr'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['codeStationQr'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('codeStationQr')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label>{{labelsGlobales.modelo}}</label>
-              <p-autoComplete [(ngModel)]="selectedModel" [dropdown]="true" [suggestions]="filteredModels"
-                (completeMethod)="filterModel($event)" field="modelCode" id="model" formControlName="model"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['model'].invalid}"></p-autoComplete>
-              <div *ngIf="submitted && formRegistro.controls['model'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('model')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <!-- <div class="form-group field">
-              <label for="descripcion">{{labelsGlobales.tasaCarga}}</label>
-              <p-autoComplete [(ngModel)]="selectedTasaCarga" [dropdown]="true" [suggestions]="filteredTasaCarga"
-                (completeMethod)="filterTasaCarga($event)" field="amount" id="chargeRate" formControlName="chargeRate"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['chargeRate'].invalid}"></p-autoComplete>
-              <div *ngIf="submitted && formRegistro.controls['chargeRate'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('chargeRate')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div> -->
-
-            <div class="form-group field">
-              <label for="latitude">{{labelsGlobales.latitude}}</label>
-              <input type="text" pInputText id="latitude" required formControlName="latitude"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['latitude'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['latitude'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('latitude')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="longitude">{{labelsGlobales.longitude}}</label>
-              <input type="text" pInputText id="longitude" required formControlName="longitude"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['longitude'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['longitude'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('longitude')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-          </form>
-        </ng-template>
-
-        <ng-template pTemplate="footer">
-          <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
-            class="p-button-secondary p-button-rounded mr-2" (click)="openDialog(false,false, 'crear')"></button>
-          <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check" class="p-button-rounded mr-2"
-            (click)="onValidaFormulario()"></button>
-        </ng-template>
-      </p-dialog>
-    </div>
-    <!-- modal Crear nuevo -->
-
-    <!-- modal Editar Registro -->
-    <div class="row">
-      <p-dialog header={{titlesGlobales.edit}} [(visible)]="dialogEdit" [style]="{width: '50vw'}" class="p-fluid"
-        [closeOnEscape]="true" [closable]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-        [draggable]="false" [resizable]="false">
-        <ng-template pTemplate="content">
-          <form class="row g-2" [formGroup]="formRegistro">
-            <div class="form-group field">
-              <label for="name">{{labelsGlobales.nameStation}}</label>
-              <input type="text" pInputText id="nameStation" required formControlName="nameStation"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['nameStation'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['nameStation'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('nameStation')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label>{{labelsGlobales.address}}</label>
-              <p-autoComplete [(ngModel)]="selectedAddress" [dropdown]="true" [suggestions]="filteredAddresses"
-                (completeMethod)="filterAddress($event)" field="district" id="address" formControlName="address"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['address'].invalid}"></p-autoComplete>
-              <div *ngIf="submitted && formRegistro.controls['address'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('address')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-            
-            <!-- <div class="form-group field">
-              <label for="direccion">{{labelsGlobales.address}}</label>
-              <input type="text" pInputText id="direccion" required formControlName="direccion"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['direccion'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['direccion'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('direccion')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div> -->
-
-            <div class="form-group field">
-              <label for="descripcion">{{labelsGlobales.description}}</label>
-              <input type="text" pInputText id="descripcion" required formControlName="descripcion"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['descripcion'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['descripcion'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('descripcion')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="codeStationQr">{{labelsGlobales.codeStationQr}}</label>
-              <input type="text" pInputText id="codeStationQr" required formControlName="codeStationQr"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['codeStationQr'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['codeStationQr'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('codeStationQr')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label>{{labelsGlobales.modelo}}</label>
-              <p-autoComplete [(ngModel)]="selectedModel" [dropdown]="true" [suggestions]="filteredModels"
-                (completeMethod)="filterModel($event)" field="modelCode" id="model" formControlName="model"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['model'].invalid}"></p-autoComplete>
-              <div *ngIf="submitted && formRegistro.controls['model'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('model')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <!-- <div class="form-group field">
-              <label for="descripcion">{{labelsGlobales.tasaCarga}}</label>
-              <p-autoComplete [(ngModel)]="selectedTasaCarga" [dropdown]="true" [suggestions]="filteredTasaCarga"
-                (completeMethod)="filterTasaCarga($event)" field="amount" id="chargeRate" formControlName="chargeRate"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['chargeRate'].invalid}"></p-autoComplete>
-              <div *ngIf="submitted && formRegistro.controls['chargeRate'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('chargeRate')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div> -->
-
-            <div class="form-group field">
-              <label for="latitude">{{labelsGlobales.latitude}}</label>
-              <input type="text" pInputText id="latitude" required formControlName="latitude"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['latitude'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['latitude'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('latitude')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="longitude">{{labelsGlobales.longitude}}</label>
-              <input type="text" pInputText id="longitude" required formControlName="longitude"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['longitude'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['longitude'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('longitude')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-          </form>
-        </ng-template>
-
-        <ng-template pTemplate="footer">
-          <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
-            class="p-button-secondary p-button-rounded mr-2" (click)="openDialog(false,false, 'editar')"></button>
-          <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check" class="p-button-rounded mr-2"
-            (click)="onValidaFormulario()"></button>
-        </ng-template>
-      </p-dialog>
-    </div>
-    <!-- modal Editar Registro -->
-
-    <!-- modal Adicionar Conector -->
-    <div class="row">
-      <p-dialog header={{titlesGlobales.createConnector}} [(visible)]="dialogConector" [style]="{width: '50vw'}"
-        class="p-fluid" [dismissableMask]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-        [draggable]="false" [resizable]="false">
-        <ng-template pTemplate="content">
-          <form class="row g-2" [formGroup]="formRegistroConector">
-
-            <div class="form-group field">
-              <label for="name">{{labelsGlobales.nombrePuerto}}</label>
-              <p-autoComplete [(ngModel)]="selectedNombrePuerto" [dropdown]="true" [suggestions]="filteredNombrePuerto"
-                (completeMethod)="filterNombrePuerto($event)" field="nombre" id="name" formControlName="name"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['name'].invalid}"></p-autoComplete>
-              <div *ngIf="submitted && formRegistro.controls['name'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('name')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <!-- <div class="form-group field">
-              <label for="descripcion">{{labelsGlobales.tasaCarga}}</label>
-              <p-autoComplete [(ngModel)]="selectedTasaCarga" [dropdown]="true" [suggestions]="filteredTasaCarga"
-                (completeMethod)="filterTasaCarga($event)" field="amount" id="chargeRate" formControlName="chargeRate"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['chargeRate'].invalid}"></p-autoComplete>
-              <div *ngIf="submitted && formRegistro.controls['chargeRate'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('chargeRate')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div> -->
-            
-            <!-- <div class="form-group field">
-              <label for="name">{{labelsGlobales.nombrePuerto}}</label>
-              <input type="text" pInputText id="name" required formControlName="name"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistroConector.controls['name'].invalid}" />
-              <div *ngIf="submitted && formRegistroConector.controls['name'].invalid">
-                <small class="p-error" *ngIf="formRegistroConector.get('name')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div> -->
-
-            <div class="form-group field">
-              <label for="description">{{labelsGlobales.descripcionPuerto}}</label>
-              <input type="text" pInputText id="description" required formControlName="description"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistroConector.controls['description'].invalid}" />
-              <div *ngIf="submitted && formRegistroConector.controls['description'].invalid">
-                <small class="p-error" *ngIf="formRegistroConector.get('description')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="maxAmperage">{{labelsGlobales.maximoAmperaje}}</label>
-              <input type="number" pInputText id="maxAmperage" required formControlName="maxAmperage"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistroConector.controls['maxAmperage'].invalid}" />
-              <div *ngIf="submitted && formRegistroConector.controls['maxAmperage'].invalid">
-                <small class="p-error" *ngIf="formRegistroConector.get('maxAmperage')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="maxPower">{{labelsGlobales.maximaPotencia}}</label>
-              <input type="number" pInputText id="maxPower" required formControlName="maxPower"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistroConector.controls['maxPower'].invalid}" />
-              <div *ngIf="submitted && formRegistroConector.controls['maxPower'].invalid">
-                <small class="p-error" *ngIf="formRegistroConector.get('maxPower')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="maxVoltage">{{labelsGlobales.maximoVoltaje}}</label>
-              <input type="number" pInputText id="maxVoltage" required formControlName="maxVoltage"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistroConector.controls['maxVoltage'].invalid}" />
-              <div *ngIf="submitted && formRegistroConector.controls['maxVoltage'].invalid">
-                <small class="p-error" *ngIf="formRegistroConector.get('maxVoltage')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-          </form>
-        </ng-template>
-
-        <ng-template pTemplate="footer">
-          <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
-            class="p-button-secondary p-button-rounded mr-2" (click)="openDialog(false,false, 'conector')"></button>
-          <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check" class="p-button-rounded mr-2"
-            (click)="onValidaFormularioConector()"></button>
-        </ng-template>
-      </p-dialog>
-    </div>
-    <!-- modal Adicionar Conector -->
-
-    <!-- modal Detalle Registro -->
-    <div class="row">
-      <p-dialog header={{titlesGlobales.detail}} [(visible)]="dialogDetalleRegistro" [style]="{width: '70vw'}"
-        class="p-fluid" [closeOnEscape]="true" [closable]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-        [draggable]="false" [resizable]="false" [modal]="true">
-        <ng-template pTemplate="content">
-          <div class="row">
-            <div class="grid">
-              <div class="col-6" style="text-align: right;">
-                <ul>
-                  <p-divider align="right">
-                    <div class="inline-flex align-items-center">
-                      <i class="pi pi-user mr-2"></i>
-                      <b>Datos Generales</b>
-                    </div>
-                  </p-divider>
-                  <li>
-                    <i class="pi pi-align-justify" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Nombre Estación: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-info-circle" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Descripción:</b>
-                  </li>
-                  <li>
-                    <i class="pi pi-map" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Dirección: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>latitude:</b>
-                  </li>
-                  <li>
-                    <i class="pi pi-map-marker" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>longitude:</b>
-                  </li>
-                  <li>
-                    <i class="pi pi-bookmark" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Marca: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-mobile" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Código de Modelo:</b>
-                  </li>
-                  <li>
-                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Número de Serie Modelo: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-arrow-circle-right" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Tipo: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Número Serie Tipo: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Versión de Firmware: </b>
-                  </li>
-                  <!-- <li>
-                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>iccid: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-hashtag" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>imsi: </b>
-                  </li> -->
-                  
-                  
-                  <!-- <li>
-                    <i class="pi pi-sort-alt" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Tasa de Carga: </b>
-                  </li> -->
-                  <li>
-                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Código QR: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Imagen QR: </b>
-                  </li>
-                  <br>
-                  <br>
-                  <br>
-                  <br>
-                  <br>
-                  <br>
-                  <br>
-                  <br>
-                  <br>
-                  <br>
-                  <br>
-                  <!-- <p-divider align="right">
-                    <div class="inline-flex align-items-center">
-                      <i class="pi pi-user mr-2"></i>
-                      <b>Datos en Linea</b>
-                    </div>
-                  </p-divider>
-                  <li>
-                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Id de la Marca: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Id Mensaje: </b>
-                  </li>
-                  <li>
-                    <i class="pi pi-qrcode" style="color: var(--primary-color)"></i> &nbsp;
-                    <b>Dato: </b>
-                  </li> -->
-                </ul>
-              </div>
-              <div class="col-6" style="text-align: left;">
-                <ul>
-                  <li>
-                    <p-divider></p-divider>
-                  </li>
-                  <li><label>{{electricStation.nameStation}}</label></li>
-                  <li><label>{{electricStation.descripcion}}</label></li>
-                  <li><label>{{electricStation.address.district}}</label></li>
-                  <li><label>{{electricStation.latitude}}</label></li>
-                  <li><label>{{electricStation.longitude}}</label></li>
-                  <li><label>{{electricStation.model.vendor}}</label></li>
-                  <li><label>{{electricStation.model.modelCode}}</label></li>
-                  <li><label>{{electricStation.model.boxSerialNumber}}</label></li>
-                  <li><label>{{electricStation.model.pointModel}}</label></li>
-                  <li><label>{{electricStation.model.pointSerialNumber}}</label></li>
-                  <li><label>{{electricStation.model.firmwareVersion}}</label></li>
-                  <!-- <li><label>iccid</label></li>
-                  <li><label>imsi</label></li> -->
-                  <!-- <li><label>{{electricStation.chargeRate.amount}}</label></li> -->
-                  <li><label>{{electricStation.codeStationQr}}</label></li>
-                  <li>
-                    <img [src]="imagenQR" alt="Converted Image" />
-                  </li>
-                  <!-- <li>
-                    <p-divider></p-divider>
-                  </li>
-                  <li><label>id de la marca</label></li>
-                  <li><label>id mensaje</label></li>
-                  <li><label>dato</label></li> -->
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="card">
-              <p-table [value]="electricStationConnectors.chargingConnectors" [tableStyle]="{ 'min-width': '50rem' }"
-                responsiveLayout="stack">
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Tipo</th>
-                    <th>Max Voltaje (V)</th>
-                    <th>Max Potencia (kW)</th>
-                    <th>Max Amperaje (A)</th>
-                    <th>Estado</th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-item>
-                  <tr>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.description }}</td>
-                    <td>{{ item.type }}</td>
-                    <td>{{ item.maxVoltage }}</td>
-                    <td>{{ item.maxPower }}</td>
-                    <td>{{ item.maxAmperage }}</td>
-                    <td>
-                      <button pButton *ngIf="item.lastState == 'Available'" label="Disponible" class="button-available" ></button>
-                      <button pButton *ngIf="item.lastState == 'Preparing'" label="Preparando" class="button-preparing"></button>
-                      <button pButton *ngIf="item.lastState == 'Charging'" label="Cargando" class="button-charging"></button>
-                      <button pButton *ngIf="item.lastState == 'Finishing'" label="Terminando" class="button-finishing"></button>
-                      <button pButton *ngIf="item.lastState == 'Unavailable'" label="No disponible" class="button-unavailable"></button>
-                      <button pButton *ngIf="item.lastState == 'SuspendedEV'" label="Carga completa" class="button-unavailable"></button>
-                      <button pButton *ngIf="item.lastState == 'SuspendedEVSE'" label="Verificando" class="button-unavailable"></button>
-                      <button pButton *ngIf="!item.lastState" label="No disponible" class="button-unavailable"></button>
-                    </td>
-                  </tr>
-                </ng-template>
-              </p-table>
-            </div>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="footer">
-          <button pButton pRipple label="Cerrar" icon="pi pi-times" class="p-button-secondary p-button-rounded mr-2"
-            (click)="openDialog(false,false, 'detalle')"></button>
-        </ng-template>
-      </p-dialog>
-    </div>
-    <!-- modal Detalle Registro -->
-
-    <!-- modal predictor -->
-   <div class="row">
-    <p-dialog 
-        header="{{titlesGlobales.estimacionConsumo}}" 
-        [(visible)]="prediccionVisible"
-        [style]="{width: '60vw', height: '70vh'}" 
-        [contentStyle]="{'height': '100%', 'overflow': 'hidden'}" 
-        class="p-fluid" 
-        [dismissableMask]="true"
-        [breakpoints]="{ '1199px': '75vw', '765px': '90vw' }" 
-        [draggable]="false" 
-        [resizable]="false">
-
-        <ng-template pTemplate="content">
-            <div class="card" style="height: 100%; display: flex; flex-direction: column;">
-                
-                <div style="flex-grow: 1; position: relative; width: 100%; min-height: 0;" *ngIf="!analizandoDatos">
-                    <p-chart 
-                        type="line" 
-                        [data]="chartData" 
-                        [options]="chartOptions" 
-                        height="100%" 
-                        width="100%">
-                    </p-chart>
-                </div>
-
-                <div style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;" *ngIf="analizandoDatos">
-                    <i class="pi pi-bolt" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
-                    <h5 style="margin-bottom: 0.5rem; color: var(--text-color);">Analizando patrones de consumo...</h5>
-                    <p style="margin-bottom: 1.5rem; color: var(--text-color-secondary); font-size: 0.9rem;">
-                        La IA está generando la predicción para las próximas 24 horas.
-                    </p>
-                    <div style="width: 60%;">
-                        <p-progressBar mode="indeterminate" [style]="{ height: '6px' }"></p-progressBar>
-                    </div>
-                </div>
-
-            </div>
-        </ng-template>
-
-    </p-dialog>
-</div>
-    <!-- modal predictor -->
-
   </div>
 </div>
+
+<p-dialog header="{{titlesGlobales.create}}" [(visible)]="dialogRegistro" (onHide)="dialogRegistro=false" [style]="{width: '50vw'}" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <form [formGroup]="formRegistro" class="grid p-fluid">
+            <div class="col-12 field"><label class="font-bold">Nombre Estación</label><input type="text" pInputText formControlName="nameStation"></div>
+            <div class="col-12 md:col-6 field"><label class="font-bold">Distrito</label><p-autoComplete formControlName="address" [suggestions]="filteredAddresses" (completeMethod)="filterAddress($event)" field="district" [dropdown]="true"></p-autoComplete></div>
+            <div class="col-12 md:col-6 field"><label class="font-bold">Modelo</label><p-autoComplete formControlName="model" [suggestions]="filteredModels" (completeMethod)="filterModel($event)" field="modelCode" [dropdown]="true"></p-autoComplete></div>
+            <div class="col-12 field"><label class="font-bold">Descripción</label><input type="text" pInputText formControlName="descripcion"></div>
+            <div class="col-12 md:col-6 field"><label class="font-bold">Latitud</label><input type="text" pInputText formControlName="latitude"></div>
+            <div class="col-12 md:col-6 field"><label class="font-bold">Longitud</label><input type="text" pInputText formControlName="longitude"></div>
+            <div class="col-12 field"><label class="font-bold">QR Estación</label><input type="text" pInputText formControlName="codeStationQr"></div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton label="Cancelar" (click)="dialogRegistro=false" class="p-button-text"></button>
+        <button pButton label="Guardar" (click)="onValidaFormulario()" style="background: #0a3364; border: none;"></button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="{{titlesGlobales.edit}}" [(visible)]="dialogEdit" (onHide)="dialogEdit=false" [style]="{width: '50vw'}" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <form [formGroup]="formRegistro" class="grid p-fluid">
+            <div class="col-12 field"><label class="font-bold">Nombre Estación</label><input type="text" pInputText formControlName="nameStation"></div>
+            <div class="col-12 md:col-6 field"><label class="font-bold">Latitud</label><input type="text" pInputText formControlName="latitude"></div>
+            <div class="col-12 md:col-6 field"><label class="font-bold">Longitud</label><input type="text" pInputText formControlName="longitude"></div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton label="Cerrar" (click)="dialogEdit=false" class="p-button-text"></button>
+        <button pButton label="Actualizar" (click)="onValidaFormulario()" style="background: #0a3364; border: none;"></button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="{{titlesGlobales.createConnector}}" [(visible)]="dialogConector" (onHide)="dialogConector=false" [style]="{width: '450px'}" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <form [formGroup]="formRegistroConector">
+            <div class="field mb-3"><label class="font-bold">Nombre Puerto</label><p-autoComplete [(ngModel)]="selectedNombrePuerto" [suggestions]="filteredNombrePuerto" (completeMethod)="filterNombrePuerto($event)" field="nombre" [dropdown]="true" [ngModelOptions]="{standalone: true}"></p-autoComplete></div>
+            <div class="field mb-3"><label class="font-bold">Descripción</label><input type="text" pInputText formControlName="description"></div>
+            <div class="grid">
+                <div class="col-4 field"><label class="font-bold">Amp.</label><input type="number" pInputText formControlName="maxAmperage"></div>
+                <div class="col-4 field"><label class="font-bold">Pot.</label><input type="number" pInputText formControlName="maxPower"></div>
+                <div class="col-4 field"><label class="font-bold">Volt.</label><input type="number" pInputText formControlName="maxVoltage"></div>
+            </div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton label="Guardar" (click)="onValidaFormularioConector()" style="background: #0a3364; border: none;"></button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="{{titlesGlobales.detail}}" [(visible)]="dialogDetalleRegistro" (onHide)="dialogDetalleRegistro=false" [style]="{width: '70vw'}" [modal]="true">
+    <div class="grid" *ngIf="electricStation">
+        <div class="col-6">
+            <p><b>Estación:</b> {{electricStation.nameStation}}</p>
+            <p><b>Modelo:</b> {{electricStation.model?.modelCode}}</p>
+            <div class="text-center py-3"><img [src]="imagenQR" *ngIf="imagenQR" style="width: 180px; border: 1px solid #ccc;"></div>
+        </div>
+        <div class="col-6">
+            <p-table [value]="electricStationConnectors.chargingConnectors" styleClass="p-datatable-sm">
+                <ng-template pTemplate="header"><tr><th>Puerto</th><th>Estado</th></tr></ng-template>
+                <ng-template pTemplate="body" let-c><tr><td>{{c.name}}</td><td>{{c.lastState}}</td></tr></ng-template>
+            </p-table>
+        </div>
+    </div>
+</p-dialog>
+
+<div class="row">
+    <div *ngIf="mapaVisible" class="map-modal">
+        <app-mapa [lat]="latitude" [lon]="longitude" [titulo]="title" (newItemEvent)="cerrarMapa($event)"></app-mapa>
+    </div>
+</div>
+
+
+
+<div class="row">
+        <p-dialog 
+            header="{{titlesGlobales.estimacionConsumo}}" 
+            [(visible)]="prediccionVisible"
+            [style]="{width: '60vw', height: '70vh'}" 
+            [contentStyle]="{'height': '100%', 'overflow': 'hidden'}" 
+            class="p-fluid" 
+            [dismissableMask]="true"
+            [breakpoints]="{ '1199px': '75vw', '765px': '90vw' }" 
+            [draggable]="false" 
+            [resizable]="false">
+    
+            <ng-template pTemplate="content">
+                <div class="card" style="height: 100%; display: flex; flex-direction: column;">
+                    <div style="flex-grow: 1; position: relative; width: 100%; min-height: 0;" *ngIf="!analizandoDatos">
+                        <p-chart type="line" [data]="chartData" [options]="chartOptions" height="100%" width="100%"></p-chart>
+                    </div>
+                    <div style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;" *ngIf="analizandoDatos">
+                        <i class="pi pi-bolt" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        <h5>Analizando patrones de consumo...</h5>
+                        <div style="width: 60%;">
+                            <p-progressBar mode="indeterminate" [style]="{ height: '6px' }"></p-progressBar>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </p-dialog>
+    </div>
+
 
 <p-toast></p-toast>
 <p-blockUI [blocked]="loading">
-  <div class="loading-container">
-    <i class="pi pi-spin pi-spinner" style="font-size: 3em"></i>
-    <p>Cargando...</p>
-  </div>
+    <div class="loading-overlay">
+        <i class="pi pi-spin pi-spinner"></i>
+        <p>CARGANDO...</p>
+    </div>
 </p-blockUI>

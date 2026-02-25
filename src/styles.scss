@@ -1,36 +1,81 @@
 $gutter: 1rem;
 
-@import "assets/layout/styles/theme/custom/theme.css"; // estilo personalizado
-@import "assets/layout/styles/layout/layout.scss"; // este pone margenescontenidos, tipo letra
+@import "assets/layout/styles/theme/custom/theme.css"; 
+@import "assets/layout/styles/layout/layout.scss"; 
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
 @import "primeflex/primeflex.css";
 
-h3 {
+/* --- CORRECCIÓN DE MODO OSCURO GLOBAL --- */
+
+// 1. Forzar que el fondo y los textos principales sigan el tema
+body {
+    background-color: var(--surface-ground);
+    color: var(--text-color);
+}
+
+// 2. Títulos SIAT: Usan el color primario del tema (Azul en claro, Celeste en oscuro)
+h3, .siat-title {
     text-align: center;
     text-transform: uppercase;
-    color: var(--primary-color-text);
+    color: var(--primary-color) !important;
+    font-weight: 850;
+    margin-bottom: 0.5rem;
 }
 
-.align-center {
-    text-align: center;
+// 3. Tarjetas (Cards): Eliminamos el blanco fijo
+.card {
+    background: var(--surface-card) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--surface-border) !important;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.container {
-    padding: 0rem;
+// 4. Cabeceras de Tablas: Evita el bloque blanco en modo oscuro
+::ng-deep {
+    .p-datatable .p-datatable-thead > tr > th {
+        background: var(--surface-section) !important;
+        color: var(--text-color) !important;
+        border: 1px solid var(--surface-border) !important;
+    }
+    
+    .p-datatable .p-datatable-tbody > tr {
+        background: var(--surface-card) !important;
+        color: var(--text-color) !important;
+    }
+
+    // Estilo para los inputs de búsqueda
+    .p-inputtext {
+        background: var(--surface-input) !important;
+        color: var(--text-color) !important;
+        border: 1px solid var(--surface-border) !important;
+        
+        &:enabled:focus {
+            border-color: var(--primary-color) !important;
+        }
+    }
 }
 
-.align-object-center {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-}
-
-.loading-container {
+// 5. Pantalla de Carga (Transparente y centrada)
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4); // Oscurece sutilmente en ambos temas
+    backdrop-filter: blur(3px); // Efecto desenfoque pro
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    flex-direction: column;
-    color: var(--primary-color);
-  }
+    z-index: 99999;
+    color: #ffffff;
+}
+
+/* --- CLASES DE UTILIDAD --- */
+.container { padding: 0.5rem; }
+.align-center { text-align: center; }

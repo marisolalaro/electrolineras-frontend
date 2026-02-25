@@ -1,434 +1,97 @@
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
-<p-confirmDialog
-  [style]="{width: '50vw'}"></p-confirmDialog>
-  <div class="container">
-  <div class="card">
-    <div class="row">
-      <h3><b>{{componentTitle.mainTitle}}</b></h3>
-      <div style="display: flex; justify-content:flex-end; margin-bottom: 1rem;" *ngIf="serviceResponse">
-        <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllAdministrations()" pTooltip="Actualizar"
-          tooltipPosition="left"></p-button> &nbsp;
-        <button *ngIf="esSuperAdmin" pButton pRipple class="mat-raised-button"
-          (click)="openDialog(true,false, 'crear')">Nuevo
-          Registro</button>
-      </div>
+<div class="container p-2">
+  <div class="card shadow-2 border-round-xl overflow-hidden">
+    
+    <div class="text-center mb-3 py-3 border-bottom-1 border-300" style="background: var(--surface-section);">
+      <h1 class="siat-title m-0 uppercase">
+        {{componentTitle.mainTitle}}
+      </h1>
+      <p class="siat-subtitle m-0 text-600 font-medium">Gestión de Usuarios y Accesos al Sistema</p>
     </div>
 
-    <div class="row" *ngIf="serviceResponse">
+    <div class="px-4 pb-4">
+      <div class="flex justify-content-between align-items-center mb-3">
+        <div class="flex gap-2">
+          <button pButton label="Limpiar Filtros" class="p-button-outlined p-button-sm" 
+                  icon="pi pi-filter-slash" (click)="clearFilters(dt1); getAllAdministrations()"></button>
+        </div>
+        <div class="flex gap-2">
+          <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllAdministrations()" 
+                    pTooltip="Actualizar" severity="secondary"></p-button>
+          
+          <button *ngIf="esSuperAdmin" pButton pRipple icon="pi pi-user-plus" label="Nuevo Usuario" 
+                  class="p-button-raised shadow-2" style="background: #0a3364; border: none;"
+                  (click)="openDialog(true, false, 'crear')">
+          </button>
+        </div>
+      </div>
+
       <p-table responsiveLayout="stack" #dt1 [value]="administradors" dataKey="id"
-        styleClass="p-datatable-gridlines p-datatable-striped" [paginator]="true" [rows]="5"
-        [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" paginatorLocale="es-ES"
-        currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros"
-        (sortFunction)="customSort($event)" [customSort]="true" width="100%">
-        <ng-template pTemplate="caption">
-          <div class="flex">
-            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash"
-              (click)="clearFilters(dt1) ; getAllAdministrations()"></button>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header" let-columns>
+               styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm shadow-1" 
+               [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+               currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros">
+        
+        <ng-template pTemplate="header">
           <tr>
-            <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">#</th>
-            <th style="width:15%; text-align:center; vertical-align:middle" pSortableColumn="username">
-              Usuario<p-sortIcon field="username"></p-sortIcon></th>
-            <!-- <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="names">Nombres<p-sortIcon
-                field="names"></p-sortIcon></th>
-            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="lastName">Apellido
-              Paterno<p-sortIcon field="lastName"></p-sortIcon></th>
-            <th style="width:13%; text-align:center; vertical-align:middle" pSortableColumn="motherLastName">Apellido
-              Materno<p-sortIcon field="motherLastName"></p-sortIcon></th> -->
-            <th style="width:15%; text-align:center; vertical-align:middle" pSortableColumn="electronicMail">Correo
-              Electrónico<p-sortIcon field="electronicMail"></p-sortIcon></th>
-            <th style="width:8%; text-align:center; vertical-align:middle" pSortableColumn="cellPhoneNumber">
-              Celular<p-sortIcon field="cellPhoneNumber"></p-sortIcon></th>
-            <th style="width:13%; text-align:center; vertical-align:middle" rowspan="2" pSortableColumn="enabled">
-              Estado<p-sortIcon field="enabled"></p-sortIcon></th>
-            <th style="width:5%; text-align:center; vertical-align:middle" rowspan="2">Opciones</th>
+            <th class="text-center" style="width:5%" rowspan="2">#</th>
+            <th pSortableColumn="username">Usuario <p-sortIcon field="username"></p-sortIcon></th>
+            <th pSortableColumn="electronicMail">Correo Electrónico <p-sortIcon field="electronicMail"></p-sortIcon></th>
+            <th class="text-center" pSortableColumn="cellPhoneNumber" style="width:12%">Celular <p-sortIcon field="cellPhoneNumber"></p-sortIcon></th>
+            <th class="text-center" pSortableColumn="enabled" style="width:12%" rowspan="2">Estado</th>
+            <th class="text-center" style="width:10%" rowspan="2">Opciones</th>
           </tr>
           <tr>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'username', 'contains')"
-                placeholder="Busca por username" class="w-full" [(ngModel)]="username">
-            </th>
-            <!-- <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'names', 'contains')"
-                placeholder="Busca por Nombres" class="w-full" [(ngModel)]="names">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'lastName', 'contains')"
-                placeholder="Busca por Apellido Paterno" class="w-full" [(ngModel)]="lastName">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'motherLastName', 'contains')"
-                placeholder="Busca por Apellido Materno" class="w-full" [(ngModel)]="motherLastName">
-            </th> -->
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'electronicMail', 'contains')"
-                placeholder="Busca por Correo Electrónico" class="w-full" [(ngModel)]="electronicMail">
-            </th>
-            <th>
-              <input pInputText type="text" (input)="applyFilter($event, 'cellPhoneNumber', 'contains')"
-                placeholder="Busca por Nro Celular" class="w-full" [(ngModel)]="cellPhoneNumber">
-            </th>
+            <th><input pInputText type="text" (input)="applyFilter($event, 'username', 'contains')" placeholder="Usuario" class="w-full p-inputtext-sm" [(ngModel)]="username"></th>
+            <th><input pInputText type="text" (input)="applyFilter($event, 'electronicMail', 'contains')" placeholder="Email" class="w-full p-inputtext-sm" [(ngModel)]="electronicMail"></th>
+            <th><input pInputText type="text" (input)="applyFilter($event, 'cellPhoneNumber', 'contains')" placeholder="Celular" class="w-full p-inputtext-sm" [(ngModel)]="cellPhoneNumber"></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+
+        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
           <tr>
-            <td style="text-align:center; vertical-align:middle">{{rowIndex + 1}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['username']}}</td>
-            <!-- <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['names']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['lastName']}}</td>
-            <td style="text-align:left; vertical-align:middle" class="uppercase">{{rowData['motherLastName']}}</td>
-             -->
-             <td style="text-align:left; vertical-align:middle">{{rowData['electronicMail']}}</td>
-             <td style="text-align:right; vertical-align:middle" class="uppercase">{{rowData['cellPhoneNumber']}}</td>
-             
-            <td style="text-align:center; vertical-align:middle">
-              <div *ngIf="esSuperAdmin">
-                <!-- <p-confirmPopup></p-confirmPopup> -->
-                <p-inputSwitch [(ngModel)]="rowData['enabled']" (onChange)="confirmSwitchChange($event, rowData)">
-                </p-inputSwitch><br>
-                <label *ngIf="rowData['enabled']">Habilitado</label>
-                <label *ngIf="!rowData['enabled']">Deshabilitado</label>
-              </div>
-              <div *ngIf="!esSuperAdmin">
-                <label>{{rowData['enabled'] | formatHabilitadoDeshabilitado}}</label>
+            <td class="text-center font-bold text-600">{{rowIndex + 1}}</td>
+            <td class="font-bold uppercase" style="color: var(--primary-color);">{{rowData['username']}}</td>
+            <td class="text-sm">{{rowData['electronicMail']}}</td>
+            <td class="text-center text-sm">{{rowData['cellPhoneNumber']}}</td>
+            <td class="text-center">
+              <div class="flex flex-column align-items-center gap-1">
+                <p-inputSwitch *ngIf="esSuperAdmin" [(ngModel)]="rowData['enabled']" (onChange)="confirmSwitchChange($event, rowData)"></p-inputSwitch>
+                <span class="text-xs font-bold" [ngClass]="rowData['enabled'] ? 'text-green-600' : 'text-red-500'">
+                  {{rowData['enabled'] ? 'HABILITADO' : 'DESHABILITADO'}}
+                </span>
               </div>
             </td>
-            <td style="text-align:center; vertical-align:middle">
-              <div class="div" *ngIf="userLogin.id == rowData['id'] && !esSuperAdmin">
-                <i class="pi pi-user-edit" style="font-size: 1.5rem; color: var(--primary-color);"
-                  data-bs-toggle="modal" data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
-              </div>
-              <div class="div" *ngIf="esSuperAdmin">
-                <i class="pi pi-user-edit" style="font-size: 1.5rem; color: var(--primary-color);"
-                  data-bs-toggle="modal" data-bs-target="#editModal" (click)="onSelecetedEdit(rowData)"></i> &nbsp;
-              </div>
+            <td class="text-center">
+              <i class="pi pi-user-edit text-blue-700 cursor-pointer hover:scale-125 transition-all" 
+                 (click)="onSelecetedEdit(rowData)" pTooltip="Editar Perfil"
+                 *ngIf="esSuperAdmin || userLogin.id == rowData['id']"></i>
             </td>
           </tr>
         </ng-template>
       </p-table>
     </div>
-
-    <div *ngIf="!serviceResponse">
-      <app-not-found [mensajeNotFound]="mensaje" (datosEnviados)="getAllAdministrations()"></app-not-found>
-      <br> <br>
-    </div>
-
-    <!-- modal Crear nuevo -->
-    <section class="dialogCrear">
-      <p-dialog header={{titlesGlobales.create}} [(visible)]="dialogRegistro" [style]="{width: '50vw'}" class="p-fluid"
-        [dismissableMask]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [draggable]="false"
-        [resizable]="false">
-        <ng-template pTemplate="content">
-          <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
-
-            <!-- <p-divider align="left">
-              <div class="inline-flex align-items-center">
-                <i class="pi pi-user mr-2"></i>
-                <b>Datos personales</b>
-              </div>
-            </p-divider>
-
-            <div class="form-group field">
-              <label for="names">{{labelsGlobales.name}}</label>
-              <input type="text" pInputText required formControlName="names" appUppercase
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['names'].invalid}"
-                oninput="this.value = this.value.toUpperCase()" />
-              <div *ngIf="submitted && formRegistro.controls['names'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('names')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="lastName">{{labelsGlobales.apellidoPaterno}}</label>
-              <input type="text" pInputText required formControlName="lastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['lastName'].invalid}"
-                oninput="this.value = this.value.toUpperCase()" />
-              <div *ngIf="submitted && formRegistro.controls['lastName'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('lastName')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="motherLastName">{{labelsGlobales.apellidoMaterno}}</label>
-              <input type="text" pInputText required formControlName="motherLastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['motherLastName'].invalid}"
-                oninput="this.value = this.value.toUpperCase()" />
-              <div *ngIf="submitted && formRegistro.controls['motherLastName'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('motherLastName')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="identificationNumber">{{labelsGlobales.ci}}</label>
-              <input type="text" pInputText required formControlName="identificationNumber"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['identificationNumber'].invalid}"
-                oninput="this.value = this.value.toUpperCase()" />
-              <div *ngIf="submitted && formRegistro.controls['identificationNumber'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('identificationNumber')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="cellPhoneNumber">{{labelsGlobales.celular}}</label>
-              <input type="text" pInputText required formControlName="cellPhoneNumber"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['cellPhoneNumber'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['cellPhoneNumber'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('cellPhoneNumber')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            
-
-            <div class="form-group field">
-              <label for="birthdate">{{labelsGlobales.fechaNacimiento}}</label>
-              <p-calendar formControlName="birthdate" dateFormat="dd/mm/yy"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['birthdate'].invalid}">
-              </p-calendar>
-              <div *ngIf="submitted && formRegistro.controls['birthdate'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('birthdate')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>-->
-
-
-
-            <!-- <p-divider align="left">
-              <div class="inline-flex align-items-center">
-                <i class="pi pi-unlock mr-2"></i>
-                <b>Datos de usuario</b>
-              </div>
-            </p-divider> -->
-
-            <div class="form-group field">
-              <label for="username">{{labelsGlobales.username}}</label>
-              <input type="text" pInputText required formControlName="username" value="" autocomplete="off"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['username'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['username'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('username')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="electronicMail">{{labelsGlobales.email}}</label>
-              <input type="text" pInputText required formControlName="electronicMail"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['electronicMail'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['electronicMail'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('electronicMail')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="password">{{labelsGlobales.contrasenia}}</label>
-              <input type="password" pInputText required formControlName="password" value="" autocomplete="new-password"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['password'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['password'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('password')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="phoneNumber">{{labelsGlobales.telefono}}</label>
-              <input type="text" pInputText formControlName="phoneNumber" />
-            </div>
-
-
-          </form>
-        </ng-template>
-
-        <ng-template pTemplate="footer">
-          <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
-            class="p-button-secondary p-button-rounded mr-2" (click)="openDialog(false,false, 'crear')"></button>
-          <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check" class="p-button-rounded mr-2"
-            (click)="onValidaFormulario()"></button>
-        </ng-template>
-      </p-dialog>
-    </section>
-    <!-- modal Crear nuevo -->
-
-    <!-- modal Editar -->
-    <section class="dialogEdit">
-      <p-dialog header={{titlesGlobales.edit}} [(visible)]="dialogEdit" [style]="{width: '50vw'}" class="p-fluid"
-        [dismissableMask]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [draggable]="false"
-        [resizable]="false">
-        <ng-template pTemplate="content">
-          <form class="row g-2" [formGroup]="formRegistro" autocomplete="off">
-
-            <!-- <p-divider align="left">
-              <div class="inline-flex align-items-center">
-                <i class="pi pi-user mr-2"></i>
-                <b>Datos personales</b>
-              </div>
-            </p-divider>
-
-             <div class="form-group field">
-              <label for="names">{{labelsGlobales.name}}</label>
-              <input type="text" pInputText required formControlName="names"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['names'].invalid}"
-                oninput="this.value = this.value.toUpperCase()" />
-              <div *ngIf="submitted && formRegistro.controls['names'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('names')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="lastName">{{labelsGlobales.apellidoPaterno}}</label>
-              <input type="text" pInputText required formControlName="lastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['lastName'].invalid}"
-                oninput="this.value = this.value.toUpperCase()" />
-              <div *ngIf="submitted && formRegistro.controls['lastName'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('lastName')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="motherLastName">{{labelsGlobales.apellidoMaterno}}</label>
-              <input type="text" pInputText required formControlName="motherLastName"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['motherLastName'].invalid}"
-                oninput="this.value = this.value.toUpperCase()" />
-              <div *ngIf="submitted && formRegistro.controls['motherLastName'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('motherLastName')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="identificationNumber">{{labelsGlobales.ci}}</label>
-              <input type="text" pInputText required formControlName="identificationNumber"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['identificationNumber'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['identificationNumber'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('identificationNumber')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="cellPhoneNumber">{{labelsGlobales.celular}}</label>
-              <input type="text" pInputText required formControlName="cellPhoneNumber"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['cellPhoneNumber'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['cellPhoneNumber'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('cellPhoneNumber')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="phoneNumber">{{labelsGlobales.telefono}}</label>
-              <input type="text" pInputText formControlName="phoneNumber" />
-            </div>
-
-            <div class="form-group field">
-              <label for="birthdate">{{labelsGlobales.fechaNacimiento}}</label>
-              <p-calendar formControlName="birthdate" dateFormat="dd/mm/yy"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['birthdate'].invalid}">
-              </p-calendar>
-              <div *ngIf="submitted && formRegistro.controls['birthdate'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('birthdate')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="electronicMail">{{labelsGlobales.email}}</label>
-              <input type="text" pInputText required formControlName="electronicMail"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['electronicMail'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['electronicMail'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('electronicMail')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div> -->
-
-            <!-- <p-divider align="left">
-              <div class="inline-flex align-items-center">
-                <i class="pi pi-unlock mr-2"></i>
-                <b>Datos de usuario</b>
-              </div>
-            </p-divider> -->
-
-            <div class="form-group field">
-              <label for="username">{{labelsGlobales.username}}</label>
-              <input type="text" pInputText required formControlName="username" value="" autocomplete="off"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['username'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['username'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('username')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="electronicMail">{{labelsGlobales.email}}</label>
-              <input type="text" pInputText required formControlName="electronicMail"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['electronicMail'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['electronicMail'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('electronicMail')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="password">{{labelsGlobales.contrasenia}}</label>
-              <input type="password" pInputText required formControlName="password" value="" autocomplete="new-password"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && formRegistro.controls['password'].invalid}" />
-              <div *ngIf="submitted && formRegistro.controls['password'].invalid">
-                <small class="p-error" *ngIf="formRegistro.get('password')?.hasError('required')">
-                  {{messagesGlobales.requiredField}}
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group field">
-              <label for="phoneNumber">{{labelsGlobales.telefono}}</label>
-              <input type="text" pInputText formControlName="phoneNumber" />
-            </div>
-
-          </form>
-        </ng-template>
-
-        <ng-template pTemplate="footer">
-          <button pButton pRipple [label]="botonesGlobales.cancel" icon="pi pi-times"
-            class="p-button-secondary p-button-rounded mr-2" (click)="openDialog(false,false, 'edit')"></button>
-          <button pButton pRipple [label]="botonesGlobales.save" icon="pi pi-check" class="p-button-rounded mr-2"
-            (click)="onValidaFormulario()"></button>
-        </ng-template>
-      </p-dialog>
-    </section>
-    <!-- modal Editar -->
   </div>
 </div>
 
-<p-toast></p-toast>
+<p-dialog [header]="titlesGlobales.create" [(visible)]="dialogRegistro" (onHide)="dialogRegistro=false" [style]="{width: '450px'}" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <form [formGroup]="formRegistro" autocomplete="off" class="p-fluid mt-3">
+            <div class="field mb-3">
+                <label class="font-bold">Nombre de Usuario</label>
+                <input type="text" pInputText formControlName="username">
+            </div>
+            </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton label="Cancelar" icon="pi pi-times" (click)="dialogRegistro=false" class="p-button-text p-button-secondary"></button>
+        <button pButton label="Guardar" icon="pi pi-check" style="background: #0a3364; border: none;" (click)="onValidaFormulario()"></button>
+    </ng-template>
+</p-dialog>
+
 <p-blockUI [blocked]="loading">
-  <div class="loading-container">
-    <i class="pi pi-spin pi-spinner" style="font-size: 3em"></i>
-    <p>Cargando...</p>
-  </div>
+    <div class="loading-overlay">
+        <i class="pi pi-spin pi-spinner" style="font-size: 3rem"></i>
+        <p class="font-bold">CARGANDO...</p>
+    </div>
 </p-blockUI>

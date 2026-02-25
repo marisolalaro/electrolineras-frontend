@@ -1,35 +1,56 @@
-ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  li {
-    padding: 8px 0;
-  }
+/* Estilos SIAT / ENDE Adaptables */
+::ng-deep {
+    .p-datatable .p-datatable-thead > tr > th {
+        background: var(--surface-section) !important;
+        color: var(--text-color) !important;
+        font-weight: 700 !important;
+        font-size: 0.85rem !important;
+        text-transform: uppercase;
+        padding: 0.75rem !important;
+    }
 
-  .button-available {
-    background-color: var(--color-available);
-    border-color: var(--color-available);
-    color: white;
-  }
-  .button-preparing {
-    background-color: var(--color-preparing);
-    border-color: var(--color-preparing);
-    color: white;
-  }
-  .button-finishing {
-    background-color: var(--color-finishing);
-    border-color: var(--color-finishing);
-    color: white;
-  }
-  .button-charging {
-    background-color: var(--color-charging);
-    border-color: var(--color-charging);
-    color: white;
-  }
-  .button-unavailable {
-    background-color: var(--color-unavailable);
-    border-color: var(--color-unavailable);
-    color: white;
-  }
+    .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+        background: #10b981 !important;
+    }
+
+    /* Corrección X de cerrar modal */
+    .p-dialog .p-dialog-header .p-dialog-header-icon {
+        color: var(--text-color) !important;
+    }
+}
+
+/* EFECTO ELÉCTRICO EN TÍTULO */
+.siat-title {
+       color: var(--primary-color) !important;
+    margin-bottom: 0 !important;
+    line-height: 1.1;
+
+}
+
+@keyframes pulseEnergy {
+    from { opacity: 0.9; text-shadow: 0 0 5px var(--primary-color); }
+    to { opacity: 1; text-shadow: 0 0 20px var(--primary-color), 0 0 30px #00adc1; }
+}
+
+.card {
+    background: var(--surface-card) !important;
+    border: 1px solid var(--surface-border) !important;
+    border-radius: 12px;
+}
+
+/* Cargando Transparente 0.4 */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    color: #ffffff;
+}

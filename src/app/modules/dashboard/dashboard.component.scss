@@ -3,74 +3,97 @@
   font-family: Inter var, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji" !important;
 }
 
-$ende-blue-dark: #0a3364; /* Tu color azul exacto */
+$ende-blue-dark: #0a3364; 
 $online-green: #10b981;
 $offline-red: #ef4444;
 
+/* 1. COMPACTAR TÍTULOS */
+.siat-title {
+    color: #0a3364;
+    font-weight: 850;
+    font-size: 2rem; /* REDUCIDO de 2.5rem */
+    letter-spacing: -1px;
+    margin-bottom: 0 !important; /* Quitar margen inferior */
+}
+
+.siat-subtitle {
+    color: #64748b;
+    font-weight: 500;
+    font-size: 1rem; /* REDUCIDO de 1.1rem */
+    margin-top: -2px; /* Más pegado al título */
+}
+
+/* 2. COMPACTAR TARJETAS */
 .modern-card {
   background: #ffffff;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
   transition: all 0.3s ease;
   overflow: hidden;
-  border-top-width: 8px !important;
+  border-top-width: 6px !important; /* REDUCIDO de 8px */
 
   &.border-online { border-top-color: $online-green !important; }
   &.border-offline { border-top-color: $offline-red !important; }
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  /* Ajuste de los contenedores internos de la tarjeta */
+  ::ng-deep .p-card-body {
+      padding: 0.75rem !important; /* Espaciado interno de la tarjeta más pequeño */
   }
 }
 
 .icon-circle {
   background: $ende-blue-dark;
-  width: 48px;
-  height: 48px;
+  width: 38px;  /* REDUCIDO de 48px */
+  height: 38px; /* REDUCIDO de 48px */
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  i { font-size: 1.2rem !important; } /* Icono más pequeño */
 }
 
+/* 3. COMPACTAR LISTA DE DATOS */
 .data-list {
   list-style: none;
   padding: 0;
+  margin: 0.5rem 0 !important; /* Menos margen arriba/abajo */
+  
   li {
-    padding: 8px 0;
+    padding: 4px 0 !important; /* REDUCIDO de 8px a 4px */
     border-bottom: 1px solid #f3f4f6;
     color: #4b5563;
-    font-size: 0.9rem;
+    font-size: 0.85rem; /* Letra ligeramente más pequeña */
     
-    b { color: $ende-blue-dark; } /* Los títulos de los datos en azul */
-    i { color: $ende-blue-dark; opacity: 0.8; }
+    b { color: $ende-blue-dark; }
+    i { color: $ende-blue-dark; opacity: 0.8; margin-right: 8px; }
   }
 }
 
+/* 4. COMPACTAR CAJA DE PUERTOS */
 .ports-box {
   background: #f9fafb;
-  border-radius: 10px;
-  padding: 12px;
+  border-radius: 8px;
+  padding: 8px !important; /* REDUCIDO de 12px */
   border: 1px solid #f3f4f6;
+  margin-top: 5px;
+
+  table {
+      font-size: 0.8rem; /* Tabla de puertos más pequeña */
+      td { padding: 2px 0 !important; }
+  }
 }
 
-/* Botón con tu color azul */
+/* Botón más compacto */
 ::ng-deep .p-button.p-button-raised {
     background: $ende-blue-dark !important;
     border-color: $ende-blue-dark !important;
+    padding: 0.5rem 1rem !important; /* Botón más bajo */
+    font-size: 0.9rem;
 }
 
-.siat-title {
-    color: #0a3364; /* Tu azul exacto */
-    font-weight: 850; /* Extra bold */
-    font-size: 2.5rem;
-    letter-spacing: -1px;
-}
-
-.siat-subtitle {
-    color: #64748b; /* Gris del SIAT */
-    font-weight: 500;
-    font-size: 1.1rem;
-    margin-top: -5px;
+/* Ajuste general para evitar scroll en el contenedor principal */
+.container {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
 }

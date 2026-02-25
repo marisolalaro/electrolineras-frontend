@@ -1,57 +1,48 @@
-<div>
+<div class="container p-2">
   <p-card>
-    <div class="row">
-      <h3><b>{{tituloComponente.mainTitle}}</b></h3>
+    <div class="text-center mb-3 py-2 border-bottom-1 border-300">
+      <h1 class="siat-title m-0">{{tituloComponente.mainTitle}}</h1>
+      <p class="siat-subtitle m-0">Generación de Reportes Institucionales</p>
     </div>
 
-<div class="row p-0">
-  <p-card header="" subheader="" class="p-0">
-
-    <div class="grid p-0 justify-content-center">
-
-      <div class="col-12 md:col-2 text-center">
-        <div class="flex flex-column align-items-center justify-content-center">
-          <label class="mb-2 font-bold">Rango de fechas:</label>
-          <p-calendar [(ngModel)]="rangeDates"
-                      selectionMode="range"
-                      [readonlyInput]="true"
-                      dateFormat="dd/mm/yy"
-                      [showIcon]="true"
-                      [style]="{'width':'250px'}"> </p-calendar>
-        </div>
+    <div class="flex justify-content-center mb-4">
+      <div class="p-3 border-round-xl shadow-1 bg-gray-50 flex align-items-center gap-3 border-1 border-200">
+        <label class="font-bold text-700"><i class="pi pi-calendar mr-2"></i>Rango de fechas:</label>
+        <p-calendar [(ngModel)]="rangeDates"
+                    selectionMode="range"
+                    [readonlyInput]="true"
+                    dateFormat="dd/mm/yy"
+                    [showIcon]="true"
+                    placeholder="Seleccione un rango"
+                    [style]="{'width':'280px'}">
+        </p-calendar>
       </div>
-
     </div>
-  </p-card>
-</div>
-    <br>
 
-  <div class="grid m-0 p-0">
-      <div class="card flex justify-content-center col-12 md:col-4 "
-        *ngFor="let reporte of tiposReportes">
+    <div class="grid justify-content-center">
+      <div class="col-12 md:col-4 lg:col-3 p-3" *ngFor="let reporte of tiposReportes">
         
-        <p-card [header]="reporte.nombre" 
-                class="card-interactiva" 
-                [class.card-seleccionado]="reporte === reporteActivoVisual"
-                [style]="{ width: '360px', cursor: 'pointer' }" 
-                (click)="descargarDesdeCard(reporte)">
+        <div class="report-card" 
+             [class.report-active]="reporte === reporteActivoVisual"
+             (click)="descargarDesdeCard(reporte)">
           
-          <ng-template pTemplate="header">
-            <img [alt]="reporte.nombre" 
-                 [src]="reporte.imagen" 
-                 style="height: 200px; object-fit: cover;" 
-                 onerror="this.src='https://primefaces.org/cdn/primeng/images/card-ng.jpg';" />
-          </ng-template>
+          <div class="report-image-container">
+            <img [src]="reporte.imagen" 
+                 [alt]="reporte.nombre"
+                 onerror="this.src='assets/images/placeholder-report.jpg';">
+            <div class="report-overlay">
+              <i class="pi pi-download text-3xl text-white"></i>
+            </div>
+          </div>
 
-        </p-card>
+          <div class="report-footer">
+            <span class="report-name">{{reporte.nombre}}</span>
+            <i class="pi pi-file-excel text-green-600 font-bold text-xl"></i>
+          </div>
+        </div>
 
       </div>
     </div>
-    
-    <div class="row p-0">
-      </div>
-    <div>
-        </div>
 
   </p-card>
 </div>

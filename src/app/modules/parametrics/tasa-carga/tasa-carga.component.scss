@@ -1,9 +1,96 @@
+/* Estilos SIAT para Tasas de Carga */
+::ng-deep {
+    .p-datatable .p-datatable-thead > tr > th {
+        color: #0a3364 !important;
+        font-weight: 700 !important;
+        font-size: 0.85rem !important;
+        text-transform: uppercase;
+        padding: 0.6rem !important;
+    }
+
+    /* InputSwitch verde institucional */
+    .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+        background: #10b981 !important;
+    }
+}
+
+.siat-title {
+    margin-bottom: 0 !important;
+}
+
+.siat-subtitle {
+    margin-top: -5px !important;
+}
+
+/* Etiquetas de Estado Modernas */
 .estado-habilitado {
-  color: green;
-  font-weight: bold;
+    color: #10b981;
+    font-weight: 700;
+    font-size: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 4px 8px;
+    border-radius: 6px;
 }
 
 .estado-deshabilitado {
-  color: red;
-  font-weight: bold;
+    color: #ef4444;
+    font-weight: 700;
+    font-size: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(239, 68, 68, 0.1);
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+/* Animación de iconos */
+.pi-pencil {
+    transition: transform 0.2s ease;
+    font-size: 1.3rem;
+    &:hover {
+        transform: scale(1.2);
+    }
+}
+
+.font-mono {
+    font-family: 'Courier New', Courier, monospace;
+}
+/* Etiquetas de Estado Adaptables */
+.estado-habilitado {
+    background-color: rgba(16, 185, 129, 0.2); // Verde suave transparente
+    color: #10b981;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.estado-deshabilitado {
+    background-color: rgba(239, 68, 68, 0.2); // Rojo suave transparente
+    color: #ef4444;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Arreglo para la "X" del Dialog en Modo Oscuro */
+::ng-deep .p-dialog .p-dialog-header .p-dialog-header-icon {
+    color: var(--text-color) !important;
+}
+
+/* Quitar fondos blancos de las cabeceras de tabla */
+::ng-deep .p-datatable .p-datatable-thead > tr > th {
+    background: var(--surface-section) !important;
+    color: var(--text-color) !important;
 }

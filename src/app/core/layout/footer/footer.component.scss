@@ -1,43 +1,109 @@
 .footer {
-    // Tu azul exacto
-    background-color: #0a3364; 
-    color: #ffffff;
-    padding: 1.2rem;
+    background-color: #0a3364; // Tu azul institucional
+    color: rgba(255, 255, 255, 0.8); // Blanco con ligera transparencia
+    padding: 0.75rem 0; // Más delgado verticalmente
     width: 100%;
+    font-family: 'Inter', sans-serif;
+    border-top: 3px solid #00adc1; // Línea turquesa de ENDE para dar contraste
     
-    // Tipografía moderna
-    font-family: Inter var, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
-    
-    // Para que no flote sobre el contenido si hay poco texto
-    position: relative; 
+    // Asegura que siempre esté al fondo
+    position: relative;
     margin-top: auto; 
 
     .footer-content {
         display: flex;
-        justify-content: center; // Centra horizontalmente
-        align-items: center;     // Centra verticalmente
-        text-align: center;
+        justify-content: center;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
     }
 
     .copyright {
-        font-size: 0.9rem;
-        letter-spacing: 0.3px;
-        opacity: 0.9;
+        font-size: 0.75rem; // Tamaño más pequeño y profesional
+        font-weight: 400;
+        letter-spacing: 0.5px;
+        text-transform: none;
 
         b {
             color: #ffffff;
             font-weight: 700;
-            text-transform: uppercase;
+            margin: 0 4px;
+        }
+
+        .separator {
+            margin: 0 10px;
+            color: rgba(255, 255, 255, 0.3);
         }
     }
 }
 
-// Para asegurar que se vea bien en celulares
+// Optimización para móviles
 @media (max-width: 768px) {
     .footer {
-        padding: 1rem;
+        padding: 0.6rem 0;
         .copyright {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
+            line-height: 1.4;
+            display: block; // En móviles el texto se apila
+            
+            .separator {
+                display: none; // Quitamos la barra en móviles
+            }
+        }
+    }
+}.footer {
+    background-color: #0a3364; // Tu azul institucional
+    color: rgba(255, 255, 255, 0.8); // Blanco con ligera transparencia
+    padding: 0.75rem 0; // Más delgado verticalmente
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    border-top: 8px solid #fecc00; // Línea turquesa de ENDE para dar contraste
+    
+    // Asegura que siempre esté al fondo
+    position: relative;
+    margin-top: auto; 
+
+    .footer-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    .copyright {
+        font-size: 0.75rem; // Tamaño más pequeño y profesional
+        font-weight: 400;
+        letter-spacing: 0.5px;
+        text-transform: none;
+
+        b {
+            color: #ffffff;
+            font-weight: 700;
+            margin: 0 4px;
+        }
+
+        .separator {
+            margin: 0 10px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+    }
+}
+
+// Optimización para móviles
+@media (max-width: 768px) {
+    .footer {
+        padding: 0.6rem 0;
+        .copyright {
+            font-size: 0.7rem;
+            line-height: 1.4;
+            display: block; // En móviles el texto se apila
+            
+            .separator {
+                display: none; // Quitamos la barra en móviles
+            }
         }
     }
 }

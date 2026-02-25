@@ -1,20 +1,54 @@
-section.listado {
-  // padding: 20rem 20rem;
+/* Pantalla de carga sutil y adaptable */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4); /* Oscurece sutilmente ambos temas */
+    backdrop-filter: blur(2px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+
+    i, p {
+        color: #ffffff !important; /* Blanco siempre resalta en el overlay oscuro */
+    }
 }
 
-hr {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  border: 0;
-  border-top: 1px solid rgb(0, 0, 0);
+::ng-deep {
+    /* Cabeceras adaptables */
+    .p-datatable .p-datatable-thead > tr > th {
+        background: var(--surface-section) !important;
+        color: var(--text-color) !important;
+        font-weight: 700 !important;
+        font-size: 0.85rem !important;
+        text-transform: uppercase;
+        padding: 0.75rem !important;
+    }
+
+    /* Tabs del detalle */
+    .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+        color: var(--primary-color) !important;
+        border-color: var(--primary-color) !important;
+    }
+
+    /* Corrección para la X de cerrar en modo oscuro */
+    .p-dialog .p-dialog-header .p-dialog-header-icon {
+        color: var(--text-color) !important;
+    }
 }
 
-ul {
-  list-style-type: none; /* Elimina los puntos de las listas, si es necesario */
-  padding: 0;
-  margin: 0;
+.siat-title {
+    color: var(--primary-color) !important;
+    margin-bottom: 0 !important;
+    line-height: 1.1;
 }
 
-li {
-  padding: 8px 0; /* Espaciado entre los elementos de la lista */
+.card {
+    background: var(--surface-card);
+    border: 1px solid var(--surface-border);
+    border-radius: 12px;
 }

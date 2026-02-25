@@ -1,70 +1,89 @@
-.my-card-container {
-  width: 100%;
+/* Reutilizamos las variables del Dashboard */
+$ende-blue: #0a3364;
+
+.siat-title {
+  color: $ende-blue;
+  font-weight: 850;
+  font-size: 2rem;
+  letter-spacing: -1px;
 }
 
-@media (min-width: 768px) {
-  .my-card-container {
-    width: 99%;
-    /* Ajusta el ancho en pantallas más grandes */
-    margin: 0 auto;
-    /* Centra el card */
+.siat-subtitle {
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* DISEÑO DE TARJETA DE REPORTE */
+.report-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    
+    .report-overlay {
+      opacity: 1;
+    }
+  }
+
+  &.report-active {
+    border: 2px solid $ende-blue;
+    background-color: #f0f7ff;
   }
 }
 
-@media (min-width: 1200px) {
-  .my-card-container {
-    width: 99%;
-    /* Ajusta el ancho en pantallas aún más grandes */
+.report-image-container {
+  position: relative;
+  height: 160px; /* Altura controlada para evitar scroll */
+  overflow: hidden;
+  background: #f1f5f9;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
+.report-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(10, 51, 100, 0.7); /* Azul ENDE con transparencia */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
-.report-btn-sivel {
-    width: 220px;
-    height: 220px;
-    margin: 15px;
-    border: none;
-    border-radius: 15px;
-    background-color: #00adc1;
-    color: white;
-    font-size: 14px;
-    font-weight: 600;
+.report-footer {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+
+  .report-name {
+    font-weight: 700;
+    color: $ende-blue;
+    font-size: 0.9rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.3s 
-ease;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
+  }
 }
 
-.report-btn-sivel.icon {
-    font-size: 48px;
-    margin-bottom: 15px;
-    opacity: 0.9;
-    color: #922f2f;
-}
-
-.card-interactiva ::ng-deep .p-card {
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    border: 1px solid transparent; 
-}
-
-.card-interactiva:hover ::ng-deep .p-card {
-    transform: translateY(-5px); 
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-}
-
-
-.card-interactiva.card-seleccionado ::ng-deep .p-card {
-    border: 2px solid #9fa1a5; 
-    transform: scale(1.05);    /* Crece */
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.6); 
-    background-color: #f0f9ff; 
-    z-index: 10;
+/* Ajustes de PrimeNG Calendar */
+::ng-deep {
+  .p-calendar .p-inputtext {
+    border-radius: 8px;
+    padding: 0.5rem;
+  }
+  .p-datepicker {
+    font-family: 'Inter', sans-serif !important;
+  }
 }

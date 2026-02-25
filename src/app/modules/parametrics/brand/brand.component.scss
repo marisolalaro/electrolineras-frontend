@@ -1,0 +1,43 @@
+/* Estilos para Modelos de Estaciones */
+::ng-deep {
+    .p-datatable-header {
+        background: var(--surface-section) !important;
+        border: none !important;
+    }
+
+    /* Cabeceras de tabla adaptables */
+    .p-datatable .p-datatable-thead > tr > th {
+        background: var(--surface-section) !important;
+        color: var(--text-color) !important;
+        font-weight: 700 !important;
+        font-size: 0.85rem !important;
+        text-transform: uppercase;
+        padding: 0.75rem !important;
+    }
+
+    /* InputSwitch verde institucional */
+    .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+        background: #10b981 !important;
+    }
+
+    /* Corregir la X del cerrar modal en modo oscuro */
+    .p-dialog .p-dialog-header .p-dialog-header-icon {
+        color: var(--text-color) !important;
+    }
+}
+
+.siat-title {
+    color: var(--primary-color) !important;
+    margin-bottom: 0 !important;
+    line-height: 1.1;
+}
+
+.siat-subtitle {
+    margin-top: -5px !important;
+}
+
+.card {
+    background: var(--surface-card);
+    border: 1px solid var(--surface-border);
+    border-radius: 12px;
+}
