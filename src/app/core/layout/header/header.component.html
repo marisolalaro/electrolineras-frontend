@@ -9,4 +9,7 @@
     <button pButton pRipple icon="pi pi-power-off" (click)="salir()" class="mr-2" pTooltip="Salir"
       tooltipPosition="bottom"></button>
   </ng-template>
+  <ng-template pTemplate="start">
+    <button *ngIf="mostrarBotonSidebar" pButton pRipple icon="pi pi-bars" (click)="onToggleSidebar()"></button>
+  </ng-template>
 </p-menubar>  

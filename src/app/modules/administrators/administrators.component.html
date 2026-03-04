@@ -1,27 +1,23 @@
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
-<div class="container p-2">
-  <div class="card shadow-2 border-round-xl overflow-hidden">
+<div class="container p-0"> <div class="card shadow-2 border-round-xl overflow-hidden">
     
-    <div class="text-center mb-3 py-3 border-bottom-1 border-300" style="background: var(--surface-section);">
-      <h1 class="siat-title m-0 uppercase">
-        {{componentTitle.mainTitle}}
+    <div class="text-center mb-1 py-1 border-bottom-1 border-300" style="background: var(--surface-section);">
+      <h1 class="siat-title m-0 uppercase" style="font-size: 2rem;"> {{componentTitle.mainTitle}}
       </h1>
-      <p class="siat-subtitle m-0 text-600 font-medium">Gestión de Usuarios y Accesos al Sistema</p>
+      <p class="siat-subtitle m-0 text-600 font-medium text-xs">Gestión de Usuarios y Accesos</p>
     </div>
 
-    <div class="px-4 pb-4">
-      <div class="flex justify-content-between align-items-center mb-3">
-        <div class="flex gap-2">
-          <button pButton label="Limpiar Filtros" class="p-button-outlined p-button-sm" 
+    <div class="px-2 pb-1"> <div class="flex justify-content-between align-items-center mb-1"> <div class="flex gap-2">
+          <button pButton label="Limpiar" class="p-button-outlined p-button-sm" 
                   icon="pi pi-filter-slash" (click)="clearFilters(dt1); getAllAdministrations()"></button>
         </div>
         <div class="flex gap-2">
           <p-button icon="pi pi-refresh" [rounded]="true" (click)="getAllAdministrations()" 
-                    pTooltip="Actualizar" severity="secondary"></p-button>
+                    pTooltip="Actualizar" severity="secondary" styleClass="p-button-sm"></p-button>
           
-          <button *ngIf="esSuperAdmin" pButton pRipple icon="pi pi-user-plus" label="Nuevo Usuario" 
-                  class="p-button-raised shadow-2" style="background: #0a3364; border: none;"
+          <button *ngIf="esSuperAdmin" pButton pRipple icon="pi pi-user-plus" label="Nuevo" 
+                  class="p-button-raised shadow-2 p-button-sm" style="background: #0a3364; border: none;"
                   (click)="openDialog(true, false, 'crear')">
           </button>
         </div>
@@ -29,8 +25,10 @@
 
       <p-table responsiveLayout="stack" #dt1 [value]="administradors" dataKey="id"
                styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm shadow-1" 
-               [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
-               currentPageReportTemplate="Mostrando {first} a {last} de {{totalRecords}} registros">
+               [paginator]="true" 
+               [rows]="5" 
+               [showCurrentPageReport]="true"
+               currentPageReportTemplate="{first}-{last} de {totalRecords}">
         
         <ng-template pTemplate="header">
           <tr>
@@ -74,18 +72,33 @@
   </div>
 </div>
 
-<p-dialog [header]="titlesGlobales.create" [(visible)]="dialogRegistro" (onHide)="dialogRegistro=false" [style]="{width: '450px'}" [modal]="true" styleClass="p-fluid">
+<p-dialog [header]="titlesGlobales.create" [(visible)]="dialogRegistro" (onHide)="dialogRegistro=false" 
+          [style]="{width: '450px'}" [modal]="true" styleClass="p-fluid" [draggable]="false" [resizable]="false">
     <ng-template pTemplate="content">
-        <form [formGroup]="formRegistro" autocomplete="off" class="p-fluid mt-3">
-            <div class="field mb-3">
-                <label class="font-bold">Nombre de Usuario</label>
-                <input type="text" pInputText formControlName="username">
+        <form [formGroup]="formRegistro" autocomplete="off" class="p-fluid mt-2">
+            <div class="field mb-2">
+                <label class="font-bold text-xs">Nombre de Usuario</label>
+                <input type="text" pInputText formControlName="username" class="p-inputtext-sm">
             </div>
-            </form>
+            <div class="field mb-2">
+                <label class="font-bold text-xs">Correo Electrónico</label>
+                <input type="email" pInputText formControlName="electronicMail" class="p-inputtext-sm">
+            </div>
+            <div class="field mb-2">
+                <label class="font-bold text-xs">Contraseña</label>
+                <input type="password" pInputText formControlName="password" class="p-inputtext-sm">
+            </div>
+            <div class="field mb-2">
+                <label class="font-bold text-xs">Teléfono</label>
+                <input type="text" pInputText formControlName="cellPhoneNumber" class="p-inputtext-sm">
+            </div>
+        </form>
     </ng-template>
     <ng-template pTemplate="footer">
-        <button pButton label="Cancelar" icon="pi pi-times" (click)="dialogRegistro=false" class="p-button-text p-button-secondary"></button>
-        <button pButton label="Guardar" icon="pi pi-check" style="background: #0a3364; border: none;" (click)="onValidaFormulario()"></button>
+        <div class="flex justify-content-end gap-2">
+            <button pButton label="Cancelar" icon="pi pi-times" (click)="dialogRegistro=false" class="p-button-text p-button-secondary p-button-sm"></button>
+            <button pButton label="Guardar" icon="pi pi-check" class="p-button-sm" style="background: #0a3364; border: none;" (click)="onValidaFormulario()"></button>
+        </div>
     </ng-template>
 </p-dialog>
 

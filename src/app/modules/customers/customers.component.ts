@@ -330,4 +330,5 @@ export default class CustomersComponent {
     this.fechaRegistro = '';
   }
 
+  
 }

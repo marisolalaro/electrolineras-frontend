@@ -1,14 +1,15 @@
 <div class="container">
   <p-card header="">
-    <div class="px-4 py-2 md:px-6 lg:px-8">
-      <div class="text-center mb-2 py-1 border-bottom-1 border-300">
-    <h1 class="siat-title m-0">ELECTROLINERAS</h1>
-    <p class="siat-subtitle m-0">Tablero de Control y Monitoreo de Estaciones</p>
-</div>
+    <div class="compact-content px-2 py-1 md:px-3 lg:px-4">
+      <div class="text-center py-0 border-bottom-1 border-300" style="margin-bottom: 2px;">
+        <h1 class="siat-title m-0">ELECTROLINERAS</h1>
+        <p class="siat-subtitle m-0">Tablero de Control y Monitoreo de Estaciones</p>
+      </div>
 
-      <div class="grid" *ngIf="serviceResponse">
+
+      <div class="grid" *ngIf="serviceResponse" style="margin: 0 -4px;">
         
-        <div class="col-12 lg:col-4 md:col-6 sm:col-12" *ngFor="let es of [0, 1, 2]; let i = index">
+          <div class="col-12 lg:col-4 md:col-6 sm:col-12" *ngFor="let es of [0,1,2]; let i = index" style="padding: 4px;">
           <div class="p-3 h-full">
             <div class="modern-card shadow-3 h-full flex flex-column" 
                  [ngClass]="{'border-online': i==0 ? estadoHeartbeat.estado == 'En línea' : i==1 ? estadoHeartbeat2.estado == 'En línea' : estadoHeartbeat3.estado == 'En línea',

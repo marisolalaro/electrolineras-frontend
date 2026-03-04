@@ -205,6 +205,7 @@ export default class ElectricStationsComponent implements OnInit {
       (resp: any) => {
         if (resp) {
           this.agenteIaService.obtenerPrediccionIa(resp.data).subscribe(
+        //  this.agenteIaService.obtenerPrediccionIaTest(resp.data).subscribe(
             (respIa: any) => {
                this.analizandoDatos = false;
               let textoLimpio = respIa.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, "").trim();
@@ -601,140 +602,119 @@ export default class ElectricStationsComponent implements OnInit {
 processPredictionData(predictions: any[]) {
     if (!predictions || predictions.length === 0) return;
 
-    // 1. Preparamos los arrays de datos
     const labels = [];
     const dataMedia = [];
     const dataSuperior = [];
     const dataInferior = [];
     
-    // (Opcional) Valor para la línea roja de capacidad máxima (ej: 65 o el máximo de tus datos)
-    const capacidadMaxima = 65; 
-    const dataCapacidad = [];
+    predictions.forEach(p => {
+        const fechaReal = new Date(p.timestamp);
+        labels.push(fechaReal.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }));
 
-  predictions.forEach(p => {
-    // Formato de hora (ej: "17:00")
-    const fechaReal = new Date(p.timestamp);
+        // Convertimos a kWh dividiendo entre 1000
+        const estimado = parseFloat(p.consumption_estimated) / 1000;
+        const error = parseFloat(p.margin_error) / 1000;
 
-    // 2. Ahora sí puedes usar toLocaleTimeString sobre 'fechaReal'
-    const horaFormateada = fechaReal.toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false
-    });
-      labels.push(horaFormateada);
-
-      // Línea principal
-      dataMedia.push(p.consumption_estimated);
-
-      // Banda de error (Superior e Inferior)
-      // Aseguramos que no sea menor a 0 si la lógica lo requiere
-      const inferior = Math.max(0, p.consumption_estimated - p.margin_error); 
-      const superior = p.consumption_estimated + p.margin_error;
-
-      dataInferior.push(inferior);
-      dataSuperior.push(superior);
-      
-      // Línea constante roja
-      dataCapacidad.push(capacidadMaxima);
+        dataMedia.push(estimado);
+        dataInferior.push(Math.max(0, estimado - error)); 
+        dataSuperior.push(estimado + error);
     });
 
-    // 2. Construimos el objeto para PrimeNG
+    // 🔴 1. Calculamos el máximo para que la gráfica tenga "aire" y no sea plana
+    const maxData = Math.max(...dataSuperior);
+    const techoDinamico = maxData > 0 ? maxData * 1.2 : 0.1;
+
+    // 🔴 2. Sincronizamos las opciones con el nuevo techo antes de asignar los datos
+    this.chartOptions.scales.y.suggestedMax = techoDinamico;
+
     this.chartData = {
-      labels: labels,
-      datasets: [
-        // Dataset 0: Límite Inferior (Invisible, solo sirve de tope)
-        {
-          label: 'Límite Inferior',
-          data: dataInferior,
-          fill: false, // No rellenar hacia abajo
-          borderColor: 'transparent',
-          pointRadius: 0,
-          tension: 0.4
-        },
-        // Dataset 1: Límite Superior (Rellena hasta el dataset 0)
-        {
-          label: 'Margen de Error',
-          data: dataSuperior,
-          fill: '-1', // <--- TRUCO: Rellena hasta el dataset anterior (índice 0)
-          borderColor: 'transparent', // Borde transparente para que no se vea línea arriba
-          backgroundColor: 'rgba(59, 130, 246, 0.2)', // Azul clarito transparente
-          pointRadius: 0,
-          tension: 0.4
-        },
-        // Dataset 2: Predicción Media (Línea Azul visible)
-        {
-          label: 'Predicción Media (kWh)',
-          data: dataMedia,
-          fill: false,
-          borderColor: '#3B82F6', // Azul fuerte
-          backgroundColor: '#3B82F6',
-          tension: 0.4,
-          pointBackgroundColor: '#ffffff',
-          pointBorderColor: '#3B82F6',
-          pointBorderWidth: 2,
-          pointRadius: 4
-        },
-        // Dataset 3: Capacidad Máxima (Línea Roja Punteada)
-        {
-          label: 'Capacidad Máxima',
-          data: dataCapacidad,
-          fill: false,
-          borderColor: '#EF4444', // Rojo
-          borderDash: [5, 5], // Punteado
-          pointRadius: 0,
-          tension: 0
-        }
-      ]
+        labels: labels,
+        datasets: [
+            { label: 'Límite Inferior', data: dataInferior, fill: false, borderColor: 'transparent', pointRadius: 0, tension: 0.4 },
+            { 
+              label: 'Margen de Error', 
+              data: dataSuperior, 
+              fill: '-1', 
+              backgroundColor: 'rgba(59, 130, 246, 0.2)', 
+              borderColor: 'transparent', 
+              pointRadius: 0, 
+              tension: 0.4 
+            },
+            { 
+              label: 'Predicción Media (kWh)', 
+              data: dataMedia, 
+              fill: false, 
+              borderColor: '#3B82F6', 
+              backgroundColor: '#3B82F6', 
+              tension: 0.4, 
+              pointRadius: 4 
+            }
+        ]
     };
-  }
 
-  initChartOptions() {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+    // Forzamos la actualización de las opciones del objeto para que Chart.js las lea de nuevo
+    this.chartOptions = { ...this.chartOptions };
+}
 
-    this.chartOptions = {
-      maintainAspectRatio: false,
-      responsive: true,
-      aspectRatio: 0.6,
-      plugins: {
-        legend: {
-          labels: {
-            color: textColor
-          },
-          // Ocultamos el label del límite inferior para que no salga en la leyenda
-          filter: function(item, chart) {
-            return item.text !== 'Límite Inferior';
-          }
-        },
-        tooltip: {
-          mode: 'index',
-          intersect: false
-        }
+initChartOptions() {
+  const documentStyle = getComputedStyle(document.documentElement);
+  const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary') || '#6c757d';
+  const surfaceBorder = documentStyle.getPropertyValue('--surface-border') || '#dfe7ef';
+
+  this.chartOptions = {
+    maintainAspectRatio: false,
+    aspectRatio: 0.6,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top',
+        filter: (item: any) => item.text !== 'Límite Inferior'
       },
-      scales: {
-        x: {
-          ticks: {
-            color: textColorSecondary
-          },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        callbacks: {
+          label: function(context: any) {
+            let label = context.dataset.label || '';
+            if (label) label += ': ';
+            if (context.parsed.y !== null) {
+              // Mostramos 3 decimales en el tooltip para precisión
+              label += context.parsed.y.toLocaleString('en-US', { minimumFractionDigits: 3 }) + ' kWh';
+            }
+            return label;
           }
-        },
-        y: {
-          ticks: {
-            color: textColorSecondary
-          },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false
-          },
-          min: 0 // Empezar en 0
         }
       }
-    };
-  }
+    },
+    scales: {
+      x: {
+        ticks: { color: textColorSecondary },
+        grid: { display: false }
+      },
+      y: {
+        min: 0,
+        suggestedMax: 0.1, // Valor inicial pequeño
+        ticks: {
+            color: textColorSecondary,
+            font: { size: 10, family: 'monospace' },
+            // 🔴 ESTO EVITA LOS CEROS REPETIDOS:
+            callback: function(value: any) {
+                if (value === 0) return '0 kWh';
+                // Si el valor es pequeño, forzamos 3 decimales para que cada etiqueta sea distinta
+                return value.toLocaleString('en-US', { 
+                    minimumFractionDigits: 3, 
+                    maximumFractionDigits: 3 
+                }) + ' kWh';
+            }
+        },
+        grid: {
+            color: surfaceBorder,
+            drawBorder: false,
+            borderDash: [3, 3] 
+        }
+      }
+    }
+  };
+}
 }
 

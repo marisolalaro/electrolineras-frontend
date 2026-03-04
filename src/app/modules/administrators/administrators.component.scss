@@ -1,19 +1,38 @@
 /* Estilo SIAT para Administración de Usuarios */
 ::ng-deep {
+    /* 🔴 Compactar las celdas del cuerpo (Casi a la mitad) */
+    .p-datatable-sm .p-datatable-tbody > tr > td {
+        padding: 0.25rem 0.5rem !important; 
+        font-size: 0.8rem !important;
+    }
+
+    /* 🔴 Compactar las cabeceras (De 0.75rem a 0.4rem) */
     .p-datatable .p-datatable-thead > tr > th {
         background: var(--surface-section) !important;
         color: var(--text-color) !important;
         font-weight: 700 !important;
-        font-size: 0.85rem !important;
+        font-size: 0.75rem !important;
         text-transform: uppercase;
-        padding: 0.75rem !important;
+        padding: 0.4rem !important; 
+    }
+
+    /* 🔴 Compactar el Paginador para que no ocupe espacio abajo */
+    .p-paginator {
+        padding: 0 !important;
+        height: 35px !important;
+        background: var(--surface-card) !important;
+    }
+
+    /* Inputs de filtro más pequeños */
+    .p-datatable .p-inputtext-sm {
+        padding: 0.3rem !important;
+        font-size: 0.75rem !important;
     }
 
     .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
         background: #10b981 !important;
     }
 
-    /* Corrección para la X del modal en modo nocturno */
     .p-dialog .p-dialog-header .p-dialog-header-icon {
         color: var(--text-color) !important;
     }
@@ -22,10 +41,24 @@
 .siat-title {
     color: var(--primary-color) !important;
     margin-bottom: 0 !important;
-    line-height: 1.1;
+    line-height: 1;
+    font-weight: 800;
 }
 
 .siat-subtitle {
-    margin-top: -5px !important;
+    margin-top: -2px !important;
 }
 
+.loading-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    i, p { color: #ffffff !important; }
+}

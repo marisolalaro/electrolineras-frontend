@@ -1,83 +1,36 @@
-/* SIDEBAR ADAPTABLE */
+/* SIDEBAR ADAPTABLE COMPACTO */
 .p-panelmenu {
     background: transparent !important;
-    padding: 0 10px;
+    padding: 0 8px; /* Reducimos padding lateral */
 
     .p-panelmenu-panel {
-        /* Cambiamos blanco fijo por variable de superficie */
         background: var(--surface-card) !important; 
         border: 1px solid var(--surface-border) !important;
-        border-radius: 8px !important;
-        margin-bottom: 0.4rem !important;
+        border-radius: 6px !important; /* Bordes un poco más finos */
+        margin-bottom: 0.2rem !important; /* Reducimos separación entre botones */
         transition: all 0.2s;
     }
 
-    .p-menuitem-text {
-        /* Cambiamos azul fijo por variable de texto */
-        color: var(--text-color) !important; 
-        font-weight: 600 !important;
-    }
-
-    .p-menuitem-icon {
-        /* Usamos el color primario del tema (Azul en claro, Celeste en oscuro) */
-        color: var(--primary-color) !important; 
-        font-size: 1.5rem !important;
-    }
-
-    /* Títulos como "ADMINISTRACIÓN PARAMÉTRICAS" */
-    .p-disabled .p-menuitem-text {
-        color: #cf7a30 !important; /* Mantenemos el naranja ENDE */
-        font-weight: 800 !important;
-    }
-
-    /* Hover que se adapta al tema */
-    .p-panelmenu-header:not(.p-disabled) > a:hover {
-        background: var(--surface-hover) !important;
-    }
-}
-
-/* Ajuste para el logo en modo oscuro */
-.logo-container {
-    background: transparent !important;
-}/* SIDEBAR ADAPTABLE */
-.p-panelmenu {
-    background: transparent !important;
-    padding: 0 10px;
-
-    .p-panelmenu-panel {
-        /* Cambiamos blanco fijo por variable de superficie */
-        background: var(--surface-card) !important; 
-        border: 1px solid var(--surface-border) !important;
-        border-radius: 8px !important;
-        margin-bottom: 0.4rem !important;
-        transition: all 0.2s;
+    .p-panelmenu-header > a {
+        padding: 0.5rem 0.75rem !important; /* Reducimos el relleno interno del botón */
     }
 
     .p-menuitem-text {
-        /* Cambiamos azul fijo por variable de texto */
         color: var(--text-color) !important; 
         font-weight: 600 !important;
+        font-size: 0.85rem !important; /* Texto ligeramente más pequeño para ganar espacio */
     }
 
     .p-menuitem-icon {
-        /* Usamos el color primario del tema (Azul en claro, Celeste en oscuro) */
         color: var(--primary-color) !important; 
-        font-size: 1.5rem !important;
+        font-size: 1.2rem !important; /* Iconos más pequeños */
     }
 
-    /* Títulos como "ADMINISTRACIÓN PARAMÉTRICAS" */
+    /* Títulos de sección como "ADMINISTRACIÓN PARAMÉTRICAS" */
     .p-disabled .p-menuitem-text {
-        color: #cf7a30 !important; /* Mantenemos el naranja ENDE */
-        font-weight: 800 !important;
+        color: #cf7a30 !important;
+        font-weight: 700 !important;
+        font-size: 0.75rem !important; /* Más pequeño para que no ocupe 2 líneas */
+        text-transform: uppercase;
     }
-
-    /* Hover que se adapta al tema */
-    .p-panelmenu-header:not(.p-disabled) > a:hover {
-        background: var(--surface-hover) !important;
-    }
-}
-
-/* Ajuste para el logo en modo oscuro */
-.logo-container {
-    background: transparent !important;
 }

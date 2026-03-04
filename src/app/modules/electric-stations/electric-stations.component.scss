@@ -54,3 +54,8 @@
     z-index: 10000;
     color: #ffffff;
 }
+
+::ng-deep .p-datatable thead input.p-inputtext-sm {
+  padding: 0.25rem !important;
+  font-size: 0.75rem;
+}

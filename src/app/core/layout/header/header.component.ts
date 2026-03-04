@@ -22,6 +22,9 @@ export class HeaderComponent implements OnInit {
 
   // variables de control
   public componenteVisible: boolean = false;
+  
+  // NUEVA VARIABLE: Controla si se ve el botón de las 3 rayitas
+  public mostrarBotonSidebar: boolean = false; 
 
   // variables propias del componente
   public user: any;
@@ -57,28 +60,32 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  // NUEVA FUNCIÓN: Traduce los roles del backend a texto para el frontend
+  obtenerNombreRol(nombreRolBackend: string): string {
+    switch (nombreRolBackend) {
+      case 'ROLE_ADMIN_SYS':
+        return 'Rol: Administrador';
+      case 'ROLE_CLIENT':
+        return 'Rol: Cliente';
+      default:
+        return 'Rol: ' + nombreRolBackend; // Por si agregas más roles en el futuro
+    }
+  }
+
   inicializaDatos() {
     return new Promise((resolve) => {
       this.user = this.global.getUser();
-      this.items = [
+      const rolUsuario = this.user.roles[0].nameRole;
+
+      // NUEVO: Si el usuario NO es cliente, mostramos el botón del menú
+      this.mostrarBotonSidebar = (rolUsuario !== 'ROLE_CLIENT');
+
+      // 1. Opciones comunes que ven TODOS (Admin y Clientes)
+      let menuBase: MenuItem[] = [
         {
-          label: mainTitles['administradores'].mainTitle,
-          icon: 'pi pi-fw pi-user',
-          routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaAdministradores],
-        },
-        {
-          label: mainTitles['clientes'].mainTitle,
-          icon: 'pi pi-fw pi-users',
-          routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaClientes],
-        },
-        {
-          separator: true
-        },
-        {
-          label: this.user.roles[0].nameRole == 'ROLE_ADMIN_SYS' ? 'Rol: Administrador' : 'Rol: General',
+          label: this.obtenerNombreRol(rolUsuario), // Llama a la función traductora
           icon: 'pi pi-id-card',
           disabled: true,
-
         },
         {
           label: this.user.electronicMail,
@@ -90,6 +97,32 @@ export class HeaderComponent implements OnInit {
           command: () => this.cambiarModo()
         }
       ];
+
+      // 2. Opciones EXCLUSIVAS que solo se agregan si es Administrador
+      if (rolUsuario === 'ROLE_ADMIN_SYS') {
+        let menuAdmin: MenuItem[] = [
+          {
+            label: mainTitles['administradores'].mainTitle,
+            icon: 'pi pi-fw pi-user',
+            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaAdministradores],
+          },
+          {
+            label: mainTitles['clientes'].mainTitle,
+            icon: 'pi pi-fw pi-users',
+            routerLink: ['/' + rutas.rutaPrincipal + '/' + rutas.rutaClientes],
+          },
+          {
+            separator: true
+          }
+        ];
+        
+        // Unimos el menú de admin con el menú base
+        this.items = [...menuAdmin, ...menuBase];
+      } else {
+        // Si es cliente u otro rol, solo ve el menú base
+        this.items = menuBase;
+      }
+
       resolve(true);
     })
   }
@@ -137,4 +170,3 @@ export class HeaderComponent implements OnInit {
   }
 
 }
-

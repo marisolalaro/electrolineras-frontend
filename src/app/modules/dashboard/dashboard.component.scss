@@ -30,7 +30,7 @@ $offline-red: #ef4444;
   border: 1px solid #e5e7eb;
   transition: all 0.3s ease;
   overflow: hidden;
-  border-top-width: 6px !important; /* REDUCIDO de 8px */
+  border-top-width: 4px !important; /* REDUCIDO de 8px */
 
   &.border-online { border-top-color: $online-green !important; }
   &.border-offline { border-top-color: $offline-red !important; }
@@ -57,10 +57,10 @@ $offline-red: #ef4444;
 .data-list {
   list-style: none;
   padding: 0;
-  margin: 0.5rem 0 !important; /* Menos margen arriba/abajo */
+  margin: 0.25rem 0 !important; /* Menos margen arriba/abajo */
   
   li {
-    padding: 4px 0 !important; /* REDUCIDO de 8px a 4px */
+    padding: 2px 0 !important; /* REDUCIDO de 8px a 4px */
     border-bottom: 1px solid #f3f4f6;
     color: #4b5563;
     font-size: 0.85rem; /* Letra ligeramente más pequeña */
@@ -94,6 +94,18 @@ $offline-red: #ef4444;
 
 /* Ajuste general para evitar scroll en el contenedor principal */
 .container {
-    padding-top: 0.5rem !important;
-    padding-bottom: 0.5rem !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+::ng-deep .p-card-body {
+    padding: 0.5rem !important;  /* Antes era 0.75rem */
+}
+
+.grid {
+  margin: 0 -4px;
+}
+
+[class*="col-"] {
+  padding: 4px;
 }

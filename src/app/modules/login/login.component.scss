@@ -4,6 +4,7 @@ body {
   background-size: cover;
   background-repeat:no-repeat ;
   max-width: 100%;
+  
 }
 
 .upper {
@@ -128,4 +129,32 @@ body {
   .list-bottom {
     width: 50%;
   }
+}
+
+/* 🔴 ANIMACIÓN DEL LOGO */
+.logo-palpitante {
+    width: 100%;
+    display: block;
+    margin: 0 auto 15px; /* Centrado y con margen inferior */
+    
+    /* Aplicamos la animación */
+    animation: palpitar 3s ease-in-out infinite;
+}
+
+@keyframes palpitar {
+    0% {
+        transform: scale(1); /* Tamaño normal */
+    }
+    50% {
+        transform: scale(1.08); /* Crece un 8% */
+    }
+    100% {
+        transform: scale(1); /* Vuelve al tamaño normal */
+    }
+}
+
+/* Efecto opcional: un brillo sutil mientras palpita */
+.logo-palpitante:hover {
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+    transition: filter 0.3s ease;
 }
